@@ -29,7 +29,7 @@ const Hero = () => {
             </span>
             Official SUPKEM CMS Portal
           </div>
-          <h1 className="text-6xl lg:text-7xl font-bold font-outfit leading-tight text-primary dark:text-white">
+          <h1 className="text-6xl lg:text-7xl font-bold font-outfit leading-tight text-primary">
             Uniting the <span className="text-secondary">Ummah</span> <br />
             Through Progress
           </h1>
