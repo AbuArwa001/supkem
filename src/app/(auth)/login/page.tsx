@@ -30,7 +30,7 @@ export default function LoginPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8 }}
-                    className="max-w-md w-full mx-auto lg:mx-0 py-12"
+                    className="max-w-md w-full mx-auto py-12 flex flex-col items-center text-center"
                 >
                     {/* Icon Alone at the Top */}
                     <Link href="/" className="inline-block mb-12 group">
@@ -39,12 +39,12 @@ export default function LoginPage() {
                         </div>
                     </Link>
 
-                    <div className="space-y-2 mb-10">
+                    <div className="space-y-2 mb-10 w-full">
                         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">Portal Login</h1>
                         <p className="text-foreground/60 text-lg">Enter your credentials to access the CMS.</p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6 w-full text-left">
                         {error && (
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
