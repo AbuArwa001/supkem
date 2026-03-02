@@ -19,7 +19,7 @@ export default function UserPortal() {
             >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                 <div className="relative z-10 space-y-4 max-w-2xl">
-                    <h1 className="text-4xl lg:text-5xl font-bold font-outfit">Welcome, {user?.full_name.split(' ')[0]}!</h1>
+                    <h1 className="text-4xl lg:text-5xl font-bold font-outfit">Welcome, {user?.full_name ? user.full_name.split(' ')[0] : 'User'}!</h1>
                     <p className="text-lg text-white/80 leading-relaxed font-medium">
                         Track your applications, manage your organization's compliance, and access official SUPKEM certifications all in one place.
                     </p>
