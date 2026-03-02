@@ -2,7 +2,8 @@
 
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import { User, Mail, Phone, Lock, Save, Loader2, ShieldCheck, UserCircle, Bell } from "lucide-react";
+import { User, Mail, Phone, Lock, Save, Loader2, UserCircle, Bell } from "lucide-react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function ProfileSettings() {
@@ -111,7 +112,7 @@ export default function ProfileSettings() {
                 <div className="space-y-8">
                     <div className="p-10 rounded-[40px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-                        <ShieldCheck size={48} className="text-white relative z-10" />
+                        <Image src="/logo.svg" alt="SUPKEM Logo" width={48} height={48} className="relative z-10" />
                         <h3 className="text-2xl font-bold font-outfit relative z-10">Access Verification</h3>
                         <p className="text-sm font-medium text-white/70 relative z-10 leading-relaxed">
                             You are currently signed in as a <span className="text-secondary font-black">{user?.role?.role_name}</span>. Your access includes administrative controls and platform auditing.

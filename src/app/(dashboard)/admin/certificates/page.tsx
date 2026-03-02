@@ -9,10 +9,10 @@ import {
     Printer,
     ExternalLink,
     Calendar,
-    ShieldCheck,
     ChevronRight,
     MoreVertical
 } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import Link from "next/link";
@@ -101,7 +101,7 @@ export default function AdminCertificates() {
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">Serial Number</p>
-                                    <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter"><ShieldCheck size={12} /> CERT-{cert.id * 1234}</p>
+                                    <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter"><Image src="/logo.svg" alt="Logo" width={12} height={12} /> CERT-{cert.id * 1234}</p>
                                 </div>
                             </div>
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileCheck, ShieldCheck, Users, Briefcase, GraduationCap, HeartHandshake } from "lucide-react";
+import { FileCheck, Users, Briefcase, GraduationCap, HeartHandshake } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 const serviceList = [
@@ -12,7 +13,7 @@ const serviceList = [
         category: "Administrative"
     },
     {
-        icon: ShieldCheck,
+        icon: "LOGO",
         title: "Halal Certification",
         desc: "Rigorous vetting and accreditation for businesses and products to ensure Halal compliance.",
         category: "Certification"
@@ -72,7 +73,11 @@ export default function ServicesPage() {
                         className="p-10 rounded-[40px] bg-white border border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group"
                     >
                         <div className="w-16 h-16 bg-primary/5 text-primary rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-white group-hover:rotate-12 transition-all">
-                            <service.icon size={32} />
+                            {service.icon === "LOGO" ? (
+                                <Image src="/logo.svg" alt="Logo" width={32} height={32} />
+                            ) : (
+                                <service.icon size={32} />
+                            )}
                         </div>
                         <p className="text-[10px] font-black uppercase tracking-widest text-secondary mb-2">{service.category}</p>
                         <h3 className="text-2xl font-bold font-outfit text-primary mb-4">{service.title}</h3>

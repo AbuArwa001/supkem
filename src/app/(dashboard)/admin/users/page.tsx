@@ -6,7 +6,6 @@ import {
     Users,
     Search,
     UserPlus,
-    Shield,
     Mail,
     Phone,
     MoreVertical,
@@ -14,6 +13,7 @@ import {
     XCircle,
     ChevronRight
 } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import Link from "next/link";
@@ -90,7 +90,7 @@ export default function UserManagement() {
                                 <td className="px-8 py-6">
                                     <div className="space-y-2">
                                         <span className="px-3 py-1 bg-primary/5 text-primary border border-primary/10 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 w-fit">
-                                            <Shield size={10} /> {u.role?.role_name || "No Role"}
+                                            <Image src="/logo.svg" alt="L" width={10} height={10} /> {u.role?.role_name || "No Role"}
                                         </span>
                                         <span className={cn(
                                             "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 w-fit",

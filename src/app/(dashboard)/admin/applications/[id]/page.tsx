@@ -17,6 +17,7 @@ import {
     ThumbsDown,
     ShieldCheck
 } from "lucide-react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 
@@ -114,7 +115,7 @@ export default function ApplicationDetail() {
                     >
                         <div className="flex items-center gap-4 text-primary">
                             <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
-                                <ShieldCheck size={24} />
+                                <Image src="/logo.svg" alt="Logo" width={24} height={24} />
                             </div>
                             <h3 className="text-2xl font-bold font-outfit">Service Details</h3>
                         </div>
