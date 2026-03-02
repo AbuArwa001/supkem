@@ -6,12 +6,31 @@ import { Mail, Phone, MapPin, Send, Clock } from "lucide-react";
 export default function ContactPage() {
     return (
         <div className="bg-white">
-            {/* Premium Hero Section */}
+            {/* Premium Mesh Gradient Hero */}
             <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden py-24 px-6">
-                <div className="absolute inset-0 -z-10 bg-white">
-                    <div className="absolute top-0 right-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px] animate-blob" />
-                    <div className="absolute bottom-0 left-[-10%] w-[60%] h-[60%] bg-secondary/5 rounded-full blur-[120px] animate-blob animation-delay-2000" />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
+                <div className="absolute inset-0 -z-10 bg-[#FCFCFD]">
+                    <div
+                        className="absolute inset-0 opacity-[0.4]"
+                        style={{
+                            backgroundImage: `
+                                radial-gradient(circle at 100% 0%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
+                                radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+                                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, transparent 100%)
+                            `
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay" />
+
+                    <motion.div
+                        animate={{
+                            scale: [1, 1.1, 1],
+                            opacity: [0.05, 0.1, 0.05],
+                            x: [0, -30, 0],
+                            y: [0, 20, 0]
+                        }}
+                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+                        className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-[120px]"
+                    />
                 </div>
 
                 <div className="max-w-7xl mx-auto text-center relative z-10 space-y-8">

@@ -22,15 +22,43 @@ import { cn } from "@/lib/utils";
 const Hero = () => {
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 px-6">
-      {/* Dynamic Glassmorphism Background */}
-      <div className="absolute inset-0 -z-10 bg-white">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px] animate-blob" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-secondary/10 rounded-full blur-[120px] animate-blob animation-delay-2000" />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-primary/5 rounded-full blur-[100px] animate-blob animation-delay-4000" />
+      {/* Premium Mesh Gradient Background */}
+      <div className="absolute inset-0 -z-10 bg-[#FCFCFD]">
+        <div
+          className="absolute inset-0 opacity-[0.4]"
+          style={{
+            backgroundImage: `
+              radial-gradient(circle at 0% 0%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 100% 100%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, transparent 100%)
+            `
+          }}
+        />
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay" />
 
-        {/* Animated Grid Pattern */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.05] mix-blend-overlay" />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/50 to-white" />
+        {/* Animated Gradient Accents */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.1, 0.2, 0.1],
+            x: [0, 50, 0],
+            y: [0, -30, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary/20 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.05, 0.15, 0.05],
+            x: [0, -50, 0],
+            y: [0, 30, 0]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-secondary/15 rounded-full blur-[150px]"
+        />
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative">
