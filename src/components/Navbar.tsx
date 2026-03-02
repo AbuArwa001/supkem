@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Shield, User, LayoutDashboard, LogOut } from "lucide-react";
+import Image from "next/image";
+import { Menu, X, User, LayoutDashboard, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 
@@ -34,10 +35,8 @@ const Navbar = () => {
             )}
         >
             <div className="max-w-7xl mx-auto flex justify-between items-center">
-                <Link href="/" className="flex items-center gap-2 group">
-                    <div className="p-2 bg-primary rounded-xl group-hover:rotate-12 transition-transform">
-                        <Shield className="w-6 h-6 text-white" />
-                    </div>
+                <Link href="/" className="flex items-center gap-3 group">
+                    <Image src="/logo.svg" alt="SUPKEM Logo" width={32} height={32} className="group-hover:rotate-12 transition-transform" />
                     <span className="text-xl font-bold tracking-tight text-primary dark:text-white">
                         SUPKEM <span className="text-secondary">CMS</span>
                     </span>

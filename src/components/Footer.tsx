@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { Shield, Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import Image from "next/image";
+import { Facebook, Twitter, Instagram, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => {
     return (
         <footer className="bg-primary text-white pt-20 pb-10">
             <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
                 <div className="space-y-6">
-                    <div className="flex items-center gap-2">
-                        <Shield className="w-8 h-8 text-secondary" />
+                    <div className="flex items-center gap-3">
+                        <Image src="/logo.svg" alt="SUPKEM Logo" width={32} height={32} />
                         <span className="text-2xl font-bold tracking-tight">SUPKEM</span>
                     </div>
                     <p className="text-white/70 text-sm leading-relaxed">
