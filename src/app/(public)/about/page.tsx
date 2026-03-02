@@ -2,87 +2,103 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Target, Heart, Award } from "lucide-react";
+import { Target, Heart, Award, Shield, Globe, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function AboutPage() {
     return (
-        <div className="space-y-24 pb-24">
-            {/* Hero Section */}
-            <section className="relative py-20 px-6 bg-primary overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
-                <div className="max-w-7xl mx-auto text-center relative z-10 space-y-6">
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="text-5xl lg:text-7xl font-bold font-outfit text-white"
+        <div className="bg-white">
+            {/* Premium Hero Section */}
+            <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-24 px-6">
+                <div className="absolute inset-0 -z-10 bg-white">
+                    <div className="absolute top-0 left-[-10%] w-[60%] h-[60%] bg-primary/5 rounded-full blur-[120px] animate-blob" />
+                    <div className="absolute bottom-0 right-[-10%] w-[60%] h-[60%] bg-secondary/5 rounded-full blur-[120px] animate-blob animation-delay-2000" />
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
+                </div>
+
+                <div className="max-w-7xl mx-auto text-center relative z-10 space-y-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        className="space-y-6"
                     >
-                        About <span className="text-secondary">SUPKEM</span>
-                    </motion.h1>
-                    <p className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed font-medium">
-                        The Supreme Council of Kenya Muslims is the primary umbrella body representing all Muslim organizations in Kenya.
-                    </p>
+                        <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/80 backdrop-blur-md shadow-xl shadow-primary/5 border border-primary/10 text-primary text-sm font-bold tracking-tight mx-auto">
+                            <span className="flex h-2 w-2 rounded-full bg-secondary animate-pulse" />
+                            Over 50 Years of Service
+                        </div>
+                        <h1 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-[0.95]">
+                            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary italic">Legacy</span>
+                        </h1>
+                        <p className="text-2xl text-foreground/60 max-w-3xl mx-auto leading-relaxed font-medium italic">
+                            "Uplifting society to a just future through faith, unity, and service to the Ummah."
+                        </p>
+                    </motion.div>
                 </div>
             </section>
 
-            {/* Content Section */}
-            <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-                <motion.div
-                    initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                    className="space-y-8"
-                >
-                    <h2 className="text-4xl font-bold font-outfit text-primary">Our Legacy & Mission</h2>
-                    <p className="text-lg text-foreground/70 leading-relaxed">
-                        Established to foster unity and champion the rights of Muslims in Kenya, SUPKEM has grown into a vital institution that bridges the gap between the community and the state. We provide a platform for collective action in education, welfare, and social justice.
-                    </p>
-                    <div className="space-y-4">
-                        {[
-                            { icon: "LOGO", title: "Advocacy", desc: "Protecting the religious and civil rights of Muslims." },
-                            { icon: Target, title: "Unity", desc: "Fostering collaboration among diverse Muslim entities." },
-                            { icon: Heart, title: "Welfare", desc: "Supporting the vulnerable through coordinated social programs." }
-                        ].map((item, i) => (
-                            <div key={i} className="flex gap-4 p-6 rounded-3xl bg-primary/[0.02] border border-primary/10">
-                                {item.icon === "LOGO" ? (
-                                    <Image src="/logo.svg" alt="Logo" width={24} height={24} className="shrink-0" />
-                                ) : (
-                                    <item.icon className="text-secondary shrink-0" size={24} />
-                                )}
-                                <div>
-                                    <h4 className="font-bold text-primary">{item.title}</h4>
-                                    <p className="text-sm text-foreground/60">{item.desc}</p>
+            {/* Legacy & Mission Section */}
+            <section className="py-32 px-6">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+                    <motion.div
+                        initial={{ opacity: 0, x: -30 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        className="space-y-12"
+                    >
+                        <div className="space-y-6">
+                            <h2 className="text-5xl font-black font-outfit text-primary leading-tight tracking-tight">Protecting Faith, <br />Empowering People</h2>
+                            <p className="text-xl text-foreground/50 leading-relaxed font-medium">
+                                Founded in 1973, the Supreme Council of Kenya Muslims (SUPKEM) serves as the primary umbrella body representing all Muslim organizations in Kenya. We bridge the gap between the community and the state, fostering unity and social justice.
+                            </p>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-6">
+                            {[
+                                { icon: Shield, title: "Policy Advocacy", desc: "Strengthening the capacity of Muslim organizations to participate in national discourse.", color: "bg-blue-50" },
+                                { icon: Globe, title: "Peacebuilding", desc: "Promoting social cohesion through interfaith dialogue and conflict resolution.", color: "bg-green-50" },
+                                { icon: Heart, title: "Humanitarian Response", desc: "Addressing health, education, and emergency needs in underserved regions.", color: "bg-red-50" }
+                            ].map((item, i) => (
+                                <div key={i} className="flex gap-6 p-8 rounded-[32px] bg-white border border-border/60 hover:border-primary/20 transition-all group shadow-sm hover:shadow-xl hover:shadow-primary/5">
+                                    <div className={cn("inline-flex p-4 rounded-2xl text-primary mb-10 group-hover:scale-110 transition-transform bg-primary/5")}>
+                                        <item.icon size={28} strokeWidth={1.5} />
+                                    </div>
+                                    <div className="pt-1">
+                                        <h4 className="text-xl font-black font-outfit text-primary mb-2">{item.title}</h4>
+                                        <p className="text-foreground/50 font-medium leading-relaxed">{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+
+                    <div className="relative">
+                        <div className="aspect-[4/5] p-2 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 rounded-[60px] backdrop-blur-3xl shadow-2xl relative overflow-hidden flex items-center justify-center">
+                            <div className="absolute inset-0 bg-white/40 backdrop-blur-xl m-1 rounded-[58px]" />
+                            <div className="relative z-10 flex flex-col items-center">
+                                <Image src="/logo.svg" alt="SUPKEM Logo" width={220} height={220} className="drop-shadow-2xl mb-8 group-hover:scale-105 transition-transform" />
+                                <div className="text-center px-10">
+                                    <p className="text-4xl font-black font-outfit text-primary uppercase tracking-tighter">1973</p>
+                                    <p className="text-xs font-black uppercase tracking-[0.4em] text-foreground/30 mt-2">Foundation Year</p>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                </motion.div>
-
-                <div className="relative">
-                    <div className="aspect-[4/5] bg-primary/10 rounded-[40px] shadow-2xl relative overflow-hidden flex items-center justify-center border border-primary/20">
-                        <Image src="/logo.svg" alt="SUPKEM Logo" width={200} height={200} className="text-primary/20 opacity-20" />
-                        <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-primary/80 to-transparent text-white">
-                            <p className="text-3xl font-bold font-outfit uppercase tracking-tighter">Established 1973</p>
-                            <p className="font-medium opacity-80">Serving the Ummah for over 50 years.</p>
                         </div>
+                        {/* Decorative Accents */}
+                        <div className="absolute -top-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl -z-10" />
+                        <div className="absolute -bottom-12 -left-12 w-64 h-64 bg-secondary/5 rounded-full blur-3xl -z-10" />
                     </div>
                 </div>
             </section>
 
-            {/* Leadership Section */}
+            {/* Our Partners Brief - Reusing context */}
             <section className="py-24 bg-primary/[0.02] px-6">
-                <div className="max-w-7xl mx-auto text-center space-y-4 mb-16">
-                    <h2 className="text-4xl font-bold font-outfit text-primary">Our Governance</h2>
-                    <p className="text-foreground/60 max-w-xl mx-auto">Led by a committed council dedicated to transparent leadership and community growth.</p>
-                </div>
-                <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {[1, 2, 3].map((v) => (
-                        <div key={v} className="text-center space-y-4 p-8 bg-white rounded-3xl border border-border hover-lift">
-                            <div className="w-24 h-24 bg-secondary/10 text-secondary rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-secondary/20">
-                                <Award size={40} />
-                            </div>
-                            <div>
-                                <h4 className="font-bold text-primary text-xl">Council Member {v}</h4>
-                                <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest mt-1">Nairobi Region</p>
-                            </div>
-                        </div>
-                    ))}
+                <div className="max-w-7xl mx-auto text-center space-y-12">
+                    <p className="text-xs font-black uppercase tracking-[0.4em] text-foreground/30">Global Collaboration</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center opacity-40 grayscale">
+                        {["AMREF", "UKAID", "UNICEF", "The Global Fund", "Kenya Redcross", "USAID"].map((p, i) => (
+                            <span key={i} className="text-2xl font-black font-outfit italic tracking-tighter text-primary whitespace-nowrap">{p}</span>
+                        ))}
+                    </div>
                 </div>
             </section>
         </div>
