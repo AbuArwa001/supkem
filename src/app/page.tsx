@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Shield, Users, FileCheck, Award, ArrowRight, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { Users, FileCheck, Award, ArrowRight, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Hero = () => {
@@ -71,7 +72,7 @@ const Hero = () => {
             {/* Replace with generate_image later if needed, for now using stylized divs */}
             <div className="absolute inset-0 bg-primary/20 rounded-[40px] rotate-6 scale-95 blur-sm" />
             <div className="absolute inset-0 bg-white dark:bg-card rounded-[40px] shadow-2xl overflow-hidden border border-border flex flex-col items-center justify-center p-12 text-center group transition-transform hover:scale-105 duration-500">
-              <Shield size={120} className="text-primary mb-8 group-hover:scale-110 transition-transform" />
+              <Image src="/logo.svg" alt="SUPKEM Logo" width={120} height={120} className="mb-8 group-hover:scale-110 transition-transform" />
               <h3 className="text-3xl font-bold mb-4 font-outfit">Supreme Council</h3>
               <p className="text-foreground/60 italic font-medium tracking-widest uppercase text-sm">Of Kenya Muslims</p>
 

@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Shield, User, Mail, Lock, Phone, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
+import { User, Mail, Lock, Phone, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import Link from "next/link";
@@ -76,7 +77,7 @@ export default function RegisterPage() {
             >
                 <div className="text-center space-y-4">
                     <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-border rounded-2xl shadow-sm hover-lift mb-4">
-                        <Shield className="text-primary w-6 h-6" />
+                        <Image src="/logo.svg" alt="SUPKEM Logo" width={24} height={24} className="text-primary" />
                         <span className="font-bold text-primary font-outfit">SUPKEM CMS</span>
                     </Link>
                     <h1 className="text-5xl font-bold font-outfit text-primary tracking-tight">Join the Council</h1>

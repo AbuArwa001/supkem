@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Shield, Target, Heart, Award } from "lucide-react";
+import { ShieldCheck, Target, Heart, Award } from "lucide-react";
 
 export default function AboutPage() {
     return (
@@ -34,7 +35,7 @@ export default function AboutPage() {
                     </p>
                     <div className="space-y-4">
                         {[
-                            { icon: Shield, title: "Advocacy", desc: "Protecting the religious and civil rights of Muslims." },
+                            { icon: ShieldCheck, title: "Advocacy", desc: "Protecting the religious and civil rights of Muslims." },
                             { icon: Target, title: "Unity", desc: "Fostering collaboration among diverse Muslim entities." },
                             { icon: Heart, title: "Welfare", desc: "Supporting the vulnerable through coordinated social programs." }
                         ].map((item, i) => (
@@ -51,7 +52,7 @@ export default function AboutPage() {
 
                 <div className="relative">
                     <div className="aspect-[4/5] bg-primary/10 rounded-[40px] shadow-2xl relative overflow-hidden flex items-center justify-center border border-primary/20">
-                        <Shield size={200} className="text-primary/20" />
+                        <Image src="/logo.svg" alt="SUPKEM Logo" width={200} height={200} className="text-primary/20 opacity-20" />
                         <div className="absolute inset-x-0 bottom-0 p-10 bg-gradient-to-t from-primary/80 to-transparent text-white">
                             <p className="text-3xl font-bold font-outfit uppercase tracking-tighter">Established 1973</p>
                             <p className="font-medium opacity-80">Serving the Ummah for over 50 years.</p>

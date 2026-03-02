@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Shield, Mail, Lock, Loader2, ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 
@@ -34,7 +35,7 @@ export default function LoginPage() {
             >
                 <div className="text-center space-y-2">
                     <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-border rounded-2xl shadow-sm hover-lift mb-8">
-                        <Shield className="text-primary w-6 h-6" />
+                        <Image src="/logo.svg" alt="SUPKEM Logo" width={24} height={24} className="text-primary" />
                         <span className="font-bold text-primary font-outfit">SUPKEM CMS</span>
                     </Link>
                     <h2 className="text-4xl font-bold font-outfit text-primary">Welcome Back</h2>
