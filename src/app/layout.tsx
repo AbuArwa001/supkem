@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,11 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
       <body className="font-inter antialiased">
-        <Navbar />
-        <main className="min-h-screen pt-20">
+        <MainLayoutWrapper>
           {children}
-        </main>
-        <Footer />
+        </MainLayoutWrapper>
       </body>
     </html>
   );
