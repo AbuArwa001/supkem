@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ShieldCheck, Target, Heart, Award } from "lucide-react";
+import { Target, Heart, Award } from "lucide-react";
 
 export default function AboutPage() {
     return (
@@ -35,12 +35,16 @@ export default function AboutPage() {
                     </p>
                     <div className="space-y-4">
                         {[
-                            { icon: ShieldCheck, title: "Advocacy", desc: "Protecting the religious and civil rights of Muslims." },
+                            { icon: "LOGO", title: "Advocacy", desc: "Protecting the religious and civil rights of Muslims." },
                             { icon: Target, title: "Unity", desc: "Fostering collaboration among diverse Muslim entities." },
                             { icon: Heart, title: "Welfare", desc: "Supporting the vulnerable through coordinated social programs." }
                         ].map((item, i) => (
                             <div key={i} className="flex gap-4 p-6 rounded-3xl bg-primary/[0.02] border border-primary/10">
-                                <item.icon className="text-secondary shrink-0" size={24} />
+                                {item.icon === "LOGO" ? (
+                                    <Image src="/logo.svg" alt="Logo" width={24} height={24} className="shrink-0" />
+                                ) : (
+                                    <item.icon className="text-secondary shrink-0" size={24} />
+                                )}
                                 <div>
                                     <h4 className="font-bold text-primary">{item.title}</h4>
                                     <p className="text-sm text-foreground/60">{item.desc}</p>
