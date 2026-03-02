@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: hsl(154 58% 21%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-secondary: hsl(45 93% 47%);
+  --color-secondary-foreground: hsl(0 0% 10%);
+  --color-accent: hsl(154 58% 30%);
+  --color-accent-foreground: hsl(0 0% 100%);
+  --color-background: hsl(0 0% 100%);
+  --color-foreground: hsl(154 58% 5%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(154 58% 5%);
+  --color-border: hsl(154 20% 90%);
+  --color-input: hsl(154 20% 90%);
+  --color-ring: hsl(154 58% 21%);
+
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+}
+
+@layer base {
+
+  *,
+  ::after,
+  ::before {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Premium Animations & Glassmorphism */
+.glass {
+  @apply bg-white/70 backdrop-blur-md border border-white/20;
+}
+
+.dark .glass {
+  @apply bg-black/70 border-white/10;
+}
+
+.premium-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+}
+
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg;
+}
