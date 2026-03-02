@@ -36,7 +36,7 @@ export const useAuth = () => {
     const login = async (email: string, password: string) => {
         setLoading(true);
         try {
-            const res = await api.post("/token/", { email, password });
+            const res = await api.post("/token/", { username: email, password });
             const { access, refresh } = res.data;
 
             Cookies.set("access_token", access, { secure: true, sameSite: "strict" });
