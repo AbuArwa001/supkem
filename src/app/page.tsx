@@ -1,8 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import {
   Users,
   FileCheck,
@@ -19,29 +20,74 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const SLIDES = [
+  { url: "/images/slider/olesaudib.jpg", alt: "International Relations" },
+  { url: "/images/slider/ole_olesapitb.jpg", alt: "Interfaith Dialogue" },
+  { url: "/images/slider/olerezo_nb.jpg", alt: "Community Impact" },
+  { url: "/images/slider/image.png", alt: "Leadership Presence" }
+];
+
+const HeroSlider = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % SLIDES.length);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 -z-20 overflow-hidden bg-black">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 0.6, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 4, ease: "easeInOut" }}
+          className="absolute inset-0"
+        >
+          <Image
+            src={SLIDES[index].url}
+            alt={SLIDES[index].alt}
+            fill
+            className="object-cover"
+            priority
+          />
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Premium Mesh Gradient Overlay */}
+      <div className="absolute inset-0 bg-[#FCFCFD]/40" />
+      <div
+        className="absolute inset-0 opacity-[0.5]"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 0% 0%, rgba(13, 148, 136, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 100% 100%, rgba(13, 148, 136, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, transparent 100%)
+          `
+        }}
+      />
+    </div>
+  );
+};
+
 const Hero = () => {
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 px-6">
-      {/* Premium Mesh Gradient Background */}
-      <div className="absolute inset-0 -z-10 bg-[#FCFCFD]">
-        <div
-          className="absolute inset-0 opacity-[0.4]"
-          style={{
-            backgroundImage: `
-              radial-gradient(circle at 0% 0%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 100% 100%, rgba(13, 148, 136, 0.15) 0%, transparent 50%),
-              radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
-              radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, transparent 100%)
-            `
-          }}
-        />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay" />
+      <HeroSlider />
 
-        {/* Animated Gradient Accents */}
+      {/* Texture & Animated Accents */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] mix-blend-overlay" />
+
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
+            scale: [1, 1.1, 1],
             opacity: [0.1, 0.2, 0.1],
             x: [0, 50, 0],
             y: [0, -30, 0]
@@ -51,7 +97,7 @@ const Hero = () => {
         />
         <motion.div
           animate={{
-            scale: [1.2, 1, 1.2],
+            scale: [1.1, 1, 1.1],
             opacity: [0.05, 0.15, 0.05],
             x: [0, -50, 0],
             y: [0, 30, 0]
