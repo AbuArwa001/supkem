@@ -8,52 +8,65 @@ import { cn } from "@/lib/utils";
 export default function AboutPage() {
     return (
         <div className="bg-white">
-            {/* Premium Mesh Gradient Hero */}
-            <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-24 px-6">
-                <div className="absolute inset-0 -z-10 bg-[#FCFCFD]">
-                    <div
-                        className="absolute inset-0 opacity-[0.4]"
-                        style={{
-                            backgroundImage: `
-                                radial-gradient(circle at 0% 0%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
-                                radial-gradient(circle at 100% 0%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-                                radial-gradient(circle at 100% 100%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
-                                radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-                                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, transparent 100%)
-                            `
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay" />
-
+            {/* Premium Hero Section with Background Image */}
+            <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden py-32 px-6 bg-slate-950">
+                {/* Background Image with Slow Zoom */}
+                <div className="absolute inset-0 z-0">
                     <motion.div
-                        animate={{
-                            scale: [1, 1.1, 1],
-                            opacity: [0.05, 0.1, 0.05],
-                            x: [0, 30, 0],
-                            y: [0, -20, 0]
-                        }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[120px]"
-                    />
+                        initial={{ scale: 1.1, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 0.5 }}
+                        transition={{ duration: 2, ease: "easeOut" }}
+                        className="relative w-full h-full"
+                    >
+                        <Image
+                            src="https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=1600"
+                            alt="SUPKEM Heritage"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                    </motion.div>
+
+                    {/* Layered Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/80 z-10" />
+                    <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10" />
                 </div>
 
-                <div className="max-w-7xl mx-auto text-center relative z-10 space-y-8">
+                <div className="max-w-7xl mx-auto relative z-20">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
-                        className="space-y-6"
+                        className="p-12 lg:p-20 rounded-[60px] bg-white/5 border border-white/10 backdrop-blur-2xl text-center space-y-8 shadow-2xl"
                     >
-                        <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/80 backdrop-blur-md shadow-xl shadow-primary/5 border border-primary/10 text-primary text-sm font-bold tracking-tight mx-auto">
+                        <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-bold tracking-tight shadow-2xl mx-auto backdrop-blur-md">
                             <span className="flex h-2 w-2 rounded-full bg-secondary animate-pulse" />
                             Over 50 Years of Service
                         </div>
-                        <h1 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-[0.95]">
-                            Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary italic">Legacy</span>
-                        </h1>
-                        <p className="text-2xl text-foreground/60 max-w-3xl mx-auto leading-relaxed font-medium italic">
-                            "Uplifting society to a just future through faith, unity, and service to the Ummah."
-                        </p>
+
+                        <div className="space-y-4">
+                            <h1 className="text-6xl lg:text-8xl font-black font-outfit text-white tracking-tighter leading-none">
+                                Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-white to-amber-300 italic">Legacy</span>
+                            </h1>
+                            <p className="text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed font-medium italic">
+                                "Uplifting society to a just future through faith, unity, and service to the Ummah."
+                            </p>
+                        </div>
+
+                        {/* Stats in Hero */}
+                        <div className="pt-8 grid grid-cols-2 lg:grid-cols-4 gap-8 opacity-80">
+                            {[
+                                { label: "Founded", val: "1973" },
+                                { label: "National Reach", val: "47 Counties" },
+                                { label: "Faith First", val: "Unity" },
+                                { label: "Commitment", val: "Service" }
+                            ].map((s, i) => (
+                                <div key={i} className="space-y-1">
+                                    <p className="text-xl font-bold text-secondary font-outfit tracking-tight">{s.val}</p>
+                                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest leading-none">{s.label}</p>
+                                </div>
+                            ))}
+                        </div>
                     </motion.div>
                 </div>
             </section>
