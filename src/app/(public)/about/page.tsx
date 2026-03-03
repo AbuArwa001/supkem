@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Target, Heart, Award, Shield, Globe, Users } from "lucide-react";
+import Link from "next/link";
+import { Target, Heart, Award, Shield, Globe, Users, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function AboutPage() {
@@ -146,6 +147,53 @@ export default function AboutPage() {
                                     sizes="(max-w-768px) 50vw, 150px"
                                 />
                             </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+            {/* Impact Gallery Section */}
+            <section id="gallery" className="py-40 px-6 bg-slate-50 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+                <div className="max-w-7xl mx-auto space-y-24">
+                    <div className="text-center space-y-6">
+                        <p className="text-xs font-black uppercase tracking-[0.4em] text-secondary">A Visual Narrative</p>
+                        <h2 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-none">
+                            Impact <span className="italic">Gallery</span>
+                        </h2>
+                        <p className="text-xl text-foreground/50 max-w-2xl mx-auto font-medium">
+                            Documenting our commitment to the community through leadership, dialogue, and grassroots initiatives.
+                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-[300px]">
+                        {[
+                            { src: "/images/slider/olesaudib.jpg", alt: "Community Leadership", span: "lg:col-span-2 lg:row-span-2" },
+                            { src: "/images/slider/ole_olesapitb.jpg", alt: "Interfaith Dialogue", span: "col-span-1" },
+                            { src: "/images/slider/olerezo_nb.jpg", alt: "Youth Empowerment", span: "col-span-1" },
+                            { src: "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800", alt: "Historical Heritage", span: "col-span-1" },
+                            { src: "/images/slider/image.png", alt: "Advocacy Programs", span: "lg:col-span-2" },
+                            { src: "/images/slider/oledarknb.jpg", alt: "Faith & Unity", span: "col-span-1" }
+                        ].map((img, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.1 }}
+                                className={cn("relative rounded-[40px] overflow-hidden group shadow-lg cursor-pointer", img.span)}
+                            >
+                                <Image
+                                    src={img.src}
+                                    alt={img.alt}
+                                    fill
+                                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 flex flex-col justify-end p-10">
+                                    <p className="text-white font-black font-outfit text-2xl tracking-tight translate-y-4 group-hover:translate-y-0 transition-transform duration-700">{img.alt}</p>
+                                    <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mt-4 opacity-0 group-hover:opacity-100 transition-opacity delay-300">
+                                        <ArrowRight size={18} className="text-white" />
+                                    </div>
+                                </div>
+                            </motion.div>
                         ))}
                     </div>
                 </div>

@@ -328,6 +328,57 @@ const Services = () => {
 };
 
 
+const HomeGallery = () => {
+  const images = [
+    { src: "/images/slider/olesaudib.jpg", alt: "Community Leadership", span: "col-span-1 row-span-2" },
+    { src: "/images/slider/ole_olesapitb.jpg", alt: "Interfaith Engagement", span: "col-span-1" },
+    { src: "/images/slider/olerezo_nb.jpg", alt: "Strategic Planning", span: "col-span-1" },
+    { src: "/images/slider/image.png", alt: "Impact Initiatives", span: "col-span-2" }
+  ];
+
+  return (
+    <section className="py-40 px-6 bg-slate-50 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-gradient-to-b from-white to-transparent -z-10" />
+      <div className="max-w-7xl mx-auto space-y-24 relative z-10">
+        <div className="flex flex-col lg:flex-row items-baseline justify-between gap-8">
+          <div className="space-y-6">
+            <p className="text-xs font-black uppercase tracking-[0.4em] text-primary">Community Impact</p>
+            <h2 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-[0.9]">
+              Visual Legacy
+            </h2>
+          </div>
+          <Link href="/about#gallery" className="group flex items-center gap-4 text-xl font-bold text-primary/60 hover:text-primary transition-colors">
+            Explore Full Gallery <div className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all"><ArrowRight size={20} className="-rotate-45 group-hover:rotate-0 transition-transform" /></div>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[250px] lg:auto-rows-[300px]">
+          {images.map((img, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className={cn("relative rounded-[32px] overflow-hidden group cursor-pointer shadow-lg", img.span)}
+            >
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+                <p className="text-white font-bold text-lg translate-y-4 group-hover:translate-y-0 transition-transform duration-500">{img.alt}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+
 export default function Home() {
   return (
     <main className="bg-white">
@@ -335,31 +386,32 @@ export default function Home() {
       <Partners />
       <ProgramAreas />
       <Services />
+      <HomeGallery />
 
-      <section className="py-40 px-6 bg-white overflow-hidden relative">
+      <section className="py-32 px-6 bg-white overflow-hidden relative">
         <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-[#0B211B] to-transparent -z-10" />
         <div className="max-w-7xl mx-auto relative group">
-          <div className="absolute inset-0 bg-primary rounded-[64px] translate-x-4 translate-y-4 transition-transform group-hover:translate-x-2 group-hover:translate-y-2 shadow-[0_50px_100px_-20px_rgba(20,83,45,0.3)]" />
-          <div className="relative bg-[#0F172A] rounded-[64px] p-20 lg:p-32 overflow-hidden border border-white/10 shadow-inner">
-            <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/30 rounded-full blur-[150px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-secondary/20 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute inset-0 bg-primary rounded-[32px] translate-x-3 translate-y-3 transition-transform group-hover:translate-x-1.5 group-hover:translate-y-1.5 shadow-[0_40px_80px_-20px_rgba(20,83,45,0.25)]" />
+          <div className="relative bg-[#0F172A] rounded-[32px] p-16 lg:p-24 overflow-hidden border border-white/10 shadow-inner">
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/15 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
 
-            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-              <div className="space-y-12">
-                <h2 className="text-7xl lg:text-9xl font-black font-outfit text-white leading-[0.85] tracking-tighter">
+            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-10">
+                <h2 className="text-5xl lg:text-8xl font-black font-outfit text-white leading-[0.9] tracking-tighter">
                   Start Your <br />
                   <span className="text-secondary italic text-glow">Journey</span>
                 </h2>
-                <p className="text-2xl text-white/50 leading-relaxed font-medium italic border-l-4 border-primary/40 pl-8">
+                <p className="text-xl text-white/50 leading-relaxed font-medium italic border-l-4 border-primary/40 pl-8 max-w-lg">
                   Step into the future of community management. Secure, efficient, and faith-aligned.
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-8 lg:justify-end">
-                <Link href="/register" className="px-14 py-8 bg-primary text-white rounded-[28px] font-black text-2xl hover:bg-secondary hover:text-primary transition-all flex items-center justify-center gap-4 group shadow-2xl shadow-primary/20">
-                  Register Now <ArrowRight size={32} className="group-hover:translate-x-2 transition-transform" />
+              <div className="flex flex-col sm:flex-row gap-6 lg:justify-end">
+                <Link href="/register" className="px-10 py-6 bg-primary text-white rounded-[12px] font-black text-xl hover:bg-secondary hover:text-primary transition-all flex items-center justify-center gap-3 group shadow-xl shadow-primary/20">
+                  Register Now <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
                 </Link>
-                <Link href="/login" className="px-14 py-8 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-[28px] font-black text-2xl hover:bg-white/10 transition-all flex items-center justify-center gap-4">
+                <Link href="/login" className="px-10 py-6 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-[12px] font-black text-xl hover:bg-white/10 transition-all flex items-center justify-center gap-3">
                   Portal Access
                 </Link>
               </div>
