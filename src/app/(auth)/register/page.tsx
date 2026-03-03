@@ -75,15 +75,26 @@ export default function RegisterPage() {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-2xl space-y-10"
             >
-                <div className="text-center space-y-4">
-                    <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-border rounded-2xl shadow-sm hover-lift mb-4">
-                        <Image src="/logo.svg" alt="SUPKEM Logo" width={24} height={24} className="text-primary" />
-                        <span className="font-bold text-primary font-outfit">SUPKEM</span>
-                    </Link>
-                    <h1 className="text-5xl font-bold font-outfit text-primary tracking-tight">Join the Council</h1>
-                    <p className="text-foreground/60 text-lg font-medium max-w-lg mx-auto leading-relaxed">
-                        Create your account to start organization registration and access official Muslim services in Kenya.
-                    </p>
+                <div className="text-center space-y-10">
+                    <div className="flex flex-col items-center space-y-4">
+                        <Link href="/" className="group transition-transform hover:scale-110 duration-500">
+                            <div className="relative w-32 h-32 mb-2">
+                                <div className="absolute inset-0 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors animate-pulse" />
+                                <Image src="/logo.svg" alt="SUPKEM Logo" fill className="relative z-10 drop-shadow-2xl object-contain" />
+                            </div>
+                        </Link>
+                        <div className="space-y-1">
+                            <h2 className="text-3xl font-black font-outfit text-primary tracking-tighter uppercase">SUPKEM</h2>
+                            <div className="h-1 w-12 bg-secondary rounded-full mx-auto" />
+                        </div>
+                    </div>
+
+                    <div className="space-y-4">
+                        <h1 className="text-5xl font-bold font-outfit text-primary tracking-tight">Join the Council</h1>
+                        <p className="text-foreground/60 text-lg font-medium max-w-lg mx-auto leading-relaxed">
+                            Create your account to start organization registration and access official Muslim services in Kenya.
+                        </p>
+                    </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-10 lg:p-16 rounded-[40px] bg-white border border-border shadow-2xl space-y-8 relative">

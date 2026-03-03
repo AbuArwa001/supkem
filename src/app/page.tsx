@@ -123,7 +123,7 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-primary/20 rounded-full blur-3xl group-hover:bg-primary/30 transition-colors animate-pulse" />
                 <Image src="/logo.svg" alt="SUPKEM Logo" width={220} height={220} className="relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-500" />
               </div>
-              <h3 className="text-4xl font-black font-outfit text-primary mb-2">SUPKEM <span className="text-secondary">CMS</span></h3>
+              <h3 className="text-4xl font-black font-outfit text-primary mb-2">SUPKEM</h3>
               <p className="text-xs font-black uppercase tracking-[0.4em] text-foreground/30 leading-relaxed max-w-[200px] mx-auto">Supreme Council of Kenya Muslims</p>
             </div>
           </div>

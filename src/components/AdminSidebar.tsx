@@ -38,7 +38,7 @@ const AdminSidebar = () => {
                         <Image src="/logo.svg" alt="Logo" width={32} height={32} />
                     </div>
                     <div>
-                        <p className="font-bold text-primary text-xl tracking-tight leading-tight">SUPKEM <span className="text-secondary">CMS</span></p>
+                        <p className="font-bold text-primary text-xl tracking-tight leading-tight">SUPKEM</p>
                         <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">Administrator</p>
                     </div>
                 </Link>

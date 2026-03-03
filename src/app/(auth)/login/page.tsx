@@ -32,16 +32,23 @@ export default function LoginPage() {
                     transition={{ duration: 0.8 }}
                     className="max-w-md w-full mx-auto py-12 flex flex-col items-center text-center"
                 >
-                    {/* Icon Alone at the Top */}
-                    <Link href="/" className="inline-block mb-12 group">
-                        <div className="p-4 bg-primary/5 rounded-[24px] group-hover:bg-primary group-hover:rotate-12 transition-all duration-500">
-                            <Image src="/logo.svg" alt="SUPKEM Logo" width={48} height={48} />
+                    {/* Premium Vertical Branding */}
+                    <div className="flex flex-col items-center space-y-4 mb-16">
+                        <Link href="/" className="group transition-transform hover:scale-110 duration-500">
+                            <div className="relative w-32 h-32 mb-2">
+                                <div className="absolute inset-0 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-colors animate-pulse" />
+                                <Image src="/logo.svg" alt="SUPKEM Logo" fill className="relative z-10 drop-shadow-2xl object-contain" />
+                            </div>
+                        </Link>
+                        <div className="space-y-1">
+                            <h2 className="text-3xl font-black font-outfit text-primary tracking-tighter uppercase">SUPKEM</h2>
+                            <div className="h-1 w-12 bg-secondary rounded-full mx-auto" />
                         </div>
-                    </Link>
+                    </div>
 
                     <div className="space-y-2 mb-10 w-full">
                         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">Portal Login</h1>
-                        <p className="text-foreground/60 text-lg">Enter your credentials to access the CMS.</p>
+                        <p className="text-foreground/60 text-lg">Enter your credentials to access the Portal.</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6 w-full text-left">

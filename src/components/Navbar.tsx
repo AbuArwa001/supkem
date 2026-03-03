@@ -38,7 +38,7 @@ const Navbar = () => {
                 <Link href="/" className="flex items-center gap-3 group">
                     <Image src="/logo.svg" alt="SUPKEM Logo" width={32} height={32} className="group-hover:rotate-12 transition-transform" />
                     <span className="text-xl font-bold tracking-tight text-primary">
-                        SUPKEM <span className="text-secondary">CMS</span>
+                        SUPKEM
                     </span>
                 </Link>
 
