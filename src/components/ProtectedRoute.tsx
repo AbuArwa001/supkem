@@ -30,7 +30,8 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
                     }
                 }
             }
-        }, [loading, isAuthenticated, router, requiredRole, user]);
+        }
+    }, [loading, isAuthenticated, router, requiredRole, user]);
 
     if (loading) {
         return (
