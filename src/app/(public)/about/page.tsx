@@ -115,9 +115,24 @@ export default function AboutPage() {
             <section className="py-24 bg-primary/[0.02] px-6">
                 <div className="max-w-7xl mx-auto text-center space-y-12">
                     <p className="text-xs font-black uppercase tracking-[0.4em] text-foreground/30">Global Collaboration</p>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center opacity-40 grayscale">
-                        {["AMREF", "UKAID", "UNICEF", "The Global Fund", "Kenya Redcross", "USAID"].map((p, i) => (
-                            <span key={i} className="text-2xl font-black font-outfit italic tracking-tighter text-primary whitespace-nowrap">{p}</span>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-12 items-center opacity-40 grayscale">
+                        {[
+                            { name: "AMREF", src: "/AMREF.png" },
+                            { name: "UKAID", src: "/UKAID.png" },
+                            { name: "UNICEF", src: "/UNICEF.png" },
+                            { name: "The Global Fund", src: "/GLOBAL FUND.png" },
+                            { name: "Kenya Redcross", src: "/KEENYA REDCROSS.png" },
+                            { name: "USAID", src: "/USAID.png" }
+                        ].map((p, i) => (
+                            <div key={i} className="relative h-12 w-full">
+                                <Image
+                                    src={p.src}
+                                    alt={p.name}
+                                    fill
+                                    className="object-contain"
+                                    sizes="(max-w-768px) 50vw, 150px"
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>

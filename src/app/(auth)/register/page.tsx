@@ -78,7 +78,7 @@ export default function RegisterPage() {
                 <div className="text-center space-y-4">
                     <Link href="/" className="inline-flex items-center gap-2 px-6 py-3 bg-white border border-border rounded-2xl shadow-sm hover-lift mb-4">
                         <Image src="/logo.svg" alt="SUPKEM Logo" width={24} height={24} className="text-primary" />
-                        <span className="font-bold text-primary font-outfit">SUPKEM CMS</span>
+                        <span className="font-bold text-primary font-outfit">SUPKEM</span>
                     </Link>
                     <h1 className="text-5xl font-bold font-outfit text-primary tracking-tight">Join the Council</h1>
                     <p className="text-foreground/60 text-lg font-medium max-w-lg mx-auto leading-relaxed">

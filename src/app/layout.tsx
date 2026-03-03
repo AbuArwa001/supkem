@@ -14,7 +14,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "SUPKEM CMS | Supreme Council of Kenya Muslims",
+  title: "SUPKEM | Supreme Council of Kenya Muslims",
   description: "Official Content Management and Application System for SUPKEM",
 };
 

@@ -147,12 +147,12 @@ const Hero = () => {
 
 const Partners = () => {
   const partners = [
-    { name: "AMREF", icon: Heart },
-    { name: "UKAID", icon: Globe },
-    { name: "UNICEF", icon: BookOpen },
-    { name: "The Global Fund", icon: Shield },
-    { name: "Kenya Redcross", icon: Heart },
-    { name: "USAID", icon: Globe }
+    { name: "AMREF", src: "/AMREF.png" },
+    { name: "UKAID", src: "/UKAID.png" },
+    { name: "UNICEF", src: "/UNICEF.png" },
+    { name: "The Global Fund", src: "/GLOBAL FUND.png" },
+    { name: "Kenya Redcross", src: "/KEENYA REDCROSS.png" },
+    { name: "USAID", src: "/USAID.png" }
   ];
 
   return (
@@ -168,14 +168,17 @@ const Partners = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-3 grayscale hover:grayscale-0 transition-all duration-500"
+              className="flex items-center gap-4 grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-500 group"
             >
-              <div className="p-2 bg-primary/5 rounded-lg">
-                <p.icon size={20} className="text-primary/60" />
+              <div className="relative w-32 h-16 grayscale group-hover:grayscale-0 transition-all duration-500">
+                <Image
+                  src={p.src}
+                  alt={p.name}
+                  fill
+                  className="object-contain"
+                  sizes="(max-w-768px) 100vw, 128px"
+                />
               </div>
-              <span className="text-xl font-black font-outfit text-primary/40 hover:text-primary transition-colors cursor-default tracking-tight italic">
-                {p.name}
-              </span>
             </motion.div>
           ))}
         </div>
