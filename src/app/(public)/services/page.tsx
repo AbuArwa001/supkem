@@ -52,13 +52,16 @@ export default function ServicesPage() {
                 {/* Background Image with Slow Zoom */}
                 <div className="absolute inset-0 z-0">
                     <motion.div
-                        initial={{ scale: 1.1, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 0.4 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
+                        initial={{ scale: 1.2, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 0.5 }}
+                        transition={{
+                            scale: { duration: 15, ease: "linear" },
+                            opacity: { duration: 2, ease: "easeOut" }
+                        }}
                         className="relative w-full h-full"
                     >
                         <Image
-                            src="https://images.unsplash.com/photo-1454165833762-0104b281a171?auto=format&fit=crop&q=80&w=1600"
+                            src="/images/slider/ole_olesapitb.jpg"
                             alt="Professional Services"
                             fill
                             className="object-cover"
