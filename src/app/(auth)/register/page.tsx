@@ -18,17 +18,20 @@ export default function RegisterPage() {
         phone: "",
         password: "",
     });
+    const [error, setError] = useState("");
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
+        setError("");
         try {
             await api.post("/users/users/", formData);
             setSuccess(true);
             setTimeout(() => router.push("/login"), 3000);
-        } catch (err) {
+        } catch (err: any) {
             console.error("Registration failed", err);
+            setError(err.response?.data?.detail || "Registration failed. Please check your details and try again.");
         } finally {
             setLoading(false);
         }
@@ -98,6 +101,15 @@ export default function RegisterPage() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-10 lg:p-16 rounded-[40px] bg-white border border-border shadow-2xl space-y-8 relative">
+                    {error && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-medium border border-red-100"
+                        >
+                            {error}
+                        </motion.div>
+                    )}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-2">
                             <label className="text-xs font-bold text-primary/60 uppercase tracking-widest ml-1">Full Name</label>
