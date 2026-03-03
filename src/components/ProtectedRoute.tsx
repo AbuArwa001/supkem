@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
-    requiredRole?: string;
+    requiredRole?: string | string[];
 }
 
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
@@ -18,17 +18,19 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
         if (!loading) {
             if (!isAuthenticated) {
                 router.push("/login");
-            } else if (requiredRole && user?.role?.role_name !== requiredRole) {
-                // If user is authenticated but doesn't have the required role,
-                // redirect to their default home page
-                if (user?.role?.role_name === "Normal User") {
-                    router.push("/portal");
-                } else {
-                    router.push("/admin");
+            } else if (requiredRole) {
+                const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+                if (!roles.includes(user?.role?.role_name)) {
+                    // If user is authenticated but doesn't have the required role,
+                    // redirect to their default home page
+                    if (user?.role?.role_name === "Normal User") {
+                        router.push("/portal");
+                    } else {
+                        router.push("/admin");
+                    }
                 }
             }
-        }
-    }, [loading, isAuthenticated, router, requiredRole, user]);
+        }, [loading, isAuthenticated, router, requiredRole, user]);
 
     if (loading) {
         return (
@@ -41,7 +43,10 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
 
     if (!isAuthenticated) return null;
 
-    if (requiredRole && user?.role?.role_name !== requiredRole) return null;
+    if (requiredRole) {
+        const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+        if (!roles.includes(user?.role?.role_name)) return null;
+    }
 
     return <>{children}</>;
 };
