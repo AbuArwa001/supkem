@@ -11,7 +11,11 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'www.transparenttextures.com',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'supkem-drf.onrender.com',
+      },
     ],
   },
 };
