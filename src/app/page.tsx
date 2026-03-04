@@ -400,7 +400,7 @@ export default function Home() {
               <div className="space-y-10">
                 <h2 className="text-5xl lg:text-8xl font-black font-outfit text-white leading-[0.9] tracking-tighter">
                   Start Your <br />
-                  <span className="text-secondary italic text-glow">Journey</span>
+                  <span className="text-secondary italic text-glow tracking-wider">Journey</span>
                 </h2>
                 <p className="text-xl text-white/50 leading-relaxed font-medium italic border-l-4 border-primary/40 pl-8 max-w-lg">
                   Step into the future of community management. Secure, efficient, and faith-aligned.
