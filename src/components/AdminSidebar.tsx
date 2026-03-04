@@ -27,6 +27,7 @@ const AdminSidebar = () => {
         { name: "Applications", href: "/admin/applications", icon: FileText },
         { name: "Certificates", href: "/admin/certificates", icon: Award },
         { name: "News CMS", href: "/admin/news", icon: FileText },
+        { name: "Video Briefings", href: "/admin/videos", icon: FileText },
         { name: "Services CMS", href: "/admin/services", icon: Settings },
         { name: "User Management", href: "/admin/users", icon: Users },
         { name: "Settings", href: "/admin/settings", icon: Settings },
