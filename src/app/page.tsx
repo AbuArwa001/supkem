@@ -206,23 +206,30 @@ const Partners = () => {
 const ProgramAreas = () => {
   const programs = [
     {
-      title: "Policy Advocacy & Community Empowerment",
-      desc: "Promoting Islamic values, leadership development, and rights awareness to strengthen Muslim organizations.",
-      icon: Shield,
+      title: "Programmes",
+      desc: "Implementing interventions in education, economic empowerment, health, peace building, and climate change.",
+      icon: Heart,
       color: "bg-teal-50 text-teal-600",
       accent: "border-teal-200"
     },
     {
-      title: "Peacebuilding & Social Cohesion",
-      desc: "Fostering interfaith dialogue, conflict resolution, and resilience through P/CVE initiatives.",
-      icon: Anchor,
+      title: "Institutional Strengthening",
+      desc: "Building solid internal structures through robust governance, resource mobilization, and HR development.",
+      icon: Shield,
       color: "bg-indigo-50 text-indigo-600",
       accent: "border-indigo-200"
     },
     {
-      title: "Humanitarian Response & Development",
-      desc: "Addressing health, education, and emergency needs in underserved regions through relief projects.",
-      icon: Heart,
+      title: "Partnership & Collaboration",
+      desc: "Fostering strategic engagement with government, non-state actors, and faith-based institutions.",
+      icon: Users,
+      color: "bg-amber-50 text-amber-600",
+      accent: "border-amber-200"
+    },
+    {
+      title: "Cross Cutting Areas",
+      desc: "Ensuring effective delivery through comprehensive research, monitoring, evaluation, and strategic communication.",
+      icon: BookOpen,
       color: "bg-rose-50 text-rose-600",
       accent: "border-rose-200"
     }
@@ -240,11 +247,11 @@ const ProgramAreas = () => {
             </h2>
           </div>
           <p className="text-2xl text-slate-400 max-w-lg font-medium italic border-l-8 border-secondary/20 pl-8 leading-relaxed">
-            "Uplifting society through faith, unity, and unwavering service to the Ummah."
+            "Guided by four core pillars to deliver programmatic and institutional growth for the Ummah."
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {programs.map((prog, i) => (
             <motion.div
               key={i}

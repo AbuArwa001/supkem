@@ -39,3 +39,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/strategic_plan.txt
+/public/SUPKEM Strategic Plan 2022-27.pdf
