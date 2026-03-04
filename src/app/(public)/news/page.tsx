@@ -1,52 +1,36 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
 import Link from "next/link";
+import api from "@/lib/api";
+import Image from "next/image";
 
-const newsItems = [
-    {
-        title: "SUPKEM Hosts National Unity Conference in Nairobi",
-        date: "March 15, 2026",
-        author: "Council Press",
-        image: "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800",
-        excerpt: "Leaders from across the 47 counties gathered to discuss social cohesion and economic empowerment programs."
-    },
-    {
-        title: "New Digital Halal Certification System Launched",
-        date: "Feb 28, 2026",
-        author: "IT Division",
-        image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800",
-        excerpt: "A major step in modernizing Islamic business practices with blockchain-backed certification tracking."
-    },
-    {
-        title: "Scholarship Applications Open for Higher Education",
-        date: "Feb 10, 2026",
-        author: "Education Dept",
-        image: "https://images.unsplash.com/photo-1523050853064-8521a30ad001?auto=format&fit=crop&q=80&w=800",
-        excerpt: "Muslim youth are encouraged to apply for the annual educational support program covering local and international universities."
+async function getNews() {
+    try {
+        const res = await api.get('/news/');
+        // Filter out unpublished articles
+        return (res.data.results || res.data).filter((item: any) => item.is_published);
+    } catch (err) {
+        return [];
     }
-];
+}
 
-export default function NewsPage() {
+export default async function NewsPage() {
+    const newsItems = await getNews();
+
     return (
         <div className="space-y-24 pb-24">
             {/* Premium Hero Section with Background Image */}
             <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-32 px-6 bg-slate-950">
                 {/* Background Image with Slow Zoom */}
                 <div className="absolute inset-0 z-0">
-                    <motion.div
-                        initial={{ scale: 1.1, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 0.4 }}
-                        transition={{ duration: 2, ease: "easeOut" }}
-                        className="relative w-full h-full"
-                    >
+                    <div className="relative w-full h-full opacity-40 animate-pulse">
                         <img
                             src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=1600"
                             alt="News & Media"
                             className="w-full h-full object-cover"
                         />
-                    </motion.div>
+                    </div>
 
                     {/* Layered Overlays */}
                     <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/80 z-10" />
@@ -54,12 +38,7 @@ export default function NewsPage() {
                 </div>
 
                 <div className="max-w-4xl mx-auto relative z-20 text-center space-y-8">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8 }}
-                        className="p-12 lg:p-16 rounded-[60px] bg-white/5 border border-white/10 backdrop-blur-2xl space-y-6 shadow-2xl"
-                    >
+                    <div className="p-12 lg:p-16 rounded-[60px] bg-white/5 border border-white/10 backdrop-blur-2xl space-y-6 shadow-2xl">
                         <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold tracking-[0.2em] uppercase shadow-2xl mx-auto backdrop-blur-md">
                             Latest Announcements
                         </div>
@@ -67,73 +46,92 @@ export default function NewsPage() {
                         <p className="text-lg lg:text-xl text-white/70 leading-relaxed font-medium max-w-2xl mx-auto">
                             Stay updated with the latest announcements, events, and reports from the Supreme Council.
                         </p>
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
             {/* Featured News Grid */}
             <section className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Large Feature */}
-                <motion.div
-                    initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}
-                    className="p-8 rounded-[48px] bg-white border border-border overflow-hidden group hover:shadow-2xl transition-all"
-                >
-                    <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8">
-                        <img src={newsItems[0].image} alt="News" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                    </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                            <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {newsItems[0].date}</span>
-                            <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> {newsItems[0].author}</span>
-                        </div>
-                        <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
-                            {newsItems[0].title}
-                        </h2>
-                        <p className="text-lg text-foreground/70 leading-relaxed font-medium">
-                            {newsItems[0].excerpt}
-                        </p>
-                        <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
-                            Read Full Story <ArrowRight size={14} />
-                        </button>
-                    </div>
-                </motion.div>
-
-                <div className="space-y-8">
-                    {newsItems.slice(1).map((item, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.2 }}
-                            className="p-6 rounded-[40px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift"
-                        >
-                            <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0">
-                                <img src={item.image} alt="News" className="w-full h-full object-cover" />
-                            </div>
-                            <div className="space-y-3 py-2">
-                                <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
-                                    <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {item.date}</span>
+                {newsItems.length > 0 ? (
+                    <>
+                        {/* Large Feature (First Item) */}
+                        <div className="p-8 rounded-[48px] bg-white border border-border overflow-hidden group hover:shadow-2xl transition-all h-fit">
+                            <Link href={`/news/${newsItems[0].slug}`} className="block">
+                                <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
+                                    <Image
+                                        src={newsItems[0].featured_image ? (newsItems[0].featured_image.startsWith('http') ? newsItems[0].featured_image : `https://supkem-drf.onrender.com${newsItems[0].featured_image}`) : "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800"}
+                                        alt={newsItems[0].title}
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                                    />
                                 </div>
-                                <h3 className="text-xl font-bold font-outfit text-primary leading-tight hover:text-secondary transition-colors cursor-pointer">
-                                    {item.title}
-                                </h3>
-                                <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
-                                    {item.excerpt}
-                                </p>
-                                <Link href="#" className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 hover:gap-3 transition-all">
-                                    Details <ArrowRight size={12} />
-                                </Link>
-                            </div>
-                        </motion.div>
-                    ))}
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
+                                        <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(newsItems[0].created_at).toLocaleDateString()}</span>
+                                        <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> SUPKEM Press</span>
+                                    </div>
+                                    <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
+                                        {newsItems[0].title}
+                                    </h2>
+                                    <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
+                                        {newsItems[0].content.substring(0, 150)}...
+                                    </p>
+                                    <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                        Read Full Story <ArrowRight size={14} />
+                                    </button>
+                                </div>
+                            </Link>
+                        </div>
 
-                    <div className="p-8 rounded-[40px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 group cursor-pointer hover:bg-secondary hover:text-white transition-all">
-                        <BookOpen size={40} className="text-secondary group-hover:text-white" />
-                        <h4 className="text-xl font-bold font-outfit">Access Press Archive</h4>
-                        <p className="text-sm font-medium opacity-60">View all historical records and press releases.</p>
+                        <div className="space-y-8">
+                            {newsItems.slice(1).map((item: any, i: number) => (
+                                <Link href={`/news/${item.slug}`} key={i} className="block group/item">
+                                    <div className="p-6 rounded-[40px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20">
+                                        <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
+                                            <Image
+                                                src={item.featured_image ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image}`) : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"}
+                                                alt={item.title}
+                                                fill
+                                                className="object-cover group-hover/item:scale-110 transition-transform duration-500"
+                                            />
+                                        </div>
+                                        <div className="space-y-3 py-2 flex-1">
+                                            <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
+                                                <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                            </div>
+                                            <h3 className="text-xl font-bold font-outfit text-primary leading-tight group-hover/item:text-secondary transition-colors line-clamp-2">
+                                                {item.title}
+                                            </h3>
+                                            <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
+                                                {item.content.substring(0, 100)}...
+                                            </p>
+                                            <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
+                                                Details <ArrowRight size={12} />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Link>
+                            ))}
+                            {newsItems.length <= 1 && (
+                                <div className="p-8 rounded-[40px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
+                                    <BookOpen size={40} className="text-secondary" />
+                                    <h4 className="text-xl font-bold font-outfit">More News Coming Soon</h4>
+                                    <p className="text-sm font-medium opacity-60">Check back later for more updates.</p>
+                                </div>
+                            )}
+                        </div>
+                    </>
+                ) : (
+                    <div className="col-span-1 lg:col-span-2 py-32 text-center space-y-6">
+                        <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
+                            <BookOpen size={40} className="text-primary/40" />
+                        </div>
+                        <div className="space-y-2">
+                            <h2 className="text-3xl font-bold font-outfit text-primary">No published news found</h2>
+                            <p className="text-foreground/60">Check back soon for latest announcements from SUPKEM.</p>
+                        </div>
                     </div>
-                </div>
+                )}
             </section>
         </div>
     );

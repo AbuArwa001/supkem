@@ -19,6 +19,12 @@ import {
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+
+const MDEditor = dynamic(
+    () => import("@uiw/react-md-editor"),
+    { ssr: false }
+);
 
 interface NewsItem {
     id: string;
@@ -274,15 +280,19 @@ export default function AdminNews() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Content</label>
-                                    <textarea
-                                        required
-                                        rows={6}
-                                        value={formData.content}
-                                        onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                                        placeholder="Write something amazing..."
-                                        className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none"
-                                    />
+                                    <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Content (Markdown Supported)</label>
+                                    <div data-color-mode="light" className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all">
+                                        <MDEditor
+                                            value={formData.content}
+                                            onChange={(val?: string) => setFormData({ ...formData, content: val || "" })}
+                                            preview="edit"
+                                            height={300}
+                                            className="!border-none"
+                                            textareaProps={{
+                                                placeholder: "Write your news story in markdown...",
+                                            }}
+                                        />
+                                    </div>
                                 </div>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
