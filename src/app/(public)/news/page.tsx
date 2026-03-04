@@ -76,7 +76,7 @@ export default async function NewsPage() {
                             <div key={i} className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col">
                                 <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
                                     <VideoPlayer
-                                        url={video.video_file.startsWith('http') ? video.video_file : `https://supkem-drf.onrender.com${video.video_file}`}
+                                        url={video.video_file.startsWith('http') ? video.video_file : `https://supkem-drf.onrender.com${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`}
                                     />
                                 </div>
                                 <div className="p-6 space-y-3 flex-1 flex flex-col">
