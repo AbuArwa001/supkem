@@ -114,7 +114,7 @@ export default async function NewsPage() {
                                 <Link href={`/news/${newsItems[0].slug}`} className="block">
                                     <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
                                         <Image
-                                            src={newsItems[0].featured_image ? (newsItems[0].featured_image.startsWith('http') ? newsItems[0].featured_image : `https://supkem-drf.onrender.com${newsItems[0].featured_image}`) : "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800"}
+                                            src={newsItems[0].featured_image ? (newsItems[0].featured_image.startsWith('http') ? newsItems[0].featured_image : `https://supkem-drf.onrender.com${newsItems[0].featured_image.startsWith('/') ? '' : '/'}${newsItems[0].featured_image}`) : "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800"}
                                             alt={newsItems[0].title}
                                             fill
                                             className="object-cover group-hover:scale-110 transition-transform duration-700"
@@ -129,7 +129,7 @@ export default async function NewsPage() {
                                             {newsItems[0].title}
                                         </h2>
                                         <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
-                                            {newsItems[0].content.substring(0, 150)}...
+                                            {newsItems[0].content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 150)}...
                                         </p>
                                         <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
                                             Read Full Story <ArrowRight size={14} />
@@ -144,7 +144,7 @@ export default async function NewsPage() {
                                         <div className="p-6 rounded-[40px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
                                             <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
                                                 <Image
-                                                    src={item.featured_image ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image}`) : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"}
+                                                    src={item.featured_image ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`) : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"}
                                                     alt={item.title}
                                                     fill
                                                     className="object-cover group-hover/item:scale-110 transition-transform duration-500"
@@ -158,7 +158,7 @@ export default async function NewsPage() {
                                                     {item.title}
                                                 </h3>
                                                 <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
-                                                    {item.content.substring(0, 100)}...
+                                                    {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 100)}...
                                                 </p>
                                                 <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
                                                     Details <ArrowRight size={12} />
