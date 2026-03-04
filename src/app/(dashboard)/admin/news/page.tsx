@@ -102,7 +102,7 @@ export default function AdminNews() {
 
         try {
             if (editingItem) {
-                await api.patch(`/news/${editingItem.id}/`, data, {
+                await api.patch(`/news/${editingItem.slug}/`, data, {
                     headers: { "Content-Type": "multipart/form-data" }
                 });
             } else {
@@ -119,10 +119,10 @@ export default function AdminNews() {
         }
     };
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (slug: string) => {
         if (confirm("Are you sure you want to delete this news item?")) {
             try {
-                await api.delete(`/news/${id}/`);
+                await api.delete(`/news/${slug}/`);
                 fetchNews();
             } catch (err) {
                 console.error("Failed to delete news", err);
@@ -216,7 +216,7 @@ export default function AdminNews() {
                                             <Edit2 size={16} />
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(item.id)}
+                                            onClick={() => handleDelete(item.slug)}
                                             className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
                                         >
                                             <Trash2 size={16} />
