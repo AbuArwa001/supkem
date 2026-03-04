@@ -79,12 +79,20 @@ export default function AdminVideos() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Validation: Ensure video file is present when creating
+        if (!editingItem && !formData.video_file) {
+            alert("Please select a video file to upload.");
+            return;
+        }
+
         setIsSubmitting(true);
 
         const data = new FormData();
         data.append("title", formData.title);
         data.append("description", formData.description);
-        data.append("is_published", String(formData.is_published));
+        data.append("is_published", formData.is_published ? "true" : "false"); // DRF MultipartParser usually prefers strings like this or 1/0
+
         if (formData.video_file) {
             data.append("video_file", formData.video_file);
         }
@@ -101,9 +109,12 @@ export default function AdminVideos() {
             }
             setIsModalOpen(false);
             fetchVideos();
-        } catch (err) {
-            console.error("Failed to save video", err);
-            alert("Failed to save video. Please ensure the file is a valid video format and try again.");
+        } catch (err: any) {
+            console.error("Failed to save video", err.response?.data || err);
+            const errorMsg = err.response?.data
+                ? Object.entries(err.response.data).map(([field, msgs]) => `${field}: ${msgs}`).join('\n')
+                : "Failed to save video. Please ensure all fields are correct.";
+            alert(errorMsg);
         } finally {
             setIsSubmitting(false);
         }
