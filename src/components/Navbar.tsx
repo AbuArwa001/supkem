@@ -42,15 +42,19 @@ const Navbar = () => {
                     </div>
                     <span className={cn(
                         "text-xl font-black tracking-tight transition-colors duration-300 font-outfit",
-                        scrolled ? "text-slate-900" : "text-white"
+                        scrolled ? "text-slate-900" : "text-slate-900 drop-shadow-sm"
                     )}>
                         SUPKEM
                     </span>
                 </Link>
 
                 {/* Desktop Links */}
-                <div className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full border bg-white/5 backdrop-blur-md transition-all duration-300"
-                    style={{ borderColor: scrolled ? "rgba(226, 232, 240, 0.8)" : "rgba(255, 255, 255, 0.2)" }}
+                <div className="hidden md:flex items-center gap-1.5 p-1.5 rounded-full border transition-all duration-300"
+                    style={{
+                        backgroundColor: scrolled ? "rgba(255, 255, 255, 0.5)" : "rgba(255, 255, 255, 0.8)",
+                        backdropFilter: "blur(12px)",
+                        borderColor: scrolled ? "rgba(226, 232, 240, 0.8)" : "rgba(226, 232, 240, 0.6)"
+                    }}
                 >
                     {navLinks.map((link) => (
                         <Link
@@ -60,7 +64,7 @@ const Navbar = () => {
                                 "px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105",
                                 scrolled
                                     ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                                    : "text-white/80 hover:text-white hover:bg-white/10"
+                                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5"
                             )}
                         >
                             {link.name}
@@ -83,7 +87,7 @@ const Navbar = () => {
                                 href="/login"
                                 className={cn(
                                     "text-sm font-bold transition-all duration-300 px-4 py-2.5 rounded-full hover:bg-black/5",
-                                    scrolled ? "text-slate-600 hover:text-slate-900" : "text-white/90 hover:text-white hover:bg-white/10"
+                                    scrolled ? "text-slate-600 hover:text-slate-900" : "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5"
                                 )}
                             >
                                 Login
@@ -94,7 +98,7 @@ const Navbar = () => {
                                     "px-7 py-2.5 rounded-full text-sm font-bold transition-all duration-500 hover:scale-105 shadow-md flex items-center gap-2 group",
                                     scrolled
                                         ? "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-slate-900/20"
-                                        : "bg-white text-slate-900 hover:bg-slate-50 hover:shadow-white/20"
+                                        : "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-slate-900/20"
                                 )}
                             >
                                 Apply Now <ChevronRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
@@ -107,7 +111,7 @@ const Navbar = () => {
                 <button
                     className={cn(
                         "md:hidden p-2.5 rounded-full backdrop-blur-md border transition-all duration-300",
-                        scrolled ? "bg-white/50 border-slate-200 text-slate-800" : "bg-black/20 border-white/20 text-white"
+                        scrolled ? "bg-white/50 border-slate-200 text-slate-800" : "bg-white/80 border-slate-200 text-slate-900"
                     )}
                     onClick={() => setIsOpen(!isOpen)}
                 >
