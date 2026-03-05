@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   --color-primary: hsl(154 58% 21%);
@@ -56,18 +57,25 @@
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .mesh-gradient {
   background-color: var(--color-primary);
-  background-image: 
-    radial-gradient(at 0% 0%, hsla(154, 58%, 30%, 1) 0, transparent 50%), 
-    radial-gradient(at 50% 0%, hsla(45, 93%, 47%, 0.5) 0, transparent 50%), 
-    radial-gradient(at 100% 0%, hsla(154, 58%, 21%, 1) 0, transparent 50%), 
+  background-image:
+    radial-gradient(at 0% 0%, hsla(154, 58%, 30%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(45, 93%, 47%, 0.5) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(154, 58%, 21%, 1) 0, transparent 50%),
     radial-gradient(at 50% 50%, hsla(154, 58%, 15%, 1) 0, transparent 50%),
-    radial-gradient(at 0% 100%, hsla(45, 93%, 40%, 0.4) 0, transparent 50%), 
+    radial-gradient(at 0% 100%, hsla(45, 93%, 40%, 0.4) 0, transparent 50%),
     radial-gradient(at 100% 100%, hsla(154, 58%, 35%, 1) 0, transparent 50%);
 }
 
