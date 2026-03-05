@@ -41,7 +41,7 @@ export default function UserPortal() {
             <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative min-h-[340px] rounded-[48px] overflow-hidden bg-slate-950 p-10 lg:p-16 flex items-center shadow-2xl"
+                className="relative min-h-[300px] rounded-[48px] overflow-hidden bg-slate-950 p-10 lg:p-14 flex items-center shadow-2xl"
             >
                 {/* Background Decor */}
                 <div className="absolute inset-0 opacity-40">
