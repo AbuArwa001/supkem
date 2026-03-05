@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Menu, X, LayoutDashboard, ChevronRight } from "lucide-react";
@@ -12,6 +13,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const pathname = usePathname();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -56,20 +58,25 @@ const Navbar = () => {
                         borderColor: scrolled ? "rgba(226, 232, 240, 0.8)" : "rgba(226, 232, 240, 0.6)"
                     }}
                 >
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={cn(
-                                "px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105",
-                                scrolled
-                                    ? "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5"
-                            )}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
+                        return (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={cn(
+                                    "px-5 py-2 text-sm font-semibold rounded-full transition-all duration-300 hover:scale-105",
+                                    isActive
+                                        ? "bg-slate-900 text-white shadow-md"
+                                        : scrolled
+                                            ? "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5"
+                                            : "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5"
+                                )}
+                            >
+                                {link.name}
+                            </Link>
+                        )
+                    })}
                 </div>
 
                 <div className="hidden md:flex items-center gap-4">
@@ -129,17 +136,28 @@ const Navbar = () => {
                         transition={{ duration: 0.2 }}
                         className="absolute top-full left-4 right-4 mt-2 bg-white/95 backdrop-blur-2xl shadow-2xl rounded-3xl p-6 md:hidden flex flex-col gap-2 border border-slate-200/60 overflow-hidden"
                     >
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.name}
-                                href={link.href}
-                                className="text-lg font-bold text-slate-700 py-3 px-4 rounded-xl hover:bg-slate-50 hover:text-slate-900 transition-colors flex items-center justify-between group"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                {link.name}
-                                <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
-                            </Link>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href || (link.href !== "/" && pathname?.startsWith(link.href));
+                            return (
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    className={cn(
+                                        "text-lg font-bold py-3 px-4 rounded-xl transition-colors flex items-center justify-between group",
+                                        isActive
+                                            ? "bg-slate-900 text-white shadow-md"
+                                            : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
+                                    )}
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {link.name}
+                                    <ChevronRight size={16} className={cn(
+                                        "transition-all group-hover:translate-x-1",
+                                        isActive ? "text-white" : "text-slate-300 group-hover:text-slate-900"
+                                    )} />
+                                </Link>
+                            )
+                        })}
 
                         <div className="h-px bg-slate-100 my-4" />
 
