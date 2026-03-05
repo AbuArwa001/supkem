@@ -2,54 +2,58 @@
 
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Send, Clock } from "lucide-react";
+import Image from "next/image";
 
 export default function ContactPage() {
     return (
         <div className="bg-white">
-            {/* Premium Mesh Gradient Hero */}
-            <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden py-24 px-6">
-                <div className="absolute inset-0 -z-10 bg-[#FCFCFD]">
-                    <div
-                        className="absolute inset-0 opacity-[0.4]"
-                        style={{
-                            backgroundImage: `
-                                radial-gradient(circle at 100% 0%, rgba(13, 148, 136, 0.1) 0%, transparent 50%),
-                                radial-gradient(circle at 0% 100%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-                                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 1) 0%, transparent 100%)
-                            `
-                        }}
-                    />
-                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.02] mix-blend-overlay" />
-
+            {/* Premium Hero Section with Background Image */}
+            <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden py-32 px-6 bg-slate-950">
+                {/* Background Image with Slow Zoom */}
+                <div className="absolute inset-0 z-0">
                     <motion.div
-                        animate={{
-                            scale: [1, 1.1, 1],
-                            opacity: [0.05, 0.1, 0.05],
-                            x: [0, -30, 0],
-                            y: [0, 20, 0]
+                        initial={{ scale: 1.2, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 0.5 }}
+                        transition={{
+                            scale: { duration: 15, ease: "linear" },
+                            opacity: { duration: 2, ease: "easeOut" }
                         }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] bg-secondary/10 rounded-full blur-[120px]"
-                    />
+                        className="relative w-full h-full"
+                    >
+                        <Image
+                            src="/images/slider/oledarknb.jpg"
+                            alt="Contact Us"
+                            fill
+                            className="object-cover"
+                            priority
+                        />
+                    </motion.div>
+
+                    {/* Layered Overlays */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/80 z-10" />
+                    <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10" />
                 </div>
 
-                <div className="max-w-7xl mx-auto text-center relative z-10 space-y-8">
+                <div className="max-w-4xl mx-auto relative z-20 text-center">
                     <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
-                        className="space-y-6"
+                        className="p-12 lg:p-16 rounded-[60px] bg-white/5 border border-white/10 backdrop-blur-2xl space-y-8 shadow-2xl"
                     >
-                        <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/80 backdrop-blur-md shadow-xl shadow-primary/5 border border-primary/10 text-primary text-sm font-bold tracking-tight mx-auto transition-transform hover:scale-105 cursor-default">
+                        <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-bold tracking-tight shadow-2xl mx-auto backdrop-blur-md transition-transform hover:scale-105 cursor-default">
                             <span className="flex h-2 w-2 rounded-full bg-secondary animate-pulse" />
                             We are here for you
                         </div>
-                        <h1 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-[0.95]">
-                            Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-secondary italic">Us</span>
-                        </h1>
-                        <p className="text-2xl text-foreground/60 max-w-2xl mx-auto leading-relaxed font-medium">
-                            Have questions or need assistance? Reach out to the Supreme Council's headquarters.
-                        </p>
+
+                        <div className="space-y-4">
+                            <h1 className="text-6xl lg:text-8xl font-black font-outfit text-white tracking-tighter leading-none">
+                                Contact <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-white to-amber-300 italic">Us</span>
+                            </h1>
+                            <p className="text-xl lg:text-2xl text-white/70 max-w-2xl mx-auto leading-relaxed font-medium">
+                                Have questions or need assistance? Reach out to the Supreme Council's headquarters.
+                            </p>
+                        </div>
                     </motion.div>
                 </div>
             </section>
