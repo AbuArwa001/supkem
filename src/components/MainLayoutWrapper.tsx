@@ -14,7 +14,7 @@ const MainLayoutWrapper = ({ children }: MainLayoutWrapperProps) => {
 
     // Define routes that should NOT show the global Navbar and Footer
     const isDashboard = pathname.startsWith("/admin") || pathname.startsWith("/portal");
-    const isAuth = pathname.startsWith("/login") || pathname.startsWith("/register");
+    const isAuth = pathname.startsWith("/login") || pathname.startsWith("/register") || pathname.startsWith("/forgot-password") || pathname.startsWith("/reset-password");
 
     // We don't want the default padding/margin for dashboard routes as they have their own sidebars
     const showGlobalNav = !isDashboard && !isAuth;
