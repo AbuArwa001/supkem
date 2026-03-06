@@ -16,16 +16,27 @@ export default function ForgotPasswordPage() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        // Basic client-side validation
+        if (!email || !email.includes('@')) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
         setLoading(true);
         setError("");
         setMessage("");
 
+        console.log("Submitting password reset for:", email);
+
         try {
             const res = await api.post("/users/request_password_reset/", { email });
+            console.log("Reset request response:", res.data);
             setMessage(res.data.detail || "If an account exists with this email, a reset link will be sent.");
         } catch (err: any) {
             console.error("Forgot password error:", err);
-            setError(err.response?.data?.detail || "An error occurred. Please try again.");
+            const errorDetail = err.response?.data?.detail || "An error occurred. Please try again.";
+            setError(errorDetail);
         } finally {
             setLoading(false);
         }
