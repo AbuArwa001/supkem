@@ -10,37 +10,43 @@ const serviceList = [
         icon: FileCheck,
         title: "Organization Registration",
         desc: "Official recognition and enrollment for mosques, schools, and Muslim NGOs in Kenya.",
-        category: "Administrative"
+        category: "Administrative",
+        href: "/services/organization-registration"
     },
     {
         icon: "LOGO",
         title: "Halal Certification",
         desc: "Rigorous vetting and accreditation for businesses and products to ensure Halal compliance.",
-        category: "Certification"
+        category: "Certification",
+        href: "/services/halal-certification"
     },
     {
         icon: Briefcase,
         title: "Advocacy & Legal Support",
         desc: "Representing the interest of the Muslim community in legal and governmental affairs.",
-        category: "Community"
+        category: "Community",
+        href: "/services/advocacy-legal-support"
     },
     {
         icon: GraduationCap,
         title: "Educational Programs",
         desc: "Scholarship coordination and curriculum support for Islamic educational institutions.",
-        category: "Education"
+        category: "Education",
+        href: "/services/educational-programs"
     },
     {
         icon: HeartHandshake,
         title: "Social Welfare",
         desc: "Coordinating humanitarian aid and social support during times of need.",
-        category: "Welfare"
+        category: "Welfare",
+        href: "/services/social-welfare"
     },
     {
         icon: Users,
         title: "Conflict Resolution",
         desc: "Mediation services for organizational and community disputes within the Ummah.",
-        category: "Legal"
+        category: "Legal",
+        href: "/services/conflict-resolution"
     }
 ];
 
@@ -118,8 +124,8 @@ export default function ServicesPage() {
                         <p className="text-foreground/60 leading-relaxed font-medium mb-8">
                             {service.desc}
                         </p>
-                        <Link href="/register" className="text-sm font-bold text-primary flex items-center gap-2 group-hover:gap-3 transition-all">
-                            Apply for this Service <FileCheck size={16} />
+                        <Link href={service.href} className="text-sm font-bold text-primary flex items-center gap-2 group-hover:gap-3 transition-all">
+                            View Service Details <FileCheck size={16} />
                         </Link>
                     </motion.div>
                 ))}
