@@ -210,33 +210,37 @@ const ProgramAreas = () => {
       desc: "Implementing interventions in education, economic empowerment, health, peace building, and climate change.",
       icon: Heart,
       color: "bg-teal-50 text-teal-600",
-      accent: "border-teal-200"
+      accent: "border-teal-200",
+      href: "/strategic-focus/programmes"
     },
     {
       title: "Institutional Strengthening",
       desc: "Building solid internal structures through robust governance, resource mobilization, and HR development.",
       icon: Shield,
       color: "bg-indigo-50 text-indigo-600",
-      accent: "border-indigo-200"
+      accent: "border-indigo-200",
+      href: "/strategic-focus/institutional-strengthening"
     },
     {
       title: "Partnership & Collaboration",
       desc: "Fostering strategic engagement with government, non-state actors, and faith-based institutions.",
       icon: Users,
       color: "bg-amber-50 text-amber-600",
-      accent: "border-amber-200"
+      accent: "border-amber-200",
+      href: "/strategic-focus/partnership-and-collaboration"
     },
     {
       title: "Cross Cutting Areas",
       desc: "Ensuring effective delivery through comprehensive research, monitoring, evaluation, and strategic communication.",
       icon: BookOpen,
       color: "bg-rose-50 text-rose-600",
-      accent: "border-rose-200"
+      accent: "border-rose-200",
+      href: "/strategic-focus/cross-cutting-areas"
     }
   ];
 
   return (
-    <section className="py-40 px-6 bg-white relative overflow-hidden">
+    <section id="strategic-focus" className="py-40 px-6 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-slate-50 to-transparent -z-10" />
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-24">
@@ -270,7 +274,7 @@ const ProgramAreas = () => {
               </div>
               <h3 className="text-3xl font-black font-outfit text-primary mb-8 tracking-tight">{prog.title}</h3>
               <p className="text-xl text-slate-500 leading-relaxed font-medium mb-8">{prog.desc}</p>
-              <Link href="/programs" className="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all uppercase tracking-widest text-xs">
+              <Link href={prog.href} className="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all uppercase tracking-widest text-xs">
                 Learn More <ArrowRight size={16} />
               </Link>
             </motion.div>
