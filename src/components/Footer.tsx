@@ -26,7 +26,7 @@ const Footer = () => {
                     <ul className="space-y-4 text-white/70 text-sm">
                         <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                         <li><Link href="/services" className="hover:text-white transition-colors">Our Services</Link></li>
-                        <li><Link href="/organizations" className="hover:text-white transition-colors">Member Organizations</Link></li>
+                        <li><Link href="/#strategic-focus" className="hover:text-white transition-colors">Strategic Focus</Link></li>
                         <li><Link href="/news" className="hover:text-white transition-colors">Latest News</Link></li>
                     </ul>
                 </div>
@@ -34,10 +34,10 @@ const Footer = () => {
                 <div>
                     <h4 className="font-bold mb-6 text-lg">Services</h4>
                     <ul className="space-y-4 text-white/70 text-sm">
-                        <li><Link href="/halal" className="hover:text-white transition-colors">Halal Certification</Link></li>
-                        <li><Link href="/membership" className="hover:text-white transition-colors">Organization Registration</Link></li>
-                        <li><Link href="/education" className="hover:text-white transition-colors">Educational Programs</Link></li>
-                        <li><Link href="/welfare" className="hover:text-white transition-colors">Social Welfare</Link></li>
+                        <li><Link href="/services/halal-certification" className="hover:text-white transition-colors">Halal Certification</Link></li>
+                        <li><Link href="/services/organization-registration" className="hover:text-white transition-colors">Organization Registration</Link></li>
+                        <li><Link href="/services/educational-programs" className="hover:text-white transition-colors">Educational Programs</Link></li>
+                        <li><Link href="/services/social-welfare" className="hover:text-white transition-colors">Social Welfare</Link></li>
                     </ul>
                 </div>
 
