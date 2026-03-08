@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -24,6 +26,8 @@ export default function CertificateDetail() {
   const [certificate, setCertificate] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isDownloading, setIsDownloading] = useState(false);
+  const certificateRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchCertificate = async () => {
@@ -48,6 +52,40 @@ export default function CertificateDetail() {
 
     fetchCertificate();
   }, [params.id]);
+
+  const handleDownloadPDF = async () => {
+    if (!certificateRef.current) return;
+
+    setIsDownloading(true);
+    try {
+      const canvas = await html2canvas(certificateRef.current, {
+        scale: 3, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#ffffff",
+      });
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "px",
+        format: [canvas.width / 3, canvas.height / 3],
+      });
+
+      pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 3, canvas.height / 3);
+      pdf.save(
+        `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`,
+      );
+    } catch (err) {
+      console.error("Failed to generate PDF", err);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   if (loading) {
     return (
@@ -97,7 +135,7 @@ export default function CertificateDetail() {
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
-            className="p-3 bg-white border border-border/50 rounded-2xl hover:bg-slate-50 hover:shadow-sm transition-all group"
+            className="p-3 bg-white border border-border/50 rounded-2xl hover:bg-slate-50 hover:shadow-sm transition-all group no-print"
           >
             <ArrowLeft
               size={20}
@@ -114,29 +152,99 @@ export default function CertificateDetail() {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
-          <button className="p-4 bg-white border border-border/50 rounded-2xl text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-lg transition-all active:scale-95 group">
+        <div className="flex items-center gap-3 no-print">
+          <button
+            onClick={handlePrint}
+            className="p-4 bg-white border border-border/50 rounded-2xl text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-lg transition-all active:scale-95 group"
+          >
             <Printer
               size={20}
               className="group-hover:scale-110 transition-transform"
             />
           </button>
-          <button className="p-4 bg-primary text-white rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 group flex items-center gap-3 font-bold border border-primary/20">
-            <Download
-              size={20}
-              className="group-hover:-translate-y-1 transition-transform"
-            />
-            <span className="hidden sm:inline">Download PDF</span>
+          <button
+            onClick={handleDownloadPDF}
+            disabled={isDownloading}
+            className="p-4 bg-primary text-white rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 group flex items-center gap-3 font-bold border border-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isDownloading ? (
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : (
+              <Download
+                size={20}
+                className="group-hover:-translate-y-1 transition-transform"
+              />
+            )}
+            <span className="hidden sm:inline">
+              {isDownloading ? "Generating..." : "Download PDF"}
+            </span>
           </button>
         </div>
       </div>
 
       {/* Certificate Canvas */}
       <motion.div
+        ref={certificateRef}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative bg-white border border-border/80 shadow-2xl rounded-[40px] overflow-hidden p-8 md:p-16 lg:p-24 flex flex-col items-center text-center max-w-4xl mx-auto"
+        className="relative bg-white border border-border/80 shadow-2xl rounded-[40px] overflow-hidden p-8 md:p-16 lg:p-24 flex flex-col items-center text-center max-w-4xl mx-auto print:shadow-none print:border-none print:rounded-none print:m-0 print:p-8 certificate-canvas"
       >
+        <style jsx global>{`
+          @media print {
+            /* Hide everything by default */
+            body * {
+              visibility: hidden;
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+
+            /* Show only the certificate canvas and its children */
+            .certificate-canvas,
+            .certificate-canvas * {
+              visibility: visible !important;
+            }
+
+            /* Position the certificate canvas properly */
+            .certificate-canvas {
+              position: absolute !important;
+              left: 0 !important;
+              top: 0 !important;
+              width: 100% !important;
+              max-width: none !important;
+              margin: 0 !important;
+              padding: 2rem !important;
+              border: none !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+              background-color: white !important;
+            }
+
+            /* Remove scrollbars and extra space */
+            html,
+            body {
+              height: auto !important;
+              overflow: visible !important;
+              margin: 0 !important;
+              padding: 0 !important;
+            }
+
+            /* Hide any UI elements that might still be visible */
+            .no-print,
+            header,
+            nav,
+            aside,
+            button {
+              display: none !important;
+              visibility: hidden !important;
+            }
+
+            /* Force background colors to print */
+            * {
+              -webkit-print-color-adjust: exact !important;
+              print-color-adjust: exact !important;
+            }
+          }
+        `}</style>
         {/* Background Decor */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
