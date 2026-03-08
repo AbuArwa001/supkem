@@ -31,8 +31,8 @@ export default function SubmitApplication() {
     const fetchData = async () => {
       try {
         const [orgRes, servRes] = await Promise.all([
-          api.get("/organizations/"),
-          api.get("/services/"),
+          api.get("/organizations/organizations/"),
+          api.get("/services/services/"),
         ]);
         setOrganizations(orgRes.data.results || orgRes.data);
         setServices(servRes.data.results || servRes.data);

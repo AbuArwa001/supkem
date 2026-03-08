@@ -16,7 +16,10 @@ import { cn } from "@/lib/utils";
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export default function OrganizationsPage() {
-  const { data, error, isLoading } = useSWR("/organizations/", fetcher);
+  const { data, error, isLoading } = useSWR(
+    "/organizations/organizations/",
+    fetcher,
+  );
   // DRF may return an array directly or { results: [] }
   const organizations = Array.isArray(data) ? data : data?.results || [];
 

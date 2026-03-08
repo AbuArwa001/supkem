@@ -19,7 +19,7 @@ export const useAuth = () => {
             }
 
             try {
-                const res = await api.get("/users/me/");
+                const res = await api.get("/users/users/me/");
                 setUser(res.data);
             } catch (err) {
                 console.error("Failed to fetch user:", err);
@@ -42,7 +42,7 @@ export const useAuth = () => {
             Cookies.set("access_token", access, { secure: true, sameSite: "strict" });
             Cookies.set("refresh_token", refresh, { secure: true, sameSite: "strict" });
 
-            const userRes = await api.get("/users/me/");
+            const userRes = await api.get("/users/users/me/");
             setUser(userRes.data);
 
             // Redirect based on role
