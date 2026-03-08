@@ -7,12 +7,14 @@ import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation"; // Added this import, assuming it was missing based on `router` usage
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [isRedirecting, setIsRedirecting] = useState(false);
   const { login, loading } = useAuth();
   const router = useRouter();
 
@@ -23,6 +25,7 @@ export default function LoginPage() {
     const res = await login(email, password);
     if (res.success) {
       setSuccess("Authentication Successful! Preparing your workspace...");
+      setIsRedirecting(true);
 
       // Allow user to read success message before redirecting
       setTimeout(() => {
@@ -32,7 +35,7 @@ export default function LoginPage() {
         } else {
           router.push("/admin");
         }
-      }, 1500);
+      }, 2000);
     } else {
       setError(res.error || "An error occurred");
     }
@@ -42,7 +45,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex bg-white font-inter">
       {/* Full-screen Loading Overlay */}
       <AnimatePresence>
-        {loading && (
+        {(loading || isRedirecting) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -137,12 +140,13 @@ export default function LoginPage() {
               {/* Status Text */}
               <div className="flex flex-col items-center">
                 <motion.p
+                  key={isRedirecting ? "redirecting" : "authenticating"}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="text-primary font-bold font-outfit uppercase tracking-[0.4em] text-xs"
+                  className="text-primary font-bold font-outfit uppercase tracking-[0.4em] text-xs text-center px-6"
                 >
-                  Authenticating
+                  {isRedirecting ? success : "Authenticating"}
                 </motion.p>
               </div>
             </div>
@@ -202,6 +206,15 @@ export default function LoginPage() {
               </motion.div>
             )}
 
+            {success && !isRedirecting && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="p-4 bg-emerald-50 text-emerald-600 rounded-2xl text-sm font-medium border border-emerald-100"
+              >
+                {success}
+              </motion.div>
+            )}
             <div className="space-y-2">
               <label className="text-xs font-black text-primary/40 uppercase tracking-[0.2em] ml-1">
                 Email Address
