@@ -9,6 +9,7 @@ import {
   Search,
   Calendar,
   ShieldCheck,
+  Download,
   Printer,
   HelpCircle,
 } from "lucide-react";
