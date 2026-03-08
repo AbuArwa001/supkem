@@ -284,7 +284,7 @@ function UserModal({
     role_id:
       user?.role_id || user?.role?.id || (roles.length > 0 ? roles[0].id : ""),
     location: user?.location || "Nairobi",
-    is_active: user !== undefined ? user.is_active : true,
+    is_active: user ? user.is_active : true,
   });
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -301,7 +301,7 @@ function UserModal({
           user?.role?.id ||
           (roles && roles.length > 0 ? roles[0].id : ""),
         location: user?.location || "Nairobi",
-        is_active: user !== undefined ? user.is_active : true,
+        is_active: user ? user.is_active : true,
       });
       setError("");
     }
