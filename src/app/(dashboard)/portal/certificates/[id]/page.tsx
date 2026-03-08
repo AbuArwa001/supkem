@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import html2canvas from "html2canvas";
+import { domToPng } from "modern-screenshot";
 import jsPDF from "jspdf";
 import { motion } from "framer-motion";
 import {
@@ -58,34 +58,33 @@ export default function CertificateDetail() {
 
     setIsDownloading(true);
     try {
-      const canvas = await html2canvas(certificateRef.current, {
-        scale: 2, // Slightly lower scale to avoid memory issues while keeping quality
-        useCORS: true,
-        logging: false,
-        backgroundColor: "#ffffff",
-        onclone: (clonedDoc) => {
-          // Extra safety: manually strip any remaining oklab styles from the clone
-          const elements = clonedDoc.querySelectorAll("*");
-          elements.forEach((el: any) => {
-            const style = el.getAttribute("style");
-            if (style && style.includes("oklab")) {
-              el.setAttribute(
-                "style",
-                style.replace(/oklab\([^)]+\)/g, "#000000"),
-              );
-            }
-          });
+      const dataUrl = await domToPng(certificateRef.current, {
+        scale: 2,
+        features: {
+          copycss: true,
         },
       });
 
-      const imgData = canvas.toDataURL("image/png");
+      const img = new (window as any).Image();
+      img.src = dataUrl;
+      await new Promise((resolve) => (img.onload = resolve));
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "px",
-        format: [canvas.width / 3, canvas.height / 3],
+        format: [img.width / 2, img.height / 2],
       });
 
-      pdf.addImage(imgData, "PNG", 0, 0, canvas.width / 3, canvas.height / 3);
+      pdf.addImage(
+        dataUrl,
+        "PNG",
+        0,
+        0,
+        img.width / 2,
+        img.height / 2,
+        undefined,
+        "FAST",
+      );
       pdf.save(
         `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`,
       );
