@@ -210,7 +210,8 @@ export default function ApplicationDetail() {
                 Entity Details
               </p>
               <h3 className="text-xl font-bold text-slate-800">
-                {application.organization_name}
+                {application.organization_name ||
+                  "Personal/Individual Application"}
               </h3>
             </div>
           </div>
