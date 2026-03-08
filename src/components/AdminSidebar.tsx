@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
   Building2,
@@ -14,12 +15,19 @@ import {
   User,
   Video,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen?: boolean;
+  onClose?: () => void;
+}) => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
 
