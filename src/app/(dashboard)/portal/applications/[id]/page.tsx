@@ -26,7 +26,7 @@ export default function ApplicationDetail() {
   useEffect(() => {
     const fetchApplication = async () => {
       try {
-        const res = await api.get(`/applications/${params.id}/`);
+        const res = await api.get(`/applications/applications/${params.id}/`);
         setApplication(res.data);
       } catch (err: any) {
         console.error("Failed to fetch application", err);

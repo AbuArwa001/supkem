@@ -254,7 +254,7 @@ export default function CertificateDetail() {
                 Reference Application
               </p>
               <p className="text-sm font-bold text-slate-800">
-                #{certificate.application.id.substring(0, 8).toUpperCase()}
+                #{String(certificate.application).substring(0, 8).toUpperCase()}
               </p>
             </div>
           </div>
