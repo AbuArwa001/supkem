@@ -10,7 +10,7 @@ import {
   FileText,
   CheckCircle2,
   ShieldAlert,
-  FileQuestion,
+  HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
@@ -144,7 +144,7 @@ export default function ApplicationDetail() {
           ) : application.status === "Rejected" ? (
             <ShieldAlert size={40} />
           ) : application.status === "Under Review" ? (
-            <FileQuestion size={40} />
+            <HelpCircle size={40} />
           ) : (
             <Clock size={40} />
           )}

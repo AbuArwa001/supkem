@@ -9,9 +9,8 @@ import {
   Search,
   Calendar,
   ShieldCheck,
-  Download,
-  Print,
-  FileQuestion,
+  Printer,
+  HelpCircle,
 } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
@@ -62,7 +61,7 @@ export default function CertificateDetail() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6 text-center">
         <div className="w-24 h-24 rounded-full bg-red-50 text-red-500 flex items-center justify-center">
-          <FileQuestion size={48} />
+          <HelpCircle size={48} />
         </div>
         <div className="space-y-2 max-w-md">
           <h2 className="text-2xl font-black font-outfit text-slate-800">
@@ -114,7 +113,7 @@ export default function CertificateDetail() {
 
         <div className="flex items-center gap-3">
           <button className="p-4 bg-white border border-border/50 rounded-2xl text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-lg transition-all active:scale-95 group">
-            <Print
+            <Printer
               size={20}
               className="group-hover:scale-110 transition-transform"
             />
