@@ -60,7 +60,7 @@ export default function UserPortal() {
         // Fetch from DRF backend endpoints
         const [appsRes, certsRes] = await Promise.all([
           api.get("/applications/"),
-          api.get("/certifications/"),
+          api.get("/applications/certifications/"),
         ]);
 
         // Adjust for DRF pagination (.results) if present

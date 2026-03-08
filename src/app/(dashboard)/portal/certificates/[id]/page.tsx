@@ -30,7 +30,9 @@ export default function CertificateDetail() {
       try {
         // Ensure ID exists before fetching
         if (params.id) {
-          const res = await api.get(`/certifications/${params.id}/`);
+          const res = await api.get(
+            `/applications/certifications/${params.id}/`,
+          );
           setCertificate(res.data);
         }
       } catch (err: any) {
