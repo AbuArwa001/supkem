@@ -60,9 +60,6 @@ export default function CertificateDetail() {
     try {
       const dataUrl = await domToPng(certificateRef.current, {
         scale: 2,
-        features: {
-          copycss: true,
-        },
       });
 
       const img = new (window as any).Image();
