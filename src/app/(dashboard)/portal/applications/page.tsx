@@ -147,7 +147,7 @@ export default function ApplicationsPage() {
                   <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-500">
                     <div className="flex items-center gap-1.5">
                       <Building2 size={16} className="text-slate-400" />
-                      {app.organization_name || "Unknown Organization"}
+                      {app.organization_name || "Personal/Individual"}
                     </div>
                     <div className="flex items-center gap-1.5">
                       <Calendar size={16} className="text-slate-400" />
