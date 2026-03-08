@@ -14,6 +14,7 @@ import {
   Clock,
   FileText,
   ChevronRight,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -169,6 +170,13 @@ export default function UserPortal() {
               >
                 <FilePlus size={18} />
                 Start New Application
+              </Link>
+              <Link
+                href="/portal/organizations/new"
+                className="px-8 py-4 bg-primary/20 backdrop-blur-md border border-white/20 text-white rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-primary/30 transition-all"
+              >
+                <Plus size={18} />
+                Register Institution
               </Link>
             </div>
           </div>

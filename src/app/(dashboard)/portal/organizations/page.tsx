@@ -9,9 +9,11 @@ import {
   Calendar,
   AlertCircle,
   FileText,
+  Plus,
 } from "lucide-react";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
@@ -26,13 +28,23 @@ export default function OrganizationsPage() {
   return (
     <div className="space-y-8 pb-20 max-w-7xl mx-auto">
       {/* Header section */}
-      <div>
-        <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-          My Organizations
-        </h2>
-        <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
-          Manage and view the organizations associated with your portal account.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
+            My Organizations
+          </h2>
+          <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
+            Manage and view the organizations associated with your portal
+            account.
+          </p>
+        </div>
+        <Link
+          href="/portal/organizations/new"
+          className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all hover-lift"
+        >
+          <Plus size={20} />
+          <span>Register New Institution</span>
+        </Link>
       </div>
 
       {/* Error State */}
@@ -75,6 +87,12 @@ export default function OrganizationsPage() {
               You are not currently associated with any registered organizations
               in the system.
             </p>
+            <Link
+              href="/portal/organizations/new"
+              className="mt-6 px-10 py-4 bg-primary text-white rounded-[20px] font-bold shadow-xl shadow-primary/10 hover-lift flex items-center gap-2"
+            >
+              <Plus size={18} /> Register My First Institution
+            </Link>
           </div>
         </div>
       ) : (
