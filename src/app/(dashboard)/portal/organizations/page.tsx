@@ -96,7 +96,7 @@ export default function OrganizationsPage() {
                       {org.name}
                     </h3>
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mt-1">
-                      {org.organization_type}
+                      {org.type}
                     </p>
                   </div>
                 </div>
@@ -133,7 +133,7 @@ export default function OrganizationsPage() {
                           Reg No.
                         </p>
                         <p className="text-sm font-semibold text-slate-700">
-                          {org.registration_number}
+                          {org.reg_number}
                         </p>
                       </div>
                     </div>
@@ -149,7 +149,7 @@ export default function OrganizationsPage() {
                           Location
                         </p>
                         <p className="text-sm font-semibold text-slate-700">
-                          {org.county}
+                          {org.county_council_name}
                         </p>
                       </div>
                     </div>
