@@ -278,7 +278,9 @@ function UserModal({
   onSuccess: () => void;
 }) {
   const [formData, setFormData] = useState({
-    full_name: user?.full_name || "",
+    first_name: user?.first_name || "",
+    middle_name: user?.middle_name || "",
+    last_name: user?.last_name || "",
     email: user?.email || "",
     password: "",
     role_id:
@@ -293,7 +295,9 @@ function UserModal({
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        full_name: user?.full_name || "",
+        first_name: user?.first_name || "",
+        middle_name: user?.middle_name || "",
+        last_name: user?.last_name || "",
         email: user?.email || "",
         password: "",
         role_id:
@@ -379,18 +383,48 @@ function UserModal({
           )}
 
           <form id="user-form" onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">
+                  First Name
+                </label>
+                <input
+                  required
+                  value={formData.first_name}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, first_name: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-border/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm font-medium transition-all"
+                  placeholder="e.g. Jane"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">
+                  Middle Name
+                </label>
+                <input
+                  value={formData.middle_name}
+                  onChange={(e) =>
+                    setFormData((p) => ({ ...p, middle_name: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 rounded-xl border border-border/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm font-medium transition-all"
+                  placeholder="Optional"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">
-                Full Name
+                Last Name / Surname
               </label>
               <input
                 required
-                value={formData.full_name}
+                value={formData.last_name}
                 onChange={(e) =>
-                  setFormData((p) => ({ ...p, full_name: e.target.value }))
+                  setFormData((p) => ({ ...p, last_name: e.target.value }))
                 }
                 className="w-full px-4 py-3 rounded-xl border border-border/60 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary/50 text-sm font-medium transition-all"
-                placeholder="e.g. Jane Doe"
+                placeholder="e.g. Doe"
               />
             </div>
 
