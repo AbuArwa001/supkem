@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -289,8 +289,8 @@ function UserModal({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Reset form when user changes
-  useState(() => {
+  // Sync form data when modal opens or user changes
+  useEffect(() => {
     if (isOpen) {
       setFormData({
         full_name: user?.full_name || "",
@@ -299,13 +299,13 @@ function UserModal({
         role_id:
           user?.role_id ||
           user?.role?.id ||
-          (roles.length > 0 ? roles[0].id : ""),
+          (roles && roles.length > 0 ? roles[0].id : ""),
         location: user?.location || "Nairobi",
         is_active: user !== undefined ? user.is_active : true,
       });
       setError("");
     }
-  });
+  }, [isOpen, user, roles]);
 
   if (!isOpen) return null;
 
