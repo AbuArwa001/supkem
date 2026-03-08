@@ -82,36 +82,6 @@ export default function UserPortal() {
   const activeApps = applications.filter(
     (app) => !["Approved", "Rejected"].includes(app.status),
   );
-  const displayApps =
-    activeApps.length > 0
-      ? activeApps
-      : [
-          {
-            id: "dummy-app",
-            service_name: "Halal Certification",
-            organization_name: "Demo Organization",
-            status: "In Progress",
-            submitted_at: new Date().toISOString(),
-          },
-        ];
-
-  const displayCerts =
-    certificates.length > 0
-      ? certificates
-      : [
-          {
-            id: "dummy-cert",
-            serial_number: "#HAL-8291",
-            application: { service_name: "Membership 2025" },
-            expires_at: "2025-12-31",
-          },
-          {
-            id: "dummy-cert-2",
-            serial_number: "#ISO-9921",
-            application: { service_name: "Business Compliance" },
-            expires_at: "2026-06-30",
-          },
-        ];
 
   const metrics = [
     {
@@ -120,7 +90,7 @@ export default function UserPortal() {
       value:
         applications.length > 0
           ? activeApps.length.toString().padStart(2, "0")
-          : "01",
+          : "00",
       color: "bg-gradient-to-br from-amber-500 to-amber-600",
       delay: 0.1,
     },
@@ -130,7 +100,7 @@ export default function UserPortal() {
       value:
         certificates.length > 0
           ? certificates.length.toString().padStart(2, "0")
-          : "02",
+          : "00",
       color: "bg-gradient-to-br from-primary to-primary/80",
       delay: 0.2,
     },
@@ -257,9 +227,14 @@ export default function UserPortal() {
               <div className="p-8 text-center text-primary/40 animate-pulse">
                 Loading applications...
               </div>
+            ) : activeApps.length === 0 ? (
+              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[40px] bg-slate-50/50">
+                No active applications found. Check back later or start a new
+                application.
+              </div>
             ) : (
-              displayApps.map((app, i) => (
-                <Link href={`/portal/applications/${app.id}`} key={app.id || i}>
+              activeApps.map((app, i) => (
+                <Link href={`/portal/applications/${app.id}`} key={app.id}>
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -332,10 +307,14 @@ export default function UserPortal() {
               <div className="p-6 text-center text-primary/40 animate-pulse">
                 Loading certificates...
               </div>
+            ) : certificates.length === 0 ? (
+              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] bg-slate-50/50">
+                No certificates found.
+              </div>
             ) : (
-              displayCerts.map((cert: any, i: number) => (
+              certificates.map((cert: any, i: number) => (
                 <motion.div
-                  key={cert.id || i}
+                  key={cert.id}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
@@ -350,7 +329,9 @@ export default function UserPortal() {
                     </button>
                   </div>
                   <h4 className="text-lg font-black font-outfit text-primary mb-1">
-                    {cert.application?.service_name || "Certification"}
+                    {cert.application?.service_name ||
+                      cert.serial_number ||
+                      "Certification"}
                   </h4>
                   <p className="text-xs text-foreground/30 font-bold mb-6 italic">
                     Valid until{" "}
@@ -359,7 +340,7 @@ export default function UserPortal() {
                       : "N/A"}
                   </p>
                   <Link
-                    href={`/portal/certificates/${cert.id || i}`}
+                    href={`/portal/certificates/${cert.id}`}
                     className="text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
                   >
                     View Document <ExternalLink size={12} />
