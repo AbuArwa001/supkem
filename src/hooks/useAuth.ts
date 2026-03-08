@@ -45,15 +45,7 @@ export const useAuth = () => {
             const userRes = await api.get("/users/users/me/");
             setUser(userRes.data);
 
-            // Redirect based on role
-            const role = userRes.data.role?.role_name;
-            if (role === "Normal User") {
-                router.push("/portal");
-            } else {
-                router.push("/admin");
-            }
-
-            return { success: true };
+            return { success: true, user: userRes.data };
         } catch (err: any) {
             console.error("Login error:", err);
             return { success: false, error: err.response?.data?.detail || "Invalid credentials" };
