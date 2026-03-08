@@ -19,7 +19,10 @@ import { cn } from "@/lib/utils";
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export default function ApplicationsPage() {
-  const { data, error, isLoading } = useSWR("/applications/", fetcher);
+  const { data, error, isLoading } = useSWR(
+    "/applications/applications/",
+    fetcher,
+  );
   // DRF may return an array directly or { results: [] }
   const applications = Array.isArray(data) ? data : data?.results || [];
 
@@ -128,7 +131,7 @@ export default function ApplicationsPage() {
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-3">
                     <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors">
-                      {app.application_type}
+                      {app.service_name || "Halal Certification"}
                     </h3>
                     <span
                       className={cn(
@@ -149,13 +152,13 @@ export default function ApplicationsPage() {
                     <div className="flex items-center gap-1.5">
                       <Calendar size={16} className="text-slate-400" />
                       Submitted{" "}
-                      {new Date(
-                        app.submission_date || app.created_at,
-                      ).toLocaleDateString()}
+                      {app.submitted_at
+                        ? new Date(app.submitted_at).toLocaleDateString()
+                        : "N/A"}
                     </div>
-                    {app.reference_number && (
+                    {app.id && (
                       <div className="flex items-center gap-1.5 font-mono text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">
-                        Ref: {app.reference_number}
+                        Ref: #{String(app.id).substring(0, 8).toUpperCase()}
                       </div>
                     )}
                   </div>

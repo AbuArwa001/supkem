@@ -59,13 +59,22 @@ export default function UserPortal() {
       try {
         // Fetch from DRF backend endpoints
         const [appsRes, certsRes] = await Promise.all([
-          api.get("/applications/"),
+          api.get("/applications/applications/"),
           api.get("/applications/certifications/"),
         ]);
 
-        // Adjust for DRF pagination (.results) if present
-        const appsData = appsRes.data.results || appsRes.data;
-        const certsData = certsRes.data.results || certsRes.data;
+        // Adjust for DRF pagination (.results) if present, ensure array
+        const appsData = Array.isArray(appsRes?.data)
+          ? appsRes.data
+          : appsRes?.data?.results && Array.isArray(appsRes.data.results)
+            ? appsRes.data.results
+            : [];
+
+        const certsData = Array.isArray(certsRes?.data)
+          ? certsRes.data
+          : certsRes?.data?.results && Array.isArray(certsRes.data.results)
+            ? certsRes.data.results
+            : [];
 
         setApplications(appsData);
         setCertificates(certsData);
@@ -79,8 +88,8 @@ export default function UserPortal() {
     fetchData();
   }, []);
 
-  const activeApps = applications.filter(
-    (app) => !["Approved", "Rejected"].includes(app.status),
+  const activeApps = (applications || []).filter(
+    (app) => app && !["Approved", "Rejected"].includes(app.status),
   );
 
   const metrics = [
@@ -88,8 +97,8 @@ export default function UserPortal() {
       icon: FileText,
       label: "Active Applications",
       value:
-        applications.length > 0
-          ? activeApps.length.toString().padStart(2, "0")
+        (applications?.length || 0) > 0
+          ? (activeApps?.length || 0).toString().padStart(2, "0")
           : "00",
       color: "bg-gradient-to-br from-amber-500 to-amber-600",
       delay: 0.1,
@@ -98,8 +107,8 @@ export default function UserPortal() {
       icon: ShieldCheck,
       label: "Valid Certificates",
       value:
-        certificates.length > 0
-          ? certificates.length.toString().padStart(2, "0")
+        (certificates?.length || 0) > 0
+          ? (certificates?.length || 0).toString().padStart(2, "0")
           : "00",
       color: "bg-gradient-to-br from-primary to-primary/80",
       delay: 0.2,
@@ -142,7 +151,9 @@ export default function UserPortal() {
               <h1 className="text-5xl lg:text-6xl font-black font-outfit text-white tracking-tight leading-none">
                 Salam,{" "}
                 <span className="text-secondary">
-                  {user?.full_name ? user.full_name.split(" ")[0] : "Member"}
+                  {user?.full_name
+                    ? String(user.full_name).split(" ")[0]
+                    : "Member"}
                 </span>
               </h1>
               <p className="text-lg text-white/50 font-medium max-w-md leading-relaxed">
@@ -234,7 +245,10 @@ export default function UserPortal() {
               </div>
             ) : (
               activeApps.map((app, i) => (
-                <Link href={`/portal/applications/${app.id}`} key={app.id}>
+                <Link
+                  href={app?.id ? `/portal/applications/${app.id}` : "#"}
+                  key={app?.id || i}
+                >
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -247,17 +261,19 @@ export default function UserPortal() {
                       </div>
                       <div className="space-y-1">
                         <h4 className="text-2xl font-black font-outfit text-primary tracking-tight">
-                          {app.service_name || "Application"}
+                          {app?.service_name || "Application"}
                         </h4>
                         <div className="flex items-center gap-3 text-sm text-foreground/40 font-medium">
                           <span className="flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest text-slate-500">
                             #
-                            {app.id
-                              ? app.id.toString().substring(0, 8).toUpperCase()
+                            {app?.id
+                              ? String(app.id).substring(0, 8).toUpperCase()
                               : "APP"}
                           </span>
                           <span>•</span>
-                          <span>{app.organization_name || "Organization"}</span>
+                          <span>
+                            {app?.organization_name || "Organization"}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -266,9 +282,9 @@ export default function UserPortal() {
                       <span
                         className={cn(
                           "px-5 py-2 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-2 border",
-                          app.status === "Under Review"
+                          app?.status === "Under Review"
                             ? "bg-amber-50 text-amber-700 border-amber-100"
-                            : app.status === "Submitted"
+                            : app?.status === "Submitted"
                               ? "bg-blue-50 text-blue-700 border-blue-100"
                               : "bg-slate-50 text-slate-700 border-slate-100",
                         )}
@@ -276,18 +292,20 @@ export default function UserPortal() {
                         <span
                           className={cn(
                             "w-1.5 h-1.5 rounded-full animate-pulse",
-                            app.status === "Under Review"
+                            app?.status === "Under Review"
                               ? "bg-amber-500"
-                              : app.status === "Submitted"
+                              : app?.status === "Submitted"
                                 ? "bg-blue-500"
                                 : "bg-slate-500",
                           )}
                         />
-                        {app.status || "In Progress"}
+                        {app?.status || "In Progress"}
                       </span>
                       <p className="text-xs text-foreground/30 font-bold mr-1">
                         Submitted{" "}
-                        {new Date(app.submitted_at).toLocaleDateString()}
+                        {app?.submitted_at
+                          ? new Date(app.submitted_at).toLocaleDateString()
+                          : "Date N/A"}
                       </p>
                     </div>
                   </motion.div>
@@ -314,7 +332,7 @@ export default function UserPortal() {
             ) : (
               certificates.map((cert: any, i: number) => (
                 <motion.div
-                  key={cert.id}
+                  key={cert?.id || i}
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
@@ -329,18 +347,18 @@ export default function UserPortal() {
                     </button>
                   </div>
                   <h4 className="text-lg font-black font-outfit text-primary mb-1">
-                    {cert.application?.service_name ||
-                      cert.serial_number ||
+                    {cert?.application?.service_name ||
+                      cert?.serial_number ||
                       "Certification"}
                   </h4>
                   <p className="text-xs text-foreground/30 font-bold mb-6 italic">
                     Valid until{" "}
-                    {cert.expires_at
+                    {cert?.expires_at
                       ? new Date(cert.expires_at).toLocaleDateString()
                       : "N/A"}
                   </p>
                   <Link
-                    href={`/portal/certificates/${cert.id}`}
+                    href={cert?.id ? `/portal/certificates/${cert.id}` : "#"}
                     className="text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
                   >
                     View Document <ExternalLink size={12} />

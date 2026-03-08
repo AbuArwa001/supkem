@@ -130,7 +130,7 @@ export default function CertificatesPage() {
                       Certificate Number
                     </p>
                     <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors font-mono">
-                      {cert.certificate_number}
+                      {cert.serial_number || "CERT-PENDING"}
                     </h3>
                   </div>
 
@@ -139,9 +139,9 @@ export default function CertificatesPage() {
                       <Calendar size={16} className="text-slate-400 shrink-0" />
                       <span className="flex-1">Issued:</span>
                       <span className="text-slate-800 font-bold">
-                        {new Date(
-                          cert.issue_date || cert.created_at,
-                        ).toLocaleDateString()}
+                        {cert.issued_at
+                          ? new Date(cert.issued_at).toLocaleDateString()
+                          : "N/A"}
                       </span>
                     </div>
                     {cert.expiry_date && (
@@ -150,9 +150,8 @@ export default function CertificatesPage() {
                           size={16}
                           className="text-slate-400 shrink-0"
                         />
-                        <span className="flex-1">Valid Until:</span>
                         <span className="text-slate-800 font-bold">
-                          {new Date(cert.expiry_date).toLocaleDateString()}
+                          {new Date(cert.expires_at).toLocaleDateString()}
                         </span>
                       </div>
                     )}
