@@ -21,7 +21,9 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    full_name: "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
     email: "",
     phone: "",
     password: "",
@@ -182,7 +184,7 @@ export default function RegisterPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               <label className="text-xs font-bold text-primary/60 uppercase tracking-widest ml-1">
                 Last Name / Surname
               </label>
