@@ -124,21 +124,21 @@ export default function UserPortal() {
   ];
 
   return (
-    <div className="space-y-12 pb-20">
+    <div className="space-y-8 md:space-y-12 pb-20">
       {/* Premium Welcome Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative min-h-[300px] rounded-[48px] overflow-hidden bg-slate-950 p-10 lg:p-14 flex items-center shadow-2xl"
+        className="relative min-h-[300px] md:min-h-[400px] rounded-[32px] md:rounded-[48px] overflow-hidden bg-slate-950 p-6 md:p-10 lg:p-14 flex items-center shadow-2xl"
       >
         {/* Background Decor */}
         <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />
-          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-secondary/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
+          <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-primary/20 rounded-full blur-[80px] md:blur-[120px] -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-[200px] md:w-[300px] h-[200px] md:h-[300px] bg-secondary/10 rounded-full blur-[60px] md:blur-[100px] translate-y-1/2 -translate-x-1/4" />
         </div>
 
-        <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center w-full">
-          <div className="space-y-8">
+        <div className="relative z-10 grid lg:grid-cols-2 gap-8 md:gap-12 items-center w-full">
+          <div className="space-y-6 md:space-y-8">
             <div className="space-y-3">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -149,7 +149,7 @@ export default function UserPortal() {
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
                 Portal Access Alpha
               </motion.div>
-              <h1 className="text-5xl lg:text-6xl font-black font-outfit text-white tracking-tight leading-none">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit text-white tracking-tight leading-none">
                 Salam,{" "}
                 <span className="text-secondary">
                   {user?.full_name
@@ -157,23 +157,23 @@ export default function UserPortal() {
                     : "Member"}
                 </span>
               </h1>
-              <p className="text-lg text-white/50 font-medium max-w-md leading-relaxed">
+              <p className="text-sm md:text-lg text-white/50 font-medium max-w-md leading-relaxed">
                 Manage your community certifications and institutional
                 compliance in one unified digital space.
               </p>
             </div>
 
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link
                 href="/portal/applications/new"
-                className="px-8 py-4 bg-white text-primary rounded-2xl font-black text-sm flex items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/20"
+                className="w-full sm:w-auto px-8 py-4 bg-white text-primary rounded-2xl font-black text-sm flex items-center justify-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-black/20"
               >
                 <FilePlus size={18} />
-                Start New Application
+                New Application
               </Link>
               <Link
                 href="/portal/organizations/new"
-                className="px-8 py-4 bg-primary/20 backdrop-blur-md border border-white/20 text-white rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-primary/30 transition-all"
+                className="w-full sm:w-auto px-8 py-4 bg-primary/20 backdrop-blur-md border border-white/20 text-white rounded-2xl font-black text-sm flex items-center justify-center gap-2 hover:bg-primary/30 transition-all"
               >
                 <Plus size={18} />
                 Register Institution
@@ -216,22 +216,22 @@ export default function UserPortal() {
       </motion.div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {metrics.map((m, i) => (
           <StatCard key={i} {...m} />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-12">
         {/* Active Application Status */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-2 space-y-6 md:space-y-8">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-black font-outfit text-primary tracking-tight">
+            <h3 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight">
               Active Applications
             </h3>
             <Link
               href="/portal/applications"
-              className="text-sm font-bold text-primary/40 hover:text-primary transition-colors flex items-center gap-1 group"
+              className="text-xs md:text-sm font-bold text-primary/40 hover:text-primary transition-colors flex items-center gap-1 group"
             >
               View All{" "}
               <ChevronRight
@@ -247,9 +247,8 @@ export default function UserPortal() {
                 Loading applications...
               </div>
             ) : activeApps.length === 0 ? (
-              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[40px] bg-slate-50/50">
-                No active applications found. Check back later or start a new
-                application.
+              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] md:rounded-[40px] bg-slate-50/50">
+                No active applications found.
               </div>
             ) : (
               activeApps.map((app, i) => (
@@ -261,35 +260,38 @@ export default function UserPortal() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="p-8 rounded-[40px] bg-white border border-border/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer mb-4"
+                    className="p-6 md:p-8 rounded-[32px] md:rounded-[40px] bg-white border border-border/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer mb-4"
                   >
-                    <div className="flex items-center gap-6">
-                      <div className="w-20 h-20 bg-primary/[0.03] text-primary rounded-3xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500">
-                        <Search size={32} strokeWidth={1.5} />
+                    <div className="flex items-center gap-4 md:gap-6">
+                      <div className="w-14 h-14 md:w-20 md:h-20 bg-primary/[0.03] text-primary rounded-2xl md:rounded-3xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500">
+                        <Search
+                          className="w-6 h-6 md:w-8 md:h-8"
+                          strokeWidth={1.5}
+                        />
                       </div>
                       <div className="space-y-1">
-                        <h4 className="text-2xl font-black font-outfit text-primary tracking-tight">
+                        <h4 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight leading-tight">
                           {app?.service_name || "Application"}
                         </h4>
-                        <div className="flex items-center gap-3 text-sm text-foreground/40 font-medium">
-                          <span className="flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest text-slate-500">
+                        <div className="flex flex-wrap items-center gap-2 md:gap-3 text-[10px] md:text-sm text-foreground/40 font-medium">
+                          <span className="flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded-md text-[9px] md:text-[10px] font-black uppercase tracking-widest text-slate-500">
                             #
                             {app?.id
                               ? String(app.id).substring(0, 8).toUpperCase()
                               : "APP"}
                           </span>
-                          <span>•</span>
-                          <span>
+                          <span className="hidden md:inline">•</span>
+                          <span className="truncate max-w-[150px] md:max-w-none">
                             {app?.organization_name || "Organization"}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-col items-end gap-3">
+                    <div className="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-3">
                       <span
                         className={cn(
-                          "px-5 py-2 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center gap-2 border",
+                          "px-4 md:px-5 py-1.5 md:py-2 rounded-xl md:rounded-2xl text-[10px] md:text-xs font-black uppercase tracking-widest flex items-center gap-2 border",
                           app?.status === "Under Review"
                             ? "bg-amber-50 text-amber-700 border-amber-100"
                             : app?.status === "Submitted"
@@ -309,11 +311,10 @@ export default function UserPortal() {
                         />
                         {app?.status || "In Progress"}
                       </span>
-                      <p className="text-xs text-foreground/30 font-bold mr-1">
-                        Submitted{" "}
+                      <p className="text-[10px] md:text-xs text-foreground/30 font-bold md:mr-1">
                         {app?.submitted_at
                           ? new Date(app.submitted_at).toLocaleDateString()
-                          : "Date N/A"}
+                          : "N/A"}
                       </p>
                     </div>
                   </motion.div>
@@ -325,13 +326,13 @@ export default function UserPortal() {
 
         {/* Recent Certificates Sidebar */}
         <div className="space-y-8">
-          <h3 className="text-2xl font-black font-outfit text-primary tracking-tight">
-            Recent Certificates
+          <h3 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight">
+            Certificates
           </h3>
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
             {loading ? (
               <div className="p-6 text-center text-primary/40 animate-pulse">
-                Loading certificates...
+                Loading...
               </div>
             ) : certificates.length === 0 ? (
               <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] bg-slate-50/50">
@@ -344,32 +345,32 @@ export default function UserPortal() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="p-6 rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
+                  className="p-6 rounded-[28px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
                 >
                   <div className="flex items-center justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">
-                      <CheckCircle2 size={24} />
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">
+                      <CheckCircle2 size={20} />
                     </div>
-                    <button className="p-3 bg-white rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
-                      <Download size={18} />
+                    <button className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
+                      <Download size={16} />
                     </button>
                   </div>
-                  <h4 className="text-lg font-black font-outfit text-primary mb-1">
+                  <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
                     {cert?.application?.service_name ||
                       cert?.serial_number ||
                       "Certification"}
                   </h4>
-                  <p className="text-xs text-foreground/30 font-bold mb-6 italic">
-                    Valid until{" "}
+                  <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
+                    Exp.{" "}
                     {cert?.expires_at
                       ? new Date(cert.expires_at).toLocaleDateString()
                       : "N/A"}
                   </p>
                   <Link
                     href={cert?.id ? `/portal/certificates/${cert.id}` : "#"}
-                    className="text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
+                    className="text-[10px] md:text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
                   >
-                    View Document <ExternalLink size={12} />
+                    View <ExternalLink size={10} />
                   </Link>
                 </motion.div>
               ))
