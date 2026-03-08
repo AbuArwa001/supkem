@@ -64,17 +64,17 @@ export default function CertificateDetail() {
         logging: false,
         backgroundColor: "#ffffff",
         onclone: (clonedDoc) => {
-          // Force standard colors on the cloned element to avoid oklab/oklch issues
-          const canvas = clonedDoc.querySelector(
-            ".certificate-canvas",
-          ) as HTMLElement;
-          if (canvas) {
-            canvas.style.setProperty("--color-primary", "#16543d");
-            canvas.style.setProperty("--color-secondary", "#e7b408");
-            canvas.style.setProperty("--color-slate-800", "#1e293b");
-            canvas.style.setProperty("--color-slate-500", "#64748b");
-            canvas.style.setProperty("--color-slate-400", "#94a3b8");
-          }
+          // Extra safety: manually strip any remaining oklab styles from the clone
+          const elements = clonedDoc.querySelectorAll("*");
+          elements.forEach((el: any) => {
+            const style = el.getAttribute("style");
+            if (style && style.includes("oklab")) {
+              el.setAttribute(
+                "style",
+                style.replace(/oklab\([^)]+\)/g, "#000000"),
+              );
+            }
+          });
         },
       });
 
@@ -287,10 +287,22 @@ export default function CertificateDetail() {
           }
         `}</style>
         {/* Background Decor */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2" />
-        <div className="absolute inset-4 border border-primary/10 rounded-[28px] pointer-events-none" />
-        <div className="absolute inset-6 border-4 border-double border-primary/5 rounded-[20px] pointer-events-none" />
+        <div
+          className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"
+          style={{ backgroundColor: "rgba(22, 84, 61, 0.05)" }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"
+          style={{ backgroundColor: "rgba(231, 180, 8, 0.1)" }}
+        />
+        <div
+          className="absolute inset-4 border rounded-[28px] pointer-events-none"
+          style={{ borderColor: "rgba(22, 84, 61, 0.1)" }}
+        />
+        <div
+          className="absolute inset-6 border-4 border-double rounded-[20px] pointer-events-none"
+          style={{ borderColor: "rgba(22, 84, 61, 0.05)" }}
+        />
 
         <div className="relative z-10 w-full flex flex-col items-center">
           <Image
@@ -301,19 +313,37 @@ export default function CertificateDetail() {
             className="mb-8 opacity-90 drop-shadow-sm"
           />
 
-          <div className="text-primary tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full">
-            <div className="h-px bg-primary/10 flex-1" />
+          <div
+            className="tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full"
+            style={{ color: "#16543d" }}
+          >
+            <div
+              className="h-px flex-1"
+              style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
+            />
             <span>Supreme Council of Kenya Muslims</span>
-            <div className="h-px bg-primary/10 flex-1" />
+            <div
+              className="h-px flex-1"
+              style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
+            />
           </div>
 
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit text-slate-800 tracking-tight leading-tight mb-8">
+          <h2
+            className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8"
+            style={{ color: "#1e293b" }}
+          >
             {certificate.application?.service_name || "Official Certification"}
           </h2>
 
-          <p className="text-lg md:text-xl text-slate-500 font-medium max-w-2xl mb-12">
+          <p
+            className="text-lg md:text-xl font-medium max-w-2xl mb-12"
+            style={{ color: "#64748b" }}
+          >
             This is to certify that{" "}
-            <strong className="text-primary border-b border-primary/20 pb-0.5">
+            <strong
+              className="border-b pb-0.5"
+              style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
+            >
               {certificate.application?.organization_name ||
                 "The designated organization"}
             </strong>{" "}
@@ -322,69 +352,121 @@ export default function CertificateDetail() {
           </p>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-16">
-            <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50">
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
+            <div
+              className="p-4 rounded-2xl border"
+              style={{
+                backgroundColor: "rgba(248, 250, 252, 0.5)",
+                borderColor: "rgba(241, 245, 249, 0.5)",
+              }}
+            >
+              <p
+                className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                style={{ color: "#94a3b8" }}
+              >
                 Serial Number
               </p>
-              <p className="font-mono text-slate-800 font-bold text-sm truncate">
+              <p
+                className="font-mono font-bold text-sm truncate"
+                style={{ color: "#1e293b" }}
+              >
                 {certificate.serial_number}
               </p>
             </div>
-            <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50">
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
+            <div
+              className="p-4 rounded-2xl border"
+              style={{
+                backgroundColor: "rgba(248, 250, 252, 0.5)",
+                borderColor: "rgba(241, 245, 249, 0.5)",
+              }}
+            >
+              <p
+                className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                style={{ color: "#94a3b8" }}
+              >
                 Date of Issue
               </p>
-              <p className="text-slate-800 font-bold text-sm tracking-wide">
+              <p
+                className="font-bold text-sm tracking-wide"
+                style={{ color: "#1e293b" }}
+              >
                 {issueDate.toLocaleDateString()}
               </p>
             </div>
-            <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50">
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
+            <div
+              className="p-4 rounded-2xl border"
+              style={{
+                backgroundColor: "rgba(248, 250, 252, 0.5)",
+                borderColor: "rgba(241, 245, 249, 0.5)",
+              }}
+            >
+              <p
+                className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                style={{ color: "#94a3b8" }}
+              >
                 Valid Until
               </p>
-              <p className="text-slate-800 font-bold text-sm tracking-wide">
+              <p
+                className="font-bold text-sm tracking-wide"
+                style={{ color: "#1e293b" }}
+              >
                 {expiryDate ? expiryDate.toLocaleDateString() : "Indefinite"}
               </p>
             </div>
-            <div className="p-4 bg-slate-50/50 rounded-2xl border border-slate-100/50 flex flex-col items-center justify-center relative overflow-hidden group">
-              <div
-                className={cn(
-                  "absolute inset-0 transition-opacity mix-blend-multiply",
-                  isValid ? "bg-emerald-50" : "bg-red-50",
-                )}
-              />
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1 relative z-10">
+            <div
+              className="p-4 rounded-2xl border flex flex-col items-center justify-center relative overflow-hidden group"
+              style={{
+                backgroundColor: isValid ? "#f0fdf4" : "#fef2f2",
+                borderColor: "transparent",
+              }}
+            >
+              <p
+                className="text-[10px] uppercase tracking-widest font-bold mb-1 relative z-10"
+                style={{ color: "#94a3b8" }}
+              >
                 Status
               </p>
               <p
-                className={cn(
-                  "font-black tracking-widest uppercase text-sm relative z-10",
-                  isValid ? "text-emerald-600" : "text-red-600",
-                )}
+                className="font-black tracking-widest uppercase text-sm relative z-10"
+                style={{ color: isValid ? "#059669" : "#dc2626" }}
               >
                 {isValid ? "Valid" : "Expired"}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center justify-between w-full border-t border-border/60 pt-8 mt-auto">
+          <div
+            className="flex items-center justify-between w-full border-t pt-8 mt-auto"
+            style={{ borderColor: "rgba(226, 232, 240, 0.6)" }}
+          >
             <div className="text-left">
-              <div className="w-40 h-10 border-b border-slate-800 flex items-end">
-                {/* Placeholder for signature image or cursive font */}
-                <span className="font-serif text-2xl text-slate-600 italic px-2 -mb-2">
+              <div
+                className="w-40 h-10 border-b flex items-end"
+                style={{ borderColor: "#1e293b" }}
+              >
+                <span
+                  className="font-serif text-2xl italic px-2 -mb-2"
+                  style={{ color: "#475569" }}
+                >
                   Official Signatory
                 </span>
               </div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mt-4">
+              <p
+                className="text-[10px] font-bold uppercase tracking-widest mt-4"
+                style={{ color: "#94a3b8" }}
+              >
                 Authorized Signature
               </p>
             </div>
 
-            {/* Placeholder for QR Code */}
-            <div className="w-24 h-24 bg-white border border-border/80 rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0">
-              <div className="w-full h-full bg-slate-50 rounded bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZWNlY2VjIiBzdHJva2Utd2lkdGg9IjIiPjxwYXRoIGQ9Ik0wIDEwaDQwdk0wIDIwaDQvTTAgMzBoNDB2TTEwaDB2NDBNMjBoMHY0ME0zMGgwdjQwIi8+PC9zdmc+')] mix-blend-multiply opacity-50 flex items-center justify-center">
-                {/* Simulating QR Code Hash visual representation */}
-                <Search size={24} className="text-slate-300" />
+            <div
+              className="w-24 h-24 bg-white border rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0"
+              style={{ borderColor: "rgba(226, 232, 240, 0.8)" }}
+            >
+              <div
+                className="w-full h-full rounded flex items-center justify-center"
+                style={{ backgroundColor: "#f8fafc" }}
+              >
+                <Search size={24} style={{ color: "#cbd5e1" }} />
               </div>
             </div>
           </div>
