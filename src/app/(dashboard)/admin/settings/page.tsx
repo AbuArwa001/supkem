@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import api from "@/lib/api";
 
 export default function ProfileSettings() {
   const { user, login } = useAuth();
