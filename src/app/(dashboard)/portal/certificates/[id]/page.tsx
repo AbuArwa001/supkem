@@ -59,10 +59,23 @@ export default function CertificateDetail() {
     setIsDownloading(true);
     try {
       const canvas = await html2canvas(certificateRef.current, {
-        scale: 3, // Higher scale for better quality
+        scale: 2, // Slightly lower scale to avoid memory issues while keeping quality
         useCORS: true,
         logging: false,
         backgroundColor: "#ffffff",
+        onclone: (clonedDoc) => {
+          // Force standard colors on the cloned element to avoid oklab/oklch issues
+          const canvas = clonedDoc.querySelector(
+            ".certificate-canvas",
+          ) as HTMLElement;
+          if (canvas) {
+            canvas.style.setProperty("--color-primary", "#16543d");
+            canvas.style.setProperty("--color-secondary", "#e7b408");
+            canvas.style.setProperty("--color-slate-800", "#1e293b");
+            canvas.style.setProperty("--color-slate-500", "#64748b");
+            canvas.style.setProperty("--color-slate-400", "#94a3b8");
+          }
+        },
       });
 
       const imgData = canvas.toDataURL("image/png");
@@ -243,6 +256,34 @@ export default function CertificateDetail() {
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
             }
+          }
+
+          /* Color compatibility for html2canvas */
+          .certificate-canvas {
+            --primary-safe: #16543d;
+            --secondary-safe: #e7b408;
+            --slate-800-safe: #1e293b;
+            --slate-500-safe: #64748b;
+          }
+
+          /* Override specific problematic elements during capture */
+          .certificate-canvas :global(.text-primary) {
+            color: var(--primary-safe) !important;
+          }
+          .certificate-canvas :global(.text-secondary) {
+            color: var(--secondary-safe) !important;
+          }
+          .certificate-canvas :global(.bg-primary\/5) {
+            background-color: rgba(22, 84, 61, 0.05) !important;
+          }
+          .certificate-canvas :global(.bg-secondary\/10) {
+            background-color: rgba(231, 180, 8, 0.1) !important;
+          }
+          .certificate-canvas :global(.border-primary\/10) {
+            border-color: rgba(22, 84, 61, 0.1) !important;
+          }
+          .certificate-canvas :global(.border-primary\/5) {
+            border-color: rgba(22, 84, 61, 0.05) !important;
           }
         `}</style>
         {/* Background Decor */}
