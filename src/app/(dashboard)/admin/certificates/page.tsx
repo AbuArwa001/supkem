@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     Award,
     Search,
@@ -10,7 +10,11 @@ import {
     ExternalLink,
     Calendar,
     ChevronRight,
-    MoreVertical
+    MoreVertical,
+    X,
+    Loader2,
+    CheckCircle2,
+    AlertCircle
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -19,19 +23,67 @@ import Link from "next/link";
 
 export default function AdminCertificates() {
     const [certificates, setCertificates] = useState([]);
+    const [eligibleApplications, setEligibleApplications] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isLoadingApplications, setIsLoadingApplications] = useState(false);
+    const [isIssuing, setIsIssuing] = useState(false);
+    const [selectedAppId, setSelectedAppId] = useState("");
+    const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+    const fetchCerts = async () => {
+        try {
+            const res = await api.get("/applications/certifications/");
+            setCertificates(res.data.results || res.data);
+        } catch (err) {
+            console.error("Failed to fetch certificates", err);
+        }
+    };
 
     useEffect(() => {
-        const fetchCerts = async () => {
-            try {
-                const res = await api.get("/applications/certifications/");
-                setCertificates(res.data.results || res.data);
-            } catch (err) {
-                console.error("Failed to fetch certificates", err);
-            }
-        };
         fetchCerts();
     }, []);
+
+    const fetchEligibleApplications = async () => {
+        setIsLoadingApplications(true);
+        try {
+            const res = await api.get("/applications/approved_no_cert/");
+            setEligibleApplications(res.data);
+        } catch (err) {
+            console.error("Failed to fetch eligible applications", err);
+        } finally {
+            setIsLoadingApplications(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isModalOpen) {
+            fetchEligibleApplications();
+            setMessage(null);
+            setSelectedAppId("");
+        }
+    }, [isModalOpen]);
+
+    const handleIssueCertificate = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!selectedAppId) return;
+
+        setIsIssuing(true);
+        setMessage(null);
+        try {
+            await api.post("/applications/certifications/", {
+                application: selectedAppId
+            });
+            setMessage({ type: 'success', text: "Certificate issued successfully!" });
+            fetchCerts();
+            setTimeout(() => setIsModalOpen(false), 2000);
+        } catch (err: any) {
+            console.error("Failed to issue certificate", err);
+            setMessage({ type: 'error', text: err.response?.data?.detail || "Failed to issue certificate. Please try again." });
+        } finally {
+            setIsIssuing(false);
+        }
+    };
 
     const filteredCerts = certificates.filter((cert: any) =>
         cert.organization_name?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,7 +107,10 @@ export default function AdminCertificates() {
                             className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
                         />
                     </div>
-                    <button className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center gap-2">
+                    <button
+                        onClick={() => setIsModalOpen(true)}
+                        className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center gap-2"
+                    >
                         <Award size={18} /> Issue New
                     </button>
                 </div>
@@ -97,11 +152,13 @@ export default function AdminCertificates() {
                             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border/50">
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">Issued Date</p>
-                                    <p className="text-xs font-bold text-primary flex items-center gap-1"><Calendar size={12} /> {new Date(cert.issued_date).toLocaleDateString()}</p>
+                                    <p className="text-xs font-bold text-primary flex items-center gap-1"><Calendar size={12} /> {new Date(cert.issued_at).toLocaleDateString()}</p>
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">Serial Number</p>
-                                    <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter"><Image src="/logo.svg" alt="Logo" width={12} height={12} /> CERT-{cert.id * 1234}</p>
+                                    <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter">
+                                        <Award size={12} /> {cert.serial_number}
+                                    </p>
                                 </div>
                             </div>
 
@@ -115,6 +172,102 @@ export default function AdminCertificates() {
                     </motion.div>
                 ))}
             </div>
+
+            {/* Issue Certificate Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl border border-border"
+                        >
+                            <div className="p-8 border-b border-border flex items-center justify-between bg-primary/5">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center">
+                                        <Award size={24} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold font-outfit text-primary tracking-tight">Issue New Certificate</h3>
+                                        <p className="text-xs font-medium text-foreground/40">Select an approved application</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setIsModalOpen(false)}
+                                    className="p-2 hover:bg-white rounded-xl transition-colors"
+                                >
+                                    <X size={20} className="text-foreground/40" />
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleIssueCertificate} className="p-8 space-y-6">
+                                {message && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className={cn(
+                                            "p-4 rounded-2xl flex items-center gap-3 font-medium text-sm",
+                                            message.type === 'success' ? "bg-green-50 text-green-600 border border-green-100" : "bg-red-50 text-red-600 border border-red-100"
+                                        )}
+                                    >
+                                        {message.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+                                        {message.text}
+                                    </motion.div>
+                                )}
+
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black uppercase tracking-[0.2em] text-foreground/40 ml-1">Application Reference</label>
+                                    <div className="relative">
+                                        <select
+                                            required
+                                            value={selectedAppId}
+                                            onChange={(e) => setSelectedAppId(e.target.value)}
+                                            className="w-full p-4 bg-white border border-border rounded-[20px] text-sm appearance-none outline-none focus:border-primary/20 transition-all shadow-sm disabled:opacity-50"
+                                            disabled={isLoadingApplications || isIssuing || message?.type === 'success'}
+                                        >
+                                            <option value="">{isLoadingApplications ? "Loading approved applications..." : "Select approved application..."}</option>
+                                            {eligibleApplications.map((app: any) => (
+                                                <option key={app.id} value={app.id}>
+                                                    {app.organization_name} - {app.service_name} ({app.id.slice(0, 8)})
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {!isLoadingApplications && eligibleApplications.length === 0 && (
+                                            <p className="text-[10px] text-red-500 mt-2 ml-1">No approved applications pending certification.</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 flex flex-col gap-3">
+                                    <button
+                                        type="submit"
+                                        disabled={!selectedAppId || isIssuing || message?.type === 'success'}
+                                        className="w-full py-4 bg-primary text-white rounded-[20px] font-bold text-sm hover-lift premium-gradient shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:transform-none"
+                                    >
+                                        {isIssuing ? (
+                                            <>
+                                                <Loader2 size={18} className="animate-spin" /> Issuing Digital Certificate...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Award size={18} /> Generate Certificate
+                                            </>
+                                        )}
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsModalOpen(false)}
+                                        className="w-full py-4 text-foreground/40 font-bold text-sm hover:text-primary transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
