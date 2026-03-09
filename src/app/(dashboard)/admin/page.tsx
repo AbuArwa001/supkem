@@ -130,9 +130,10 @@ const ReportModal = ({ isOpen, onClose, data }: { isOpen: boolean, onClose: () =
 
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF("p", "mm", "a4");
-    const imgProps = pdf.getImageProperties(imgData);
+
+    // Use canvas dimensions directly to avoid type error with getImageProperties
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save(`SUPKEM_Analytical_Report_${new Date().toISOString().split('T')[0]}.pdf`);
