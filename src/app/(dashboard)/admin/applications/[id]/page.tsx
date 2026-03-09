@@ -44,7 +44,7 @@ export default function ApplicationDetail() {
     const handleAction = async (status: string) => {
         setSubmitting(true);
         try {
-            await api.patch(`/applications/applications/${id}/`, { status });
+            await api.post(`/applications/applications/${id}/update_status/`, { status });
             router.push("/admin/applications");
         } catch (err) {
             console.error("Action failed", err);
