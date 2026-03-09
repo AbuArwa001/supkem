@@ -34,10 +34,15 @@ export default function AdminApplications() {
         fetchApplications();
     }, []);
 
-    const filteredApps = applications.filter((app: any) => {
-        const matchesFilter = filter === "all" || app.status.toLowerCase() === filter.toLowerCase();
-        const matchesSearch = app.organization_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            app.id.toString().includes(searchTerm);
+    const filteredApps = (applications || []).filter((app: any) => {
+        const matchesFilter = filter === "all" || app.status?.toLowerCase() === filter.toLowerCase();
+
+        const searchLower = searchTerm.toLowerCase();
+        const matchesSearch =
+            (app.organization_name?.toLowerCase() || "").includes(searchLower) ||
+            (app.display_id?.toLowerCase() || "").includes(searchLower) ||
+            app.id?.toString().includes(searchTerm);
+
         return matchesFilter && matchesSearch;
     });
 
@@ -103,8 +108,10 @@ export default function AdminApplications() {
                                     </span>
                                 </div>
                                 <p className="text-sm font-semibold text-foreground/40 flex items-center gap-2">
-                                    <span className="text-secondary font-bold underline underline-offset-4 decoration-2 decoration-secondary/30">{app.organization_name}</span>
-                                    • Submitted on {new Date(app.created_at).toLocaleDateString()}
+                                    <span className="text-secondary font-bold underline underline-offset-4 decoration-2 decoration-secondary/30">
+                                        {app.organization_name || "Individual Application"}
+                                    </span>
+                                    • Submitted on {app.submitted_at ? new Date(app.submitted_at).toLocaleDateString() : "Pending"}
                                 </p>
                             </div>
                         </div>
