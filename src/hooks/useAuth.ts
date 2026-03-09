@@ -19,7 +19,7 @@ export const useAuth = () => {
             }
 
             try {
-                const res = await api.get("/users/me/");
+                const res = await api.get("/users/users/me/");
                 setUser(res.data);
             } catch (err) {
                 console.error("Failed to fetch user:", err);
@@ -42,18 +42,10 @@ export const useAuth = () => {
             Cookies.set("access_token", access, { secure: true, sameSite: "strict" });
             Cookies.set("refresh_token", refresh, { secure: true, sameSite: "strict" });
 
-            const userRes = await api.get("/users/me/");
+            const userRes = await api.get("/users/users/me/");
             setUser(userRes.data);
 
-            // Redirect based on role
-            const role = userRes.data.role?.role_name;
-            if (role === "Normal User") {
-                router.push("/portal");
-            } else {
-                router.push("/admin");
-            }
-
-            return { success: true };
+            return { success: true, user: userRes.data };
         } catch (err: any) {
             console.error("Login error:", err);
             return { success: false, error: err.response?.data?.detail || "Invalid credentials" };
