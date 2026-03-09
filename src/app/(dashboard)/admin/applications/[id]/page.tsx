@@ -68,7 +68,7 @@ export default function ApplicationDetail() {
                     <ArrowLeft size={20} />
                 </button>
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-bold font-outfit text-primary">Review Application #{app.id}</h1>
+                    <h1 className="text-3xl font-bold font-outfit text-primary">Review Application {app.display_id}</h1>
                     <p className="text-foreground/40 font-medium">Submitted by {app.organization_name} on {new Date(app.created_at).toLocaleDateString()}</p>
                 </div>
             </div>

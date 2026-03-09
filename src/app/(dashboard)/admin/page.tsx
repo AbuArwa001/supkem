@@ -179,7 +179,7 @@ export default function AdminOverview() {
                     >
                       <td className="px-6 md:px-8 py-5 md:py-6">
                         <Link href={`/admin/applications/${app.id}`} className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                          {app.id.slice(0, 8)}...
+                          {app.display_id}
                         </Link>
                       </td>
                       <td className="px-6 md:px-8 py-5 md:py-6">

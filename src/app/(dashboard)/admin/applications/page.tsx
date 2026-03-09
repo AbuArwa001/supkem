@@ -91,7 +91,7 @@ export default function AdminApplications() {
                             </div>
                             <div className="space-y-1">
                                 <div className="flex items-center gap-3">
-                                    <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer">#{app.id} - {app.service_name}</h4>
+                                    <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer">{app.display_id} - {app.service_name}</h4>
                                     <span className={cn(
                                         "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-[0.2em] inline-flex items-center gap-1.5 border",
                                         app.status === "Approved" ? "bg-green-50 text-green-700 border-green-100" :
