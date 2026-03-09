@@ -1,5 +1,4 @@
-"use client";
-
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Users,
@@ -13,8 +12,11 @@ import {
   ArrowUpRight,
   BarChart3,
   Activity,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import api from "@/lib/api";
+import Link from "next/link";
 
 const StatCard = ({ icon: Icon, label, value, trend, color, delay }: any) => (
   <motion.div
@@ -62,71 +64,38 @@ const StatCard = ({ icon: Icon, label, value, trend, color, delay }: any) => (
 );
 
 export default function AdminOverview() {
-  const stats = [
-    {
-      icon: Building2,
-      label: "Organizations",
-      value: "254",
-      trend: "+12.5%",
-      color: "bg-gradient-to-br from-indigo-500 to-indigo-700",
-      delay: 0,
-    },
-    {
-      icon: Users,
-      label: "Total Users",
-      value: "1,240",
-      trend: "+5.2%",
-      color: "bg-gradient-to-br from-emerald-500 to-emerald-700",
-      delay: 0.1,
-    },
-    {
-      icon: FileText,
-      label: "Applications",
-      value: "86",
-      trend: "+18.0%",
-      color: "bg-gradient-to-br from-amber-500 to-amber-700",
-      delay: 0.2,
-    },
-    {
-      icon: Award,
-      label: "Certificates",
-      value: "42",
-      trend: "+8.4%",
-      color: "bg-gradient-to-br from-blue-500 to-blue-700",
-      delay: 0.3,
-    },
-  ];
+  const [data, setData] = useState<{ stats: any[], recent_applications: any[] } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const recentApplications = [
-    {
-      id: "APP-001",
-      org: "Al-Iman Mosque",
-      type: "Halal Certification",
-      status: "Pending",
-      time: "2 hours ago",
-    },
-    {
-      id: "APP-002",
-      org: "Muslim Welfare Soc",
-      type: "Organization Reg",
-      status: "Approved",
-      time: "5 hours ago",
-    },
-    {
-      id: "APP-003",
-      org: "Nairobi Bilal School",
-      type: "Social Welfare",
-      status: "Rejected",
-      time: "Yesterday",
-    },
-    {
-      id: "APP-004",
-      org: "Coastal Islamic Center",
-      type: "Zakat Application",
-      status: "Pending",
-      time: "Yesterday",
-    },
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const res = await api.get("/dashboard/stats/");
+        setData(res.data);
+      } catch (err) {
+        console.error("Failed to fetch dashboard stats", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDashboardData();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+        >
+          <Loader2 size={40} className="text-indigo-600" />
+        </motion.div>
+      </div>
+    );
+  }
+
+  const stats = data?.stats || [];
+  const recentApplications = data?.recent_applications || [];
 
   return (
     <div className="space-y-8 md:space-y-12">
@@ -156,7 +125,11 @@ export default function AdminOverview() {
       {/* Stat Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
         {stats.map((s, i) => (
-          <StatCard key={i} {...s} />
+          <StatCard key={i} icon={
+            s.label === "Organizations" ? Building2 :
+              s.label === "Total Users" ? Users :
+                s.label === "Applications" ? FileText : Award
+          } {...s} delay={i * 0.1} />
         ))}
       </div>
 
@@ -168,13 +141,13 @@ export default function AdminOverview() {
             <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
               Recent Applications
             </h3>
-            <button className="text-xs md:text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group whitespace-nowrap">
+            <Link href="/admin/applications" className="text-xs md:text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group whitespace-nowrap">
               View Pipeline{" "}
               <ArrowUpRight
                 size={16}
                 className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
               />
-            </button>
+            </Link>
           </div>
 
           <div className="bg-white border border-slate-100 rounded-[28px] md:rounded-[32px] overflow-hidden shadow-lg shadow-slate-200/40">
@@ -203,16 +176,16 @@ export default function AdminOverview() {
                       className="hover:bg-slate-50/80 transition-colors group cursor-pointer"
                     >
                       <td className="px-6 md:px-8 py-5 md:py-6">
-                        <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
-                          {app.id}
-                        </span>
+                        <Link href={`/admin/applications/${app.id}`} className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                          {app.id.slice(0, 8)}...
+                        </Link>
                       </td>
                       <td className="px-6 md:px-8 py-5 md:py-6">
                         <p className="font-bold text-sm md:text-base text-slate-900">
-                          {app.org}
+                          {app.organization_name}
                         </p>
                         <p className="text-[10px] md:text-xs font-semibold text-slate-500 mt-1">
-                          {app.type}
+                          {app.service_name}
                         </p>
                       </td>
                       <td className="px-6 md:px-8 py-5 md:py-6">
@@ -237,10 +210,17 @@ export default function AdminOverview() {
                         </span>
                       </td>
                       <td className="px-6 md:px-8 py-5 md:py-6 text-xs md:text-sm font-semibold text-slate-500 text-right">
-                        {app.time}
+                        {new Date(app.submitted_at).toLocaleDateString()}
                       </td>
                     </tr>
                   ))}
+                  {recentApplications.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="px-8 py-10 text-center text-slate-400 font-medium">
+                        No recent applications found.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
