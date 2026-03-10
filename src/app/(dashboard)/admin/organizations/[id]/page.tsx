@@ -294,6 +294,22 @@ export default function OrganizationDetail() {
                 <div className="flex items-center justify-between p-4 rounded-2xl border border-border bg-white hover:border-primary/20 transition-all group">
                   <div className="flex items-center gap-4 overflow-hidden">
                     <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
+                      <Phone size={18} className="text-primary/60 group-hover:text-primary transition-colors" />
+                    </div>
+                    <span className="text-sm font-bold text-slate-600 truncate">
+                      {org.phone_number || "Phone not provided"}
+                    </span>
+                  </div>
+                  {org.phone_number && (
+                    <a href={`tel:${org.phone_number}`} className="p-2 text-primary/40 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between p-4 rounded-2xl border border-border bg-white hover:border-primary/20 transition-all group">
+                  <div className="flex items-center gap-4 overflow-hidden">
+                    <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
                       <Mail size={18} className="text-primary/60 group-hover:text-primary transition-colors" />
                     </div>
                     <span className="text-sm font-bold text-slate-600 truncate">

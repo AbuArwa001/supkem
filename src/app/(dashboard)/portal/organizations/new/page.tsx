@@ -23,6 +23,7 @@ export default function RegisterOrganization() {
     reg_number: "",
     pin_number: "",
     gps_location: "",
+    phone_number: "",
     website: "",
     email: "",
     county_council: "",
@@ -174,6 +175,21 @@ export default function RegisterOrganization() {
                 placeholder="-1.2345, 36.7890"
               />
             </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-bold text-primary/60 ml-1 uppercase tracking-widest">
+              Phone Number (Optional)
+            </label>
+            <input
+              type="tel"
+              value={formData.phone_number}
+              onChange={(e) =>
+                setFormData({ ...formData, phone_number: e.target.value })
+              }
+              className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+              placeholder="+254700000000"
+            />
           </div>
 
           <div className="space-y-3">
