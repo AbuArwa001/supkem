@@ -23,6 +23,8 @@ export default function RegisterOrganization() {
     reg_number: "",
     pin_number: "",
     gps_location: "",
+    website: "",
+    email: "",
     county_council: "",
     region: "",
   });
@@ -172,6 +174,36 @@ export default function RegisterOrganization() {
                 placeholder="-1.2345, 36.7890"
               />
             </div>
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-bold text-primary/60 ml-1 uppercase tracking-widest">
+              Email Address (Optional)
+            </label>
+            <input
+              type="email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+              placeholder="contact@institution.org"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <label className="text-sm font-bold text-primary/60 ml-1 uppercase tracking-widest">
+              Website URL (Optional)
+            </label>
+            <input
+              type="url"
+              value={formData.website}
+              onChange={(e) =>
+                setFormData({ ...formData, website: e.target.value })
+              }
+              className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+              placeholder="https://www.institution.org"
+            />
           </div>
 
           <div className="space-y-3">
