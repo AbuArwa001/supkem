@@ -78,7 +78,7 @@ export default function OrganizationDetail() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-10 rounded-[48px] bg-white border border-border shadow-sm space-y-10 relative overflow-hidden"
+            className="p-10 rounded-[24px] bg-white border border-border shadow-sm space-y-10 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/[0.02] rounded-full -translate-y-1/2 translate-x-1/2" />
 
@@ -172,7 +172,7 @@ export default function OrganizationDetail() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="p-8 rounded-[40px] bg-white border border-border shadow-sm flex items-center justify-between group"
+                className="p-8 rounded-[20px] bg-white border border-border shadow-sm flex items-center justify-between group"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center">
@@ -190,7 +190,7 @@ export default function OrganizationDetail() {
 
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="p-8 rounded-[40px] bg-white border border-border shadow-sm flex items-center justify-between group"
+                className="p-8 rounded-[20px] bg-white border border-border shadow-sm flex items-center justify-between group"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center">
@@ -210,7 +210,7 @@ export default function OrganizationDetail() {
         </div>
 
         <div className="space-y-8">
-          <div className="p-8 rounded-[40px] bg-white border border-border shadow-sm space-y-8 overflow-hidden relative">
+          <div className="p-8 rounded-[20px] bg-white border border-border shadow-sm space-y-8 overflow-hidden relative">
             <div className="flex items-center gap-3">
               <Users size={20} className="text-primary" />
               <h4 className="font-bold text-primary">Assigned Personnel</h4>
@@ -242,7 +242,7 @@ export default function OrganizationDetail() {
             </button>
           </div>
 
-          <div className="p-8 rounded-[40px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6">
+          <div className="p-8 rounded-[20px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6">
             <h4 className="font-bold text-lg flex items-center gap-2">
               <LayoutDashboard size={18} /> Administrative Actions
             </h4>

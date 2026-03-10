@@ -164,7 +164,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
                         transition={{ duration: 0.6, delay: 0.2 }}
                         className="lg:col-span-2 space-y-8"
                     >
-                        <div className="bg-white rounded-[40px] p-10 lg:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
+                        <div className="bg-white rounded-[20px] p-10 lg:p-14 shadow-2xl shadow-slate-200/50 border border-slate-100">
                             <h2 className="text-3xl font-bold font-outfit text-primary mb-6">Overview</h2>
                             <p className="text-lg text-slate-600 leading-relaxed mb-10">
                                 {service.description}

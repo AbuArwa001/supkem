@@ -128,7 +128,7 @@ export default function AdminCertificates() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05 }}
-            className="p-8 rounded-[40px] bg-white border-2 border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
+            className="p-8 rounded-[20px] bg-white border-2 border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
           >
             {/* Premium Background Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/[0.03] -translate-y-12 translate-x-12 rounded-full group-hover:bg-primary/5 transition-colors" />

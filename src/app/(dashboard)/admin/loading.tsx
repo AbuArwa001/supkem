@@ -26,7 +26,7 @@ export default function DashboardLoading() {
       </div>
 
       {/* Main Content Area Skeleton */}
-      <div className="h-[400px] bg-white border border-slate-100 rounded-[40px] p-10 space-y-6">
+      <div className="h-[400px] bg-white border border-slate-100 rounded-[20px] p-10 space-y-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-slate-100 rounded-2xl" />
           <div className="h-6 w-48 bg-slate-100 rounded-lg" />

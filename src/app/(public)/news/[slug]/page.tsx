@@ -67,7 +67,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
 
             {/* Article Body */}
             <main className="max-w-3xl mx-auto px-6 -mt-12 relative z-20">
-                <div className="bg-white rounded-[40px] p-8 lg:p-16 shadow-2xl shadow-black/10 border border-slate-100">
+                <div className="bg-white rounded-[20px] p-8 lg:p-16 shadow-2xl shadow-black/10 border border-slate-100">
                     <article className="
                         prose prose-lg max-w-none
                         prose-headings:font-outfit prose-headings:text-primary prose-headings:font-black prose-headings:tracking-tight prose-headings:leading-tight

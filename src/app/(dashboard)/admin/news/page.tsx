@@ -253,7 +253,7 @@ export default function AdminNews() {
                             initial={{ scale: 0.95, opacity: 0, y: 20 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                            className="relative w-full max-w-2xl bg-white rounded-[40px] shadow-2xl overflow-hidden shadow-primary/10"
+                            className="relative w-full max-w-2xl bg-white rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
                         >
                             <div className="p-8 border-b border-border flex items-center justify-between">
                                 <h2 className="text-2xl font-bold font-outfit text-primary">

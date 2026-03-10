@@ -154,7 +154,7 @@ const ReportModal = ({ isOpen, onClose, data }: { isOpen: boolean, onClose: () =
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-5xl max-h-[90vh] bg-white rounded-[40px] shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-5xl max-h-[90vh] bg-white rounded-[20px] shadow-2xl overflow-hidden flex flex-col"
           >
             {/* Modal Header */}
             <div className="p-8 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/50">

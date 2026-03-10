@@ -84,7 +84,7 @@ export default function AdminOrganizations() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.05 }}
                         className={cn(
-                            "p-8 rounded-[40px] bg-white border border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group relative",
+                            "p-8 rounded-[20px] bg-white border border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group relative",
                             viewMode === "list" && "flex items-center justify-between"
                         )}
                     >

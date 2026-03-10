@@ -61,7 +61,7 @@ export default function ProfileSettings() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-10 rounded-[48px] bg-white border border-border shadow-sm space-y-10"
+            className="p-10 rounded-[24px] bg-white border border-border shadow-sm space-y-10"
           >
             <div className="flex items-center gap-4 text-primary">
               <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center shrink-0">
@@ -196,7 +196,7 @@ export default function ProfileSettings() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="p-10 rounded-[48px] bg-white border border-border shadow-sm space-y-10"
+            className="p-10 rounded-[24px] bg-white border border-border shadow-sm space-y-10"
           >
             <div className="flex items-center gap-4 text-primary">
               <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
@@ -237,7 +237,7 @@ export default function ProfileSettings() {
         </div>
 
         <div className="space-y-8">
-          <div className="p-10 rounded-[40px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
+          <div className="p-10 rounded-[20px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
             <Image
               src="/logo.svg"
@@ -259,7 +259,7 @@ export default function ProfileSettings() {
             </p>
           </div>
 
-          <div className="p-10 rounded-[40px] bg-white border border-border shadow-sm space-y-8">
+          <div className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8">
             <div className="flex items-center gap-3 text-primary">
               <Bell size={24} className="opacity-40" />
               <h4 className="text-xl font-bold font-outfit">Notifications</h4>

@@ -79,7 +79,7 @@ export default function RegisterOrganization() {
 
       <form
         onSubmit={handleSubmit}
-        className="p-10 rounded-[40px] bg-white border border-border shadow-2xl shadow-primary/5 space-y-8"
+        className="p-10 rounded-[20px] bg-white border border-border shadow-2xl shadow-primary/5 space-y-8"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:col-span-2 space-y-3">

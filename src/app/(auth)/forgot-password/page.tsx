@@ -137,7 +137,7 @@ export default function ForgotPasswordPage() {
                 </div>
 
                 <div className="relative z-10 p-20 text-center space-y-8 max-w-2xl text-white">
-                    <div className="inline-block p-8 rounded-[40px] bg-white/5 border border-white/10 backdrop-blur-xl mb-4">
+                    <div className="inline-block p-8 rounded-[20px] bg-white/5 border border-white/10 backdrop-blur-xl mb-4">
                         <Lock className="w-20 h-20 text-secondary" />
                     </div>
                     <h2 className="text-4xl font-bold font-outfit leading-tight">Secure Account Recovery</h2>

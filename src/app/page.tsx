@@ -316,7 +316,7 @@ const Services = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="p-12 rounded-[48px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white inset-px hover:border-white transition-all duration-500 group relative"
+              className="p-12 rounded-[24px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl hover:bg-white inset-px hover:border-white transition-all duration-500 group relative"
             >
               <div className="flex flex-col gap-8">
                 <div className="w-20 h-20 rounded-3xl bg-primary/20 text-secondary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all duration-700 shadow-xl">

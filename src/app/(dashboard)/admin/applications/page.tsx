@@ -135,7 +135,7 @@ export default function AdminApplications() {
                 ))}
 
                 {filteredApps.length === 0 && (
-                    <div className="py-20 text-center space-y-4 rounded-[40px] border-2 border-dashed border-border bg-primary/[0.01]">
+                    <div className="py-20 text-center space-y-4 rounded-[20px] border-2 border-dashed border-border bg-primary/[0.01]">
                         <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mx-auto text-primary/20">
                             <Search size={40} />
                         </div>

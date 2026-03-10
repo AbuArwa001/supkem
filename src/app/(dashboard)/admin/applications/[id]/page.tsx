@@ -78,7 +78,7 @@ export default function ApplicationDetail() {
                     {/* Organization Section */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-                        className="p-10 rounded-[40px] bg-white border border-border shadow-sm space-y-8"
+                        className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8"
                     >
                         <div className="flex items-center gap-4 text-primary">
                             <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center shrink-0">
@@ -110,7 +110,7 @@ export default function ApplicationDetail() {
                     {/* Service Section */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                        className="p-10 rounded-[40px] bg-white border border-border shadow-sm space-y-8"
+                        className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8"
                     >
                         <div className="flex items-center gap-4 text-primary">
                             <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
@@ -141,7 +141,7 @@ export default function ApplicationDetail() {
 
                 {/* Action Sidebar */}
                 <div className="space-y-8">
-                    <div className="p-8 rounded-[40px] bg-primary text-white shadow-2xl shadow-primary/20 space-y-8 relative overflow-hidden">
+                    <div className="p-8 rounded-[20px] bg-primary text-white shadow-2xl shadow-primary/20 space-y-8 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
                         <div className="space-y-4 relative z-10">
                             <p className="text-xs font-bold text-white/50 uppercase tracking-widest">Current Status</p>
@@ -173,7 +173,7 @@ export default function ApplicationDetail() {
                         </div>
                     </div>
 
-                    <div className="p-8 rounded-[40px] bg-white border border-border shadow-sm space-y-6">
+                    <div className="p-8 rounded-[20px] bg-white border border-border shadow-sm space-y-6">
                         <h4 className="font-bold text-primary flex items-center gap-2">
                             <Clock size={18} /> Timeline Status
                         </h4>

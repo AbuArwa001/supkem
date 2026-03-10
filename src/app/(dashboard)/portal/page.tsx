@@ -129,7 +129,7 @@ export default function UserPortal() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative min-h-[300px] md:min-h-[400px] rounded-[32px] md:rounded-[48px] overflow-hidden bg-slate-950 p-6 md:p-10 lg:p-14 flex items-center shadow-2xl"
+        className="relative min-h-[300px] md:min-h-[400px] rounded-[32px] md:rounded-[24px] overflow-hidden bg-slate-950 p-6 md:p-10 lg:p-14 flex items-center shadow-2xl"
       >
         {/* Background Decor */}
         <div className="absolute inset-0 opacity-40">
@@ -185,7 +185,7 @@ export default function UserPortal() {
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="bg-white/5 border border-white/10 backdrop-blur-3xl p-8 rounded-[40px] shadow-2xl relative z-10"
+              className="bg-white/5 border border-white/10 backdrop-blur-3xl p-8 rounded-[20px] shadow-2xl relative z-10"
             >
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 rounded-2xl bg-secondary/20 flex items-center justify-center text-secondary">
@@ -247,7 +247,7 @@ export default function UserPortal() {
                 Loading applications...
               </div>
             ) : activeApps.length === 0 ? (
-              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] md:rounded-[40px] bg-slate-50/50">
+              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] md:rounded-[20px] bg-slate-50/50">
                 No active applications found.
               </div>
             ) : (
@@ -260,7 +260,7 @@ export default function UserPortal() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="p-6 md:p-8 rounded-[32px] md:rounded-[40px] bg-white border border-border/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer mb-4"
+                    className="p-6 md:p-8 rounded-[32px] md:rounded-[20px] bg-white border border-border/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer mb-4"
                   >
                     <div className="flex items-center gap-4 md:gap-6">
                       <div className="w-14 h-14 md:w-20 md:h-20 bg-primary/[0.03] text-primary rounded-2xl md:rounded-3xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500">
@@ -378,7 +378,7 @@ export default function UserPortal() {
           </div>
 
           {/* Quick Support Card */}
-          <div className="p-8 rounded-[40px] bg-primary text-white space-y-4 relative overflow-hidden group shadow-2xl">
+          <div className="p-8 rounded-[20px] bg-primary text-white space-y-4 relative overflow-hidden group shadow-2xl">
             <div className="relative z-10">
               <h4 className="text-xl font-bold font-outfit">Need Help?</h4>
               <p className="text-white/60 text-sm font-medium leading-relaxed">

@@ -110,7 +110,7 @@ export default async function NewsPage() {
                     {newsItems.length > 0 ? (
                         <>
                             {/* Large Feature (First Item) */}
-                            <div className="p-8 rounded-[48px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
+                            <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
                                 <Link href={`/news/${newsItems[0].slug}`} className="block">
                                     <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
                                         <Image
@@ -141,7 +141,7 @@ export default async function NewsPage() {
                             <div className="space-y-8 flex flex-col">
                                 {newsItems.slice(1).map((item: any, i: number) => (
                                     <Link href={`/news/${item.slug}`} key={i} className="block group/item">
-                                        <div className="p-6 rounded-[40px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
+                                        <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
                                             <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
                                                 <Image
                                                     src={item.featured_image ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`) : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"}
@@ -168,7 +168,7 @@ export default async function NewsPage() {
                                     </Link>
                                 ))}
                                 {newsItems.length <= 1 && (
-                                    <div className="p-8 rounded-[40px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
+                                    <div className="p-8 rounded-[20px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
                                         <BookOpen size={40} className="text-secondary" />
                                         <h4 className="text-xl font-bold font-outfit">More News Coming Soon</h4>
                                         <p className="text-sm font-medium opacity-60">Check back later for more updates.</p>

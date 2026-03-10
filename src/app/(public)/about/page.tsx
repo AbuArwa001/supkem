@@ -182,7 +182,7 @@ export default function AboutPage() {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: i * 0.1 }}
-                                className={cn("relative rounded-[40px] overflow-hidden group shadow-lg cursor-pointer", img.span)}
+                                className={cn("relative rounded-[20px] overflow-hidden group shadow-lg cursor-pointer", img.span)}
                             >
                                 <Image
                                     src={img.src}

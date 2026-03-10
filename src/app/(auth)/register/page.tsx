@@ -43,7 +43,7 @@ export default function RegisterPage() {
       console.error("Registration failed", err);
       setError(
         err.response?.data?.detail ||
-          "Registration failed. Please check your details and try again.",
+        "Registration failed. Please check your details and try again.",
       );
     } finally {
       setLoading(false);
@@ -56,7 +56,7 @@ export default function RegisterPage() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-md w-full p-12 rounded-[40px] bg-white border border-border shadow-2xl text-center space-y-6"
+          className="max-w-md w-full p-12 rounded-[20px] bg-white border border-border shadow-2xl text-center space-y-6"
         >
           <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
             <CheckCircle2 size={40} />
@@ -131,7 +131,7 @@ export default function RegisterPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="p-10 lg:p-16 rounded-[40px] bg-white border border-border shadow-2xl space-y-8 relative"
+          className="p-10 lg:p-16 rounded-[20px] bg-white border border-border shadow-2xl space-y-8 relative"
         >
           {error && (
             <motion.div

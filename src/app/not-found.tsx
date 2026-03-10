@@ -33,9 +33,9 @@ export default function NotFound() {
                                     rotate: [0, 5, -5, 0]
                                 }}
                                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="w-32 h-32 md:w-48 md:h-48 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[40px] shadow-2xl flex items-center justify-center relative group"
+                                className="w-32 h-32 md:w-48 md:h-48 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[20px] shadow-2xl flex items-center justify-center relative group"
                             >
-                                <div className="absolute inset-0 bg-primary/10 rounded-[40px] animate-pulse" />
+                                <div className="absolute inset-0 bg-primary/10 rounded-[20px] animate-pulse" />
                                 <Search size={64} className="text-secondary group-hover:scale-110 transition-transform duration-500" strokeWidth={1.5} />
                             </motion.div>
                         </div>

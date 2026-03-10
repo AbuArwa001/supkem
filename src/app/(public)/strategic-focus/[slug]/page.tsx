@@ -442,7 +442,7 @@ export default function StrategicFocusPage({ params }: { params: Promise<{ slug:
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true, margin: "-100px" }}
                                     transition={{ duration: 0.6 }}
-                                    className="bg-white rounded-[40px] p-8 lg:p-14 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col lg:flex-row gap-12"
+                                    className="bg-white rounded-[20px] p-8 lg:p-14 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-100 flex flex-col lg:flex-row gap-12"
                                 >
                                     <div className="lg:w-1/3 space-y-6">
                                         <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shadow-inner">
