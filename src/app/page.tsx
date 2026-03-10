@@ -264,7 +264,7 @@ const ProgramAreas = () => {
               transition={{ delay: i * 0.1 }}
               whileHover={{ y: -15 }}
               className={cn(
-                "p-14 rounded-[56px] bg-slate-50/30 border border-slate-100 hover:bg-white hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] transition-all duration-700 relative group overflow-hidden",
+                "p-14 rounded-[px] bg-slate-50/30 border border-slate-100 hover:bg-white hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] transition-all duration-700 relative group overflow-hidden",
                 prog.accent
               )}
             >
