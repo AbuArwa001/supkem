@@ -19,6 +19,7 @@ import Link from "next/link";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import MarriageCertificateTemplate from "@/components/MarriageCertificateTemplate";
 
 export default function CertificateDetail() {
   const params = useParams();
@@ -301,171 +302,177 @@ export default function CertificateDetail() {
         />
 
         <div className="relative z-10 w-full flex flex-col items-center">
-          <Image
-            src="/logo.svg"
-            alt="SUPKEM Logo"
-            width={80}
-            height={80}
-            className="mb-8 opacity-90 drop-shadow-sm"
-          />
+          {certificate.application?.service_name?.toLowerCase().includes("marriage") ? (
+            <MarriageCertificateTemplate certificate={certificate} />
+          ) : (
+            <>
+              <Image
+                src="/logo.svg"
+                alt="SUPKEM Logo"
+                width={80}
+                height={80}
+                className="mb-8 opacity-90 drop-shadow-sm"
+              />
 
-          <div
-            className="tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full"
-            style={{ color: "#16543d" }}
-          >
-            <div
-              className="h-px flex-1"
-              style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
-            />
-            <span>Supreme Council of Kenya Muslims</span>
-            <div
-              className="h-px flex-1"
-              style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
-            />
-          </div>
-
-          <h2
-            className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8"
-            style={{ color: "#1e293b" }}
-          >
-            {certificate.application?.service_name || "Official Certification"}
-          </h2>
-
-          <p
-            className="text-lg md:text-xl font-medium max-w-2xl mb-12"
-            style={{ color: "#64748b" }}
-          >
-            This is to certify that{" "}
-            <strong
-              className="border-b pb-0.5"
-              style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
-            >
-              {certificate.application?.organization_name ||
-                "The designated organization"}
-            </strong>{" "}
-            has successfully met the standards and requirements for this
-            certification.
-          </p>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-16">
-            <div
-              className="p-4 rounded-2xl border"
-              style={{
-                backgroundColor: "rgba(248, 250, 252, 0.5)",
-                borderColor: "rgba(241, 245, 249, 0.5)",
-              }}
-            >
-              <p
-                className="text-[10px] uppercase tracking-widest font-bold mb-1"
-                style={{ color: "#94a3b8" }}
-              >
-                Serial Number
-              </p>
-              <p
-                className="font-mono font-bold text-sm truncate"
-                style={{ color: "#1e293b" }}
-              >
-                {certificate.serial_number}
-              </p>
-            </div>
-            <div
-              className="p-4 rounded-2xl border"
-              style={{
-                backgroundColor: "rgba(248, 250, 252, 0.5)",
-                borderColor: "rgba(241, 245, 249, 0.5)",
-              }}
-            >
-              <p
-                className="text-[10px] uppercase tracking-widest font-bold mb-1"
-                style={{ color: "#94a3b8" }}
-              >
-                Date of Issue
-              </p>
-              <p
-                className="font-bold text-sm tracking-wide"
-                style={{ color: "#1e293b" }}
-              >
-                {issueDate.toLocaleDateString()}
-              </p>
-            </div>
-            <div
-              className="p-4 rounded-2xl border"
-              style={{
-                backgroundColor: "rgba(248, 250, 252, 0.5)",
-                borderColor: "rgba(241, 245, 249, 0.5)",
-              }}
-            >
-              <p
-                className="text-[10px] uppercase tracking-widest font-bold mb-1"
-                style={{ color: "#94a3b8" }}
-              >
-                Valid Until
-              </p>
-              <p
-                className="font-bold text-sm tracking-wide"
-                style={{ color: "#1e293b" }}
-              >
-                {expiryDate ? expiryDate.toLocaleDateString() : "Indefinite"}
-              </p>
-            </div>
-            <div
-              className="p-4 rounded-2xl border flex flex-col items-center justify-center relative overflow-hidden group"
-              style={{
-                backgroundColor: isValid ? "#f0fdf4" : "#fef2f2",
-                borderColor: "transparent",
-              }}
-            >
-              <p
-                className="text-[10px] uppercase tracking-widest font-bold mb-1 relative z-10"
-                style={{ color: "#94a3b8" }}
-              >
-                Status
-              </p>
-              <p
-                className="font-black tracking-widest uppercase text-sm relative z-10"
-                style={{ color: isValid ? "#059669" : "#dc2626" }}
-              >
-                {isValid ? "Valid" : "Expired"}
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="flex items-center justify-between w-full border-t pt-8 mt-auto"
-            style={{ borderColor: "rgba(226, 232, 240, 0.6)" }}
-          >
-            <div className="text-left">
               <div
-                className="w-40 h-10 border-b flex items-end"
-                style={{ borderColor: "#1e293b" }}
+                className="tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full"
+                style={{ color: "#16543d" }}
               >
-                <span
-                  className="font-serif text-2xl italic px-2 -mb-2"
-                  style={{ color: "#475569" }}
+                <div
+                  className="h-px flex-1"
+                  style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
+                />
+                <span>Supreme Council of Kenya Muslims</span>
+                <div
+                  className="h-px flex-1"
+                  style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
+                />
+              </div>
+
+              <h2
+                className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8"
+                style={{ color: "#1e293b" }}
+              >
+                {certificate.application?.service_name || "Official Certification"}
+              </h2>
+
+              <p
+                className="text-lg md:text-xl font-medium max-w-2xl mb-12"
+                style={{ color: "#64748b" }}
+              >
+                This is to certify that{" "}
+                <strong
+                  className="border-b pb-0.5"
+                  style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
                 >
-                  Official Signatory
-                </span>
-              </div>
-              <p
-                className="text-[10px] font-bold uppercase tracking-widest mt-4"
-                style={{ color: "#94a3b8" }}
-              >
-                Authorized Signature
+                  {certificate.application?.organization_name ||
+                    "The designated organization"}
+                </strong>{" "}
+                has successfully met the standards and requirements for this
+                certification.
               </p>
-            </div>
 
-            <div
-              className="w-24 h-24 bg-white border rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0"
-              style={{ borderColor: "rgba(226, 232, 240, 0.8)" }}
-            >
-              <div
-                className="w-full h-full rounded flex items-center justify-center"
-                style={{ backgroundColor: "#f8fafc" }}
-              >
-                <Search size={24} style={{ color: "#cbd5e1" }} />
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-16">
+                <div
+                  className="p-4 rounded-2xl border"
+                  style={{
+                    backgroundColor: "rgba(248, 250, 252, 0.5)",
+                    borderColor: "rgba(241, 245, 249, 0.5)",
+                  }}
+                >
+                  <p
+                    className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Serial Number
+                  </p>
+                  <p
+                    className="font-mono font-bold text-sm truncate"
+                    style={{ color: "#1e293b" }}
+                  >
+                    {certificate.serial_number}
+                  </p>
+                </div>
+                <div
+                  className="p-4 rounded-2xl border"
+                  style={{
+                    backgroundColor: "rgba(248, 250, 252, 0.5)",
+                    borderColor: "rgba(241, 245, 249, 0.5)",
+                  }}
+                >
+                  <p
+                    className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Date of Issue
+                  </p>
+                  <p
+                    className="font-bold text-sm tracking-wide"
+                    style={{ color: "#1e293b" }}
+                  >
+                    {issueDate.toLocaleDateString()}
+                  </p>
+                </div>
+                <div
+                  className="p-4 rounded-2xl border"
+                  style={{
+                    backgroundColor: "rgba(248, 250, 252, 0.5)",
+                    borderColor: "rgba(241, 245, 249, 0.5)",
+                  }}
+                >
+                  <p
+                    className="text-[10px] uppercase tracking-widest font-bold mb-1"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Valid Until
+                  </p>
+                  <p
+                    className="font-bold text-sm tracking-wide"
+                    style={{ color: "#1e293b" }}
+                  >
+                    {expiryDate ? expiryDate.toLocaleDateString() : "Indefinite"}
+                  </p>
+                </div>
+                <div
+                  className="p-4 rounded-2xl border flex flex-col items-center justify-center relative overflow-hidden group"
+                  style={{
+                    backgroundColor: isValid ? "#f0fdf4" : "#fef2f2",
+                    borderColor: "transparent",
+                  }}
+                >
+                  <p
+                    className="text-[10px] uppercase tracking-widest font-bold mb-1 relative z-10"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Status
+                  </p>
+                  <p
+                    className="font-black tracking-widest uppercase text-sm relative z-10"
+                    style={{ color: isValid ? "#059669" : "#dc2626" }}
+                  >
+                    {isValid ? "Valid" : "Expired"}
+                  </p>
+                </div>
               </div>
-            </div>
-          </div>
+
+              <div
+                className="flex items-center justify-between w-full border-t pt-8 mt-auto"
+                style={{ borderColor: "rgba(226, 232, 240, 0.6)" }}
+              >
+                <div className="text-left">
+                  <div
+                    className="w-40 h-10 border-b flex items-end"
+                    style={{ borderColor: "#1e293b" }}
+                  >
+                    <span
+                      className="font-serif text-2xl italic px-2 -mb-2"
+                      style={{ color: "#475569" }}
+                    >
+                      Official Signatory
+                    </span>
+                  </div>
+                  <p
+                    className="text-[10px] font-bold uppercase tracking-widest mt-4"
+                    style={{ color: "#94a3b8" }}
+                  >
+                    Authorized Signature
+                  </p>
+                </div>
+
+                <div
+                  className="w-24 h-24 bg-white border rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0"
+                  style={{ borderColor: "rgba(226, 232, 240, 0.8)" }}
+                >
+                  <div
+                    className="w-full h-full rounded flex items-center justify-center"
+                    style={{ backgroundColor: "#f8fafc" }}
+                  >
+                    <Search size={24} style={{ color: "#cbd5e1" }} />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </motion.div>
 
