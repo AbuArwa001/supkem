@@ -47,7 +47,7 @@ export default function AdminCertificates() {
   const fetchEligibleApplications = async () => {
     setIsLoadingApplications(true);
     try {
-      const res = await api.get("/applications/approved_no_cert/");
+      const res = await api.get("/applications/applications/approved_no_cert/");
       setEligibleApplications(res.data);
     } catch (err) {
       console.error("Failed to fetch eligible applications", err);
