@@ -98,9 +98,10 @@ export default function OrganizationsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {organizations.map((org: any) => (
-            <div
+            <Link
+              href={`/portal/organizations/${org.id}`}
               key={org.id}
-              className="bg-white border border-border/50 overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group rounded-[32px] relative"
+              className="block bg-white border border-border/50 overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group rounded-[32px] relative"
             >
               {/* Card Header & Decorative elements */}
               <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 pointer-events-none">
@@ -205,16 +206,18 @@ export default function OrganizationsPage() {
                   <span
                     className={cn(
                       "px-2.5 py-1 rounded-full text-[9px] uppercase tracking-widest border",
-                      org.is_active !== false
+                      org.accreditation_status === "Accredited"
                         ? "bg-emerald-50 text-emerald-600 border-emerald-100"
-                        : "bg-slate-50 text-slate-500 border-slate-200",
+                        : org.accreditation_status === "Pending"
+                          ? "bg-amber-50 text-amber-600 border-amber-100"
+                          : "bg-red-50 text-red-600 border-red-100",
                     )}
                   >
-                    {org.is_active !== false ? "Active" : "Inactive"}
+                    {org.accreditation_status || "Pending"}
                   </span>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
