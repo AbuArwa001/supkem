@@ -368,6 +368,7 @@ export default function OrganizationDetail() {
                 </div>
                 <ChevronRight size={20} className="text-green-500/50 group-hover:text-green-600 group-hover:translate-x-1 transition-all" />
               </div>
+            </motion.div>
           </div>
         </div>
 
