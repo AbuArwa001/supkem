@@ -100,6 +100,9 @@ export default function SubmitApplication() {
   const isHajjUmrahService = selectedService?.category?.toLowerCase().includes("hajj") ||
     selectedService?.name?.toLowerCase().includes("hajj");
 
+  // For Marriage, organization is optional but used as a "Registrar"
+  const canSelectOrganization = !isIndividualService || isMarriageService;
+
   const updateMarriageData = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -757,14 +760,16 @@ export default function SubmitApplication() {
               <div
                 className={cn(
                   "p-8 rounded-[40px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-6",
-                  isIndividualService && "pointer-events-none opacity-40",
+                  !canSelectOrganization && "pointer-events-none opacity-40",
                 )}
               >
                 <div className="flex items-center gap-3 text-primary">
                   <Building2 size={24} className="opacity-50" />
-                  <h3 className="text-xl font-black font-outfit">Applying Entity</h3>
+                  <h3 className="text-xl font-black font-outfit">
+                    {isIndividualService ? "Registrar / Mosque" : "Applying Entity"}
+                  </h3>
                 </div>
-                {isIndividualService ? (
+                {isIndividualService && !isMarriageService ? (
                   <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 flex gap-3">
                     <Info size={18} className="text-blue-500 shrink-0 mt-0.5" />
                     <p className="text-xs text-blue-700/70 font-bold leading-relaxed">
@@ -774,41 +779,47 @@ export default function SubmitApplication() {
                   </div>
                 ) : (
                   <div className="space-y-3">
-                    {organizations.map((org: any) => (
-                      <label
-                        key={org.id}
-                        className={cn(
-                          "p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center justify-between group",
-                          formData.organization === org.id
-                            ? "border-primary bg-primary/[0.03] shadow-lg shadow-primary/5"
-                            : "border-slate-50 hover:border-primary/20 bg-slate-50 border-transparent",
+                    {organizations.length === 0 ? (
+                      <p className="text-xs text-slate-400 font-bold italic p-4 text-center border-2 border-dashed border-slate-100 rounded-2xl">
+                        {isIndividualService ? "Searching for accredited Mosques..." : "No organizations found."}
+                      </p>
+                    ) : (
+                      <>
+                        {isIndividualService && (
+                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
+                            Select a recognized Registrar
+                          </p>
                         )}
-                      >
-                        <input
-                          type="radio"
-                          name="organization"
-                          value={org.id}
-                          className="hidden"
-                          onChange={() => setFormData({ ...formData, organization: org.id })}
-                        />
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            "w-10 h-10 rounded-xl flex items-center justify-center transition-all bg-white",
-                            formData.organization === org.id ? "bg-primary text-white" : "text-slate-400"
-                          )}>
-                            <Building2 size={20} />
-                          </div>
-                          <div>
-                            <p className={cn(
-                              "font-bold text-sm transition-colors",
-                              formData.organization === org.id ? "text-primary" : "text-slate-700"
-                            )}>{org.name}</p>
-                            <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest">{org.type}</p>
-                          </div>
-                        </div>
-                      </label>
-                    ))}
-                    {organizations.length === 0 && (
+                        {organizations.map((org: any) => (
+                          <label
+                            key={org.id}
+                            className={cn(
+                              "p-4 rounded-2xl border-2 cursor-pointer transition-all flex items-center justify-between group",
+                              formData.organization === org.id
+                                ? "border-primary bg-primary/[0.03] shadow-lg shadow-primary/5"
+                                : "border-slate-50 hover:border-primary/20 bg-slate-50 border-transparent",
+                            )}
+                          >
+                            <input
+                              type="radio"
+                              name="organization"
+                              value={org.id}
+                              className="hidden"
+                              onChange={() => setFormData({ ...formData, organization: org.id })}
+                            />
+                            <div className="flex items-center gap-3">
+                              <div className={cn(
+                                "w-10 h-10 rounded-xl flex items-center justify-center transition-all bg-white",
+                                formData.organization === org.id ? "bg-primary text-white" : "text-slate-400"
+                              )}>
+                                <Building2 size={20} />
+                              </div>
+                            </div>
+                          </label>
+                        ))}
+                      </>
+                    )}
+                    {!isIndividualService && organizations.length === 0 && (
                       <Link
                         href="/portal/organizations/new"
                         className="p-8 rounded-3xl border-2 border-dashed border-border flex flex-col items-center justify-center gap-3 text-center text-foreground/40 hover:text-primary hover:border-primary/40 transition-all font-bold bg-slate-50/30"

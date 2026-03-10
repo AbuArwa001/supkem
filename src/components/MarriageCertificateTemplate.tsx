@@ -201,8 +201,10 @@ export default function MarriageCertificateTemplate({ certificate }: MarriageCer
                 <div className="flex flex-col md:flex-row items-end justify-between pt-12 border-t border-slate-100 gap-10">
                     <div className="text-left space-y-6 w-full md:w-auto">
                         <div className="space-y-1">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Designated Official</p>
-                            <p className="text-lg font-black font-outfit text-primary uppercase">{certificate.application?.organization_name}</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Issuing Authority / Registrar</p>
+                            <p className="text-lg font-black font-outfit text-primary uppercase">
+                                {certificate.application?.organization_name || "SUPKEM HEADQUARTERS"}
+                            </p>
                             <p className="text-xs font-medium text-slate-500 uppercase">Authorized Registrar under SUPKEM</p>
                         </div>
                         <div className="space-y-1">
