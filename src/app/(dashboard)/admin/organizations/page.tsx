@@ -135,11 +135,15 @@ export default function AdminOrganizations() {
                                 {viewMode === "grid" && (
                                     <div className="flex gap-4 pt-2 border-t border-border/50">
                                         <div className="text-center bg-primary/[0.02] p-3 rounded-2xl flex-1 border border-primary/5 hover:bg-primary/5 transition-colors">
-                                            <p className="text-lg font-black text-primary">05</p>
+                                            <p className="text-lg font-black text-primary">
+                                                {org.apps_count < 10 && org.apps_count > 0 ? `0${org.apps_count}` : org.apps_count || '00'}
+                                            </p>
                                             <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Apps</p>
                                         </div>
                                         <div className="text-center bg-secondary/[0.02] p-3 rounded-2xl flex-1 border border-secondary/5 hover:bg-secondary/5 transition-colors">
-                                            <p className="text-lg font-black text-secondary">02</p>
+                                            <p className="text-lg font-black text-secondary">
+                                                {org.certs_count < 10 && org.certs_count > 0 ? `0${org.certs_count}` : org.certs_count || '00'}
+                                            </p>
                                             <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Certs</p>
                                         </div>
                                     </div>

@@ -43,12 +43,23 @@ export default function OrganizationDetail() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [defaultUsers, setDefaultUsers] = useState<any[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [actionLoading, setActionLoading] = useState<string | null>(null); // Stores userId being acted upon
 
   useEffect(() => {
     fetchOrgData();
+    fetchDefaultUsers();
   }, [id]);
+
+  const fetchDefaultUsers = async () => {
+    try {
+      const res = await api.get(`/users/users/`);
+      setDefaultUsers(res.data.results || res.data);
+    } catch (err) {
+      console.error("Failed to fetch default users", err);
+    }
+  };
 
   const fetchOrgData = async () => {
     setLoading(true);
@@ -68,7 +79,10 @@ export default function OrganizationDetail() {
 
   const handleSearchUsers = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
 
     setIsSearching(true);
     try {
@@ -501,13 +515,8 @@ export default function OrganizationDetail() {
                       <Users size={32} className="mx-auto text-slate-300 mb-3" />
                       <p className="text-slate-500 font-medium text-sm">No users found matching "{searchQuery}"</p>
                     </div>
-                  ) : searchResults.length === 0 ? (
-                    <div className="text-center py-10">
-                      <Search size={32} className="mx-auto text-slate-200 mb-3" />
-                      <p className="text-slate-400 font-medium text-sm">Search results will appear here</p>
-                    </div>
                   ) : (
-                    searchResults.map((user) => {
+                    (searchResults.length > 0 ? searchResults : defaultUsers).map((user) => {
                       const isAlreadyAssigned = personnel.some(p => p.user.id === user.id);
                       return (
                         <div key={user.id} className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-primary/20 hover:shadow-md transition-all">
