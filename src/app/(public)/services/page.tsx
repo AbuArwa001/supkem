@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileCheck, Users, Briefcase, GraduationCap, HeartHandshake } from "lucide-react";
+import { FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, Heart, Plane, FileText, BookOpen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -47,6 +47,34 @@ const serviceList = [
         desc: "Mediation services for organizational and community disputes within the Ummah.",
         category: "Legal",
         href: "/services/conflict-resolution"
+    },
+    {
+        icon: Heart,
+        title: "Marriage Certificates",
+        desc: "Islamic marriage certification for Muslim couples, legally recognized under Kenyan law.",
+        category: "Individuals",
+        href: "/services/marriage-certificates"
+    },
+    {
+        icon: Plane,
+        title: "Hajj & Umrah Facilitation",
+        desc: "Official support letters and logistical guidance for sacred pilgrimages.",
+        category: "Individuals",
+        href: "/services/hajj-umrah"
+    },
+    {
+        icon: FileText,
+        title: "Travel Visa Advisory",
+        desc: "Visa advisory services and official letters of support for religious and educational travel abroad.",
+        category: "Individuals",
+        href: "/services/visa-advisory"
+    },
+    {
+        icon: BookOpen,
+        title: "Study Abroad Letters",
+        desc: "Official recommendation letters to support Muslim students applying for scholarships and universities abroad.",
+        category: "Individuals",
+        href: "/services/study-abroad"
     }
 ];
 
