@@ -20,6 +20,7 @@ export default function AdminOrganizations() {
     const [organizations, setOrganizations] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [viewMode, setViewMode] = useState("grid");
+    const [statusFilter, setStatusFilter] = useState("All");
 
     useEffect(() => {
         const fetchOrgs = async () => {
@@ -33,9 +34,11 @@ export default function AdminOrganizations() {
         fetchOrgs();
     }, []);
 
-    const filteredOrgs = organizations.filter((org: any) =>
-        org.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredOrgs = organizations.filter((org: any) => {
+        const matchesSearch = org.name?.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = statusFilter === "All" || org.accreditation_status === statusFilter;
+        return matchesSearch && matchesStatus;
+    });
 
     return (
         <div className="space-y-10">
@@ -73,6 +76,23 @@ export default function AdminOrganizations() {
                 </div>
             </div>
 
+            <div className="flex bg-slate-100 p-1 rounded-2xl w-fit">
+                {["All", "Pending", "Accredited", "Suspended"].map((status) => (
+                    <button
+                        key={status}
+                        onClick={() => setStatusFilter(status)}
+                        className={cn(
+                            "px-6 py-2 rounded-xl text-sm font-bold transition-all",
+                            statusFilter === status
+                                ? "bg-white text-primary shadow-sm"
+                                : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
+                        )}
+                    >
+                        {status}
+                    </button>
+                ))}
+            </div>
+
             <div className={cn(
                 "grid gap-6",
                 viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
@@ -94,8 +114,18 @@ export default function AdminOrganizations() {
                             </div>
                             <div className="space-y-4 flex-1">
                                 <div>
-                                    <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer">{org.name}</h4>
-                                    <div className="flex items-center gap-2 mt-1">
+                                    <div className="flex items-start justify-between gap-4">
+                                        <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer leading-tight">{org.name}</h4>
+                                        <span className={cn(
+                                            "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shrink-0 border",
+                                            org.accreditation_status === "Accredited" ? "bg-green-50 text-green-600 border-green-200" :
+                                                org.accreditation_status === "Pending" ? "bg-amber-50 text-amber-600 border-amber-200" :
+                                                    "bg-red-50 text-red-600 border-red-200"
+                                        )}>
+                                            {org.accreditation_status || "Pending"}
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-2 mt-2">
                                         <span className="text-[10px] font-black uppercase tracking-widest text-secondary">{org.type}</span>
                                         <span className="text-foreground/20">•</span>
                                         <p className="text-xs font-bold text-foreground/40 flex items-center gap-1"><MapPin size={10} /> Nairobi, Kenya</p>
@@ -131,6 +161,6 @@ export default function AdminOrganizations() {
                     </motion.div>
                 ))}
             </div>
-        </div>
+        </div >
     );
 }

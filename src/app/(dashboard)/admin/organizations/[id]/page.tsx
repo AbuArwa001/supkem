@@ -133,6 +133,18 @@ export default function OrganizationDetail() {
     }
   };
 
+  const handleUpdateStatus = async (status: string) => {
+    setActionLoading('status_update');
+    try {
+      await api.post(`/organizations/organizations/${id}/update_status/`, { status });
+      setOrg({ ...org, accreditation_status: status });
+    } catch (err) {
+      console.error("Failed to update status", err);
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
   if (loading)
     return (
       <div className="h-96 flex items-center justify-center flex-col gap-4">
@@ -187,9 +199,19 @@ export default function OrganizationDetail() {
                 <h3 className="text-2xl font-black font-outfit text-primary mb-2 tracking-tight">
                   Entity Details
                 </h3>
-                <span className="px-4 py-1.5 bg-secondary/10 text-secondary border border-secondary/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
-                  {org.type}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="px-4 py-1.5 bg-secondary/10 text-secondary border border-secondary/20 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
+                    {org.type}
+                  </span>
+                  <span className={cn(
+                    "px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] border",
+                    org.accreditation_status === "Accredited" ? "bg-green-50 text-green-600 border-green-200" :
+                      org.accreditation_status === "Pending" ? "bg-amber-50 text-amber-600 border-amber-200" :
+                        "bg-red-50 text-red-600 border-red-200"
+                  )}>
+                    {org.accreditation_status || "Pending"}
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -407,11 +429,19 @@ export default function OrganizationDetail() {
               SUPKEM portal.
             </p>
             <div className="space-y-4 pt-4 relative z-10">
-              <button className="w-full py-4 bg-white text-primary rounded-2xl font-bold text-sm hover:bg-secondary hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10">
-                Issue Certificate <Award size={18} />
+              <button
+                onClick={() => handleUpdateStatus('Accredited')}
+                disabled={actionLoading === 'status_update' || org.accreditation_status === 'Accredited'}
+                className="w-full py-4 bg-white text-primary rounded-2xl font-bold text-sm hover:bg-secondary hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {actionLoading === 'status_update' ? <Loader2 size={18} className="animate-spin" /> : <>Issue Certificate <Award size={18} /></>}
               </button>
-              <button className="w-full py-4 bg-red-600/30 text-white border border-white/20 rounded-2xl font-bold text-sm hover:bg-red-600 hover:border-red-600 transition-all flex items-center justify-center gap-2 backdrop-blur-md">
-                Suspend Account
+              <button
+                onClick={() => handleUpdateStatus('Suspended')}
+                disabled={actionLoading === 'status_update' || org.accreditation_status === 'Suspended'}
+                className="w-full py-4 bg-red-600/30 text-white border border-white/20 rounded-2xl font-bold text-sm hover:bg-red-600 hover:border-red-600 transition-all flex items-center justify-center gap-2 backdrop-blur-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {actionLoading === 'status_update' ? <Loader2 size={18} className="animate-spin" /> : "Suspend Account"}
               </button>
             </div>
           </div>
