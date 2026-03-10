@@ -166,7 +166,7 @@ export default function ServicesPage() {
                         <h2 className="text-4xl font-bold font-outfit">Need a custom certification?</h2>
                         <p className="text-white/70 font-medium">Our team is ready to guide you through complex registration and certification requirements.</p>
                     </div>
-                    <Link href="/login" className="px-10 py-5 bg-white text-primary rounded-2xl font-bold text-lg hover:bg-secondary hover:text-white transition-all shadow-xl whitespace-nowrap">
+                    <Link href="/contact" className="px-10 py-5 bg-white text-primary rounded-2xl font-bold text-lg hover:bg-secondary hover:text-white transition-all shadow-xl whitespace-nowrap">
                         Contact Support
                     </Link>
                 </div>
