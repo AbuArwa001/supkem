@@ -68,7 +68,7 @@ export default function OrganizationDetail() {
       const [orgRes, personnelRes, profileRes] = await Promise.all([
         api.get(`/organizations/organizations/${id}/`),
         api.get(`/organizations/organizations/${id}/personnel/`),
-        api.get("/users/profile/")
+        api.get("/users/users/me/")
       ]);
       setOrg(orgRes.data);
       const personnelList = personnelRes.data;
