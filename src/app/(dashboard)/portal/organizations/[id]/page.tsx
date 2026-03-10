@@ -38,6 +38,7 @@ export default function OrganizationDetail() {
   const [org, setOrg] = useState<any>(null);
   const [personnel, setPersonnel] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Personnel Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,12 +65,19 @@ export default function OrganizationDetail() {
   const fetchOrgData = async () => {
     setLoading(true);
     try {
-      const [orgRes, personnelRes] = await Promise.all([
+      const [orgRes, personnelRes, profileRes] = await Promise.all([
         api.get(`/organizations/organizations/${id}/`),
-        api.get(`/organizations/organizations/${id}/personnel/`)
+        api.get(`/organizations/organizations/${id}/personnel/`),
+        api.get("/users/profile/")
       ]);
       setOrg(orgRes.data);
-      setPersonnel(personnelRes.data);
+      const personnelList = personnelRes.data;
+      setPersonnel(personnelList);
+
+      // Check if current user is an admin in this organization
+      const currentUserId = profileRes.data.id;
+      const currentUserRecord = personnelList.find((p: any) => p.user.id === currentUserId);
+      setIsAdmin(currentUserRecord?.status === "Admin");
     } catch (err) {
       console.error("Failed to fetch organization data", err);
     } finally {
