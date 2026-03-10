@@ -276,7 +276,7 @@ export default function AdminCertificateDetail() {
                     style={{ backgroundColor: "rgba(231, 180, 8, 0.1)" }}
                 />
                 <div
-                    className="absolute inset-4 border rounded-[28px] pointer-events-none"
+                    className="absolute inset-4 border rounded-[14px] pointer-events-none"
                     style={{ borderColor: "rgba(22, 84, 61, 0.1)" }}
                 />
                 <div

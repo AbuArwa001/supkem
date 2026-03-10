@@ -345,7 +345,7 @@ export default function UserPortal() {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="p-6 rounded-[28px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
+                  className="p-6 rounded-[14px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
                 >
                   <div className="flex items-center justify-between mb-6">
                     <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">

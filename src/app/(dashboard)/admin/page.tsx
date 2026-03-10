@@ -232,7 +232,7 @@ const ReportModal = ({ isOpen, onClose, data }: { isOpen: boolean, onClose: () =
                     const Icon = icons[i % icons.length];
                     const color = colors[i % colors.length];
                     return (
-                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-[28px] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
+                      <div key={i} className="p-6 bg-white border border-slate-100 rounded-[14px] hover:shadow-xl hover:shadow-slate-200/50 transition-all group">
                         <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform", color)}>
                           <Icon size={24} />
                         </div>
@@ -396,7 +396,7 @@ export default function AdminOverview() {
             </Link>
           </div>
 
-          <div className="bg-white border border-slate-100 rounded-[28px] md:rounded-[32px] overflow-hidden shadow-lg shadow-slate-200/40">
+          <div className="bg-white border border-slate-100 rounded-[14px] md:rounded-[32px] overflow-hidden shadow-lg shadow-slate-200/40">
             <div className="overflow-x-auto scrollbar-hide">
               <table className="w-full text-left border-collapse min-w-[700px]">
                 <thead>

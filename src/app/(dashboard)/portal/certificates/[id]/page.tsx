@@ -43,7 +43,7 @@ export default function CertificateDetail() {
         console.error("Failed to fetch certificate", err);
         setError(
           err.response?.data?.detail ||
-            "Certificate not found or you do not have permission.",
+          "Certificate not found or you do not have permission.",
         );
       } finally {
         setLoading(false);
@@ -292,7 +292,7 @@ export default function CertificateDetail() {
           style={{ backgroundColor: "rgba(231, 180, 8, 0.1)" }}
         />
         <div
-          className="absolute inset-4 border rounded-[28px] pointer-events-none"
+          className="absolute inset-4 border rounded-[14px] pointer-events-none"
           style={{ borderColor: "rgba(22, 84, 61, 0.1)" }}
         />
         <div
