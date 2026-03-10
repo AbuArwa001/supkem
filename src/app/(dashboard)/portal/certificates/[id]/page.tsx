@@ -20,6 +20,7 @@ import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import MarriageCertificateTemplate from "@/components/MarriageCertificateTemplate";
+import SupportLetterTemplate from "@/components/SupportLetterTemplate";
 
 export default function CertificateDetail() {
   const params = useParams();
@@ -304,6 +305,9 @@ export default function CertificateDetail() {
         <div className="relative z-10 w-full flex flex-col items-center">
           {certificate.application?.service_name?.toLowerCase().includes("marriage") ? (
             <MarriageCertificateTemplate certificate={certificate} />
+          ) : certificate.application?.service_name?.toLowerCase().includes("hajj") ||
+            certificate.application?.service_name?.toLowerCase().includes("umrah") ? (
+            <SupportLetterTemplate certificate={certificate} />
           ) : (
             <>
               <Image

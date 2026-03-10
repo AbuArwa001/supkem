@@ -59,6 +59,17 @@ export default function SubmitApplication() {
       witness_2_name: "",
       witness_2_id: "",
     },
+    pilgrim_details: {
+      full_name: "",
+      passport_number: "",
+      nationality: "",
+      date_of_birth: "",
+      gender: "Male",
+      trip_type: "Hajj",
+      expected_travel_date: "",
+      travel_agent_name: "",
+      guidance_requested: false,
+    }
   });
   const [step, setStep] = useState(1);
   const router = useRouter();
@@ -86,12 +97,24 @@ export default function SubmitApplication() {
     selectedService?.target_audience === "Organization";
   const isIndividualService = selectedService?.target_audience === "Individual";
   const isMarriageService = selectedService?.category === "Marriage";
+  const isHajjUmrahService = selectedService?.category?.toLowerCase().includes("hajj") ||
+    selectedService?.name?.toLowerCase().includes("hajj");
 
   const updateMarriageData = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       marriage_details: {
         ...prev.marriage_details,
+        [field]: value,
+      },
+    }));
+  };
+
+  const updatePilgrimData = (field: string, value: any) => {
+    setFormData((prev) => ({
+      ...prev,
+      pilgrim_details: {
+        ...prev.pilgrim_details,
         [field]: value,
       },
     }));
@@ -105,6 +128,7 @@ export default function SubmitApplication() {
         ...formData,
         organization: formData.organization || null,
         marriage_details: isMarriageService ? formData.marriage_details : null,
+        pilgrim_details: isHajjUmrahService ? formData.pilgrim_details : null,
       };
       await api.post("/applications/applications/", payload);
       router.push("/portal");
@@ -126,23 +150,27 @@ export default function SubmitApplication() {
             Select a service and provide details to start your submission.
           </p>
         </div>
-        {isMarriageService && (
+        {(isMarriageService || isHajjUmrahService) && (
           <div className="flex items-center gap-2 bg-primary/5 p-2 px-4 rounded-2xl border border-primary/10">
-            {[1, 2, 3].map((s) => (
-              <div
-                key={s}
-                className={cn(
-                  "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
-                  step === s
-                    ? "bg-primary text-white scale-110 shadow-lg"
-                    : step > s
-                      ? "bg-green-500 text-white"
-                      : "bg-white text-slate-400 border border-slate-200",
-                )}
-              >
-                {step > s ? "✓" : s}
-              </div>
-            ))}
+            {[1, 2, isMarriageService ? 3 : 2].map((s, idx, arr) => {
+              const maxSteps = isMarriageService ? 3 : 2;
+              if (idx + 1 > maxSteps) return null;
+              return (
+                <div
+                  key={idx}
+                  className={cn(
+                    "w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all",
+                    step === idx + 1
+                      ? "bg-primary text-white scale-110 shadow-lg"
+                      : step > idx + 1
+                        ? "bg-green-500 text-white"
+                        : "bg-white text-slate-400 border border-slate-200",
+                  )}
+                >
+                  {step > idx + 1 ? "✓" : idx + 1}
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
@@ -245,6 +273,135 @@ export default function SubmitApplication() {
                       </div>
                     </label>
                   ))}
+                </div>
+              </motion.div>
+            )}
+
+            {step === 2 && isHajjUmrahService && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-12"
+              >
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/10">
+                      <User size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black font-outfit text-slate-800">Pilgrim Particulars</h3>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Details of the Applicant</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name (as per Passport)</label>
+                      <input
+                        type="text"
+                        placeholder="John Doe"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.full_name}
+                        onChange={(e) => updatePilgrimData('full_name', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
+                      <input
+                        type="text"
+                        placeholder="AK1234567"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.passport_number}
+                        onChange={(e) => updatePilgrimData('passport_number', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Nationality</label>
+                      <input
+                        type="text"
+                        placeholder="Kenyan"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.nationality}
+                        onChange={(e) => updatePilgrimData('nationality', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Date of Birth</label>
+                      <input
+                        type="date"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.date_of_birth}
+                        onChange={(e) => updatePilgrimData('date_of_birth', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Gender</label>
+                      <select
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.gender}
+                        onChange={(e) => updatePilgrimData('gender', e.target.value)}
+                      >
+                        <option>Male</option>
+                        <option>Female</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Trip Type</label>
+                      <select
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.trip_type}
+                        onChange={(e) => updatePilgrimData('trip_type', e.target.value)}
+                      >
+                        <option>Hajj</option>
+                        <option>Umrah</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Expected Travel Date</label>
+                      <input
+                        type="date"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.expected_travel_date}
+                        onChange={(e) => updatePilgrimData('expected_travel_date', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Travel Agent Name</label>
+                      <input
+                        type="text"
+                        placeholder="Licensed Agent"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.pilgrim_details.travel_agent_name}
+                        onChange={(e) => updatePilgrimData('travel_agent_name', e.target.value)}
+                      />
+                    </div>
+                    <div className="md:col-span-2 p-6 rounded-3xl bg-amber-50/50 border border-amber-100 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Info size={20} className="text-amber-500" />
+                        <div>
+                          <p className="font-bold text-slate-800">Educational Guidance</p>
+                          <p className="text-xs text-slate-500">Would you like logistical and spiritual guidance for your journey?</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updatePilgrimData('guidance_requested', !formData.pilgrim_details.guidance_requested)}
+                        className={cn(
+                          "px-6 py-2 rounded-xl font-bold transition-all",
+                          formData.pilgrim_details.guidance_requested
+                            ? "bg-primary text-white shadow-lg"
+                            : "bg-white border border-slate-200 text-slate-400"
+                        )}
+                      >
+                        {formData.pilgrim_details.guidance_requested ? "Requested" : "Request"}
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
@@ -699,6 +856,19 @@ export default function SubmitApplication() {
                         </div>
                       </div>
                     )}
+                    {isHajjUmrahService && (
+                      <div className="pt-2">
+                        <p className="text-xs text-white/40 mb-2 font-bold uppercase tracking-widest italic">Sacred Journey</p>
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-xs font-bold text-amber-400">
+                            <div className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Visa Support Process
+                          </div>
+                          <div className="flex items-center gap-2 text-xs font-bold text-amber-400">
+                            <div className="w-1.5 h-1.5 rounded-full bg-amber-400" /> Official Endorsement
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -715,7 +885,7 @@ export default function SubmitApplication() {
             Cancel Application
           </Link>
           <div className="flex items-center gap-4">
-            {isMarriageService && step > 1 && (
+            {(isMarriageService || isHajjUmrahService) && step > 1 && (
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
@@ -725,7 +895,7 @@ export default function SubmitApplication() {
               </button>
             )}
 
-            {(isMarriageService && step < 3) ? (
+            {((isMarriageService && step < 3) || (isHajjUmrahService && step < 2)) ? (
               <button
                 type="button"
                 onClick={() => setStep(step + 1)}
