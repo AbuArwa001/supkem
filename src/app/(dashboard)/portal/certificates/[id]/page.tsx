@@ -21,6 +21,8 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import MarriageCertificateTemplate from "@/components/MarriageCertificateTemplate";
 import SupportLetterTemplate from "@/components/SupportLetterTemplate";
+import StudyAbroadLetterTemplate from "@/components/StudyAbroadLetterTemplate";
+import TravelVisaAdvisoryTemplate from "@/components/TravelVisaAdvisoryTemplate";
 
 export default function CertificateDetail() {
   const params = useParams();
@@ -308,6 +310,12 @@ export default function CertificateDetail() {
           ) : certificate.application?.service_name?.toLowerCase().includes("hajj") ||
             certificate.application?.service_name?.toLowerCase().includes("umrah") ? (
             <SupportLetterTemplate certificate={certificate} />
+          ) : certificate.application?.service_name?.toLowerCase().includes("study") ||
+            certificate.application?.service_name?.toLowerCase().includes("abroad") ? (
+            <StudyAbroadLetterTemplate certificate={certificate} />
+          ) : certificate.application?.service_name?.toLowerCase().includes("visa") ||
+            certificate.application?.service_name?.toLowerCase().includes("travel") ? (
+            <TravelVisaAdvisoryTemplate certificate={certificate} />
           ) : (
             <>
               <Image

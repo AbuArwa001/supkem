@@ -69,6 +69,27 @@ export default function SubmitApplication() {
       expected_travel_date: "",
       travel_agent_name: "",
       guidance_requested: false,
+    },
+    education_details: {
+      full_name: "",
+      passport_number: "",
+      institution_name: "",
+      course_of_study: "",
+      country: "",
+      scholarship_details: "",
+    },
+    travel_visa_details: {
+      full_name: "",
+      passport_number: "",
+      destination_country: "",
+      trip_purpose: "Religious",
+      expected_travel_date: "",
+    },
+    employment_details: {
+      full_name: "",
+      id_number: "",
+      position_applied_for: "",
+      employer_name: "",
     }
   });
   const [step, setStep] = useState(1);
@@ -99,6 +120,12 @@ export default function SubmitApplication() {
   const isMarriageService = selectedService?.category === "Marriage";
   const isHajjUmrahService = selectedService?.category?.toLowerCase().includes("hajj") ||
     selectedService?.name?.toLowerCase().includes("hajj");
+  const isEducationService = selectedService?.category?.toLowerCase().includes("education") ||
+    selectedService?.name?.toLowerCase().includes("study");
+  const isTravelVisaService = selectedService?.category?.toLowerCase().includes("travel") ||
+    selectedService?.name?.toLowerCase().includes("visa");
+  const isEmploymentService = selectedService?.category?.toLowerCase().includes("employment") ||
+    selectedService?.name?.toLowerCase().includes("referral");
 
   // For Marriage, organization is optional but used as a "Registrar"
   const canSelectOrganization = !isIndividualService || isMarriageService;
@@ -123,6 +150,36 @@ export default function SubmitApplication() {
     }));
   };
 
+  const updateEducationData = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      education_details: {
+        ...prev.education_details,
+        [field]: value,
+      },
+    }));
+  };
+
+  const updateTravelVisaData = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      travel_visa_details: {
+        ...prev.travel_visa_details,
+        [field]: value,
+      },
+    }));
+  };
+
+  const updateEmploymentData = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      employment_details: {
+        ...prev.employment_details,
+        [field]: value,
+      },
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -132,6 +189,9 @@ export default function SubmitApplication() {
         organization: formData.organization || null,
         marriage_details: isMarriageService ? formData.marriage_details : null,
         pilgrim_details: isHajjUmrahService ? formData.pilgrim_details : null,
+        education_details: isEducationService ? formData.education_details : null,
+        travel_visa_details: isTravelVisaService ? formData.travel_visa_details : null,
+        employment_details: isEmploymentService ? formData.employment_details : null,
       };
       await api.post("/applications/applications/", payload);
       router.push("/portal");
@@ -153,9 +213,9 @@ export default function SubmitApplication() {
             Select a service and provide details to start your submission.
           </p>
         </div>
-        {(isMarriageService || isHajjUmrahService) && (
+        {(isMarriageService || isHajjUmrahService || isEducationService || isTravelVisaService || isEmploymentService) && (
           <div className="flex items-center gap-2 bg-primary/5 p-2 px-4 rounded-2xl border border-primary/10">
-            {[1, 2, isMarriageService ? 3 : 2].map((s, idx, arr) => {
+            {[1, 2, 3].map((s, idx, arr) => {
               const maxSteps = isMarriageService ? 3 : 2;
               if (idx + 1 > maxSteps) return null;
               return (
@@ -280,7 +340,7 @@ export default function SubmitApplication() {
               </motion.div>
             )}
 
-            {step === 2 && isHajjUmrahService && (
+            {step === 2 && isEducationService && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -289,23 +349,23 @@ export default function SubmitApplication() {
                 <div className="space-y-8">
                   <div className="flex items-center gap-4 group">
                     <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/10">
-                      <User size={24} />
+                      <GraduationCap size={24} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black font-outfit text-slate-800">Pilgrim Particulars</h3>
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Details of the Applicant</p>
+                      <h3 className="text-2xl font-black font-outfit text-slate-800">Educational Endorsement</h3>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Student Information</p>
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name (as per Passport)</label>
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
                       <input
                         type="text"
-                        placeholder="John Doe"
+                        placeholder="Student Name"
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.full_name}
-                        onChange={(e) => updatePilgrimData('full_name', e.target.value)}
+                        value={formData.education_details.full_name}
+                        onChange={(e) => updateEducationData('full_name', e.target.value)}
                         required
                       />
                     </div>
@@ -313,54 +373,123 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
                       <input
                         type="text"
-                        placeholder="AK1234567"
+                        placeholder="Passport No."
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.passport_number}
-                        onChange={(e) => updatePilgrimData('passport_number', e.target.value)}
+                        value={formData.education_details.passport_number}
+                        onChange={(e) => updateEducationData('passport_number', e.target.value)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Nationality</label>
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Institution Name</label>
                       <input
                         type="text"
-                        placeholder="Kenyan"
+                        placeholder="University / College Name"
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.nationality}
-                        onChange={(e) => updatePilgrimData('nationality', e.target.value)}
+                        value={formData.education_details.institution_name}
+                        onChange={(e) => updateEducationData('institution_name', e.target.value)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Date of Birth</label>
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Course of Study</label>
                       <input
-                        type="date"
+                        type="text"
+                        placeholder="e.g. Bachelor of Islamic Studies"
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.date_of_birth}
-                        onChange={(e) => updatePilgrimData('date_of_birth', e.target.value)}
+                        value={formData.education_details.course_of_study}
+                        onChange={(e) => updateEducationData('course_of_study', e.target.value)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Gender</label>
-                      <select
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Country</label>
+                      <input
+                        type="text"
+                        placeholder="Destination Country"
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.gender}
-                        onChange={(e) => updatePilgrimData('gender', e.target.value)}
-                      >
-                        <option>Male</option>
-                        <option>Female</option>
-                      </select>
+                        value={formData.education_details.country}
+                        onChange={(e) => updateEducationData('country', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Scholarship Details (Optional)</label>
+                      <textarea
+                        rows={2}
+                        placeholder="Mention any scholarship or specific purpose..."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.education_details.scholarship_details}
+                        onChange={(e) => updateEducationData('scholarship_details', e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {step === 2 && isTravelVisaService && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-12"
+              >
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/10">
+                      <Plane size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black font-outfit text-slate-800">Visa Advisory Support</h3>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Travel Particulars</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="Traveler Name"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.travel_visa_details.full_name}
+                        onChange={(e) => updateTravelVisaData('full_name', e.target.value)}
+                        required
+                      />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Trip Type</label>
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
+                      <input
+                        type="text"
+                        placeholder="Passport No."
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.travel_visa_details.passport_number}
+                        onChange={(e) => updateTravelVisaData('passport_number', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Destination Country</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Saudi Arabia, Egypt, Turkey"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.travel_visa_details.destination_country}
+                        onChange={(e) => updateTravelVisaData('destination_country', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Trip Purpose</label>
                       <select
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.trip_type}
-                        onChange={(e) => updatePilgrimData('trip_type', e.target.value)}
+                        value={formData.travel_visa_details.trip_purpose}
+                        onChange={(e) => updateTravelVisaData('trip_purpose', e.target.value)}
                       >
-                        <option>Hajj</option>
-                        <option>Umrah</option>
+                        <option>Religious</option>
+                        <option>Educational</option>
+                        <option>Business</option>
+                        <option>Personal</option>
                       </select>
                     </div>
                     <div className="space-y-2">
@@ -368,41 +497,77 @@ export default function SubmitApplication() {
                       <input
                         type="date"
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.expected_travel_date}
-                        onChange={(e) => updatePilgrimData('expected_travel_date', e.target.value)}
+                        value={formData.travel_visa_details.expected_travel_date}
+                        onChange={(e) => updateTravelVisaData('expected_travel_date', e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {step === 2 && isEmploymentService && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-12"
+              >
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/10">
+                      <Briefcase size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black font-outfit text-slate-800">Employment Referral</h3>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Candidate Information</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.employment_details.full_name}
+                        onChange={(e) => updateEmploymentData('full_name', e.target.value)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Travel Agent Name</label>
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID Number</label>
                       <input
                         type="text"
-                        placeholder="Licensed Agent"
+                        placeholder="ID No."
                         className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-                        value={formData.pilgrim_details.travel_agent_name}
-                        onChange={(e) => updatePilgrimData('travel_agent_name', e.target.value)}
+                        value={formData.employment_details.id_number}
+                        onChange={(e) => updateEmploymentData('id_number', e.target.value)}
+                        required
                       />
                     </div>
-                    <div className="md:col-span-2 p-6 rounded-3xl bg-amber-50/50 border border-amber-100 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Info size={20} className="text-amber-500" />
-                        <div>
-                          <p className="font-bold text-slate-800">Educational Guidance</p>
-                          <p className="text-xs text-slate-500">Would you like logistical and spiritual guidance for your journey?</p>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => updatePilgrimData('guidance_requested', !formData.pilgrim_details.guidance_requested)}
-                        className={cn(
-                          "px-6 py-2 rounded-xl font-bold transition-all",
-                          formData.pilgrim_details.guidance_requested
-                            ? "bg-primary text-white shadow-lg"
-                            : "bg-white border border-slate-200 text-slate-400"
-                        )}
-                      >
-                        {formData.pilgrim_details.guidance_requested ? "Requested" : "Request"}
-                      </button>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Position Applied For</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Accountant, Teacher"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.employment_details.position_applied_for}
+                        onChange={(e) => updateEmploymentData('position_applied_for', e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Potential Employer Name</label>
+                      <input
+                        type="text"
+                        placeholder="Employer Name"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        value={formData.employment_details.employer_name}
+                        onChange={(e) => updateEmploymentData('employer_name', e.target.value)}
+                        required
+                      />
                     </div>
                   </div>
                 </div>
@@ -896,7 +1061,7 @@ export default function SubmitApplication() {
             Cancel Application
           </Link>
           <div className="flex items-center gap-4">
-            {(isMarriageService || isHajjUmrahService) && step > 1 && (
+            {(isMarriageService || isHajjUmrahService || isEducationService || isTravelVisaService || isEmploymentService) && step > 1 && (
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
@@ -906,7 +1071,8 @@ export default function SubmitApplication() {
               </button>
             )}
 
-            {((isMarriageService && step < 3) || (isHajjUmrahService && step < 2)) ? (
+            {((isMarriageService && step < 3) ||
+              ((isHajjUmrahService || isEducationService || isTravelVisaService || isEmploymentService) && step < 2)) ? (
               <button
                 type="button"
                 onClick={() => setStep(step + 1)}
