@@ -1,290 +1,142 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
-import { useState } from "react";
-import {
-  User,
-  Mail,
-  Phone,
-  Lock,
-  Save,
-  Loader2,
-  UserCircle,
-  Bell,
-} from "lucide-react";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import api from "@/lib/api";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  UserCircle,
+  ShieldCheck,
+  Bell,
+  Cpu,
+  ChevronRight,
+  Database,
+  Users,
+  Settings as SettingsIcon
+} from "lucide-react";
+import Link from "next/link";
+import { useAuth } from "@/hooks/useAuth";
 
-export default function ProfileSettings() {
-  const { user, login } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    first_name: user?.first_name || "",
-    middle_name: user?.middle_name || "",
-    last_name: user?.last_name || "",
-    phone: user?.phone || "",
-  });
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
-  const handleUpdateProfile = async () => {
-    setLoading(true);
-    setError("");
-    setSuccess("");
-    try {
-      await api.patch("/users/users/me/", formData);
-      setSuccess("Profile updated successfully!");
-    } catch (err: any) {
-      console.error("Update failed", err);
-      setError(err.response?.data?.detail || "Failed to update profile.");
-    } finally {
-      setLoading(false);
-    }
-  };
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0 },
+};
+
+export default function SettingsHub() {
+  const { user } = useAuth();
+  const isAdmin = user?.role?.role_name === "Admin" || user?.is_staff;
+
+  const settingsCategories = [
+    {
+      title: "Account Profile",
+      description: "Manage your personal information, security preferences, and account identity.",
+      icon: UserCircle,
+      color: "text-blue-600",
+      bg: "bg-blue-50",
+      link: "/admin/settings/profile"
+    },
+    {
+      title: "System Parameters",
+      description: "Fine-tune core application behaviors, service defaults, and facility configurations.",
+      icon: Cpu,
+      color: "text-primary",
+      bg: "bg-primary/5",
+      link: "/admin/settings/system-parameters",
+      isAdminOnly: true
+    },
+    {
+      title: "Notifications",
+      description: "Configure automated alerts for applications, certificates, and system events.",
+      icon: Bell,
+      color: "text-amber-600",
+      bg: "bg-amber-50",
+      link: "/admin/settings/notifications",
+    },
+    {
+      title: "Access Control",
+      description: "Manage role-based permissions and administrative security protocols.",
+      link: "/admin/users",
+      icon: ShieldCheck,
+      color: "text-indigo-600",
+      bg: "bg-indigo-50",
+      isAdminOnly: true
+    },
+    {
+      title: "Data Audit Logs",
+      description: "Review system activity logs and monitor administrative changes.",
+      link: "/admin/settings/audit",
+      icon: Database,
+      color: "text-slate-600",
+      bg: "bg-slate-50",
+      isAdminOnly: true
+    },
+  ];
 
   return (
-    <div className="space-y-12">
-      <div className="space-y-1">
-        <h1 className="text-4xl font-bold font-outfit text-primary">
-          Account Settings
-        </h1>
-        <p className="text-foreground/60 font-medium tracking-tight">
-          Manage your personal information, security preferences, and
-          notification settings.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-10">
-          {/* Profile Information */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="p-10 rounded-[24px] bg-white border border-border shadow-sm space-y-10"
-          >
-            <div className="flex items-center gap-4 text-primary">
-              <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center shrink-0">
-                <UserCircle size={28} />
-              </div>
-              <h3 className="text-2xl font-bold font-outfit">
-                Personal Information
-              </h3>
-            </div>
-
-            {success && (
-              <div className="p-4 bg-emerald-50 text-emerald-600 rounded-2xl text-sm font-bold border border-emerald-100">
-                {success}
-              </div>
-            )}
-
-            {error && (
-              <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm font-bold border border-red-100">
-                {error}
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  First Name
-                </label>
-                <div className="relative group">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
-                    size={20}
-                  />
-                  <input
-                    value={formData.first_name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, first_name: e.target.value })
-                    }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                  />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Middle Name
-                </label>
-                <div className="relative group">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
-                    size={20}
-                  />
-                  <input
-                    value={formData.middle_name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, middle_name: e.target.value })
-                    }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                  />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Last Name / Surname
-                </label>
-                <div className="relative group">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
-                    size={20}
-                  />
-                  <input
-                    value={formData.last_name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, last_name: e.target.value })
-                    }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                  />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Email Address
-                </label>
-                <div className="relative group">
-                  <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
-                    size={20}
-                  />
-                  <input
-                    disabled
-                    defaultValue={user?.email}
-                    className="w-full bg-primary/[0.01] border border-border rounded-2xl py-4 pl-12 pr-4 opacity-50 cursor-not-allowed font-bold text-primary"
-                  />
-                </div>
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Phone Number
-                </label>
-                <div className="relative group">
-                  <Phone
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
-                    size={20}
-                  />
-                  <input
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-6">
-              <button
-                onClick={handleUpdateProfile}
-                disabled={loading}
-                className="px-10 py-4 bg-primary text-white rounded-[24px] font-extrabold text-sm hover-lift premium-gradient shadow-xl shadow-primary/20 flex items-center gap-3 disabled:opacity-50"
-              >
-                {loading ? (
-                  <Loader2 className="animate-spin" size={18} />
-                ) : (
-                  <Save size={18} />
-                )}
-                Update Profile
-              </button>
-            </div>
-          </motion.div>
-
-          {/* Security Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="p-10 rounded-[24px] bg-white border border-border shadow-sm space-y-10"
-          >
-            <div className="flex items-center gap-4 text-primary">
-              <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
-                <Lock size={28} />
-              </div>
-              <h3 className="text-2xl font-bold font-outfit">
-                Security & Access
-              </h3>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Current Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-                />
-              </div>
-              <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  New Password
-                </label>
-                <input
-                  type="password"
-                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
-                />
-              </div>
-            </div>
-
-            <div className="pt-6">
-              <button className="px-10 py-4 border-2 border-primary text-primary rounded-[24px] font-extrabold text-sm hover:bg-primary hover:text-white transition-all flex items-center gap-3">
-                Change Password
-              </button>
-            </div>
-          </motion.div>
-        </div>
-
-        <div className="space-y-8">
-          <div className="p-10 rounded-[20px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-            <Image
-              src="/logo.svg"
-              alt="SUPKEM Logo"
-              width={48}
-              height={48}
-              className="relative z-10"
-            />
-            <h3 className="text-2xl font-bold font-outfit relative z-10">
-              Access Verification
-            </h3>
-            <p className="text-sm font-medium text-white/70 relative z-10 leading-relaxed">
-              You are currently signed in as a{" "}
-              <span className="text-secondary font-black">
-                {user?.role?.role_name}
-              </span>
-              . Your access includes administrative controls and platform
-              auditing.
+    <motion.div
+      variants={container}
+      initial="hidden"
+      animate="show"
+      className="space-y-12"
+    >
+      <header>
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary">
+            <SettingsIcon size={28} />
+          </div>
+          <div>
+            <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
+              Settings <span className="text-foreground/40 italic">Hub</span>
+            </h1>
+            <p className="text-foreground/60 font-medium tracking-tight">
+              Centralized platform configuration and administrative preferences.
             </p>
           </div>
-
-          <div className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8">
-            <div className="flex items-center gap-3 text-primary">
-              <Bell size={24} className="opacity-40" />
-              <h4 className="text-xl font-bold font-outfit">Notifications</h4>
-            </div>
-            <div className="space-y-4">
-              <label className="flex items-center justify-between p-4 rounded-3xl bg-primary/[0.02] border border-primary/5 cursor-pointer group">
-                <span className="text-sm font-bold text-primary opacity-60 group-hover:opacity-100 transition-opacity">
-                  Email Updates
-                </span>
-                <input
-                  type="checkbox"
-                  className="w-5 h-5 accent-primary"
-                  defaultChecked
-                />
-              </label>
-              <label className="flex items-center justify-between p-4 rounded-3xl bg-primary/[0.02] border border-primary/5 cursor-pointer group">
-                <span className="text-sm font-bold text-primary opacity-60 group-hover:opacity-100 transition-opacity">
-                  SMS Alerts
-                </span>
-                <input type="checkbox" className="w-5 h-5 accent-primary" />
-              </label>
-            </div>
-          </div>
         </div>
+      </header>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {settingsCategories.map((category, index) => {
+          if (category.isAdminOnly && !isAdmin) return null;
+
+          const cardContent = (
+            <Card className="border-none shadow-premium bg-white rounded-[2rem] overflow-hidden hover:shadow-premium-hover transition-all duration-500 group cursor-pointer border border-transparent hover:border-primary/10 h-full">
+              <CardHeader className="p-8 pb-0 flex flex-row items-start justify-between">
+                <div className={`${category.bg} p-5 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
+                  <category.icon className={`h-8 w-8 ${category.color}`} />
+                </div>
+                <ChevronRight className="h-6 w-6 text-slate-200 group-hover:translate-x-2 transition-transform duration-500 group-hover:text-primary/40" />
+              </CardHeader>
+              <CardContent className="p-8">
+                <CardTitle className="text-2xl font-bold font-outfit text-slate-900 mb-3 tracking-tight">
+                  {category.title}
+                </CardTitle>
+                <CardDescription className="text-slate-500 font-semibold text-base leading-relaxed">
+                  {category.description}
+                </CardDescription>
+              </CardContent>
+            </Card>
+          );
+
+          return (
+            <motion.div key={index} variants={item}>
+              {category.link ? (
+                <Link href={category.link}>
+                  {cardContent}
+                </Link>
+              ) : cardContent}
+            </motion.div>
+          );
+        })}
       </div>
-    </div>
+    </motion.div>
   );
 }
