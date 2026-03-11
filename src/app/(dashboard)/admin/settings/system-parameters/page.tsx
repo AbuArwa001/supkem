@@ -77,10 +77,12 @@ export default function SystemParametersPage() {
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
     const [updatingKey, setUpdatingKey] = useState<string | null>(null);
 
-    const { data: parameters, error, mutate, isLoading } = useSWR<SystemParameter[]>(
+    const { data: rawData, error, mutate, isLoading } = useSWR<any>(
         isAdmin ? "/configurations/system-parameters/" : null,
         fetcher
     );
+
+    const parameters: SystemParameter[] = Array.isArray(rawData) ? rawData : (rawData?.results || []);
 
     const handleSave = async (key: string) => {
         const value = pendingChanges[key];
@@ -91,7 +93,8 @@ export default function SystemParametersPage() {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
             // Update local cache
             if (parameters) {
-                mutate(parameters.map(p => p.key === key ? { ...p, value } : p), false);
+                const updatedParameters = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
+                mutate(rawData.results ? { ...rawData, results: updatedParameters } : updatedParameters, false);
             }
             setPendingChanges(prev => {
                 const next = { ...prev };
@@ -120,7 +123,7 @@ export default function SystemParametersPage() {
         );
     }
 
-    const filteredParameters = parameters?.filter(p => {
+    const filteredParameters = parameters?.filter((p: SystemParameter) => {
         const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
             p.key.toLowerCase().includes(search.toLowerCase());
         const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;

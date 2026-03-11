@@ -97,10 +97,12 @@ export default function AccessControlPage() {
     const [selectedRole, setSelectedRole] = useState<Role | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    const { data: roles, isLoading, error, mutate } = useSWR<Role[]>(
+    const { data: rawRoles, isLoading, error, mutate } = useSWR<any>(
         isAdmin ? "/users/roles/" : null,
         fetcher
     );
+
+    const roles: Role[] = Array.isArray(rawRoles) ? rawRoles : (rawRoles?.results || []);
 
     if (!isAdmin) {
         return (
@@ -116,7 +118,7 @@ export default function AccessControlPage() {
         );
     }
 
-    const filteredRoles = roles?.filter(role =>
+    const filteredRoles = roles?.filter((role: Role) =>
         role.role_name.toLowerCase().includes(search.toLowerCase())
     );
 

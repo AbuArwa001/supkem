@@ -70,15 +70,18 @@ export default function NotificationsSettingsPage() {
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
     const [updatingKey, setUpdatingKey] = useState<string | null>(null);
 
-    const { data: parameters, isLoading: paramsLoading, mutate: mutateParams } = useSWR<SystemParameter[]>(
+    const { data: rawParams, isLoading: paramsLoading, mutate: mutateParams } = useSWR<any>(
         isAdmin ? "/configurations/system-parameters/?category=notifications" : null,
         fetcher
     );
 
-    const { data: roles, isLoading: rolesLoading } = useSWR<Role[]>(
+    const { data: rawRoles, isLoading: rolesLoading } = useSWR<any>(
         isAdmin ? "/users/roles/" : null,
         fetcher
     );
+
+    const parameters = Array.isArray(rawParams) ? rawParams : (rawParams?.results || []);
+    const roles = Array.isArray(rawRoles) ? rawRoles : (rawRoles?.results || []);
 
     if (!isAdmin) {
         return (
@@ -107,7 +110,8 @@ export default function NotificationsSettingsPage() {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
             toast.success("Setting updated successfully");
             if (parameters) {
-                mutateParams(parameters.map(p => p.key === key ? { ...p, value } : p), false);
+                const updatedParams = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
+                mutateParams(rawParams.results ? { ...rawParams, results: updatedParams } : updatedParams, false);
             }
             setPendingChanges(prev => {
                 const next = { ...prev };
@@ -191,7 +195,7 @@ export default function NotificationsSettingsPage() {
                         </Card>
                     ))
                 ) : (
-                    parameters?.map((param) => (
+                    parameters?.map((param: SystemParameter) => (
                         <motion.div key={param.id} variants={item}>
                             <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden group hover:shadow-premium-hover transition-all duration-500">
                                 <CardContent className="p-8 md:p-10">
@@ -245,7 +249,7 @@ export default function NotificationsSettingsPage() {
                                                     </div>
                                                 ) : param.data_type === "json" && param.key === "notify_roles" ? (
                                                     <div className="space-y-2 max-h-[200px] overflow-y-auto p-2 bg-slate-50 rounded-[1.25rem] border border-slate-100 no-scrollbar">
-                                                        {roles?.map(role => {
+                                                        {roles?.map((role: Role) => {
                                                             const currentVal = pendingChanges[param.key] ?? param.value;
                                                             let isSelected = false;
                                                             try {
