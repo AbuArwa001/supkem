@@ -65,7 +65,11 @@ const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export default function UsersPage() {
   const { user: currentUser } = useAuth();
-  const isAdmin = currentUser?.role?.role_name === "Admin" || currentUser?.is_staff;
+  const isAdmin =
+    currentUser?.is_superuser ||
+    currentUser?.is_staff ||
+    currentUser?.role?.role_name?.toLowerCase().includes("admin") ||
+    currentUser?.role_name?.toLowerCase().includes("admin");
 
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");

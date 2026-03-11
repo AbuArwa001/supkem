@@ -32,7 +32,11 @@ const item = {
 
 export default function SettingsHub() {
   const { user } = useAuth();
-  const isAdmin = user?.role?.role_name === "Admin" || user?.is_staff;
+  const isAdmin =
+    user?.is_superuser ||
+    user?.is_staff ||
+    user?.role?.role_name?.toLowerCase().includes("admin") ||
+    user?.role_name?.toLowerCase().includes("admin");
 
   const settingsCategories = [
     {

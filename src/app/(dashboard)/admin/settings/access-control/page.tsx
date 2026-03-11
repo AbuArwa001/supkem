@@ -88,7 +88,11 @@ const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function AccessControlPage() {
     const { user } = useAuth();
-    const isAdmin = user?.role?.role_name === "Admin" || user?.is_staff;
+    const isAdmin =
+        user?.is_superuser ||
+        user?.is_staff ||
+        user?.role?.role_name?.toLowerCase().includes("admin") ||
+        user?.role_name?.toLowerCase().includes("admin");
     const [search, setSearch] = useState("");
     const [selectedRole, setSelectedRole] = useState<Role | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
