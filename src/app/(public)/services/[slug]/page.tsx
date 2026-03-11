@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ArrowRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ArrowRight, ShieldCheck, CheckCircle2, Heart, Plane, FileText, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { use } from "react";
 
 // Using Lucide React Icons
 const iconMap: Record<string, React.ElementType> = {
-    FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ShieldCheck
+    FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ShieldCheck, Heart, Plane, FileText, BookOpen
 };
 
 // Detailed Mock Content for Services
@@ -98,6 +98,66 @@ const SERVICES_DATA = {
             "Community cohesion and peace-building dialogues"
         ],
         details: "Peace and unity are paramount. Our conflict resolution services provide a neutral, Sharia-compliant platform to mediate disputes, averting protracted legal battles and preserving harmony within families, mosques, and the broader community."
+    },
+    "marriage-certificates": {
+        title: "Marriage Certificates",
+        subtitle: "Islamic marriage (Nikah) certification",
+        description: "Official Islamic marriage certification recognized under Kenyan law, providing legal and religious validity to your union through professional Sharia-compliant processing.",
+        heroImage: "/images/slider/olerezo_nb.jpg",
+        icon: "Heart",
+        category: "Individuals",
+        features: [
+            "Sharia-compliant Nikah certification",
+            "Legal recognition under Kenyan Statutes",
+            "Marriage counseling and pre-marital resources",
+            "Secure digital record keeping"
+        ],
+        details: "A valid marriage certificate is essential for various legal and administrative procedures. SUPKEM provides certified Nikah documents that are recognized by the Registrar of Marriages in Kenya. We guide couples through the process, ensuring all religious requirements are met while aligning with national legal standards."
+    },
+    "hajj-umrah": {
+        title: "Hajj & Umrah Facilitation",
+        subtitle: "Guidance for the sacred journey",
+        description: "Comprehensive support for pilgrims embarking on Hajj and Umrah, providing essential documentation, logistical coordination, and spiritual guidance.",
+        heroImage: "/images/slider/olesaudib.jpg",
+        icon: "Plane",
+        category: "Individuals",
+        features: [
+            "Official embassy support letters",
+            "Logistics and travel protocol guidance",
+            "Pre-departure educational seminars",
+            " pilgrim welfare coordination"
+        ],
+        details: "The journey to the Holy Lands is a significant milestone for every Muslim. Our department works closely with the Hajj Mission and travel agencies to ensure pilgrims are well-prepared. We provide the necessary recommendation letters for visa processing and conduct orientation sessions to help you perform your rituals with ease and focus."
+    },
+    "visa-advisory": {
+        title: "Travel Visa Advisory",
+        subtitle: "Support for religious and educational travel",
+        description: "Expert advisory services and official recommendation letters to facilitate visa applications for religious pilgrimages and international educational pursuits.",
+        heroImage: "/images/slider/ole_olesapitb.jpg",
+        icon: "FileText",
+        category: "Individuals",
+        features: [
+            "Specialized religious travel advisory",
+            "Official SUPKEM recommendation letters",
+            "Documentation review and verification",
+            "Support for students and religious scholars"
+        ],
+        details: "Applying for visas for religious or educational travel can be complex. SUPKEM provides formal support letters to embassies, verifying the religious or academic nature of your travel. While we do not issue visas, our advisory service helps ensure your application is well-documented and meets the necessary criteria for consideration."
+    },
+    "study-abroad": {
+        title: "Study Abroad Letters",
+        subtitle: "Supporting educational aspirations",
+        description: "Official recommendation and support letters for Muslim students applying for international scholarships and university placements across the globe.",
+        heroImage: "/images/slider/olerezo_nb.jpg",
+        icon: "BookOpen",
+        category: "Individuals",
+        features: [
+            "University admission recommendation letters",
+            "Scholarship support documentation",
+            "Academic pathway and institution guidance",
+            "Verification of student credentials"
+        ],
+        details: "We are committed to the academic advancement of the Muslim youth. For students seeking higher education abroad, SUPKEM provides official letters that vouch for the student's background and aspirations. These letters are often required or highly valued by international universities and scholarship boards as part of the admission and vetting process."
     }
 };
 
