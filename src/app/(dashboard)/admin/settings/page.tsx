@@ -63,7 +63,7 @@ export default function SettingsHub() {
     {
       title: "Access Control",
       description: "Manage role-based permissions and administrative security protocols.",
-      link: "/admin/users",
+      link: "/admin/settings/access-control",
       icon: ShieldCheck,
       color: "text-indigo-600",
       bg: "bg-indigo-50",
