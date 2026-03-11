@@ -26,6 +26,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface SystemParameter {

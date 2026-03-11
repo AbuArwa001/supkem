@@ -11,8 +11,10 @@ import {
   Loader2,
   UserCircle,
   Bell,
+  ChevronRight,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 
@@ -45,14 +47,22 @@ export default function ProfileSettings() {
 
   return (
     <div className="space-y-12">
-      <div className="space-y-1">
-        <h1 className="text-4xl font-bold font-outfit text-primary">
-          Account Settings
-        </h1>
-        <p className="text-foreground/60 font-medium tracking-tight">
-          Manage your personal information, security preferences, and
-          notification settings.
-        </p>
+      <div className="flex items-center gap-4 mb-8">
+        <Link
+          href="/admin/settings"
+          className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary"
+        >
+          <ChevronRight className="rotate-180" size={24} />
+        </Link>
+        <div className="space-y-1">
+          <h1 className="text-4xl font-bold font-outfit text-primary">
+            Account Settings
+          </h1>
+          <p className="text-foreground/60 font-medium tracking-tight">
+            Manage your personal information, security preferences, and
+            notification settings.
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
