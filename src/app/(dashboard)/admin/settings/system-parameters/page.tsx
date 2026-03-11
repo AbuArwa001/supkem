@@ -16,7 +16,8 @@ import {
     Truck,
     Bell,
     Cpu,
-    Loader2
+    Loader2,
+    ChevronRight,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -138,18 +139,26 @@ export default function SystemParametersPage() {
             className="space-y-12"
         >
             <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div>
-                    <div className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary">
-                            <Settings2 size={28} />
-                        </div>
-                        <div>
-                            <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-                                System <span className="text-foreground/40 italic">Parameters</span>
-                            </h1>
-                            <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                                Fine-tuning core application behaviors and facility defaults.
-                            </p>
+                <div className="flex items-center gap-4">
+                    <Link
+                        href="/admin/settings"
+                        className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary self-start mt-2"
+                    >
+                        <ChevronRight className="rotate-180" size={24} />
+                    </Link>
+                    <div>
+                        <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary">
+                                <Settings2 size={28} />
+                            </div>
+                            <div>
+                                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
+                                    System <span className="text-foreground/40 italic">Parameters</span>
+                                </h1>
+                                <p className="text-foreground/60 font-medium tracking-tight mt-1">
+                                    Fine-tuning core application behaviors and facility defaults.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -262,7 +271,7 @@ export default function SystemParametersPage() {
                                                                 </span>
                                                                 <Switch
                                                                     checked={(pendingChanges[param.key] ?? param.value) === "True"}
-                                                                    onCheckedChange={(checked) => handleValueChange(param.key, checked ? "True" : "False")}
+                                                                    onCheckedChange={(checked: boolean) => handleValueChange(param.key, checked ? "True" : "False")}
                                                                 />
                                                             </div>
                                                         ) : (
