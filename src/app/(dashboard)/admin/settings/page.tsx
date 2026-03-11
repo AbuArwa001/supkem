@@ -104,6 +104,26 @@ export default function SettingsHub() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* User Management */}
+        <motion.div variants={item}>
+          <Link href="/admin/users">
+            <Card className="border-none shadow-premium bg-white rounded-[2.5rem] p-8 hover:shadow-premium-hover transition-all duration-500 group border border-transparent hover:border-rose-100 h-full">
+              <div className="flex flex-col h-full">
+                <div className="bg-rose-50 p-4 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-500">
+                  <Users className="h-8 w-8 text-rose-600" />
+                </div>
+                <h3 className="text-2xl font-black text-slate-900 mt-6 font-outfit uppercase tracking-tight">Team Management</h3>
+                <p className="text-slate-500 font-semibold text-sm mt-3 flex-grow">
+                  Administrate system access, institutional roles, and staff profiles.
+                </p>
+                <div className="mt-8 pt-6 border-t border-slate-50 flex items-center justify-between text-rose-600 font-black text-[10px] uppercase tracking-widest">
+                  <span>Manage Registry</span>
+                  <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </div>
+            </Card>
+          </Link>
+        </motion.div>
         {settingsCategories.map((category, index) => {
           if (category.isAdminOnly && !isAdmin) return null;
 
