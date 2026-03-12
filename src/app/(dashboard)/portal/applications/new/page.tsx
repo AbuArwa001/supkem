@@ -21,6 +21,9 @@ import {
   Users,
   Info,
   Gift,
+  GraduationCap,
+  Plane,
+  Briefcase,
 } from "lucide-react";
 
 export default function SubmitApplication() {

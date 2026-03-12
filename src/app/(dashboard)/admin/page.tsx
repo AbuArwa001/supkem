@@ -300,7 +300,12 @@ const StatCard = ({ icon: Icon, label, value, trend, color, delay }: any) => (
 );
 
 export default function AdminOverview() {
-  const [data, setData] = useState<{ stats: any[], recent_applications: any[], report_data: any } | null>(null);
+  const [data, setData] = useState<{
+    stats: any[],
+    recent_applications: any[],
+    report_data: any,
+    upcoming_deadlines: any[]
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isReportOpen, setIsReportOpen] = useState(false);
 
@@ -481,49 +486,48 @@ export default function AdminOverview() {
               Upcoming Deadlines
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
-              {[
-                {
-                  title: "Membership Renewal",
-                  desc: "Due in 3 days • Coastal Region",
-                  type: "warning",
-                },
-                {
-                  title: "Audit Report Submission",
-                  desc: "Due next week • Finance Dept",
-                  type: "danger",
-                },
-                {
-                  title: "System Maintenance",
-                  desc: "Scheduled tomorrow at 2 AM",
-                  type: "info",
-                },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="p-6 rounded-[24px] bg-white border border-slate-100 flex items-start gap-4 hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all cursor-pointer group"
-                >
-                  <div
-                    className={cn(
-                      "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform",
-                      item.type === "warning"
-                        ? "bg-amber-100 text-amber-600"
-                        : item.type === "danger"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-blue-100 text-blue-600",
-                    )}
+              {data?.upcoming_deadlines && data.upcoming_deadlines.length > 0 ? (
+                data.upcoming_deadlines.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    className="p-6 rounded-[24px] bg-white border border-slate-100 flex items-start gap-4 hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all cursor-pointer group"
                   >
-                    <Clock size={18} />
+                    <div
+                      className={cn(
+                        "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform",
+                        item.type === "warning"
+                          ? "bg-amber-100 text-amber-600"
+                          : item.type === "danger"
+                            ? "bg-red-100 text-red-600"
+                            : "bg-blue-100 text-blue-600",
+                      )}
+                    >
+                      <Clock size={18} />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="font-bold text-sm md:text-base text-slate-900 leading-none">
+                        {item.title}
+                      </p>
+                      <p className="text-[10px] md:text-xs font-semibold text-slate-500">
+                        {item.desc}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="p-10 text-center bg-slate-50/50 border border-dashed border-slate-200 rounded-[32px] space-y-3">
+                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
+                    <CheckCircle2 className="text-emerald-500" size={24} />
                   </div>
                   <div className="space-y-1">
-                    <p className="font-bold text-sm md:text-base text-slate-900 leading-none">
-                      {item.title}
-                    </p>
-                    <p className="text-[10px] md:text-xs font-semibold text-slate-500">
-                      {item.desc}
-                    </p>
+                    <p className="font-bold text-slate-900">All Clear!</p>
+                    <p className="text-xs text-slate-400 font-medium">No urgent deadlines or delayed applications found.</p>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
