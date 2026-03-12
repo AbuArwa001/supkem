@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import api, { API_BASE_URL } from "@/lib/api";
-import VideoPlayer from "@/components/news/VideoPlayer";
 
 interface VideoBriefingItem {
     id: string;
@@ -183,7 +182,10 @@ export default function AdminVideos() {
                             {/* Video Placeholder */}
                             <div className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                 {item.video_file ? (
-                                    <VideoPlayer url={item.video_file.startsWith('http') ? item.video_file : `${API_BASE_URL}${item.video_file.startsWith('/') ? '' : '/'}${item.video_file}`} />
+                                    <video
+                                        src={item.video_file.startsWith('http') ? item.video_file : `${API_BASE_URL}${item.video_file.startsWith('/') ? '' : '/'}${item.video_file}`}
+                                        className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                                    />
                                 ) : (
                                     <VideoIcon className="text-primary/20" size={48} />
                                 )}

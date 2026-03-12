@@ -12,21 +12,24 @@ interface VideoPlayerProps {
 export default function VideoPlayer({ url }: VideoPlayerProps) {
     return (
         <div className="absolute inset-0 bg-black flex items-center justify-center">
-            <ReactPlayer
-                url={url}
+            <video
+                src={url}
                 controls
-                width="100%"
-                height="100%"
-                className="!absolute inset-0"
-                config={{
-                    file: {
-                        attributes: {
-                            controlsList: 'nodownload',
-                            className: 'w-full h-full object-cover'
-                        }
-                    }
+                className="w-full h-full object-cover"
+                crossOrigin="anonymous"
+                playsInline
+                onError={(e) => {
+                    const target = e.target as HTMLVideoElement;
+                    console.error("Video Playback Error:", {
+                        src: target.src,
+                        error: target.error,
+                        code: target.error?.code,
+                        message: target.error?.message
+                    });
                 }}
-            />
+            >
+                Your browser does not support the video tag.
+            </video>
         </div>
     );
 }
