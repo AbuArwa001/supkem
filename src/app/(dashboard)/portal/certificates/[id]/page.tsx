@@ -287,7 +287,7 @@ export default function CertificateDetail() {
           }
         `}</style>
         {/* Background Decor - Only show for generic certificates, marriage template has its own */}
-        {!certificate.application?.service_name?.toLowerCase().includes("marriage") && (
+        {!certificate.application_detail?.service_name?.toLowerCase().includes("marriage") && (
           <>
             <div
               className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"
@@ -309,16 +309,16 @@ export default function CertificateDetail() {
         )}
 
         <div className="relative z-10 w-full flex flex-col items-center">
-          {certificate.application?.service_name?.toLowerCase().includes("marriage") ? (
+          {certificate.application_detail?.service_name?.toLowerCase().includes("marriage") ? (
             <MarriageCertificateTemplate certificate={certificate} />
-          ) : certificate.application?.service_name?.toLowerCase().includes("hajj") ||
-            certificate.application?.service_name?.toLowerCase().includes("umrah") ? (
+          ) : certificate.application_detail?.service_name?.toLowerCase().includes("hajj") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("umrah") ? (
             <SupportLetterTemplate certificate={certificate} />
-          ) : certificate.application?.service_name?.toLowerCase().includes("study") ||
-            certificate.application?.service_name?.toLowerCase().includes("abroad") ? (
+          ) : certificate.application_detail?.service_name?.toLowerCase().includes("study") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("abroad") ? (
             <StudyAbroadLetterTemplate certificate={certificate} />
-          ) : certificate.application?.service_name?.toLowerCase().includes("visa") ||
-            certificate.application?.service_name?.toLowerCase().includes("travel") ? (
+          ) : certificate.application_detail?.service_name?.toLowerCase().includes("visa") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("travel") ? (
             <TravelVisaAdvisoryTemplate certificate={certificate} />
           ) : (
             <>
@@ -349,7 +349,7 @@ export default function CertificateDetail() {
                 className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8"
                 style={{ color: "#1e293b" }}
               >
-                {certificate.application?.service_name || "Official Certification"}
+                {certificate.application_detail?.service_name || "Official Certification"}
               </h2>
 
               <p
@@ -361,7 +361,7 @@ export default function CertificateDetail() {
                   className="border-b pb-0.5"
                   style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
                 >
-                  {certificate.application?.organization_name ||
+                  {certificate.application_detail?.organization_name ||
                     "The designated organization"}
                 </strong>{" "}
                 has successfully met the standards and requirements for this
@@ -509,7 +509,7 @@ export default function CertificateDetail() {
             </div>
           </div>
           <Link
-            href={`/portal/applications/${certificate.application.id}`}
+            href={`/portal/applications/${certificate.application}`}
             className="px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest hover:border-slate-300 hover:shadow-sm transition-all"
           >
             View App Details
