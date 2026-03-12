@@ -8,8 +8,8 @@ interface TravelVisaAdvisoryTemplateProps {
 }
 
 export default function TravelVisaAdvisoryTemplate({ certificate }: TravelVisaAdvisoryTemplateProps) {
-    const { application } = certificate;
-    const { travel_visa_details } = application || {};
+    const { application_detail } = certificate;
+    const { travel_visa_details } = application_detail || {};
 
     if (!travel_visa_details) return null;
 

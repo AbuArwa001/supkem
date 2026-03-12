@@ -8,8 +8,8 @@ interface StudyAbroadLetterTemplateProps {
 }
 
 export default function StudyAbroadLetterTemplate({ certificate }: StudyAbroadLetterTemplateProps) {
-    const { application } = certificate;
-    const { education_details } = application || {};
+    const { application_detail } = certificate;
+    const { education_details } = application_detail || {};
 
     if (!education_details) return null;
 

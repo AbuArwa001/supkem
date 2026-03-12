@@ -8,8 +8,8 @@ interface SupportLetterTemplateProps {
 }
 
 export default function SupportLetterTemplate({ certificate }: SupportLetterTemplateProps) {
-    const { application } = certificate;
-    const { pilgrim_details } = application || {};
+    const { application_detail } = certificate;
+    const { pilgrim_details } = application_detail || {};
 
     if (!pilgrim_details) return null;
 
