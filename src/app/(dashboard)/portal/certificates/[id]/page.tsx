@@ -286,23 +286,27 @@ export default function CertificateDetail() {
             border-color: rgba(22, 84, 61, 0.05) !important;
           }
         `}</style>
-        {/* Background Decor */}
-        <div
-          className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"
-          style={{ backgroundColor: "rgba(22, 84, 61, 0.05)" }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"
-          style={{ backgroundColor: "rgba(231, 180, 8, 0.1)" }}
-        />
-        <div
-          className="absolute inset-4 border rounded-[14px] pointer-events-none"
-          style={{ borderColor: "rgba(22, 84, 61, 0.1)" }}
-        />
-        <div
-          className="absolute inset-6 border-4 border-double rounded-[20px] pointer-events-none"
-          style={{ borderColor: "rgba(22, 84, 61, 0.05)" }}
-        />
+        {/* Background Decor - Only show for generic certificates, marriage template has its own */}
+        {!certificate.application?.service_name?.toLowerCase().includes("marriage") && (
+          <>
+            <div
+              className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"
+              style={{ backgroundColor: "rgba(22, 84, 61, 0.05)" }}
+            />
+            <div
+              className="absolute bottom-0 left-0 w-96 h-96 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"
+              style={{ backgroundColor: "rgba(231, 180, 8, 0.1)" }}
+            />
+            <div
+              className="absolute inset-4 border rounded-[14px] pointer-events-none"
+              style={{ borderColor: "rgba(22, 84, 61, 0.1)" }}
+            />
+            <div
+              className="absolute inset-6 border-4 border-double rounded-[20px] pointer-events-none"
+              style={{ borderColor: "rgba(22, 84, 61, 0.05)" }}
+            />
+          </>
+        )}
 
         <div className="relative z-10 w-full flex flex-col items-center">
           {certificate.application?.service_name?.toLowerCase().includes("marriage") ? (

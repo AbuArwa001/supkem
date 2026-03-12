@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 /strategic_plan.txt
 /public/SUPKEM Strategic Plan 2022-27.pdf
+.env*.local
