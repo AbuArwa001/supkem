@@ -1,7 +1,7 @@
 import { Calendar, User, ArrowLeft, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import api from "@/lib/api";
+import api, { API_BASE_URL } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -25,7 +25,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
     }
 
     const featuredImage = article.featured_image
-        ? (article.featured_image.startsWith('http') ? article.featured_image : `https://supkem-drf.onrender.com${article.featured_image}`)
+        ? (article.featured_image.startsWith('http') ? article.featured_image : `${API_BASE_URL}${article.featured_image.startsWith('/') ? '' : '/'}${article.featured_image}`)
         : "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=1600";
 
     return (

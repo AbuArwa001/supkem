@@ -17,7 +17,7 @@ import {
     Loader2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import api from "@/lib/api";
+import api, { API_BASE_URL } from "@/lib/api";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 
@@ -182,7 +182,7 @@ export default function AdminNews() {
                             <div className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden">
                                 {item.featured_image ? (
                                     <Image
-                                        src={item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image}`}
+                                        src={item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`}
                                         alt={item.title}
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-500"

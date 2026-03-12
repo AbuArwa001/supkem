@@ -1,8 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+export const API_BASE_URL = 'https://supkem-drf.onrender.com';
+
 const api = axios.create({
-    baseURL: 'https://supkem-drf.onrender.com/api/v1', // Using the provided production URL
+    baseURL: `${API_BASE_URL}/api/v1`, // Using the provided production URL
     headers: {
         'Content-Type': 'application/json',
     },

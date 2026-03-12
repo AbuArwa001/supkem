@@ -1,6 +1,6 @@
 import { Calendar, User, ArrowRight, BookOpen, PlayCircle, Film } from "lucide-react";
 import Link from "next/link";
-import api from "@/lib/api";
+import api, { API_BASE_URL } from "@/lib/api";
 import Image from "next/image";
 import VideoPlayer from "@/components/news/VideoPlayer";
 
@@ -88,7 +88,7 @@ export default async function NewsPage() {
                         {videos.map((video: any, i: number) => {
                             const videoUrl = video.video_file.startsWith('http')
                                 ? video.video_file
-                                : `https://supkem-drf.onrender.com${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`;
+                                : `${API_BASE_URL}${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`;
 
                             return (
                                 <div key={i} className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col">
@@ -131,7 +131,7 @@ export default async function NewsPage() {
                                 const item = newsItems[0];
                                 const extractedImg = extractFirstImage(item.content);
                                 const imageSource = item.featured_image
-                                    ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
+                                    ? (item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
                                     : (extractedImg || "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800");
 
                                 return (
@@ -169,7 +169,7 @@ export default async function NewsPage() {
                                 {newsItems.slice(1).map((item: any, i: number) => {
                                     const extractedImg = extractFirstImage(item.content);
                                     const imageSource = item.featured_image
-                                        ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
+                                        ? (item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
                                         : (extractedImg || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800");
 
                                     return (

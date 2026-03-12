@@ -17,6 +17,8 @@ import {
   X,
   FileDown,
   Layers,
+  Video,
+  Plus
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
@@ -611,6 +613,36 @@ export default function AdminOverview() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+          
+          {/* Quick Actions / CMS Shortcuts */}
+          <div className="space-y-6">
+            <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
+              Media Management
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              <Link href="/admin/news" className="group p-6 rounded-[24px] bg-white border border-slate-100 flex items-center gap-4 hover:shadow-xl hover:shadow-primary/5 transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
+                  <FileText size={20} />
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-slate-900 leading-tight">News CMS</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Manage Articles</p>
+                </div>
+                <Plus size={16} className="text-slate-300 group-hover:text-primary transition-colors" />
+              </Link>
+
+              <Link href="/admin/videos" className="group p-6 rounded-[24px] bg-white border border-slate-100 flex items-center gap-4 hover:shadow-xl hover:shadow-primary/5 transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/5 flex items-center justify-center text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
+                  <Video size={20} />
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-slate-900 leading-tight">Video Briefings</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Press Updates</p>
+                </div>
+                <Plus size={16} className="text-slate-300 group-hover:text-amber-500 transition-colors" />
+              </Link>
             </div>
           </div>
         </div>
