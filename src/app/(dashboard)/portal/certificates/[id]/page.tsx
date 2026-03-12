@@ -14,6 +14,7 @@ import {
   Download,
   Printer,
   HelpCircle,
+  AlertCircle,
 } from "lucide-react";
 import Link from "next/link";
 import api from "@/lib/api";
@@ -311,15 +312,36 @@ export default function CertificateDetail() {
         <div className="relative z-10 w-full flex flex-col items-center">
           {certificate.application_detail?.service_name?.toLowerCase().includes("marriage") ? (
             <MarriageCertificateTemplate certificate={certificate} />
-          ) : certificate.application_detail?.service_name?.toLowerCase().includes("hajj") ||
-            certificate.application_detail?.service_name?.toLowerCase().includes("umrah") ? (
-            <SupportLetterTemplate certificate={certificate} />
-          ) : certificate.application_detail?.service_name?.toLowerCase().includes("study") ||
-            certificate.application_detail?.service_name?.toLowerCase().includes("abroad") ? (
-            <StudyAbroadLetterTemplate certificate={certificate} />
-          ) : certificate.application_detail?.service_name?.toLowerCase().includes("visa") ||
-            certificate.application_detail?.service_name?.toLowerCase().includes("travel") ? (
-            <TravelVisaAdvisoryTemplate certificate={certificate} />
+          ) : (certificate.application_detail?.service_name?.toLowerCase().includes("hajj") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("umrah")) ? (
+            certificate.application_detail?.pilgrim_details ? (
+              <SupportLetterTemplate certificate={certificate} />
+            ) : (
+              <div className="py-20 text-slate-400 font-medium">
+                <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
+                <p>Pilgrim details missing. Please contact support.</p>
+              </div>
+            )
+          ) : (certificate.application_detail?.service_name?.toLowerCase().includes("study") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("abroad")) ? (
+            certificate.application_detail?.education_details ? (
+              <StudyAbroadLetterTemplate certificate={certificate} />
+            ) : (
+              <div className="py-20 text-slate-400 font-medium">
+                <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
+                <p>Educational details missing. Please contact support.</p>
+              </div>
+            )
+          ) : (certificate.application_detail?.service_name?.toLowerCase().includes("visa") ||
+            certificate.application_detail?.service_name?.toLowerCase().includes("travel")) ? (
+            certificate.application_detail?.travel_visa_details ? (
+              <TravelVisaAdvisoryTemplate certificate={certificate} />
+            ) : (
+              <div className="py-20 text-slate-400 font-medium">
+                <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
+                <p>Travel details missing. Please contact support.</p>
+              </div>
+            )
           ) : (
             <>
               <Image

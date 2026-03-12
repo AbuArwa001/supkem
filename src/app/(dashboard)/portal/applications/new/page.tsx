@@ -124,9 +124,12 @@ export default function SubmitApplication() {
   const isIndividualService = selectedService?.target_audience === "Individual";
   const isMarriageService = selectedService?.category === "Marriage";
   const isHajjUmrahService = selectedService?.category?.toLowerCase().includes("hajj") ||
-    selectedService?.name?.toLowerCase().includes("hajj");
+    selectedService?.name?.toLowerCase().includes("hajj") ||
+    selectedService?.category?.toLowerCase().includes("umrah") ||
+    selectedService?.name?.toLowerCase().includes("umrah");
   const isEducationService = selectedService?.category?.toLowerCase().includes("education") ||
-    selectedService?.name?.toLowerCase().includes("study");
+    selectedService?.name?.toLowerCase().includes("study") ||
+    selectedService?.name?.toLowerCase().includes("abroad");
   const isTravelVisaService = selectedService?.category?.toLowerCase().includes("travel") ||
     selectedService?.name?.toLowerCase().includes("visa");
   const isEmploymentService = selectedService?.category?.toLowerCase().includes("employment") ||

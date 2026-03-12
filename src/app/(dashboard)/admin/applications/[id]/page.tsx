@@ -19,7 +19,9 @@ import {
     Plane,
     Map,
     CalendarCheck,
-    Briefcase
+    Briefcase,
+    GraduationCap,
+    Globe
 } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -283,6 +285,94 @@ export default function ApplicationDetail() {
                                             </div>
                                         </div>
                                     )}
+                                </div>
+                            </div>
+                        )}
+                        
+                        {app.education_details && (
+                            <div className="space-y-12 pt-6 border-t border-border mt-8">
+                                <div className="space-y-6">
+                                    <h4 className="text-xl font-bold text-primary flex items-center gap-2">
+                                        <GraduationCap className="text-emerald-500" size={20} /> Education Details
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Student Name</p>
+                                            <p className="font-bold text-slate-800">{app.education_details.full_name}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Passport No.</p>
+                                            <p className="font-bold text-slate-800">{app.education_details.passport_number}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Institution</p>
+                                            <p className="font-bold text-slate-800">{app.education_details.institution_name}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Country</p>
+                                            <p className="font-bold text-slate-800">{app.education_details.country}</p>
+                                        </div>
+                                        <div className="md:col-span-2 space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Course of Study</p>
+                                            <p className="font-bold text-slate-800">{app.education_details.course_of_study}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {app.travel_visa_details && (
+                            <div className="space-y-12 pt-6 border-t border-border mt-8">
+                                <div className="space-y-6">
+                                    <h4 className="text-xl font-bold text-primary flex items-center gap-2">
+                                        <Globe className="text-indigo-500" size={20} /> Travel & Visa Details
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Traveler Name</p>
+                                            <p className="font-bold text-slate-800">{app.travel_visa_details.full_name}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Passport No.</p>
+                                            <p className="font-bold text-slate-800">{app.travel_visa_details.passport_number}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Destination</p>
+                                            <p className="font-bold text-slate-800">{app.travel_visa_details.destination_country}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Purpose</p>
+                                            <p className="font-bold text-slate-800">{app.travel_visa_details.trip_purpose}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {app.employment_details && (
+                            <div className="space-y-12 pt-6 border-t border-border mt-8">
+                                <div className="space-y-6">
+                                    <h4 className="text-xl font-bold text-primary flex items-center gap-2">
+                                        <Briefcase className="text-slate-600" size={20} /> Employment Details
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Candidate Name</p>
+                                            <p className="font-bold text-slate-800">{app.employment_details.full_name}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">ID Number</p>
+                                            <p className="font-bold text-slate-800">{app.employment_details.id_number}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Employer</p>
+                                            <p className="font-bold text-slate-800">{app.employment_details.employer_name}</p>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Position</p>
+                                            <p className="font-bold text-slate-800">{app.employment_details.position_applied_for}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}
