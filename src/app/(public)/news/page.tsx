@@ -4,11 +4,18 @@ import api from "@/lib/api";
 import Image from "next/image";
 import VideoPlayer from "@/components/news/VideoPlayer";
 
+// Helper function to extract first image URL from markdown
+const extractFirstImage = (content: string) => {
+    const match = content.match(/!\[.*?\]\((.*?)\)/);
+    return match ? match[1] : null;
+};
+
 async function getNews() {
     try {
         const res = await api.get('/news/');
         return (res.data.results || res.data).filter((item: any) => item.is_published);
     } catch (err) {
+        console.error("Error fetching news:", err);
         return [];
     }
 }
@@ -16,8 +23,14 @@ async function getNews() {
 async function getVideos() {
     try {
         const res = await api.get('/videos/');
-        return (res.data.results || res.data).filter((item: any) => item.is_published);
+        const data = res.data.results || res.data;
+        if (!Array.isArray(data)) {
+            console.warn("Videos data is not an array:", data);
+            return [];
+        }
+        return data.filter((item: any) => item.is_published);
     } catch (err) {
+        console.error("Error fetching videos:", err);
         return [];
     }
 }
@@ -72,24 +85,28 @@ export default async function NewsPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {videos.map((video: any, i: number) => (
-                            <div key={i} className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col">
-                                <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
-                                    <VideoPlayer
-                                        url={video.video_file.startsWith('http') ? video.video_file : `https://supkem-drf.onrender.com${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`}
-                                    />
-                                </div>
-                                <div className="p-6 space-y-3 flex-1 flex flex-col">
-                                    <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2">{video.title}</h3>
-                                    {video.description && (
-                                        <p className="text-sm text-foreground/60 line-clamp-2">{video.description}</p>
-                                    )}
-                                    <div className="pt-4 mt-auto border-t border-border/50">
-                                        <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">{new Date(video.created_at).toLocaleDateString()}</p>
+                        {videos.map((video: any, i: number) => {
+                            const videoUrl = video.video_file.startsWith('http')
+                                ? video.video_file
+                                : `https://supkem-drf.onrender.com${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`;
+
+                            return (
+                                <div key={i} className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col">
+                                    <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
+                                        <VideoPlayer url={videoUrl} />
+                                    </div>
+                                    <div className="p-6 space-y-3 flex-1 flex flex-col">
+                                        <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2">{video.title}</h3>
+                                        {video.description && (
+                                            <p className="text-sm text-foreground/60 line-clamp-2">{video.description}</p>
+                                        )}
+                                        <div className="pt-4 mt-auto border-t border-border/50">
+                                            <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">{new Date(video.created_at).toLocaleDateString()}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </section>
             )}
@@ -110,63 +127,80 @@ export default async function NewsPage() {
                     {newsItems.length > 0 ? (
                         <>
                             {/* Large Feature (First Item) */}
-                            <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
-                                <Link href={`/news/${newsItems[0].slug}`} className="block">
-                                    <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
-                                        <Image
-                                            src={newsItems[0].featured_image ? (newsItems[0].featured_image.startsWith('http') ? newsItems[0].featured_image : `https://supkem-drf.onrender.com${newsItems[0].featured_image.startsWith('/') ? '' : '/'}${newsItems[0].featured_image}`) : "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800"}
-                                            alt={newsItems[0].title}
-                                            fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                        />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                                            <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(newsItems[0].created_at).toLocaleDateString()}</span>
-                                            <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> SUPKEM Press</span>
-                                        </div>
-                                        <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
-                                            {newsItems[0].title}
-                                        </h2>
-                                        <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
-                                            {newsItems[0].content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 150)}...
-                                        </p>
-                                        <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
-                                            Read Full Story <ArrowRight size={14} />
-                                        </button>
-                                    </div>
-                                </Link>
-                            </div>
+                            {(() => {
+                                const item = newsItems[0];
+                                const extractedImg = extractFirstImage(item.content);
+                                const imageSource = item.featured_image
+                                    ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
+                                    : (extractedImg || "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800");
 
-                            <div className="space-y-8 flex flex-col">
-                                {newsItems.slice(1).map((item: any, i: number) => (
-                                    <Link href={`/news/${item.slug}`} key={i} className="block group/item">
-                                        <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
-                                            <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
+                                return (
+                                    <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
+                                        <Link href={`/news/${item.slug}`} className="block">
+                                            <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
                                                 <Image
-                                                    src={item.featured_image ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`) : "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800"}
+                                                    src={imageSource}
                                                     alt={item.title}
                                                     fill
-                                                    className="object-cover group-hover/item:scale-110 transition-transform duration-500"
+                                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
                                                 />
                                             </div>
-                                            <div className="space-y-3 py-2 flex-1 flex flex-col justify-center">
-                                                <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
-                                                    <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
+                                                    <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                                    <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> SUPKEM Press</span>
                                                 </div>
-                                                <h3 className="text-xl font-bold font-outfit text-primary leading-tight group-hover/item:text-secondary transition-colors line-clamp-2">
+                                                <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
                                                     {item.title}
-                                                </h3>
-                                                <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
-                                                    {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 100)}...
+                                                </h2>
+                                                <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
+                                                    {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 150)}...
                                                 </p>
-                                                <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
-                                                    Details <ArrowRight size={12} />
-                                                </span>
+                                                <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                                    Read Full Story <ArrowRight size={14} />
+                                                </button>
                                             </div>
-                                        </div>
-                                    </Link>
-                                ))}
+                                        </Link>
+                                    </div>
+                                );
+                            })()}
+
+                            <div className="space-y-8 flex flex-col">
+                                {newsItems.slice(1).map((item: any, i: number) => {
+                                    const extractedImg = extractFirstImage(item.content);
+                                    const imageSource = item.featured_image
+                                        ? (item.featured_image.startsWith('http') ? item.featured_image : `https://supkem-drf.onrender.com${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
+                                        : (extractedImg || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800");
+
+                                    return (
+                                        <Link href={`/news/${item.slug}`} key={i} className="block group/item">
+                                            <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
+                                                <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
+                                                    <Image
+                                                        src={imageSource}
+                                                        alt={item.title}
+                                                        fill
+                                                        className="object-cover group-hover/item:scale-110 transition-transform duration-500"
+                                                    />
+                                                </div>
+                                                <div className="space-y-3 py-2 flex-1 flex flex-col justify-center">
+                                                    <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
+                                                        <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                                    </div>
+                                                    <h3 className="text-xl font-bold font-outfit text-primary leading-tight group-hover/item:text-secondary transition-colors line-clamp-2">
+                                                        {item.title}
+                                                    </h3>
+                                                    <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
+                                                        {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 100)}...
+                                                    </p>
+                                                    <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
+                                                        Details <ArrowRight size={12} />
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </Link>
+                                    );
+                                })}
                                 {newsItems.length <= 1 && (
                                     <div className="p-8 rounded-[20px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
                                         <BookOpen size={40} className="text-secondary" />
