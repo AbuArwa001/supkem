@@ -24,6 +24,7 @@ import {
   GraduationCap,
   Plane,
   Briefcase,
+  Compass,
 } from "lucide-react";
 
 export default function SubmitApplication() {
@@ -96,6 +97,7 @@ export default function SubmitApplication() {
     }
   });
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -141,6 +143,13 @@ export default function SubmitApplication() {
         [field]: value,
       },
     }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const updatePilgrimData = (field: string, value: any) => {
@@ -151,6 +160,13 @@ export default function SubmitApplication() {
         [field]: value,
       },
     }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const updateEducationData = (field: string, value: string) => {
@@ -161,6 +177,13 @@ export default function SubmitApplication() {
         [field]: value,
       },
     }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const updateTravelVisaData = (field: string, value: string) => {
@@ -171,6 +194,13 @@ export default function SubmitApplication() {
         [field]: value,
       },
     }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
   };
 
   const updateEmploymentData = (field: string, value: string) => {
@@ -181,10 +211,107 @@ export default function SubmitApplication() {
         [field]: value,
       },
     }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  const validateStep = (currentStep: number) => {
+    const newErrors: Record<string, string> = {};
+
+    if (currentStep === 1) {
+      if (!formData.service) newErrors.service = "Please select a service";
+      if (isOrganizationRequired && !formData.organization)
+        newErrors.organization = "Organization is required for this service";
+    }
+
+    if (currentStep === 2) {
+      if (isMarriageService) {
+        const m = formData.marriage_details;
+        if (!m.husband_name) newErrors.husband_name = "Husband's name is required";
+        if (!m.husband_id_passport) newErrors.husband_id_passport = "Husband's ID/Passport is required";
+        if (!m.husband_age) newErrors.husband_age = "Husband's age is required";
+        if (!m.husband_occupation) newErrors.husband_occupation = "Husband's occupation is required";
+        if (!m.husband_residence_county) newErrors.husband_residence_county = "County is required";
+        if (!m.husband_residence_sub_county) newErrors.husband_residence_sub_county = "Sub-county is required";
+
+        if (!m.wife_name) newErrors.wife_name = "Wife's name is required";
+        if (!m.wife_id_passport) newErrors.wife_id_passport = "Wife's ID/Passport is required";
+        if (!m.wife_age) newErrors.wife_age = "Wife's age is required";
+        if (!m.wife_occupation) newErrors.wife_occupation = "Wife's occupation is required";
+        if (!m.wife_residence_county) newErrors.wife_residence_county = "County is required";
+        if (!m.wife_residence_sub_county) newErrors.wife_residence_sub_county = "Sub-county is required";
+      }
+
+      if (isHajjUmrahService) {
+        const p = formData.pilgrim_details;
+        if (!p.full_name) newErrors.full_name = "Full name is required";
+        if (!p.passport_number) newErrors.passport_number = "Passport number is required";
+        if (!p.nationality) newErrors.nationality = "Nationality is required";
+        if (!p.date_of_birth) newErrors.date_of_birth = "Date of birth is required";
+        if (!p.expected_travel_date) newErrors.expected_travel_date = "Travel date is required";
+      }
+
+      if (isEducationService) {
+        const e = formData.education_details;
+        if (!e.full_name) newErrors.full_name = "Full name is required";
+        if (!e.passport_number) newErrors.passport_number = "Passport number is required";
+        if (!e.institution_name) newErrors.institution_name = "Institution name is required";
+        if (!e.course_of_study) newErrors.course_of_study = "Course is required";
+        if (!e.country) newErrors.country = "Country is required";
+      }
+
+      if (isTravelVisaService) {
+        const t = formData.travel_visa_details;
+        if (!t.full_name) newErrors.full_name = "Full name is required";
+        if (!t.passport_number) newErrors.passport_number = "Passport number is required";
+        if (!t.destination_country) newErrors.destination_country = "Destination is required";
+        if (!t.expected_travel_date) newErrors.expected_travel_date = "Travel date is required";
+      }
+
+      if (isEmploymentService) {
+        const em = formData.employment_details;
+        if (!em.full_name) newErrors.full_name = "Full name is required";
+        if (!em.id_number) newErrors.id_number = "ID number is required";
+        if (!em.position_applied_for) newErrors.position_applied_for = "Position is required";
+        if (!em.employer_name) newErrors.employer_name = "Employer name is required";
+      }
+    }
+
+    if (currentStep === 3 && isMarriageService) {
+      const m = formData.marriage_details;
+      if (!m.wife_waliyy_name) newErrors.wife_waliyy_name = "Waliyy name is required";
+      if (!m.wife_waliyy_relationship) newErrors.wife_waliyy_relationship = "Relationship is required";
+      if (!m.agreed_mahr) newErrors.agreed_mahr = "Mahr detail is required";
+      if (!m.paid_mahr_and_deferred) newErrors.paid_mahr_and_deferred = "Payment status is required";
+      if (!m.date_of_marriage) newErrors.date_of_marriage = "Date is required";
+      if (!m.place_of_marriage) newErrors.place_of_marriage = "Place is required";
+      if (!m.county_of_marriage) newErrors.county_of_marriage = "County is required";
+      if (!m.witness_1_name) newErrors.witness_1_name = "Witness 1 name is required";
+      if (!m.witness_1_id) newErrors.witness_1_id = "Witness 1 ID is required";
+      if (!m.witness_2_name) newErrors.witness_2_name = "Witness 2 name is required";
+      if (!m.witness_2_id) newErrors.witness_2_id = "Witness 2 ID is required";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleNextStep = () => {
+    if (validateStep(step)) {
+      setStep(step + 1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateStep(step)) return;
+
     setLoading(true);
     try {
       const payload = {
@@ -262,6 +389,9 @@ export default function SubmitApplication() {
                     <p className="text-xs text-foreground/30 font-bold uppercase tracking-widest">
                       What would you like to apply for?
                     </p>
+                    {errors.service && (
+                      <p className="text-rose-500 text-xs font-bold mt-2 animate-pulse">{errors.service}</p>
+                    )}
                   </div>
                 </div>
 
@@ -273,7 +403,9 @@ export default function SubmitApplication() {
                         "p-6 rounded-[32px] border-2 cursor-pointer transition-all flex flex-col gap-4 group relative overflow-hidden",
                         formData.service === service.id
                           ? "border-primary bg-primary/[0.03] shadow-2xl shadow-primary/10"
-                          : "border-slate-100 hover:border-primary/20 bg-white",
+                          : errors.service
+                            ? "border-rose-200 bg-rose-50/20 shadow-inner"
+                            : "border-slate-100 hover:border-primary/20 bg-white",
                       )}
                     >
                       <input
@@ -290,6 +422,7 @@ export default function SubmitApplication() {
                                 ? ""
                                 : formData.organization,
                           });
+                          if (errors.service) setErrors(prev => ({ ...prev, service: "" }));
                         }}
                       />
                       <div className="flex items-center justify-between">
@@ -343,6 +476,97 @@ export default function SubmitApplication() {
               </motion.div>
             )}
 
+            {step === 2 && isHajjUmrahService && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="space-y-12"
+              >
+                <div className="space-y-8">
+                  <div className="flex items-center gap-4 group">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 group-hover:scale-110 transition-transform">
+                      <Compass size={24} />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-black font-outfit text-slate-800">Hajj & Umrah Support</h3>
+                      <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Pilgrim Particulars</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
+                      <input
+                        type="text"
+                        placeholder="Full Name"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.full_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
+                        value={formData.pilgrim_details.full_name}
+                        onChange={(e) => updatePilgrimData('full_name', e.target.value)}
+                      />
+                      {errors.full_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.full_name}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
+                      <input
+                        type="text"
+                        placeholder="Passport No."
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.passport_number ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
+                        value={formData.pilgrim_details.passport_number}
+                        onChange={(e) => updatePilgrimData('passport_number', e.target.value)}
+                      />
+                      {errors.passport_number && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.passport_number}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Nationality</label>
+                      <input
+                        type="text"
+                        placeholder="Nationality"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.nationality ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
+                        value={formData.pilgrim_details.nationality}
+                        onChange={(e) => updatePilgrimData('nationality', e.target.value)}
+                      />
+                      {errors.nationality && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.nationality}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Date of Birth</label>
+                      <input
+                        type="date"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.date_of_birth ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
+                        value={formData.pilgrim_details.date_of_birth}
+                        onChange={(e) => updatePilgrimData('date_of_birth', e.target.value)}
+                      />
+                      {errors.date_of_birth && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.date_of_birth}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Expected Travel Date</label>
+                      <input
+                        type="date"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.expected_travel_date ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
+                        value={formData.pilgrim_details.expected_travel_date}
+                        onChange={(e) => updatePilgrimData('expected_travel_date', e.target.value)}
+                      />
+                      {errors.expected_travel_date && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.expected_travel_date}</p>}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
             {step === 2 && isEducationService && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -366,55 +590,70 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="Student Name"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.full_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.education_details.full_name}
                         onChange={(e) => updateEducationData('full_name', e.target.value)}
-                        required
                       />
+                      {errors.full_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.full_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
                       <input
                         type="text"
                         placeholder="Passport No."
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.passport_number ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.education_details.passport_number}
                         onChange={(e) => updateEducationData('passport_number', e.target.value)}
-                        required
                       />
+                      {errors.passport_number && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.passport_number}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Institution Name</label>
                       <input
                         type="text"
                         placeholder="University / College Name"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.institution_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.education_details.institution_name}
                         onChange={(e) => updateEducationData('institution_name', e.target.value)}
-                        required
                       />
+                      {errors.institution_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.institution_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Course of Study</label>
                       <input
                         type="text"
                         placeholder="e.g. Bachelor of Islamic Studies"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.course_of_study ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.education_details.course_of_study}
                         onChange={(e) => updateEducationData('course_of_study', e.target.value)}
-                        required
                       />
+                      {errors.course_of_study && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.course_of_study}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Country</label>
                       <input
                         type="text"
                         placeholder="Destination Country"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.country ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.education_details.country}
                         onChange={(e) => updateEducationData('country', e.target.value)}
-                        required
                       />
+                      {errors.country && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.country}</p>}
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Scholarship Details (Optional)</label>
@@ -454,33 +693,42 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="Traveler Name"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.full_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.travel_visa_details.full_name}
                         onChange={(e) => updateTravelVisaData('full_name', e.target.value)}
-                        required
                       />
+                      {errors.full_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.full_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Passport Number</label>
                       <input
                         type="text"
                         placeholder="Passport No."
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.passport_number ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.travel_visa_details.passport_number}
                         onChange={(e) => updateTravelVisaData('passport_number', e.target.value)}
-                        required
                       />
+                      {errors.passport_number && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.passport_number}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Destination Country</label>
                       <input
                         type="text"
                         placeholder="e.g. Saudi Arabia, Egypt, Turkey"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.destination_country ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.travel_visa_details.destination_country}
                         onChange={(e) => updateTravelVisaData('destination_country', e.target.value)}
-                        required
                       />
+                      {errors.destination_country && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.destination_country}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Trip Purpose</label>
@@ -499,11 +747,14 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Expected Travel Date</label>
                       <input
                         type="date"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.expected_travel_date ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.travel_visa_details.expected_travel_date}
                         onChange={(e) => updateTravelVisaData('expected_travel_date', e.target.value)}
-                        required
                       />
+                      {errors.expected_travel_date && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.expected_travel_date}</p>}
                     </div>
                   </div>
                 </div>
@@ -533,44 +784,56 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="Full Name"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.full_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.employment_details.full_name}
                         onChange={(e) => updateEmploymentData('full_name', e.target.value)}
-                        required
                       />
+                      {errors.full_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.full_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID Number</label>
                       <input
                         type="text"
                         placeholder="ID No."
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.id_number ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.employment_details.id_number}
                         onChange={(e) => updateEmploymentData('id_number', e.target.value)}
-                        required
                       />
+                      {errors.id_number && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.id_number}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Position Applied For</label>
                       <input
                         type="text"
                         placeholder="e.g. Accountant, Teacher"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.position_applied_for ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.employment_details.position_applied_for}
                         onChange={(e) => updateEmploymentData('position_applied_for', e.target.value)}
-                        required
                       />
+                      {errors.position_applied_for && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.position_applied_for}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Potential Employer Name</label>
                       <input
                         type="text"
                         placeholder="Employer Name"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.employer_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.employment_details.employer_name}
                         onChange={(e) => updateEmploymentData('employer_name', e.target.value)}
-                        required
                       />
+                      {errors.employer_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.employer_name}</p>}
                     </div>
                   </div>
                 </div>
@@ -601,30 +864,42 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="Khalfani Athman"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_name}
                         onChange={(e) => updateMarriageData('husband_name', e.target.value)}
                       />
+                      {errors.husband_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID / Passport No.</label>
                       <input
                         type="text"
                         placeholder="ID N.O: 31783475"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_id_passport}
                         onChange={(e) => updateMarriageData('husband_id_passport', e.target.value)}
                       />
+                      {errors.husband_id_passport && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_id_passport}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Age</label>
                       <input
                         type="text"
                         placeholder="27 YEARS OLD"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_age ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_age}
                         onChange={(e) => updateMarriageData('husband_age', e.target.value)}
                       />
+                      {errors.husband_age && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_age}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Marital Status</label>
@@ -644,30 +919,42 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="ICT OFFICER, MINISTRY OF AGRICULTURE"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_occupation ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_occupation}
                         onChange={(e) => updateMarriageData('husband_occupation', e.target.value)}
                       />
+                      {errors.husband_occupation && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_occupation}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (County)</label>
                       <input
                         type="text"
                         placeholder="MOMBASA"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_residence_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_residence_county}
                         onChange={(e) => updateMarriageData('husband_residence_county', e.target.value)}
                       />
+                      {errors.husband_residence_county && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_residence_county}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (Sub-County)</label>
                       <input
                         type="text"
                         placeholder="CHANGAMWE"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.husband_residence_sub_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.husband_residence_sub_county}
                         onChange={(e) => updateMarriageData('husband_residence_sub_county', e.target.value)}
                       />
+                      {errors.husband_residence_sub_county && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_residence_sub_county}</p>}
                     </div>
                   </div>
                 </div>
@@ -690,30 +977,42 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="Riziki Mohamed"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_name}
                         onChange={(e) => updateMarriageData('wife_name', e.target.value)}
                       />
+                      {errors.wife_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID / Passport No.</label>
                       <input
                         type="text"
                         placeholder="ID NO: 32288080"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_id_passport}
                         onChange={(e) => updateMarriageData('wife_id_passport', e.target.value)}
                       />
+                      {errors.wife_id_passport && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_id_passport}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Age</label>
                       <input
                         type="text"
                         placeholder="29 YEARS OLD"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_age ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_age}
                         onChange={(e) => updateMarriageData('wife_age', e.target.value)}
                       />
+                      {errors.wife_age && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_age}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Marital Status</label>
@@ -732,30 +1031,42 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="A CAKE BAKER"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_occupation ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_occupation}
                         onChange={(e) => updateMarriageData('wife_occupation', e.target.value)}
                       />
+                      {errors.wife_occupation && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_occupation}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (County)</label>
                       <input
                         type="text"
                         placeholder="MOMBASA"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_residence_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_residence_county}
                         onChange={(e) => updateMarriageData('wife_residence_county', e.target.value)}
                       />
+                      {errors.wife_residence_county && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_residence_county}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (Sub-County)</label>
                       <input
                         type="text"
                         placeholder="KISAUNI"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_residence_sub_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_residence_sub_county}
                         onChange={(e) => updateMarriageData('wife_residence_sub_county', e.target.value)}
                       />
+                      {errors.wife_residence_sub_county && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_residence_sub_county}</p>}
                     </div>
                   </div>
                 </div>
@@ -786,40 +1097,56 @@ export default function SubmitApplication() {
                       <input
                         type="text"
                         placeholder="HASSAN MOHAMED GAMUMU"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_waliyy_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_waliyy_name}
                         onChange={(e) => updateMarriageData('wife_waliyy_name', e.target.value)}
                       />
+                      {errors.wife_waliyy_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_waliyy_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Relationship to Wife</label>
                       <input
                         type="text"
                         placeholder="HER BROTHER"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.wife_waliyy_relationship ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.wife_waliyy_relationship}
                         onChange={(e) => updateMarriageData('wife_waliyy_relationship', e.target.value)}
                       />
+                      {errors.wife_waliyy_relationship && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.wife_waliyy_relationship}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Agreed Mahr</label>
                       <input
                         type="text"
                         placeholder="A SET OF GOLD WORTH KSHS. 75,000/="
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.agreed_mahr ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.agreed_mahr}
                         onChange={(e) => updateMarriageData('agreed_mahr', e.target.value)}
                       />
+                      {errors.agreed_mahr && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.agreed_mahr}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Paid / Deferred Status</label>
                       <input
                         type="text"
                         placeholder="DEFERRED"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.paid_mahr_and_deferred ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.paid_mahr_and_deferred}
                         onChange={(e) => updateMarriageData('paid_mahr_and_deferred', e.target.value)}
                       />
+                      {errors.paid_mahr_and_deferred && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.paid_mahr_and_deferred}</p>}
                     </div>
                     <div className="space-y-2 md:col-span-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Particulars of Gifts (if any)</label>
@@ -851,70 +1178,98 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Date of Marriage</label>
                       <input
                         type="date"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.date_of_marriage ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.date_of_marriage}
                         onChange={(e) => updateMarriageData('date_of_marriage', e.target.value)}
                       />
+                      {errors.date_of_marriage && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.date_of_marriage}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Place of Marriage</label>
                       <input
                         type="text"
                         placeholder="MASJID NOOR, KIDARAJANI, BAMBURI"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.place_of_marriage ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.place_of_marriage}
                         onChange={(e) => updateMarriageData('place_of_marriage', e.target.value)}
                       />
+                      {errors.place_of_marriage && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.place_of_marriage}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">County</label>
                       <input
                         type="text"
                         placeholder="MOMBASA"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.county_of_marriage ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.county_of_marriage}
                         onChange={(e) => updateMarriageData('county_of_marriage', e.target.value)}
                       />
+                      {errors.county_of_marriage && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.county_of_marriage}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 1 Name</label>
                       <input
                         type="text"
                         placeholder="SEIF MOHAMED MAKUTA"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.witness_1_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.witness_1_name}
                         onChange={(e) => updateMarriageData('witness_1_name', e.target.value)}
                       />
+                      {errors.witness_1_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.witness_1_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 1 ID No.</label>
                       <input
                         type="text"
                         placeholder="29653490"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.witness_1_id ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.witness_1_id}
                         onChange={(e) => updateMarriageData('witness_1_id', e.target.value)}
                       />
+                      {errors.witness_1_id && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.witness_1_id}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 2 Name</label>
                       <input
                         type="text"
                         placeholder="HAMAD MOHAMMED"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.witness_2_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.witness_2_name}
                         onChange={(e) => updateMarriageData('witness_2_name', e.target.value)}
                       />
+                      {errors.witness_2_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.witness_2_name}</p>}
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 2 ID No.</label>
                       <input
                         type="text"
                         placeholder="28869113"
-                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
+                        className={cn(
+                          "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
+                          errors.witness_2_id ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
+                        )}
                         value={formData.marriage_details.witness_2_id}
                         onChange={(e) => updateMarriageData('witness_2_id', e.target.value)}
                       />
+                      {errors.witness_2_id && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.witness_2_id}</p>}
                     </div>
                   </div>
                 </div>
@@ -986,6 +1341,9 @@ export default function SubmitApplication() {
                           </label>
                         ))}
                       </>
+                    )}
+                    {errors.organization && (
+                      <p className="text-rose-500 text-[10px] font-bold mt-2 animate-pulse">{errors.organization}</p>
                     )}
                     {!isIndividualService && organizations.length === 0 && (
                       <Link
@@ -1078,7 +1436,7 @@ export default function SubmitApplication() {
               ((isHajjUmrahService || isEducationService || isTravelVisaService || isEmploymentService) && step < 2)) ? (
               <button
                 type="button"
-                onClick={() => setStep(step + 1)}
+                onClick={handleNextStep}
                 className="px-10 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-xl hover:shadow-primary/20 transition-all flex items-center gap-3 font-outfit"
               >
                 Next Step <ArrowRight size={20} />
@@ -1086,11 +1444,7 @@ export default function SubmitApplication() {
             ) : (
               <button
                 type="submit"
-                disabled={
-                  loading ||
-                  !formData.service ||
-                  (isOrganizationRequired && !formData.organization)
-                }
+                disabled={loading}
                 className="px-12 py-5 bg-primary text-white rounded-[28px] font-black text-xl shadow-2xl shadow-primary/30 flex items-center gap-3 disabled:opacity-30 disabled:pointer-events-none hover:scale-105 transition-all font-outfit"
               >
                 {loading ? <Loader2 className="animate-spin" /> : <>Complete Submission <ArrowRight size={22} /></>}
