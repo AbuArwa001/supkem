@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Switch } from "@/components/ui/switch";
 import api from "@/lib/api";
 import { toast } from "sonner";
@@ -139,9 +140,8 @@ export function UserForm({ onSuccess, user }: UserFormProps) {
                     <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">
                         Initial Password
                     </label>
-                    <Input
+                    <PasswordInput
                         required
-                        type="password"
                         value={formData.password}
                         onChange={(e) => setFormData(p => ({ ...p, password: e.target.value }))}
                         placeholder="••••••••"

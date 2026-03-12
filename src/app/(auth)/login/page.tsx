@@ -7,7 +7,9 @@ import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import Link from "next/link";
 import { AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation"; // Added this import, assuming it was missing based on `router` usage
+import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -253,12 +255,11 @@ export default function LoginPage() {
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                   size={20}
                 />
-                <input
-                  type="password"
+                <PasswordInput
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
+                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-10 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
                   placeholder="••••••••"
                 />
               </div>

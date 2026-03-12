@@ -17,6 +17,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export default function ProfileSettings() {
   const { user, login } = useAuth();
@@ -222,8 +223,7 @@ export default function ProfileSettings() {
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
                   Current Password
                 </label>
-                <input
-                  type="password"
+                <PasswordInput
                   className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                 />
               </div>
@@ -231,8 +231,7 @@ export default function ProfileSettings() {
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
                   New Password
                 </label>
-                <input
-                  type="password"
+                <PasswordInput
                   className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                 />
               </div>

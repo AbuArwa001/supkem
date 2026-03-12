@@ -7,6 +7,7 @@ import { Lock, Loader2, ArrowRight, CheckCircle2, AlertCircle } from "lucide-rea
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/api";
+import { PasswordInput } from "@/components/ui/password-input";
 
 function ResetPasswordForm() {
     const searchParams = useSearchParams();
@@ -120,13 +121,12 @@ function ResetPasswordForm() {
                     <label className="text-xs font-black text-primary/40 uppercase tracking-[0.2em] ml-1">New Password</label>
                     <div className="relative group">
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors" size={20} />
-                        <input
-                            type="password"
+                        <PasswordInput
                             required
                             min={8}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
+                            className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-10 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
                             placeholder="••••••••"
                         />
                     </div>
@@ -136,12 +136,11 @@ function ResetPasswordForm() {
                     <label className="text-xs font-black text-primary/40 uppercase tracking-[0.2em] ml-1">Confirm Password</label>
                     <div className="relative group">
                         <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors" size={20} />
-                        <input
-                            type="password"
+                        <PasswordInput
                             required
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
+                            className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-10 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-medium"
                             placeholder="••••••••"
                         />
                     </div>

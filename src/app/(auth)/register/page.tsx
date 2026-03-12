@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import api from "@/lib/api";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PasswordInput } from "@/components/ui/password-input";
 
 export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
@@ -257,14 +258,13 @@ export default function RegisterPage() {
                   className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 group-focus-within:text-primary transition-colors"
                   size={20}
                 />
-                <input
-                  type="password"
+                <PasswordInput
                   required
                   value={formData.password}
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
+                  className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-10 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
                   placeholder="••••••••"
                 />
               </div>
