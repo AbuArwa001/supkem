@@ -9,7 +9,7 @@ interface MarriageCertificateTemplateProps {
 }
 
 export default function MarriageCertificateTemplate({ certificate }: MarriageCertificateTemplateProps) {
-    const details = certificate.application?.marriage_details;
+    const details = certificate.application_detail?.marriage_details;
     if (!details) return null;
 
     const Row = ({ en, value, ar, className = "" }: { en: string; value: string; ar: string; className?: string }) => (
