@@ -482,9 +482,18 @@ export default function AdminOverview() {
         <div className="space-y-8">
           {/* Action Items */}
           <div className="space-y-6">
-            <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
-              Upcoming Deadlines
-            </h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
+                Upcoming Deadlines
+              </h3>
+              <Link href="/admin/deadlines" className="text-xs md:text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group whitespace-nowrap">
+                View All{" "}
+                <ArrowUpRight
+                  size={16}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </Link>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4">
               {data?.upcoming_deadlines && data.upcoming_deadlines.length > 0 ? (
                 data.upcoming_deadlines.map((item, i) => (
