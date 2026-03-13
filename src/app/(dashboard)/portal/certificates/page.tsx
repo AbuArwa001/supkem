@@ -15,23 +15,35 @@ import { cn } from "@/lib/utils";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
+const CERT_KEYWORDS = ["marriage"];
+const LETTER_KEYWORDS = ["hajj", "umrah", "study", "abroad", "visa", "travel"];
+
+function isCertificate(cert: any): boolean {
+  const serviceName =
+    cert?.application_detail?.service_name?.toLowerCase() || "";
+  // A cert is anything that is NOT a letter type
+  const isLetter = LETTER_KEYWORDS.some((kw) => serviceName.includes(kw));
+  return !isLetter;
+}
+
 export default function CertificatesPage() {
   const { data, error, isLoading } = useSWR(
     "/applications/certifications/",
     fetcher,
   );
-  // DRF may return an array directly or { results: [] }
-  const certificates = Array.isArray(data) ? data : data?.results || [];
+  const allCerts = Array.isArray(data) ? data : data?.results || [];
+  const certificates = allCerts.filter(isCertificate);
 
   return (
     <div className="space-y-8 pb-20 max-w-7xl mx-auto">
       {/* Header section */}
       <div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-          My Certificates
+        My Certificates
         </h2>
         <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
-          Access and download your official Halal certificates.
+          Access and download your official SUPKEM certificates (e.g., Islamic
+          Marriage Certificate).
         </p>
       </div>
 
@@ -72,8 +84,14 @@ export default function CertificatesPage() {
                 No Certificates Found
               </h3>
               <p className="text-slate-500 font-medium text-sm max-w-sm">
-                You do not have any official Halal certificates issued yet.
-                Submit an application first.
+                You do not have any official certificates issued yet. For
+                support letters, visit{" "}
+                <a
+                  href="/portal/letters"
+                  className="text-primary font-bold hover:underline"
+                >
+                  My Letters
+                </a>.
               </p>
               <Link
                 href="/portal/applications"
