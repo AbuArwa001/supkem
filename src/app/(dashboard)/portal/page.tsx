@@ -89,6 +89,18 @@ export default function UserPortal() {
     fetchData();
   }, []);
 
+  const LETTER_KEYWORDS = ["hajj", "umrah", "study", "abroad", "visa", "travel"];
+
+  const lettersDocs = (certificates || []).filter((c: any) => {
+    const s = c?.application_detail?.service_name?.toLowerCase() || "";
+    return LETTER_KEYWORDS.some((kw) => s.includes(kw));
+  });
+
+  const certsDocs = (certificates || []).filter((c: any) => {
+    const s = c?.application_detail?.service_name?.toLowerCase() || "";
+    return !LETTER_KEYWORDS.some((kw) => s.includes(kw));
+  });
+
   const activeApps = (applications || []).filter(
     (app) => app && !["Approved", "Rejected"].includes(app.status),
   );
@@ -106,19 +118,22 @@ export default function UserPortal() {
     },
     {
       icon: ShieldCheck,
-      label: "Valid Certificates",
+      label: "Certificates",
       value:
-        (certificates?.length || 0) > 0
-          ? (certificates?.length || 0).toString().padStart(2, "0")
+        (certsDocs?.length || 0) > 0
+          ? (certsDocs?.length || 0).toString().padStart(2, "0")
           : "00",
       color: "bg-gradient-to-br from-primary to-primary/80",
       delay: 0.2,
     },
     {
       icon: Clock,
-      label: "Pending Actions",
-      value: "00",
-      color: "bg-gradient-to-br from-slate-600 to-slate-800",
+      label: "Letters Issued",
+      value:
+        (lettersDocs?.length || 0) > 0
+          ? (lettersDocs?.length || 0).toString().padStart(2, "0")
+          : "00",
+      color: "bg-gradient-to-br from-blue-500 to-blue-700",
       delay: 0.3,
     },
   ];
@@ -324,57 +339,116 @@ export default function UserPortal() {
           </div>
         </div>
 
-        {/* Recent Certificates Sidebar */}
+        {/* Certificates & Letters Sidebar */}
         <div className="space-y-8">
-          <h3 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight">
-            Certificates
-          </h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-            {loading ? (
-              <div className="p-6 text-center text-primary/40 animate-pulse">
-                Loading...
-              </div>
-            ) : certificates.length === 0 ? (
-              <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] bg-slate-50/50">
-                No certificates found.
-              </div>
-            ) : (
-              certificates.map((cert: any, i: number) => (
-                <motion.div
-                  key={cert?.id || i}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 + i * 0.1 }}
-                  className="p-6 rounded-[14px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">
-                      <CheckCircle2 size={20} />
-                    </div>
-                    <button className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
-                      <Download size={16} />
-                    </button>
-                  </div>
-                  <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
-                    {cert?.application?.service_name ||
-                      cert?.serial_number ||
-                      "Certification"}
-                  </h4>
-                  <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
-                    Exp.{" "}
-                    {cert?.expires_at
-                      ? new Date(cert.expires_at).toLocaleDateString()
-                      : "N/A"}
-                  </p>
-                  <Link
-                    href={cert?.id ? `/portal/certificates/${cert.id}` : "#"}
-                    className="text-[10px] md:text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
+          {/* Certificates */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight">
+                Certificates
+              </h3>
+              <Link
+                href="/portal/certificates"
+                className="text-xs font-bold text-primary/40 hover:text-primary transition-colors flex items-center gap-1 group"
+              >
+                View All <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              {loading ? (
+                <div className="p-6 text-center text-primary/40 animate-pulse">Loading...</div>
+              ) : certsDocs.length === 0 ? (
+                <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] bg-slate-50/50">
+                  No certificates found.
+                </div>
+              ) : (
+                certsDocs.slice(0, 2).map((cert: any, i: number) => (
+                  <motion.div
+                    key={cert?.id || i}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
+                    className="p-6 rounded-[14px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
                   >
-                    View <ExternalLink size={10} />
-                  </Link>
-                </motion.div>
-              ))
-            )}
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">
+                        <CheckCircle2 size={20} />
+                      </div>
+                      <button className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
+                        <Download size={16} />
+                      </button>
+                    </div>
+                    <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
+                      {cert?.application_detail?.service_name || cert?.serial_number || "Certification"}
+                    </h4>
+                    <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
+                      Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
+                    </p>
+                    <Link
+                      href={cert?.id ? `/portal/certificates/${cert.id}` : "#"}
+                      className="text-[10px] md:text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
+                    >
+                      View <ExternalLink size={10} />
+                    </Link>
+                  </motion.div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* Letters */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl md:text-2xl font-black font-outfit text-primary tracking-tight">
+                Letters
+              </h3>
+              <Link
+                href="/portal/letters"
+                className="text-xs font-bold text-primary/40 hover:text-primary transition-colors flex items-center gap-1 group"
+              >
+                View All <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
+              {loading ? (
+                <div className="p-6 text-center text-primary/40 animate-pulse">Loading...</div>
+              ) : lettersDocs.length === 0 ? (
+                <div className="p-8 text-center text-foreground/40 text-sm font-medium border border-border/60 border-dashed rounded-[32px] bg-slate-50/50">
+                  No letters found.
+                </div>
+              ) : (
+                lettersDocs.slice(0, 2).map((cert: any, i: number) => (
+                  <motion.div
+                    key={cert?.id || i}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6 + i * 0.1 }}
+                    className="p-6 rounded-[14px] md:rounded-[32px] bg-blue-50/50 border border-transparent hover:bg-white hover:border-blue-200/60 hover:shadow-xl hover:shadow-blue-500/5 transition-all group"
+                  >
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-blue-600 shadow-sm border border-border/40 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                        <FileText size={20} />
+                      </div>
+                      <button className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
+                        <Download size={16} />
+                      </button>
+                    </div>
+                    <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
+                      {cert?.application_detail?.service_name || cert?.serial_number || "Official Letter"}
+                    </h4>
+                    <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
+                      Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
+                    </p>
+                    <Link
+                      href={cert?.id ? `/portal/letters/${cert.id}` : "#"}
+                      className="text-[10px] md:text-xs font-black text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
+                    >
+                      View <ExternalLink size={10} />
+                    </Link>
+                  </motion.div>
+                ))
+              )}
+            </div>
           </div>
 
           {/* Quick Support Card */}
