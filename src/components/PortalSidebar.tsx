@@ -8,6 +8,7 @@ import {
   Building2,
   FileText,
   Award,
+  Mail,
   Settings,
   LogOut,
   ChevronRight,
@@ -38,6 +39,7 @@ const PortalSidebar = ({
     },
     { name: "My Applications", href: "/portal/applications", icon: FileText },
     { name: "My Certificates", href: "/portal/certificates", icon: Award },
+    { name: "My Letters", href: "/portal/letters", icon: Mail },
     { name: "Profile Settings", href: "/portal/profile", icon: Settings },
   ];
 
