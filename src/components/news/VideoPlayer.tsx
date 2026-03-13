@@ -16,7 +16,6 @@ export default function VideoPlayer({ url }: VideoPlayerProps) {
                 src={url}
                 controls
                 className="w-full h-full object-cover"
-                crossOrigin="anonymous"
                 playsInline
                 onError={(e) => {
                     const target = e.target as HTMLVideoElement;
