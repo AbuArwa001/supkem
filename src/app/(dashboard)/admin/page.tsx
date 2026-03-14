@@ -261,7 +261,7 @@ const StatCard = ({ icon: Icon, label, value, trend, color, delay }: any) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5, ease: "easeOut" }}
-    className="p-8 rounded-[32px] bg-white border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-slate-200/50 transition-all group relative overflow-hidden"
+    className="p-8 rounded-[32px] bg-white border border-slate-300/50 border-l-4 border-l-indigo-500 shadow-md hover:shadow-2xl hover:shadow-indigo-500/10 transition-all group relative overflow-hidden"
   >
     <div className="flex items-start justify-between relative z-10">
       <div>
@@ -416,7 +416,7 @@ export default function AdminOverview() {
   const recentApplications = data?.recent_applications || [];
 
   return (
-    <div className="space-y-8 md:space-y-12 -m-6 p-6 sm:-m-10 sm:p-10 bg-slate-50/40 min-h-screen">
+    <div className="space-y-8 md:space-y-12 -m-6 p-6 sm:-m-10 sm:p-10 bg-slate-100/40 min-h-screen">
       <ReportModal
         isOpen={isReportOpen}
         onClose={() => setIsReportOpen(false)}
@@ -578,7 +578,7 @@ export default function AdminOverview() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="p-6 rounded-[24px] bg-white border border-slate-200 shadow-sm flex items-start gap-4 hover:shadow-2xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden"
+                    className="p-6 rounded-[24px] bg-white border border-slate-300/50 shadow-md flex items-start gap-4 hover:shadow-2xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden"
                   >
                     <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
                     
@@ -632,7 +632,7 @@ export default function AdminOverview() {
               Media Management
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-              <Link href="/admin/news" className="group p-6 rounded-[24px] bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all">
+              <Link href="/admin/news" className="group p-6 rounded-[24px] bg-white border border-slate-300/50 shadow-md hover:shadow-xl hover:shadow-primary/10 transition-all">
                 <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shadow-inner">
                   <FileText size={20} />
                 </div>
@@ -643,7 +643,7 @@ export default function AdminOverview() {
                 <Plus size={16} className="text-slate-300 group-hover:text-primary transition-colors" />
               </Link>
 
-              <Link href="/admin/videos" className="group p-6 rounded-[24px] bg-white border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-primary/5 transition-all">
+              <Link href="/admin/videos" className="group p-6 rounded-[24px] bg-white border border-slate-300/50 shadow-md hover:shadow-xl hover:shadow-primary/10 transition-all">
                 <div className="w-12 h-12 rounded-2xl bg-amber-500/5 flex items-center justify-center text-amber-600 group-hover:bg-amber-500 group-hover:text-white transition-all shadow-inner">
                   <Video size={20} />
                 </div>

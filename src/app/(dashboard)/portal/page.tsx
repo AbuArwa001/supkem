@@ -25,7 +25,7 @@ const StatCard = ({ icon: Icon, label, value, color, delay }: any) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
-    className="p-6 rounded-[32px] bg-white border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
+    className="p-6 rounded-[32px] bg-white border border-slate-300/50 shadow-md hover:shadow-2xl hover:shadow-primary/10 transition-all group relative overflow-hidden"
   >
     <div className="flex items-center gap-5 relative z-10">
       <div
@@ -139,7 +139,7 @@ export default function UserPortal() {
   ];
 
   return (
-    <div className="space-y-8 md:space-y-12 pb-20 -m-6 p-6 sm:-m-10 sm:p-10 bg-slate-50/40">
+    <div className="space-y-8 md:space-y-12 pb-20 -m-6 p-6 sm:-m-10 sm:p-10 bg-slate-100/40 min-h-screen">
       {/* Premium Welcome Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -275,7 +275,7 @@ export default function UserPortal() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="p-6 md:p-8 rounded-[32px] md:rounded-[20px] bg-white border border-border/60 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:shadow-primary/5 transition-all group cursor-pointer mb-4"
+                    className="p-6 md:p-8 rounded-[32px] md:rounded-[20px] bg-white border border-slate-300/50 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-2xl hover:shadow-primary/10 transition-all group cursor-pointer mb-4"
                   >
                     <div className="flex items-center gap-4 md:gap-6">
                       <div className="w-14 h-14 md:w-20 md:h-20 bg-primary/[0.03] text-primary rounded-2xl md:rounded-3xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500">
