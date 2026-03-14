@@ -11,9 +11,11 @@ import {
     Video as VideoIcon,
     CheckCircle2,
     Loader2,
-    Film
+    Film,
+    PlayCircle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import api, { API_BASE_URL } from "@/lib/api";
 
 interface VideoBriefingItem {
