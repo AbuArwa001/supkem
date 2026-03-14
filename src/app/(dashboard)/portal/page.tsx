@@ -25,19 +25,19 @@ const StatCard = ({ icon: Icon, label, value, color, delay }: any) => (
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
-    className="p-6 rounded-[32px] bg-white border border-border/50 hover:shadow-xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
+    className="p-6 rounded-[32px] bg-white border border-slate-200 shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
   >
     <div className="flex items-center gap-5 relative z-10">
       <div
         className={cn(
-          "inline-flex p-4 rounded-2xl shrink-0 group-hover:scale-110 transition-transform",
+          "inline-flex p-4 rounded-2xl shrink-0 group-hover:scale-110 transition-transform shadow-sm",
           color,
         )}
       >
         <Icon size={24} className="text-white" />
       </div>
       <div>
-        <p className="text-[10px] font-black text-foreground/30 uppercase tracking-[0.2em] mb-1">
+        <p className="text-[10px] font-black text-foreground/60 uppercase tracking-[0.2em] mb-1">
           {label}
         </p>
         <h3 className="text-2xl font-black font-outfit text-primary">
@@ -139,7 +139,7 @@ export default function UserPortal() {
   ];
 
   return (
-    <div className="space-y-8 md:space-y-12 pb-20">
+    <div className="space-y-8 md:space-y-12 pb-20 -m-6 p-6 sm:-m-10 sm:p-10 bg-slate-50/40">
       {/* Premium Welcome Banner */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -326,7 +326,7 @@ export default function UserPortal() {
                         />
                         {app?.status || "In Progress"}
                       </span>
-                      <p className="text-[10px] md:text-xs text-foreground/30 font-bold md:mr-1">
+                      <p className="text-[10px] md:text-xs text-foreground/50 font-bold md:mr-1">
                         {app?.submitted_at
                           ? new Date(app.submitted_at).toLocaleDateString()
                           : "N/A"}
@@ -444,8 +444,9 @@ export default function UserPortal() {
                     <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
                       {cert?.application_detail?.service_name || cert?.serial_number || "Official Letter"}
                     </h4>
-                    <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
-                      Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
+                    <p className="text-[10px] md:text-xs text-foreground/50 font-bold mb-6 flex items-center gap-2">
+                       <Calendar size={12} className="text-blue-500/50" />
+                       Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
                     </p>
                     <Link
                       href={cert?.id ? `/portal/letters/${cert.id}` : "#"}
