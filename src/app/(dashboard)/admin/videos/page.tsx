@@ -179,8 +179,11 @@ export default function AdminVideos() {
                             transition={{ delay: i * 0.05 }}
                             className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
                         >
-                            {/* Video Placeholder */}
-                            <div className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden">
+                            {/* Video Thumbnail/Player Preview */}
+                            <Link 
+                                href={`/admin/videos/${item.id}`}
+                                className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden cursor-pointer"
+                            >
                                 {item.video_file ? (
                                     <video
                                         src={item.video_file.startsWith('http') ? item.video_file : `${API_BASE_URL}${item.video_file.startsWith('/') ? '' : '/'}${item.video_file}`}
@@ -191,7 +194,7 @@ export default function AdminVideos() {
                                 )}
                                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     <div className="w-12 h-12 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <Film size={20} className="ml-1" />
+                                        <PlayCircle size={20} className="ml-1" />
                                     </div>
                                 </div>
                                 <div className="absolute top-4 right-4 relative z-10">
@@ -202,11 +205,13 @@ export default function AdminVideos() {
                                         {item.is_published ? "Published" : "Draft"}
                                     </span>
                                 </div>
-                            </div>
+                            </Link>
 
                             <div className="p-6 space-y-4 flex-1 flex flex-col">
                                 <div className="space-y-2">
-                                    <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2">{item.title}</h3>
+                                    <Link href={`/admin/videos/${item.id}`}>
+                                        <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2 hover:underline cursor-pointer">{item.title}</h3>
+                                    </Link>
                                     <p className="text-sm text-foreground/60 line-clamp-2">{item.description || "No description provided."}</p>
                                 </div>
 
