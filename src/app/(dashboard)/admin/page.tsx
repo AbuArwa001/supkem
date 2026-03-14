@@ -578,38 +578,48 @@ export default function AdminOverview() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="p-6 rounded-[24px] bg-white border border-slate-100 flex items-start gap-4 hover:shadow-xl hover:shadow-slate-200/50 hover:-translate-y-1 transition-all cursor-pointer group"
+                    className="p-6 rounded-[24px] bg-white border border-slate-100 flex items-start gap-4 hover:shadow-2xl hover:shadow-slate-200/40 hover:-translate-y-1 transition-all cursor-pointer group relative overflow-hidden"
                   >
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500" />
+                    
                     <div
                       className={cn(
-                        "w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform",
+                        "w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform relative z-10",
                         item.type === "warning"
-                          ? "bg-amber-100 text-amber-600"
+                          ? "bg-amber-50 text-amber-600 border border-amber-100"
                           : item.type === "danger"
-                            ? "bg-red-100 text-red-600"
-                            : "bg-blue-100 text-blue-600",
+                            ? "bg-rose-50 text-rose-600 border border-rose-100"
+                            : "bg-indigo-50 text-indigo-600 border border-indigo-100",
                       )}
                     >
-                      <Clock size={18} />
+                      <Clock size={20} />
                     </div>
-                    <div className="space-y-1">
-                      <p className="font-bold text-sm md:text-base text-slate-900 leading-none">
-                        {item.title}
-                      </p>
-                      <p className="text-[10px] md:text-xs font-semibold text-slate-500">
+                    <div className="space-y-1 relative z-10">
+                      <div className="flex items-center gap-2">
+                         <p className="font-bold text-base text-slate-900 leading-tight group-hover:text-indigo-600 transition-colors">
+                            {item.title}
+                        </p>
+                        {item.type === "danger" && <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping" />}
+                      </div>
+                      <p className="text-xs font-semibold text-slate-500 leading-relaxed">
                         {item.desc}
                       </p>
                     </div>
                   </motion.div>
                 ))
               ) : (
-                <div className="p-10 text-center bg-slate-50/50 border border-dashed border-slate-200 rounded-[32px] space-y-3">
-                  <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto shadow-sm">
-                    <CheckCircle2 className="text-emerald-500" size={24} />
+                <div className="p-12 text-center bg-gradient-to-br from-slate-50 to-white border border-dashed border-slate-200 rounded-[40px] space-y-4 shadow-inner relative overflow-hidden group">
+                   {/* Background Glow */}
+                  <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  
+                  <div className="w-16 h-16 bg-white rounded-[20px] flex items-center justify-center mx-auto shadow-xl border border-slate-100 group-hover:scale-110 transition-transform relative z-10">
+                    <CheckCircle2 className="text-emerald-500" size={32} />
                   </div>
-                  <div className="space-y-1">
-                    <p className="font-bold text-slate-900">All Clear!</p>
-                    <p className="text-xs text-slate-400 font-medium">No urgent deadlines or delayed applications found.</p>
+                  <div className="space-y-2 relative z-10">
+                    <p className="text-xl font-black font-outfit text-slate-900 tracking-tight">Systems Optimal</p>
+                    <p className="text-sm text-slate-400 font-medium max-w-[200px] mx-auto leading-relaxed">
+                        No urgent deadlines or delayed applications detected.
+                    </p>
                   </div>
                 </div>
               )}

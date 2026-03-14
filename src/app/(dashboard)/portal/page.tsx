@@ -368,27 +368,35 @@ export default function UserPortal() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 + i * 0.1 }}
-                    className="p-6 rounded-[14px] md:rounded-[32px] bg-slate-50 border border-transparent hover:bg-white hover:border-border/60 hover:shadow-xl hover:shadow-primary/5 transition-all group"
+                    className="p-6 rounded-[32px] bg-gradient-to-br from-emerald-50/50 to-white border border-emerald-100/50 hover:border-emerald-200 hover:shadow-2xl hover:shadow-emerald-500/5 transition-all group relative overflow-hidden"
                   >
-                    <div className="flex items-center justify-between mb-6">
-                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white flex items-center justify-center text-primary shadow-sm border border-border/40 group-hover:bg-primary group-hover:text-white transition-colors">
-                        <CheckCircle2 size={20} />
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/[0.03] rounded-full -translate-y-1/2 translate-x-1/2" />
+                    
+                    <div className="flex items-center justify-between mb-6 relative z-10">
+                      <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center shadow-inner border border-emerald-200 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-500">
+                        <ShieldCheck size={22} />
                       </div>
-                      <button className="p-2.5 md:p-3 bg-white rounded-xl md:rounded-2xl text-primary/40 hover:text-primary hover:bg-white transition-all shadow-sm border border-border/20 active:scale-90">
+                      <button className="p-3 bg-white border border-slate-100 rounded-2xl text-slate-400 hover:text-emerald-600 hover:border-emerald-200 transition-all shadow-sm active:scale-90">
                         <Download size={16} />
                       </button>
                     </div>
-                    <h4 className="text-base md:text-lg font-black font-outfit text-primary mb-1 leading-tight">
-                      {cert?.application_detail?.service_name || cert?.serial_number || "Certification"}
-                    </h4>
-                    <p className="text-[10px] md:text-xs text-foreground/30 font-bold mb-6 italic">
-                      Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
-                    </p>
+
+                    <div className="space-y-1 relative z-10">
+                      <p className="text-[10px] font-black text-emerald-600/60 uppercase tracking-[0.2em]">Verified Document</p>
+                      <h4 className="text-lg font-black font-outfit text-primary mb-1 leading-tight group-hover:text-emerald-700 transition-colors">
+                        {cert?.application_detail?.service_name || cert?.serial_number || "Certification"}
+                      </h4>
+                      <p className="text-[10px] text-foreground/30 font-bold mb-6 flex items-center gap-1.5">
+                        <Calendar size={12} className="text-emerald-500/50" />
+                        Issued: {cert?.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
+                      </p>
+                    </div>
+
                     <Link
                       href={cert?.id ? `/portal/certificates/${cert.id}` : "#"}
-                      className="text-[10px] md:text-xs font-black text-primary flex items-center gap-2 group-hover:gap-3 transition-all uppercase tracking-widest bg-white w-fit px-4 py-2 rounded-xl shadow-sm border border-border/20"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-xl border border-emerald-100 shadow-sm hover:bg-emerald-50 hover:gap-3 transition-all relative z-10"
                     >
-                      View <ExternalLink size={10} />
+                      Registry Details <ChevronRight size={14} />
                     </Link>
                   </motion.div>
                 ))
