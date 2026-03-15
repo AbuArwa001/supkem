@@ -124,7 +124,7 @@ export default function AboutPage() {
           >
             <div className="aspect-square relative rounded-[60px] overflow-hidden shadow-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=1200"
+                src="/images/slide31602.jpg"
                 alt="SUPKEM Heritage"
                 fill
                 className="object-cover"
@@ -319,7 +319,7 @@ export default function AboutPage() {
                 span: "col-span-1",
               },
               {
-                src: "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800",
+                src: "/images/slide31602.jpg",
                 alt: "Historical Heritage",
                 span: "col-span-1",
               },
