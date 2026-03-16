@@ -65,7 +65,7 @@ const PortalSidebar = ({
           width: isCollapsed ? 80 : 300,
         }}
         className={cn(
-          "h-screen sticky top-0 bg-[#0A1A14] border-r border-white/5 flex flex-col z-[60] text-slate-300",
+          "h-screen sticky top-0 bg-[#0A1A14] border-r border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
           "fixed lg:sticky",
           isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
@@ -127,7 +127,12 @@ const PortalSidebar = ({
         </Link>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar overflow-x-hidden">
+        <nav
+          className={cn(
+            "flex-1 px-4 py-4 space-y-2 overflow-y-auto custom-scrollbar flex flex-col",
+            isCollapsed && "items-center px-2",
+          )}
+        >
           {!isCollapsed && (
             <div className="px-4 pb-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">
@@ -143,17 +148,24 @@ const PortalSidebar = ({
                 href={item.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center justify-between px-4 py-3.5 rounded-2xl font-medium transition-all group relative overflow-hidden",
+                  "flex items-center justify-between px-4 py-3.5 rounded-2xl font-medium transition-all group relative overflow-hidden shrink-0",
                   isActive
                     ? "text-white shadow-lg"
                     : "text-white/50 hover:bg-white/5 hover:text-white",
-                  isCollapsed && "px-0 justify-center h-12 w-12 mx-auto",
+                  isCollapsed ? "p-0 justify-center h-12 w-12" : "w-full",
                 )}
               >
                 {isActive && (
                   <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/50 opacity-90" />
                 )}
-                <div className="flex items-center gap-4 relative z-10 w-full justify-center lg:justify-start">
+                <div
+                  className={cn(
+                    "flex items-center gap-4 relative z-10 shrink-0",
+                    isCollapsed
+                      ? "justify-center w-full"
+                      : "w-full justify-start",
+                  )}
+                >
                   <item.icon
                     size={20}
                     className={cn(
@@ -165,8 +177,10 @@ const PortalSidebar = ({
                   />
                   {!isCollapsed && (
                     <motion.span
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: "auto" }}
+                      exit={{ opacity: 0, width: 0 }}
+                      className="whitespace-nowrap overflow-hidden"
                     >
                       {item.name}
                     </motion.span>
