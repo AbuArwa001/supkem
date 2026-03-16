@@ -95,7 +95,7 @@ export default function AdminOrganizations() {
 
             <div className={cn(
                 "grid gap-6",
-                viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
+                viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
             )}>
                 {filteredOrgs.map((org: any, i) => (
                     <motion.div
@@ -108,14 +108,14 @@ export default function AdminOrganizations() {
                             viewMode === "list" && "flex items-center justify-between"
                         )}
                     >
-                        <div className={cn("flex items-start gap-6 min-w-0", viewMode === "list" && "flex-1")}>
+                        <div className={cn("flex items-start gap-6", viewMode === "list" && "flex-1")}>
                             <div className="w-16 h-16 bg-primary/5 text-primary rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all border border-primary/10 group-hover:border-primary">
                                 <Building2 size={32} />
                             </div>
-                            <div className="space-y-4 flex-1 min-w-0">
+                            <div className="space-y-4 flex-1">
                                 <div>
                                     <div className="flex items-start justify-between gap-4">
-                                        <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer leading-tight truncate">{org.name}</h4>
+                                        <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer leading-tight">{org.name}</h4>
                                         <span className={cn(
                                             "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shrink-0 border",
                                             org.accreditation_status === "Accredited" ? "bg-green-50 text-green-600 border-green-200" :
@@ -133,18 +133,18 @@ export default function AdminOrganizations() {
                                 </div>
 
                                 {viewMode === "grid" && (
-                                    <div className="flex gap-3 pt-2 border-t border-border/50">
-                                        <div className="text-center bg-primary/[0.02] p-3 rounded-2xl flex-1 border border-primary/5 hover:bg-primary/5 transition-colors overflow-hidden">
+                                    <div className="flex gap-4 pt-2 border-t border-border/50">
+                                        <div className="text-center bg-primary/[0.02] p-3 rounded-2xl flex-1 border border-primary/5 hover:bg-primary/5 transition-colors">
                                             <p className="text-lg font-black text-primary">
                                                 {org.apps_count < 10 && org.apps_count > 0 ? `0${org.apps_count}` : org.apps_count || '00'}
                                             </p>
-                                            <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none truncate">Apps</p>
+                                            <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Apps</p>
                                         </div>
-                                        <div className="text-center bg-secondary/[0.02] p-3 rounded-2xl flex-1 border border-secondary/5 hover:bg-secondary/5 transition-colors overflow-hidden">
+                                        <div className="text-center bg-secondary/[0.02] p-3 rounded-2xl flex-1 border border-secondary/5 hover:bg-secondary/5 transition-colors">
                                             <p className="text-lg font-black text-secondary">
                                                 {org.certs_count < 10 && org.certs_count > 0 ? `0${org.certs_count}` : org.certs_count || '00'}
                                             </p>
-                                            <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none truncate">Certs</p>
+                                            <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Certs</p>
                                         </div>
                                     </div>
                                 )}
