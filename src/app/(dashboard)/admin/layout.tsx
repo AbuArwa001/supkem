@@ -11,20 +11,17 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   return (
     <ProtectedRoute
       requiredRole={["Admin", "Super Admin", "IT Officer", "Finance Officer"]}
     >
-      <div className="flex min-h-screen bg-primary/[0.02] overflow-x-hidden">
+      <div className="flex min-h-screen bg-primary/[0.02]">
         <AdminSidebar
           isOpen={isSidebarOpen}
-          isCollapsed={isSidebarCollapsed}
           onClose={() => setIsSidebarOpen(false)}
-          onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
         />
-        <main className="flex-1 min-h-screen relative w-full overflow-x-hidden">
+        <main className="flex-1 overflow-x-hidden min-h-screen">
           {/* Mobile Header */}
           <header className="lg:hidden flex items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50">
             <div className="flex items-center gap-3">

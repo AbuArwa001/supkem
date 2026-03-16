@@ -24,17 +24,14 @@ import Image from "next/image";
 
 const AdminSidebar = ({
   isOpen,
-  isCollapsed = false,
   onClose,
-  onToggleCollapse,
 }: {
   isOpen?: boolean;
-  isCollapsed?: boolean;
   onClose?: () => void;
-  onToggleCollapse?: () => void;
 }) => {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
     { name: "Overview", href: "/admin", icon: LayoutDashboard },
@@ -75,7 +72,7 @@ const AdminSidebar = ({
       >
         {/* Retract Toggle Button (Desktop) */}
         <button
-          onClick={onToggleCollapse}
+          onClick={() => setIsCollapsed(!isCollapsed)}
           className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-primary rounded-full items-center justify-center border border-white/10 text-white z-[70] transition-transform hover:scale-110"
         >
           <ChevronRight
