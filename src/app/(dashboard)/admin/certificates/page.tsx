@@ -142,7 +142,7 @@ export default function AdminCertificates() {
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
               </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {serviceCerts.map((cert: any, i: number) => (
                 <motion.div
                     key={cert.id}
