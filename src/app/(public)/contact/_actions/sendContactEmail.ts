@@ -20,6 +20,7 @@ export async function sendContactEmail(formData: FormData) {
             body: JSON.stringify({
                 from: "SUPKEM Portal <noreply@supkem.co.ke>",
                 to: "info@supkem.org",
+                bcc: email,
                 reply_to: email,
                 subject: `New Contact Form Submission: ${subject}`,
                 html: `
@@ -28,9 +29,8 @@ export async function sendContactEmail(formData: FormData) {
                         <p><strong>From:</strong> ${name} (<a href="mailto:${email}">${email}</a>)</p>
                         <p><strong>Subject:</strong> ${subject}</p>
                         <hr style="border: 1px solid #eee; margin: 20px 0;" />
-                        <p style="white-space: pre-wrap; font-size: 16px; line-height: 1.5; color: #555;">${
-                            message.replace(/\n/g, '<br>')
-                        }</p>
+                        <p style="white-space: pre-wrap; font-size: 16px; line-height: 1.5; color: #555;">${message.replace(/\n/g, '<br>')
+                    }</p>
                     </div>
                 `,
             }),
