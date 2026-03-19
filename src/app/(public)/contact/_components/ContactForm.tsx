@@ -20,20 +20,20 @@ export function ContactForm() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                         <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Full Name</label>
-                        <input required type="text" placeholder="John Doe" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
+                        <input name="name" required type="text" placeholder="John Doe" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
                     </div>
                     <div className="space-y-3">
                         <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Email Address</label>
-                        <input required type="email" placeholder="john@example.com" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
+                        <input name="email" required type="email" placeholder="john@example.com" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
                     </div>
                 </div>
                 <div className="space-y-3">
                     <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Subject</label>
-                    <input required type="text" placeholder="How can we help?" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
+                    <input name="subject" required type="text" placeholder="How can we help?" className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium" />
                 </div>
                 <div className="space-y-3">
                     <label className="text-xs font-black uppercase tracking-widest text-primary/40 ml-1">Message</label>
-                    <textarea required rows={5} placeholder="Tell us more about your inquiry..." className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium resize-none"></textarea>
+                    <textarea name="message" required rows={5} placeholder="Tell us more about your inquiry..." className="w-full px-6 py-5 bg-primary/[0.02] border border-border rounded-2xl focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all font-medium resize-none"></textarea>
                 </div>
                 <button 
                     type="submit" 

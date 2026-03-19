@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { sendContactEmail } from "@/app/(public)/contact/_actions/sendContactEmail";
 
 export function useContactLogic() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -7,12 +8,21 @@ export function useContactLogic() {
         e.preventDefault();
         setIsSubmitting(true);
         
-        // Simulating an API call
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        
-        setIsSubmitting(false);
-        // Add actual toast or state logic here upon success
-        alert("Message simulated as sent!");
+        try {
+            const formData = new FormData(e.currentTarget);
+            const result = await sendContactEmail(formData);
+            
+            if (result.error) {
+                alert(result.error);
+            } else {
+                alert("Your message has been sent successfully!");
+                e.currentTarget.reset();
+            }
+        } catch (error) {
+            alert("Failed to send message.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return {
