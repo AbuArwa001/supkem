@@ -13,7 +13,8 @@ import ActionSidebar from "@/app/(dashboard)/admin/applications/[id]/_components
 import { useApplicationDetailLogic } from "@/app/(dashboard)/admin/applications/[id]/_hooks/useApplicationDetailLogic";
 
 export default function ApplicationDetail() {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string | string[];
   const { app, loading, submitting, handleAction, router } =
     useApplicationDetailLogic(id);
 
