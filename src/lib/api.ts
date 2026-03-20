@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export const API_BASE_URL = 'https://supkem-drf.onrender.com';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://supkem-drf.onrender.com';
 
 const api = axios.create({
     baseURL: `${API_BASE_URL}/api/v1`, // Using the provided production URL
