@@ -27,7 +27,7 @@ function VerifyEmailLogic() {
 
     const verifyEmail = async () => {
       try {
-        await api.post("/users/verify_email/", { uid, token });
+        await api.post("/users/users/verify_email/", { uid, token });
         setSuccess(true);
         setTimeout(() => {
           router.push("/login?verified=true");
