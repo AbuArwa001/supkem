@@ -85,16 +85,16 @@ export function CertificateCanvas({
         .certificate-canvas :global(.text-secondary) {
           color: var(--secondary-safe) !important;
         }
-        .certificate-canvas :global(.bg-primary/5) {
+        .certificate-canvas :global(.bg-primary\/5) {
           background-color: rgba(22, 84, 61, 0.05) !important;
         }
-        .certificate-canvas :global(.bg-secondary/10) {
+        .certificate-canvas :global(.bg-secondary\/10) {
           background-color: rgba(231, 180, 8, 0.1) !important;
         }
-        .certificate-canvas :global(.border-primary/10) {
+        .certificate-canvas :global(.border-primary\/10) {
           border-color: rgba(22, 84, 61, 0.1) !important;
         }
-        .certificate-canvas :global(.border-primary/5) {
+        .certificate-canvas :global(.border-primary\/5) {
           border-color: rgba(22, 84, 61, 0.05) !important;
         }
       `}</style>
