@@ -6,7 +6,7 @@ import { Certificate } from "@/services/certificate-service";
 
 interface CertificateCanvasProps {
   certificate: Certificate;
-  certificateRef: React.RefObject<HTMLDivElement>;
+  certificateRef: React.RefObject<HTMLDivElement | null>;
   issueDate: Date | null;
   expiryDate: Date | null;
   isValid: boolean;
