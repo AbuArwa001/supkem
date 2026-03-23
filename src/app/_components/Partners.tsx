@@ -8,7 +8,7 @@ const PARTNERS = [
   { name: "Ministry of Islamic Affairs (MOIA)", src: "/images/partners/Saudi_Ministry_of_Islamic_daawah_Affairs_Logo.png" },
   { name: "Muslim World League", src: "/images/partners/mwl.svg" },
   { name: "UAE Embassy Nairobi", src: "/images/partners/uae_flag.svg" },
-  { name: "Islamic Development Bank (IsDB)", src: "/images/partners/isdb.svg" },
+  { name: "Islamic Development Bank (IsDB)", src: "/images/partners/isdb.png" },
   { name: "Royal Embassy of Saudi Arabia", src: "/images/partners/saudi_flag.svg" },
   { name: "AMREF", src: "/AMREF.png" },
   { name: "UKAID", src: "/UKAID.png" },
