@@ -1,7 +1,8 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { ChevronLeft, Download } from "lucide-react";
+import { ChevronLeft, Download, Calendar, BookOpen } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { API_BASE_URL } from "@/lib/api";
 import { getNewsPaperById } from "@/app/(public)/news/_services/newsService";
 
@@ -42,64 +43,109 @@ export default async function NewsPaperViewPage({
     );
   }
 
+  const coverImage = paper.cover_image
+    ? paper.cover_image.startsWith("http")
+      ? paper.cover_image
+      : `${API_BASE_URL}${paper.cover_image.startsWith("/") ? "" : "/"}${paper.cover_image}`
+    : "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=1600";
+
   return (
-    <div className="min-h-screen bg-[#FDFDFD] pt-32 pb-20">
-      <div className="max-w-7xl mx-auto px-6 mb-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <Link
-            href="/news"
-            className="inline-flex items-center gap-2 text-sm font-bold text-foreground/40 hover:text-primary transition-colors mb-4 uppercase tracking-widest"
-          >
-            <ChevronLeft size={16} /> Back to News
-          </Link>
-          <h1 className="text-4xl md:text-5xl font-black font-outfit tracking-tight text-primary leading-tight">
-            {paper.title}
-          </h1>
-          <div className="flex items-center gap-4 mt-4 text-sm font-semibold text-foreground/60 uppercase tracking-widest">
-            <span>{new Date(paper.published_date).toLocaleDateString()}</span>
-            {paper.issue_number && (
-              <>
-                <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-                <span className="text-primary bg-primary/10 px-3 py-1 rounded-full">
+    <div className="min-h-screen bg-slate-50 pb-24">
+      {/* Hero Section */}
+      <header className="relative h-[60vh] min-h-[480px] flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <Image
+            src={coverImage}
+            alt={paper.title}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 pb-24 w-full relative z-10">
+          <div className="max-w-4xl space-y-6">
+            <Link
+              href="/news"
+              className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors font-bold uppercase tracking-widest text-xs bg-black/20 px-4 py-2 rounded-full backdrop-blur-md"
+            >
+              <ChevronLeft size={14} /> Back to News
+            </Link>
+
+            <h1 className="text-4xl lg:text-6xl font-black font-outfit text-white leading-tight tracking-tight">
+              {paper.title}
+            </h1>
+
+            <div className="flex flex-wrap items-center gap-6 text-sm font-bold text-white/60 uppercase tracking-widest">
+              <span className="flex items-center gap-2">
+                <Calendar size={14} className="text-amber-400" />
+                {new Date(paper.published_date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              {paper.issue_number && (
+                <span className="text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
                   Issue {paper.issue_number}
                 </span>
-              </>
-            )}
+              )}
+            </div>
           </div>
         </div>
+      </header>
 
-        <a
-          href={pdfUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="shrink-0 px-8 py-4 bg-primary text-white rounded-[20px] font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full md:w-auto action-button-scale"
-        >
-          <Download size={20} />
-          Download PDF
-        </a>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="bg-white border border-border/50 rounded-[32px] p-2 md:p-6 shadow-2xl shadow-primary/5 h-[80vh] min-h-[600px] flex overflow-hidden">
-          <object
-            data={pdfUrl}
-            type="application/pdf"
-            className="w-full h-full rounded-[24px]"
-          >
-            <div className="flex flex-col items-center justify-center h-full space-y-4">
-              <p className="text-foreground/60 font-medium">
-                Your browser does not support inline PDFs.
-              </p>
-              <a
-                href={pdfUrl}
-                className="text-primary font-bold hover:underline py-2 px-4 rounded-xl bg-primary/5"
-              >
-                Download the PDF
-              </a>
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
+        <div className="flex flex-col gap-8">
+          {/* Actions Bar */}
+          <div className="bg-white rounded-[32px] p-6 shadow-2xl shadow-black/5 border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-primary/10 rounded-2xl">
+                <BookOpen size={24} className="text-primary" />
+              </div>
+              <div>
+                <p className="font-bold text-primary">Official Publication</p>
+                <p className="text-sm text-foreground/60">
+                  Supreme Council of Kenya Muslims (SUPKEM)
+                </p>
+              </div>
             </div>
-          </object>
+
+            <a
+              href={pdfUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="px-8 py-4 bg-primary text-white rounded-2xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full md:w-auto"
+            >
+              <Download size={20} />
+              Download PDF
+            </a>
+          </div>
+
+          {/* PDF Viewer */}
+          <div className="bg-white border border-border/50 rounded-[40px] p-2 md:p-6 shadow-2xl shadow-black/5 h-[80vh] min-h-[600px] flex overflow-hidden">
+            <object
+              data={pdfUrl}
+              type="application/pdf"
+              className="w-full h-full rounded-[32px]"
+            >
+              <div className="flex flex-col items-center justify-center h-full space-y-4">
+                <p className="text-foreground/60 font-medium">
+                  Your browser does not support inline PDFs.
+                </p>
+                <a
+                  href={pdfUrl}
+                  className="text-primary font-bold hover:underline py-2 px-4 rounded-xl bg-primary/5"
+                >
+                  Download the PDF
+                </a>
+              </div>
+            </object>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
