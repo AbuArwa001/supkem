@@ -5,6 +5,8 @@ import { NewsPapersSection } from "@/app/(public)/news/_components/NewsPapersSec
 
 import { getNews, getVideos, getNewsPapers } from "@/app/(public)/news/_services/newsService";
 
+export const revalidate = 60; // Revalidate the page cache every 60 seconds
+
 export default async function NewsPage() {
     const newsItems = await getNews();
     const videos = await getVideos();
