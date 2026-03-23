@@ -1,6 +1,12 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, FileText, Image as ImageIcon, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  X,
+  FileText,
+  Image as ImageIcon,
+  CheckCircle2,
+  Loader2,
+} from "lucide-react";
 import { NewsPaperItem } from "@/services/news-service";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +24,7 @@ interface NewsPaperModalProps {
   };
   setFormData: (data: any) => void;
   isSubmitting: boolean;
+  error: string | null;
   onSubmit: (e: React.FormEvent) => void;
 }
 
@@ -28,6 +35,7 @@ export function NewsPaperModal({
   formData,
   setFormData,
   isSubmitting,
+  error,
   onSubmit,
 }: NewsPaperModalProps) {
   return (
@@ -64,6 +72,13 @@ export function NewsPaperModal({
               onSubmit={onSubmit}
               className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar"
             >
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-100 rounded-2xl">
+                  <p className="text-sm font-bold text-red-600 leading-relaxed">
+                    {error}
+                  </p>
+                </div>
+              )}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
                   Title
@@ -102,7 +117,10 @@ export function NewsPaperModal({
                     required
                     value={formData.published_date}
                     onChange={(e) =>
-                      setFormData({ ...formData, published_date: e.target.value })
+                      setFormData({
+                        ...formData,
+                        published_date: e.target.value,
+                      })
                     }
                     className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                   />
@@ -134,9 +152,7 @@ export function NewsPaperModal({
                     >
                       <FileText size={20} />
                       <span className="truncate max-w-[150px]">
-                        {formData.file
-                            ? formData.file.name
-                            : "Select PDF"}
+                        {formData.file ? formData.file.name : "Select PDF"}
                       </span>
                     </label>
                   </div>
@@ -164,11 +180,11 @@ export function NewsPaperModal({
                       className="w-full px-6 py-4 bg-primary/[0.02] border border-dashed border-border group-hover:border-primary/50 rounded-2xl cursor-pointer flex items-center justify-center gap-2 text-foreground/40 font-bold transition-all"
                     >
                       <ImageIcon size={20} />
-                       <span className="truncate max-w-[150px]">
+                      <span className="truncate max-w-[150px]">
                         {formData.cover_image
-                            ? formData.cover_image.name
-                            : "Select Image"}
-                       </span>
+                          ? formData.cover_image.name
+                          : "Select Image"}
+                      </span>
                     </label>
                   </div>
                 </div>
