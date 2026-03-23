@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import useSWR from "swr";
+import api from "@/lib/api";
 
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
 
@@ -16,7 +20,15 @@ const extractFirstImage = (content: string) => {
     return match ? match[1] : null;
 };
 
-export function FeaturedNews({ newsItems }: FeaturedNewsProps) {
+export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps) {
+    const { data: newsItems } = useSWR('/news/', url => api.get(url).then(res => {
+        const data = res.data.results || res.data;
+        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
+    }), {
+        fallbackData: initialNewsItems,
+        refreshInterval: 10000
+    });
+
     return (
         <section className="max-w-7xl mx-auto px-6 space-y-12">
             <div className="flex items-center gap-4">

@@ -1,14 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { BookOpen, ArrowRight } from "lucide-react";
-import { API_BASE_URL } from "@/lib/api";
+import useSWR from "swr";
+import api, { API_BASE_URL } from "@/lib/api";
 import { NewsPaperItem } from "@/app/(public)/news/_services/newsService";
 
 interface NewsPapersSectionProps {
     newsPapers: NewsPaperItem[];
 }
 
-export function NewsPapersSection({ newsPapers }: NewsPapersSectionProps) {
+export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersSectionProps) {
+    const { data: newsPapers } = useSWR('/news/news_papers/', url => api.get(url).then(res => {
+        const data = res.data.results || res.data;
+        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
+    }), {
+        fallbackData: initialNewsPapers,
+        refreshInterval: 10000
+    });
+
     if (!newsPapers || newsPapers.length === 0) return null;
 
     return (

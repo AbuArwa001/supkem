@@ -1,9 +1,10 @@
+"use client";
+
 import Link from "next/link";
-
 import { Film, PlayCircle, ArrowRight } from "lucide-react";
-
 import VideoPlayer from "@/components/news/VideoPlayer";
-import { API_BASE_URL } from "@/lib/api";
+import useSWR from "swr";
+import api, { API_BASE_URL } from "@/lib/api";
 
 import { VideoItem } from "@/app/(public)/news/_services/newsService";
 
@@ -11,7 +12,15 @@ interface VideoBriefingsProps {
     videos: VideoItem[];
 }
 
-export function VideoBriefings({ videos }: VideoBriefingsProps) {
+export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
+    const { data: videos } = useSWR('/videos/', url => api.get(url).then(res => {
+        const data = res.data.results || res.data;
+        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
+    }), {
+        fallbackData: initialVideos,
+        refreshInterval: 10000
+    });
+
     if (!videos || videos.length === 0) return null;
 
     return (
