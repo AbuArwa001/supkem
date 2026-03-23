@@ -86,7 +86,7 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
                         })()}
 
                         <div className="space-y-8 flex flex-col">
-                            {newsItems.slice(1).map((item, i) => {
+                            {newsItems.slice(1).map((item: NewsItem, i: number) => {
                                 const extractedImg = extractFirstImage(item.content);
                                 const imageSource = item.featured_image
                                     ? (item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
