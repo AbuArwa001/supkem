@@ -23,12 +23,18 @@ export function NewsPapersSection({ newsPapers }: NewsPapersSectionProps) {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10">
                 {newsPapers.map((paper, i) => {
                     const imageUrl = paper.cover_image
                         ? paper.cover_image.startsWith('http')
                             ? paper.cover_image
                             : `${API_BASE_URL}${paper.cover_image.startsWith('/') ? '' : '/'}${paper.cover_image}`
+                        : null;
+
+                    const pdfUrl = paper.file
+                        ? paper.file.startsWith("https")
+                            ? paper.file
+                            : `${API_BASE_URL}${paper.file.startsWith("/") ? "" : "/"}${paper.file}`
                         : null;
 
                     return (
@@ -37,13 +43,19 @@ export function NewsPapersSection({ newsPapers }: NewsPapersSectionProps) {
                             href={`/news-papers/${paper.id}`}
                             className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
                         >
-                            <div className="aspect-[3/4] relative bg-primary/5 flex items-center justify-center overflow-hidden">
+                            <div className="aspect-[4/5] relative bg-primary/5 flex items-center justify-center overflow-hidden pointer-events-none">
                                 {imageUrl ? (
                                     <Image
                                         src={imageUrl}
                                         alt={paper.title}
                                         fill
                                         className="object-cover group-hover:scale-110 transition-transform duration-500"
+                                    />
+                                ) : pdfUrl ? (
+                                    <object
+                                        data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                                        type="application/pdf"
+                                        className="w-full h-[120%] -mt-10 group-hover:scale-105 transition-transform duration-700 opacity-90"
                                     />
                                 ) : (
                                     <BookOpen className="text-primary/20 hover:scale-110 transition-transform duration-500" size={48} />
@@ -57,7 +69,7 @@ export function NewsPapersSection({ newsPapers }: NewsPapersSectionProps) {
                                 </div>
                                 <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300 z-10" />
                             </div>
-                            
+
                             <div className="p-6 space-y-3 flex-1 flex flex-col">
                                 <h3 className="text-lg font-bold font-outfit text-primary line-clamp-2 leading-snug group-hover:text-secondary transition-colors">
                                     {paper.title}
