@@ -14,7 +14,7 @@ interface NewsPapersSectionProps {
 }
 
 export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersSectionProps) {
-    const { data: newsPapers } = useSWR(
+    const { data: newsPapers } = useSWR<NewsPaperItem[]>(
         `${API_BASE}/api/v1/news/news_papers/`,
         (url: string) =>
             fetch(url)
