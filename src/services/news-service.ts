@@ -61,6 +61,46 @@ export const NewsService = {
      * @param slug The slug of the news item to delete.
      */
     async deleteNews(slug: string): Promise<void> {
-        await api.delete(`/news/${slug}/`);
+        await api.delete(`/news/news/${slug}/`);
+    },
+};
+
+export interface NewsPaperItem {
+    id: string;
+    title: string;
+    file: string | null;
+    cover_image: string | null;
+    issue_number: string;
+    published_date: string;
+    is_published: boolean;
+    created_at: string;
+    updated_at: string;
+}
+
+export const NewsPaperService = {
+    async getNewsPapers(): Promise<NewsPaperItem[]> {
+        const response = await api.get<NewsPaperItem[] | { results?: NewsPaperItem[] }>("/news/news_papers/");
+        if (Array.isArray(response.data)) {
+            return response.data;
+        }
+        return response.data.results || [];
+    },
+
+    async createNewsPaper(data: FormData): Promise<NewsPaperItem> {
+        const response = await api.post<NewsPaperItem>("/news/news_papers/", data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+        return response.data;
+    },
+
+    async updateNewsPaper(id: string, data: FormData): Promise<NewsPaperItem> {
+        const response = await api.patch<NewsPaperItem>(`/news/news_papers/${id}/`, data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+        return response.data;
+    },
+
+    async deleteNewsPaper(id: string): Promise<void> {
+        await api.delete(`/news/news_papers/${id}/`);
     },
 };
