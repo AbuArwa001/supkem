@@ -4,7 +4,9 @@ import Link from "next/link";
 import { Film, PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";
-import api, { API_BASE_URL } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
 import { VideoItem } from "@/app/(public)/news/_services/newsService";
 
@@ -13,13 +15,17 @@ interface VideoBriefingsProps {
 }
 
 export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
-    const { data: videos } = useSWR('/videos/', url => api.get(url).then(res => {
-        const data = res.data.results || res.data;
-        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
-    }), {
-        fallbackData: initialVideos,
-        refreshInterval: 10000
-    });
+    const { data: videos } = useSWR(
+        `${API_BASE}/api/v1/videos/`,
+        (url: string) =>
+            fetch(url)
+                .then((r) => r.json())
+                .then((d) => {
+                    const items = Array.isArray(d) ? d : d?.results ?? [];
+                    return items.filter((item: any) => item.is_published);
+                }),
+        { fallbackData: initialVideos, refreshInterval: 30000 }
+    );
 
     if (!videos || videos.length === 0) return null;
 

@@ -3,13 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import useSWR from "swr";
-import api from "@/lib/api";
-
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
-
 import { API_BASE_URL } from "@/lib/api";
-
 import { NewsItem } from "@/app/(public)/news/_services/newsService";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
 interface FeaturedNewsProps {
     newsItems: NewsItem[];
@@ -21,13 +19,17 @@ const extractFirstImage = (content: string) => {
 };
 
 export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps) {
-    const { data: newsItems } = useSWR('/news/', url => api.get(url).then(res => {
-        const data = res.data.results || res.data;
-        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
-    }), {
-        fallbackData: initialNewsItems,
-        refreshInterval: 10000
-    });
+    const { data: newsItems } = useSWR(
+        `${API_BASE}/api/v1/news/news/`,
+        (url: string) =>
+            fetch(url)
+                .then((r) => r.json())
+                .then((d) => {
+                    const items = Array.isArray(d) ? d : d?.results ?? [];
+                    return items.filter((item: any) => item.is_published);
+                }),
+        { fallbackData: initialNewsItems, refreshInterval: 30000 }
+    );
 
     return (
         <section className="max-w-7xl mx-auto px-6 space-y-12">

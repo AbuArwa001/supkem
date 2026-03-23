@@ -4,7 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { BookOpen, ArrowRight } from "lucide-react";
 import useSWR from "swr";
-import api, { API_BASE_URL } from "@/lib/api";
+import { API_BASE_URL } from "@/lib/api";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 import { NewsPaperItem } from "@/app/(public)/news/_services/newsService";
 
 interface NewsPapersSectionProps {
@@ -12,13 +14,17 @@ interface NewsPapersSectionProps {
 }
 
 export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersSectionProps) {
-    const { data: newsPapers } = useSWR('/news/news_papers/', url => api.get(url).then(res => {
-        const data = res.data.results || res.data;
-        return Array.isArray(data) ? data.filter((item: any) => item.is_published) : [];
-    }), {
-        fallbackData: initialNewsPapers,
-        refreshInterval: 10000
-    });
+    const { data: newsPapers } = useSWR(
+        `${API_BASE}/api/v1/news/news_papers/`,
+        (url: string) =>
+            fetch(url)
+                .then((r) => r.json())
+                .then((d) => {
+                    const items = Array.isArray(d) ? d : d?.results ?? [];
+                    return items.filter((item: any) => item.is_published);
+                }),
+        { fallbackData: initialNewsPapers, refreshInterval: 30000 }
+    );
 
     if (!newsPapers || newsPapers.length === 0) return null;
 
