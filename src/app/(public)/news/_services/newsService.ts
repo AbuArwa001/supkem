@@ -1,5 +1,8 @@
 import api from "@/lib/api";
 
+const SERVER_API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
+
 export interface NewsItem {
     id: number | string;
     title: string;
@@ -73,10 +76,19 @@ export async function getNewsPapers(): Promise<NewsPaperItem[]> {
     }
 }
 
+/**
+ * Server-safe fetch: uses native `fetch` so it works in Next.js
+ * Server Components without importing browser-only `js-cookie`.
+ */
 export async function getNewsPaperById(id: string): Promise<NewsPaperItem | null> {
     try {
-        const res = await api.get(`/news/news_papers/${id}/`);
-        return res.data;
+        const url = `${SERVER_API_URL}/api/v1/news/news_papers/${id}/`;
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) {
+            console.error(`News paper fetch failed: ${res.status} for id=${id}`);
+            return null;
+        }
+        return res.json();
     } catch (err) {
         console.error("Error fetching news paper by id:", err);
         return null;
