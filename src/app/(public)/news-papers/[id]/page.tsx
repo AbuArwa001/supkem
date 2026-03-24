@@ -117,7 +117,7 @@ export default async function NewsPaperViewPage({
               href={pdfUrl}
               target="_blank"
               rel="noreferrer"
-              className="px-8 py-4 bg-primary text-white rounded-2xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full md:w-auto"
+              className="px-8 py-4 bg-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full md:w-auto"
             >
               <Download size={20} />
               Download PDF
@@ -125,7 +125,7 @@ export default async function NewsPaperViewPage({
           </div>
 
           {/* PDF Viewer */}
-          <div className="bg-white border border-border/50 rounded-[40px] p-2 md:p-6 shadow-2xl shadow-black/5 h-[80vh] min-h-[600px] flex overflow-hidden">
+          <div className="bg-white border border-border/50 rounded-[20px] p-2 md:p-6 shadow-2xl shadow-black/5 h-[80vh] min-h-[600px] flex overflow-hidden">
             <object
               data={pdfUrl}
               type="application/pdf"

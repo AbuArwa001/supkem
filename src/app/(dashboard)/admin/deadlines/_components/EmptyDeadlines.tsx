@@ -10,7 +10,7 @@ interface EmptyDeadlinesProps {
  */
 export function EmptyDeadlines({ onReset }: EmptyDeadlinesProps) {
   return (
-    <div className="p-20 text-center bg-slate-50/50 border border-dashed border-slate-200 rounded-[40px] space-y-4">
+    <div className="p-20 text-center bg-slate-50/50 border border-dashed border-slate-200 rounded-[20px] space-y-4">
       <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center mx-auto shadow-sm">
         <CheckCircle2 className="text-emerald-500" size={40} />
       </div>

@@ -57,7 +57,7 @@ export function LeadershipSection() {
               key={i}
               {...fadeIn}
               transition={{ delay: i * 0.2 }}
-              className="p-10 rounded-[40px] border border-border/60 bg-white hover:shadow-2xl hover:shadow-primary/5 transition-all group"
+              className="p-10 rounded-[20px] border border-border/60 bg-white hover:shadow-2xl hover:shadow-primary/5 transition-all group"
             >
               <div
                 className={cn(

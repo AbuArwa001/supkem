@@ -82,7 +82,7 @@ export const Sidebar = ({ deadlines }: SidebarProps) => {
               </motion.div>
             ))
           ) : (
-            <div className="p-12 text-center bg-gradient-to-br from-slate-50 to-white border border-dashed border-slate-200 rounded-[40px] space-y-4 shadow-inner relative overflow-hidden group">
+            <div className="p-12 text-center bg-gradient-to-br from-slate-50 to-white border border-dashed border-slate-200 rounded-[20px] space-y-4 shadow-inner relative overflow-hidden group">
               <div className="absolute inset-0 bg-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
               <div className="w-16 h-16 bg-white rounded-[20px] flex items-center justify-center mx-auto shadow-xl border border-slate-100 group-hover:scale-110 transition-transform relative z-10">
                 <CheckCircle2 className="text-emerald-500" size={32} />

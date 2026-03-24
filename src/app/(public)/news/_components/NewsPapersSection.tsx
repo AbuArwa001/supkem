@@ -58,7 +58,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersS
                         <Link
                             key={i}
                             href={`/news-papers/${paper.id}`}
-                            className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
+                            className="bg-white border border-border rounded-[24px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
                         >
                             <div className="aspect-[4/5] relative bg-primary/5 flex items-center justify-center overflow-hidden pointer-events-none">
                                 {imageUrl ? (

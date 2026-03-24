@@ -1285,7 +1285,7 @@ export default function SubmitApplication() {
             <div className="sticky top-6">
               <div
                 className={cn(
-                  "p-8 rounded-[40px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-6",
+                  "p-8 rounded-[20px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-6",
                   !canSelectOrganization && "pointer-events-none opacity-40",
                 )}
               >
@@ -1366,7 +1366,7 @@ export default function SubmitApplication() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="mt-6 p-8 rounded-[40px] bg-slate-900 text-white shadow-2xl relative overflow-hidden"
+                  className="mt-6 p-8 rounded-[20px] bg-slate-900 text-white shadow-2xl relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl" />
                   <h4 className="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-4">Application Summary</h4>

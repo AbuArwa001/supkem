@@ -68,7 +68,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
             <main className="max-w-5xl mx-auto px-6 -mt-10 lg:-mt-20 relative z-20">
                 <div className="space-y-12">
                     {/* Premium Video Container */}
-                    <div className="aspect-video bg-black rounded-[40px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-4 border-white/5 relative group">
+                    <div className="aspect-video bg-black rounded-[20px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-4 border-white/5 relative group">
                         <VideoPlayer url={videoUrl} />
                     </div>
 
