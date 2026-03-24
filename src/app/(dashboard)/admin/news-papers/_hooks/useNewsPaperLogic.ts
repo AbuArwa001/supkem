@@ -16,14 +16,17 @@ export function useNewsPaperLogic() {
         cover_image: null as File | null
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const fetchNewsPapers = async () => {
         setLoading(true);
+        setError(null);
         try {
             const data = await NewsPaperService.getNewsPapers();
             setNewsPapers(data);
         } catch (err) {
             console.error("Failed to fetch news papers", err);
+            setError("Failed to load news papers. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -34,6 +37,7 @@ export function useNewsPaperLogic() {
     }, []);
 
     const handleOpenModal = (item: NewsPaperItem | null = null) => {
+        setError(null);
         if (item) {
             setEditingItem(item);
             setFormData({
@@ -60,11 +64,13 @@ export function useNewsPaperLogic() {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setError(null);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
+        setError(null);
 
         const data = new FormData();
         data.append("title", formData.title);
@@ -86,8 +92,14 @@ export function useNewsPaperLogic() {
             }
             setIsModalOpen(false);
             fetchNewsPapers();
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to save news paper", err);
+            setError(
+                err.response?.data?.detail || 
+                err.response?.data?.file?.[0] ||
+                err.response?.data?.cover_image?.[0] ||
+                "Failed to upload news paper. The file might be too large or the server is unreachable."
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -120,6 +132,7 @@ export function useNewsPaperLogic() {
         formData,
         setFormData,
         isSubmitting,
+        error,
         handleOpenModal,
         handleCloseModal,
         handleSubmit,

@@ -17,6 +17,7 @@ export default function AdminNewsPapers() {
     formData,
     setFormData,
     isSubmitting,
+    error,
     handleOpenModal,
     handleCloseModal,
     handleSubmit,
@@ -45,6 +46,7 @@ export default function AdminNewsPapers() {
         formData={formData}
         setFormData={setFormData}
         isSubmitting={isSubmitting}
+        error={error}
         onSubmit={handleSubmit}
       />
     </div>
