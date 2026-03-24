@@ -31,6 +31,8 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
         { fallbackData: initialNewsItems, refreshInterval: 30000 }
     );
 
+    console.log(API_BASE);
+
     return (
         <section className="max-w-7xl mx-auto px-6 space-y-12">
             <div className="flex items-center gap-4">

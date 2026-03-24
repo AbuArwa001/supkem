@@ -9,7 +9,7 @@ import { notFound } from "next/navigation";
 
 async function getArticle(slug: string) {
     try {
-        const res = await api.get(`/news/${slug}/`);
+        const res = await api.get(`/news/news/${slug}/`);
         return res.data;
     } catch {
         return null;
