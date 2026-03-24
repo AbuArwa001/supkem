@@ -126,23 +126,11 @@ export default async function NewsPaperViewPage({
 
           {/* PDF Viewer */}
           <div className="bg-white border border-border/50 rounded-[20px] p-2 md:p-6 shadow-2xl shadow-black/5 h-[80vh] min-h-[600px] flex overflow-hidden">
-            <object
-              data={pdfUrl}
-              type="application/pdf"
+            <iframe
+              src={`https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`}
               className="w-full h-full rounded-[16px]"
-            >
-              <div className="flex flex-col items-center justify-center h-full space-y-4">
-                <p className="text-foreground/60 font-medium">
-                  Your browser does not support inline PDFs.
-                </p>
-                <a
-                  href={pdfUrl}
-                  className="text-primary font-bold hover:underline py-2 px-4 rounded-xl bg-primary/5"
-                >
-                  Download the PDF
-                </a>
-              </div>
-            </object>
+              title={paper.title}
+            />
           </div>
         </div>
       </main>

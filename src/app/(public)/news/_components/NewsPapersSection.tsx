@@ -69,10 +69,10 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersS
                                         className="object-cover group-hover:scale-110 transition-transform duration-500"
                                     />
                                 ) : pdfUrl ? (
-                                    <object
-                                        data={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-                                        type="application/pdf"
-                                        className="w-full h-[120%] -mt-10 group-hover:scale-105 transition-transform duration-700 opacity-90"
+                                    <iframe
+                                        src={`https://docs.google.com/viewer?url=${encodeURIComponent(pdfUrl)}&embedded=true`}
+                                        className="w-full h-full group-hover:scale-105 transition-transform duration-700 opacity-90 scale-110"
+                                        title={paper.title}
                                     />
                                 ) : (
                                     <BookOpen className="text-primary/20 hover:scale-110 transition-transform duration-500" size={48} />
