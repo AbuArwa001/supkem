@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,6 +32,7 @@ export default function RootLayout({
           {children}
         </MainLayoutWrapper>
         <Toaster position="top-right" richColors />
+        <Analytics />
       </body>
     </html>
   );
