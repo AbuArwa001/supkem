@@ -5,4 +5,7 @@ export interface RegisterFormData {
   email: string;
   phone: string;
   password: string;
+  confirm_password?: string;
 }
+
+export type FieldErrors = Partial<Record<keyof RegisterFormData, string>>;

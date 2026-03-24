@@ -11,6 +11,7 @@ export default function RegisterPage() {
     loading,
     success,
     error,
+    fieldErrors,
     formData,
     setFormData,
     handleSubmit
@@ -39,6 +40,7 @@ export default function RegisterPage() {
           onSubmit={handleSubmit}
           loading={loading}
           error={error}
+          fieldErrors={fieldErrors}
         />
       </motion.div>
     </div>
