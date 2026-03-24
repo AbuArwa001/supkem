@@ -179,10 +179,10 @@ export default function AdminVideos() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.05 }}
-                            className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
+                            className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
                         >
                             {/* Video Thumbnail/Player Preview */}
-                            <Link 
+                            <Link
                                 href={`/admin/videos/${item.id}`}
                                 className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden cursor-pointer"
                             >

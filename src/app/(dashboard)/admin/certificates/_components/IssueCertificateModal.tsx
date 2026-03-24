@@ -35,7 +35,7 @@ export default function IssueCertificateModal({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl border border-border"
+            className="bg-white w-full max-w-lg rounded-[16px] overflow-hidden shadow-2xl border border-border"
           >
             <div className="p-8 border-b border-border flex items-center justify-between bg-primary/5">
               <div className="flex items-center gap-3">

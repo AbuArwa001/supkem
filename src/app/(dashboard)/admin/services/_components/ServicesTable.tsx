@@ -23,7 +23,7 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
     }
 
     return (
-        <div className="bg-white border border-border rounded-[32px] overflow-hidden shadow-sm">
+        <div className="bg-white border border-border rounded-[16px] overflow-hidden shadow-sm">
             <table className="w-full text-left">
                 <thead className="bg-primary/[0.02] border-b border-border">
                     <tr className="text-xs font-bold text-foreground/40 uppercase tracking-widest">

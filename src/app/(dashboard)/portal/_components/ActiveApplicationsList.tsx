@@ -24,13 +24,13 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
         {loading ? (
           <div className="p-12 text-center text-slate-400 animate-pulse font-bold uppercase tracking-widest">Loading...</div>
         ) : apps.length === 0 ? (
-          <div className="p-12 text-center text-slate-500 font-medium border-2 border-slate-200 border-dashed rounded-[32px] bg-white">
+          <div className="p-12 text-center text-slate-500 font-medium border-2 border-slate-200 border-dashed rounded-[16px] bg-white">
             No active applications found.
           </div>
         ) : (
           apps.map((app, i) => (
             <Link href={`/portal/applications/${app.id}`} key={app.id || i}>
-              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="p-6 md:p-8 rounded-[32px] bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:border-primary/20 transition-all group mb-4">
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }} className="p-6 md:p-8 rounded-[16px] bg-white border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6 hover:shadow-xl hover:border-primary/20 transition-all group mb-4">
                 <div className="flex items-center gap-6">
                   <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-50 text-slate-900 rounded-2xl flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-all duration-500">
                     <Search className="w-8 h-8" strokeWidth={1.5} />

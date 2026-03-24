@@ -16,7 +16,7 @@ export function OrganizationCoreInfo({ org }: OrganizationCoreInfoProps) {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-10 rounded-[32px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-10 relative overflow-hidden"
+            className="p-10 rounded-[16px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-10 relative overflow-hidden"
         >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/[0.02] rounded-full -translate-y-1/2 translate-x-1/2" />
 

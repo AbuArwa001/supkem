@@ -75,7 +75,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
                     {/* Meta & Description */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
                         <div className="lg:col-span-2 space-y-8">
-                            <div className="bg-white rounded-[32px] p-8 lg:p-12 shadow-xl shadow-black/5 border border-slate-100">
+                            <div className="bg-white rounded-[16px] p-8 lg:p-12 shadow-xl shadow-black/5 border border-slate-100">
                                 <h2 className="text-2xl font-black font-outfit text-primary mb-6 flex items-center gap-3">
                                     <PlayCircle className="text-secondary" />
                                     About this Briefing
@@ -88,7 +88,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
 
                         {/* Sidebar / Actions */}
                         <div className="space-y-6">
-                            <div className="bg-white rounded-[32px] p-6 shadow-xl shadow-black/5 border border-slate-100 space-y-6">
+                            <div className="bg-white rounded-[16px] p-6 shadow-xl shadow-black/5 border border-slate-100 space-y-6">
                                 <p className="text-xs font-black uppercase tracking-widest text-foreground/40 px-2">Actions</p>
                                 <button className="w-full py-4 bg-primary text-white rounded-[20px] font-bold text-sm hover-lift flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
                                     <Share2 size={18} /> Share Briefing
@@ -101,7 +101,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
                                 </Link>
                             </div>
 
-                            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-[32px] p-8 text-white shadow-xl shadow-primary/20 space-y-4">
+                            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-[16px] p-8 text-white shadow-xl shadow-primary/20 space-y-4">
                                 <h3 className="text-xl font-bold font-outfit tracking-tight">Stay Informed</h3>
                                 <p className="text-sm opacity-80 leading-relaxed font-medium">Follow our official channels for the most accurate and up-to-date information.</p>
                                 <div className="pt-2">

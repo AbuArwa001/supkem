@@ -13,7 +13,7 @@ export default function PortalWelcomeBanner({ user }: PortalWelcomeBannerProps) 
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="relative min-h-[300px] md:min-h-[400px] rounded-[32px] overflow-hidden bg-slate-950 p-6 md:p-14 flex items-center shadow-2xl"
+      className="relative min-h-[300px] md:min-h-[400px] rounded-[16px] overflow-hidden bg-slate-950 p-6 md:p-14 flex items-center shadow-2xl"
     >
       <div className="absolute inset-0 opacity-40">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/3" />

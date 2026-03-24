@@ -16,7 +16,7 @@ export function OrganizationAdministrativeActions({
     onUpdateStatus
 }: OrganizationAdministrativeActionsProps) {
     return (
-        <div className="p-8 rounded-[32px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
+        <div className="p-8 rounded-[16px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-2xl" />
             <h4 className="font-bold text-lg flex items-center gap-3 font-outfit relative z-10">
                 <div className="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-sm">

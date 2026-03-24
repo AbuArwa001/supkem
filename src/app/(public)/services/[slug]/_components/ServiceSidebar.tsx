@@ -18,7 +18,7 @@ export function ServiceSidebar({ features, IconComponent }: ServiceSidebarProps)
             className="space-y-8"
         >
             {/* Features Card */}
-            <div className="bg-primary rounded-[32px] p-10 text-white shadow-xl relative overflow-hidden group">
+            <div className="bg-primary rounded-[16px] p-10 text-white shadow-xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-bl-full flex items-start justify-end p-6">
                     <IconComponent size={48} className="text-white/20 group-hover:scale-110 transition-transform duration-500" />
                 </div>
@@ -34,7 +34,7 @@ export function ServiceSidebar({ features, IconComponent }: ServiceSidebarProps)
             </div>
 
             {/* Action Card */}
-            <div className="bg-white rounded-[32px] p-8 border border-slate-200 shadow-lg text-center space-y-6">
+            <div className="bg-white rounded-[16px] p-8 border border-slate-200 shadow-lg text-center space-y-6">
                 <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
                     <FileCheck size={32} />
                 </div>

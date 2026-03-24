@@ -40,7 +40,7 @@ export function AddPersonnelModal({
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[80vh]"
+                className="bg-white w-full max-w-lg rounded-[16px] overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[80vh]"
             >
                 <div className="p-6 sm:p-8 border-b border-border flex items-center justify-between bg-slate-50/50">
                     <div className="flex items-center gap-4">

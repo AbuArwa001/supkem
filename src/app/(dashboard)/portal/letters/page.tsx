@@ -66,7 +66,7 @@ export default function LettersPage() {
       {/* Content Display */}
       <div className="space-y-12">
         {isLoading ? (
-          <div className="bg-white border border-border/50 shadow-sm rounded-[32px] overflow-hidden p-6">
+          <div className="bg-white border border-border/50 shadow-sm rounded-[16px] overflow-hidden p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((skeleton) => (
                 <div
@@ -83,7 +83,7 @@ export default function LettersPage() {
             </div>
           </div>
         ) : letters.length === 0 ? (
-          <div className="bg-white border border-border/50 shadow-sm rounded-[32px] overflow-hidden p-16 text-center">
+          <div className="bg-white border border-border/50 shadow-sm rounded-[16px] overflow-hidden p-16 text-center">
             <div className="flex flex-col items-center justify-center space-y-4">
               <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
                 <Mail size={40} />

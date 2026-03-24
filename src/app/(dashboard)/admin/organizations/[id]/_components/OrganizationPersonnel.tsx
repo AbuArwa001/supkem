@@ -22,7 +22,7 @@ export function OrganizationPersonnel({
     onOpenModal
 }: OrganizationPersonnelProps) {
     return (
-        <div className="p-8 rounded-[32px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-8 overflow-hidden relative">
+        <div className="p-8 rounded-[16px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-8 overflow-hidden relative">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">

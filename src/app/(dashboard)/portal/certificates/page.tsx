@@ -49,7 +49,7 @@ export default function CertificatesPage() {
       {/* Header section */}
       <div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-        My Certificates
+          My Certificates
         </h2>
         <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
           Access and download your official SUPKEM certificates (e.g., Islamic
@@ -70,7 +70,7 @@ export default function CertificatesPage() {
       {/* Content Display */}
       <div className="space-y-12">
         {isLoading ? (
-          <div className="bg-white border border-border/50 shadow-sm rounded-[32px] overflow-hidden p-6">
+          <div className="bg-white border border-border/50 shadow-sm rounded-[16px] overflow-hidden p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3].map((skeleton) => (
                 <div
@@ -87,7 +87,7 @@ export default function CertificatesPage() {
             </div>
           </div>
         ) : certificates.length === 0 ? (
-          <div className="bg-white border border-border/50 shadow-sm rounded-[32px] overflow-hidden p-16 text-center">
+          <div className="bg-white border border-border/50 shadow-sm rounded-[16px] overflow-hidden p-16 text-center">
             <div className="flex flex-col items-center justify-center space-y-4">
               <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
                 <Award size={40} />

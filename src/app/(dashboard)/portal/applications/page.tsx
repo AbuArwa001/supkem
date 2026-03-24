@@ -85,7 +85,7 @@ export default function ApplicationsPage() {
       )}
 
       {/* Content Display */}
-      <div className="bg-white border border-border/50 shadow-sm rounded-[32px] overflow-hidden">
+      <div className="bg-white border border-border/50 shadow-sm rounded-[16px] overflow-hidden">
         {isLoading ? (
           <div className="divide-y divide-border/30">
             {[1, 2, 3].map((skeleton) => (

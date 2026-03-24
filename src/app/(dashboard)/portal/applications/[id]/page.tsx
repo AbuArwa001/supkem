@@ -32,7 +32,7 @@ export default function ApplicationDetail() {
         console.error("Failed to fetch application", err);
         setError(
           err.response?.data?.detail ||
-            "Application not found or you don't have access.",
+          "Application not found or you don't have access.",
         );
       } finally {
         setLoading(false);
@@ -112,7 +112,7 @@ export default function ApplicationDetail() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={cn(
-          "relative overflow-hidden rounded-[32px] p-8 md:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8",
+          "relative overflow-hidden rounded-[16px] p-8 md:p-12 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8",
           application.status === "Approved"
             ? "bg-emerald-600"
             : application.status === "Rejected"
@@ -157,7 +157,7 @@ export default function ApplicationDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="p-8 bg-white border border-border/50 rounded-[32px] shadow-sm space-y-6"
+          className="p-8 bg-white border border-border/50 rounded-[16px] shadow-sm space-y-6"
         >
           <div className="flex items-center gap-4 border-b border-border/50 pb-6">
             <div className="w-12 h-12 bg-primary/5 text-primary rounded-2xl flex items-center justify-center shrink-0">
@@ -199,7 +199,7 @@ export default function ApplicationDetail() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-8 bg-white border border-border/50 rounded-[32px] shadow-sm space-y-6"
+          className="p-8 bg-white border border-border/50 rounded-[16px] shadow-sm space-y-6"
         >
           <div className="flex items-center gap-4 border-b border-border/50 pb-6">
             <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
@@ -233,7 +233,7 @@ export default function ApplicationDetail() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.3 }}
-          className="mt-8 p-8 bg-emerald-50 border border-emerald-100 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-6"
+          className="mt-8 p-8 bg-emerald-50 border border-emerald-100 rounded-[16px] flex flex-col md:flex-row items-center justify-between gap-6"
         >
           <div>
             <h3 className="text-xl font-black font-outfit text-emerald-800 tracking-tight">

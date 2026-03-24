@@ -99,7 +99,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
                 </div>
 
                 {/* Back CTA */}
-                <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-[32px] bg-primary/5 border border-primary/10">
+                <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-[16px] bg-primary/5 border border-primary/10">
                     <div className="flex items-center gap-4">
                         <div className="p-3 bg-primary/10 rounded-2xl">
                             <BookOpen size={22} className="text-primary" />

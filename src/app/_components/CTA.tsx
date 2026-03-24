@@ -8,7 +8,7 @@ export const CTA = () => {
     <section className="py-32 px-6 bg-white overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-[#0B211B] to-transparent -z-10" />
       <div className="max-w-7xl mx-auto relative group">
-        <div className="absolute inset-0 bg-primary rounded-[32px] translate-x-3 translate-y-3 transition-transform group-hover:translate-x-1.5 group-hover:translate-y-1.5 shadow-[0_40px_80px_-20px_rgba(20,83,45,0.25)]" />
+        <div className="absolute inset-0 bg-primary rounded-[16px] translate-x-3 translate-y-3 transition-transform group-hover:translate-x-1.5 group-hover:translate-y-1.5 shadow-[0_40px_80px_-20px_rgba(20,83,45,0.25)]" />
         <div className="relative bg-[#0F172A] rounded-[24px] p-16 lg:p-24 overflow-hidden border border-white/10 shadow-inner">
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 animate-pulse" />
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/15 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />

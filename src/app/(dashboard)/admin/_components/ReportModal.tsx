@@ -81,7 +81,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                       Last 30 Days
                     </span>
                   </div>
-                  <div className="p-8 bg-slate-50 border border-slate-100 rounded-[32px]">
+                  <div className="p-8 bg-slate-50 border border-slate-100 rounded-[16px]">
                     <AreaChart data={data?.growth_trend || []} />
                   </div>
                   <p className="text-sm text-slate-500 font-medium leading-relaxed">
@@ -101,7 +101,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                       Distribution
                     </h3>
                   </div>
-                  <div className="p-8 bg-slate-50 border border-slate-100 rounded-[32px]">
+                  <div className="p-8 bg-slate-50 border border-slate-100 rounded-[16px]">
                     <BarChart data={data?.status_distribution || []} />
                   </div>
                   <div className="grid grid-cols-3 gap-4">

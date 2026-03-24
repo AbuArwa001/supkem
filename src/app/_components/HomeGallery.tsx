@@ -65,7 +65,7 @@ export const HomeGallery = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.1 }}
               className={cn(
-                "relative rounded-[32px] overflow-hidden group cursor-pointer shadow-lg",
+                "relative rounded-[16px] overflow-hidden group cursor-pointer shadow-lg",
                 img.span,
               )}
             >

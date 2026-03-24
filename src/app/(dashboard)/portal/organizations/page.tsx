@@ -63,7 +63,7 @@ export default function OrganizationsPage() {
           {[1, 2, 3].map((skeleton) => (
             <div
               key={skeleton}
-              className="bg-white border border-border/50 rounded-[32px] p-6 h-64 animate-pulse"
+              className="bg-white border border-border/50 rounded-[16px] p-6 h-64 animate-pulse"
             >
               <div className="w-16 h-16 bg-slate-100 rounded-2xl mb-4" />
               <div className="h-6 w-3/4 bg-slate-100 rounded-lg mb-4" />
@@ -75,7 +75,7 @@ export default function OrganizationsPage() {
           ))}
         </div>
       ) : organizations.length === 0 ? (
-        <div className="bg-white border border-border/50 rounded-[32px] p-16 text-center">
+        <div className="bg-white border border-border/50 rounded-[16px] p-16 text-center">
           <div className="flex flex-col items-center justify-center space-y-4">
             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300">
               <Building2 size={40} />
@@ -101,7 +101,7 @@ export default function OrganizationsPage() {
             <Link
               href={`/portal/organizations/${org.id}`}
               key={org.id}
-              className="block bg-white border border-border/50 overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group rounded-[32px] relative"
+              className="block bg-white border border-border/50 overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 transition-all group rounded-[16px] relative"
             >
               {/* Card Header & Decorative elements */}
               <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity transform group-hover:scale-110 pointer-events-none">

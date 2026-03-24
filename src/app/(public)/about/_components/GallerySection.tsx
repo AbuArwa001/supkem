@@ -67,7 +67,7 @@ export function GallerySection() {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.1 }}
               className={cn(
-                "relative rounded-[32px] overflow-hidden group shadow-xl cursor-pointer bg-slate-100",
+                "relative rounded-[16px] overflow-hidden group shadow-xl cursor-pointer bg-slate-100",
                 img.span,
               )}
             >

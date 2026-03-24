@@ -36,7 +36,7 @@ export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
         </Link>
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-[14px] md:rounded-[32px] overflow-hidden shadow-lg shadow-slate-200/40">
+      <div className="bg-white border border-slate-100 rounded-[14px] md:rounded-[16px] overflow-hidden shadow-lg shadow-slate-200/40">
         <div className="overflow-x-auto scrollbar-hide">
           <table className="w-full text-left border-collapse min-w-[700px]">
             <thead>

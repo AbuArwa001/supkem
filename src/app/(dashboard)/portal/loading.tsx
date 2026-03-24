@@ -17,7 +17,7 @@ export default function DashboardLoading() {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-32 bg-white border border-slate-100 rounded-[32px] p-6 space-y-3"
+            className="h-32 bg-white border border-slate-100 rounded-[16px] p-6 space-y-3"
           >
             <div className="h-4 w-20 bg-slate-100 rounded" />
             <div className="h-8 w-24 bg-slate-200 rounded opacity-50" />

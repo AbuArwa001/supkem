@@ -209,7 +209,7 @@ export default function OrganizationDetail() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-10 rounded-[32px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-10 relative overflow-hidden"
+            className="p-10 rounded-[16px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-10 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/[0.02] rounded-full -translate-y-1/2 translate-x-1/2" />
 
@@ -373,7 +373,7 @@ export default function OrganizationDetail() {
         </div>
 
         <div className="space-y-6">
-          <div className="p-8 rounded-[32px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-8 overflow-hidden relative">
+          <div className="p-8 rounded-[16px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-8 overflow-hidden relative">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
@@ -465,7 +465,7 @@ export default function OrganizationDetail() {
                 initial={{ opacity: 0, scale: 0.95, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="bg-white w-full max-w-lg rounded-[32px] overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[80vh]"
+                className="bg-white w-full max-w-lg rounded-[16px] overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[80vh]"
               >
                 <div className="p-6 sm:p-8 border-b border-border flex items-center justify-between bg-slate-50/50">
                   <div className="flex items-center gap-4">

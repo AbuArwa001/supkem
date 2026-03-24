@@ -25,7 +25,7 @@ export const StatCard = ({
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5, ease: "easeOut" }}
-    className="p-8 rounded-[32px] bg-white border border-slate-300/50 border-l-4 border-l-indigo-500 shadow-md hover:shadow-2xl hover:shadow-indigo-500/10 transition-all group relative overflow-hidden"
+    className="p-8 rounded-[16px] bg-white border border-slate-300/50 border-l-4 border-l-indigo-500 shadow-md hover:shadow-2xl hover:shadow-indigo-500/10 transition-all group relative overflow-hidden"
   >
     <div className="flex items-start justify-between relative z-10">
       <div>

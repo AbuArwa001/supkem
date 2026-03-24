@@ -403,7 +403,7 @@ export default function SubmitApplication() {
                     <label
                       key={service.id}
                       className={cn(
-                        "p-6 rounded-[32px] border-2 cursor-pointer transition-all flex flex-col gap-4 group relative overflow-hidden",
+                        "p-6 rounded-[16px] border-2 cursor-pointer transition-all flex flex-col gap-4 group relative overflow-hidden",
                         formData.service === service.id
                           ? "border-primary bg-primary/[0.03] shadow-2xl shadow-primary/10"
                           : errors.service

@@ -100,7 +100,7 @@ export default async function NewsPaperViewPage({
       <main className="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
         <div className="flex flex-col gap-8">
           {/* Actions Bar */}
-          <div className="bg-white rounded-[32px] p-6 shadow-2xl shadow-black/5 border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="bg-white rounded-[16px] p-6 shadow-2xl shadow-black/5 border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="p-3 bg-primary/10 rounded-2xl">
                 <BookOpen size={24} className="text-primary" />
@@ -129,7 +129,7 @@ export default async function NewsPaperViewPage({
             <object
               data={pdfUrl}
               type="application/pdf"
-              className="w-full h-full rounded-[32px]"
+              className="w-full h-full rounded-[16px]"
             >
               <div className="flex flex-col items-center justify-center h-full space-y-4">
                 <p className="text-foreground/60 font-medium">

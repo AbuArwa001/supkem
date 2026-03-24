@@ -25,7 +25,7 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full"
+      className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full"
     >
       <div className="aspect-[3/4] relative bg-primary/5 flex items-center justify-center overflow-hidden">
         {imageUrl ? (
@@ -50,9 +50,9 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
             {item.is_published ? "Published" : "Draft"}
           </span>
           {item.issue_number && (
-             <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-white">
-                Issue {item.issue_number}
-             </span>
+            <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-white">
+              Issue {item.issue_number}
+            </span>
           )}
         </div>
       </div>
@@ -68,16 +68,16 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
         </div>
 
         <div className="pt-6 mt-auto border-t border-border/50 flex items-center justify-between">
-            {item.file && (
-               <a 
-                 href={item.file.startsWith("http") ? item.file : `${API_BASE_URL}${item.file}`}
-                 target="_blank"
-                 rel="noreferrer"
-                 className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/5 px-3 py-2 rounded-xl hover:bg-primary hover:text-white transition-all"
-               >
-                 <Download size={14} /> Download PDF
-               </a>
-            )}
+          {item.file && (
+            <a
+              href={item.file.startsWith("http") ? item.file : `${API_BASE_URL}${item.file}`}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/5 px-3 py-2 rounded-xl hover:bg-primary hover:text-white transition-all"
+            >
+              <Download size={14} /> Download PDF
+            </a>
+          )}
           <div className="flex items-center gap-2 ml-auto">
             <button
               onClick={onEdit}

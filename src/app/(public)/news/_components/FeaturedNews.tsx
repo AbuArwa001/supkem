@@ -57,7 +57,7 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
                             return (
                                 <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
                                     <Link href={`/news/${item.slug}`} className="block">
-                                        <div className="aspect-video bg-primary/5 rounded-[32px] overflow-hidden mb-8 relative">
+                                        <div className="aspect-video bg-primary/5 rounded-[16px] overflow-hidden mb-8 relative">
                                             <Image
                                                 src={imageSource}
                                                 alt={item.title}
@@ -95,7 +95,7 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
                                 return (
                                     <Link href={`/news/${item.slug}`} key={i} className="block group/item">
                                         <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
-                                            <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[32px] overflow-hidden shrink-0 relative">
+                                            <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[16px] overflow-hidden shrink-0 relative">
                                                 <Image
                                                     src={imageSource}
                                                     alt={item.title}

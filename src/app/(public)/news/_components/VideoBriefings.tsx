@@ -56,7 +56,7 @@ export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
             <Link
               key={i}
               href={`/videos/${video.id}`}
-              className="bg-white border border-border rounded-[32px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
+              className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
             >
               <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 pointer-events-none z-10 bg-black/20 group-hover:bg-transparent transition-colors" />

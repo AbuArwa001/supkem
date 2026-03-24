@@ -11,7 +11,7 @@ interface VideoMetadataSidebarProps {
 export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
   return (
     <div className="lg:col-span-4 space-y-6">
-      <div className="bg-white border border-border rounded-[32px] p-8 space-y-8">
+      <div className="bg-white border border-border rounded-[16px] p-8 space-y-8">
         <h3 className="text-xl font-bold font-outfit text-primary">
           Metadata Details
         </h3>
@@ -87,7 +87,7 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-secondary to-primary-dark rounded-[32px] p-8 text-white shadow-xl shadow-secondary/20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-secondary to-primary-dark rounded-[16px] p-8 text-white shadow-xl shadow-secondary/20 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 rotate-12">
           <Film size={80} />
         </div>

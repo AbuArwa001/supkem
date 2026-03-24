@@ -10,7 +10,7 @@ export default function ServiceHeader({ app }: { app: any }) {
         <h3 className="text-2xl font-bold font-outfit">Service Details</h3>
       </div>
 
-      <div className="p-8 rounded-[32px] bg-primary/[0.02] border border-primary/10 flex items-center justify-between">
+      <div className="p-8 rounded-[16px] bg-primary/[0.02] border border-primary/10 flex items-center justify-between">
         <div>
           <h4 className="text-2xl font-bold text-primary font-outfit mb-1">
             {app.service_name}

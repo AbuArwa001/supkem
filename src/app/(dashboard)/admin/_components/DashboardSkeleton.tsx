@@ -20,7 +20,7 @@ export const DashboardSkeleton = () => {
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className="p-8 rounded-[32px] bg-white border border-slate-100 space-y-4"
+            className="p-8 rounded-[16px] bg-white border border-slate-100 space-y-4"
           >
             <div className="flex items-start justify-between">
               <div className="space-y-3">
@@ -42,7 +42,7 @@ export const DashboardSkeleton = () => {
             <Skeleton className="h-7 w-48 rounded-xl" />
             <Skeleton className="h-5 w-24 rounded-lg" />
           </div>
-          <div className="bg-white border border-slate-100 rounded-[32px] overflow-hidden">
+          <div className="bg-white border border-slate-100 rounded-[16px] overflow-hidden">
             {/* Table Header */}
             <div className="flex items-center gap-6 px-8 py-5 border-b border-slate-100 bg-slate-50/50">
               <Skeleton className="h-3 w-24 rounded" />
@@ -71,7 +71,7 @@ export const DashboardSkeleton = () => {
         {/* Sidebar Skeleton */}
         <div className="space-y-4">
           <Skeleton className="h-7 w-40 rounded-xl" />
-          <div className="bg-white border border-slate-100 rounded-[32px] overflow-hidden divide-y divide-slate-50">
+          <div className="bg-white border border-slate-100 rounded-[16px] overflow-hidden divide-y divide-slate-50">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="flex items-center gap-4 px-6 py-5">
                 <Skeleton className="h-10 w-10 rounded-2xl shrink-0" />

@@ -15,11 +15,11 @@ export const VideoPlayerSection = ({
 }: VideoPlayerSectionProps) => {
   return (
     <div className="lg:col-span-8 space-y-8">
-      <div className="aspect-video bg-black rounded-[32px] overflow-hidden shadow-2xl border-4 border-white shadow-primary/5 relative">
+      <div className="aspect-video bg-black rounded-[16px] overflow-hidden shadow-2xl border-4 border-white shadow-primary/5 relative">
         <VideoPlayer url={videoUrl} />
       </div>
 
-      <div className="bg-white border border-border rounded-[32px] p-8 lg:p-12 space-y-6">
+      <div className="bg-white border border-border rounded-[16px] p-8 lg:p-12 space-y-6">
         <div className="flex items-center gap-3">
           <span
             className={cn(
