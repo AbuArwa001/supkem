@@ -113,7 +113,7 @@ export const UserDetailsSheet = ({
               <DetailRow 
                 icon={Calendar} 
                 label="Member Since" 
-                value={displayUser?.created_at ? format(new Date(displayUser.created_at), "MMMM dd, yyyy") : null} 
+                value={(displayUser?.date_joined || displayUser?.created_at) ? format(new Date(displayUser.date_joined || displayUser.created_at), "MMMM dd, yyyy") : null} 
               />
               <DetailRow 
                 icon={Hash} 

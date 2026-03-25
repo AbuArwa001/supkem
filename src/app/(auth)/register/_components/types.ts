@@ -3,7 +3,7 @@ export interface RegisterFormData {
   middle_name: string;
   last_name: string;
   email: string;
-  phone: string;
+  phone_number: string;
   password: string;
   confirm_password?: string;
 }

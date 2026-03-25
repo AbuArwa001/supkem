@@ -14,7 +14,7 @@ export function useRegisterLogic() {
     middle_name: "",
     last_name: "",
     email: "",
-    phone: "",
+    phone_number: "",
     password: "",
     confirm_password: "",
   });
@@ -34,7 +34,7 @@ export function useRegisterLogic() {
     if (!formData.email.trim()) newErrors.email = "Email is required.";
     else if (!emailRegex.test(formData.email)) newErrors.email = "Invalid email format.";
 
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
+    if (!formData.phone_number.trim()) newErrors.phone_number = "Phone number is required.";
 
     if (!formData.password) newErrors.password = "Password is required.";
     else if (formData.password.length < 8) newErrors.password = "Password must be at least 8 characters.";

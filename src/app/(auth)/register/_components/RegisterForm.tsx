@@ -143,22 +143,22 @@ export function RegisterForm({ formData, setFormData, onSubmit, loading, error, 
           </label>
           <div className="relative group">
             <Phone
-              className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${fieldErrors.phone ? 'text-red-400' : 'text-primary/30 group-focus-within:text-primary'}`}
+              className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${fieldErrors.phone_number ? 'text-red-400' : 'text-primary/30 group-focus-within:text-primary'}`}
               size={20}
             />
             <input
               required
-              value={formData.phone}
+              value={formData.phone_number}
               onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
+                setFormData({ ...formData, phone_number: e.target.value })
               }
-              className={`w-full bg-primary/[0.02] border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none ${fieldErrors.phone ? 'border-red-300' : 'border-border'}`}
+              className={`w-full bg-primary/[0.02] border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none ${fieldErrors.phone_number ? 'border-red-300' : 'border-border'}`}
               placeholder="+254 7XX XXX XXX"
             />
           </div>
-          {fieldErrors.phone && (
+          {fieldErrors.phone_number && (
             <p className="text-xs text-red-500 font-medium ml-1 flex items-center gap-1 mt-1">
-                {fieldErrors.phone}
+                {fieldErrors.phone_number}
             </p>
           )}
         </div>
