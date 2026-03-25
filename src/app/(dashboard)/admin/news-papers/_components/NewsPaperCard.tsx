@@ -35,6 +35,12 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
+        ) : item.file ? (
+          <iframe
+            src={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file)}&embedded=true`}
+            className="w-full h-full group-hover:scale-105 transition-transform duration-700 opacity-90 scale-110"
+            title={item.title}
+          />
         ) : (
           <BookOpen className="text-primary/20" size={48} />
         )}
