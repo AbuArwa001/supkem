@@ -7,7 +7,18 @@ async function fetchAllPages(url: string, getter: (u: string) => Promise<any>) {
     const res = await getter(next);
     const data = res.data;
     results = results.concat(data.results ?? data);
-    next = data.next ?? null;
+    // DRF returns an absolute URL for `next`; strip the origin so the
+    // axios instance resolves it against its own configured baseURL.
+    if (data.next) {
+      try {
+        const parsed = new URL(data.next);
+        next = parsed.pathname + parsed.search;
+      } catch {
+        next = data.next;
+      }
+    } else {
+      next = null;
+    }
   }
   return results;
 }
