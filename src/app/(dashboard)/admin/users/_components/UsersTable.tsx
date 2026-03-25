@@ -33,6 +33,7 @@ interface UsersTableProps {
   onNext: () => void;
   hasPrev: boolean;
   hasNext: boolean;
+  onView: (user: User) => void;
   onEdit: (user: User) => void;
   onDelete: (user: User) => void;
   searchQuery: string;
@@ -47,6 +48,7 @@ export const UsersTable = ({
   onNext,
   hasPrev,
   hasNext,
+  onView,
   onEdit,
   onDelete,
   searchQuery,
@@ -100,6 +102,7 @@ export const UsersTable = ({
                   <UserRow
                     key={user.id}
                     user={user}
+                    onView={onView}
                     onEdit={onEdit}
                     onDelete={onDelete}
                   />

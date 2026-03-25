@@ -8,6 +8,7 @@ import {
   MoreVertical,
   Edit2,
   Trash2,
+  Info,
 } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -31,11 +32,12 @@ interface User {
 
 interface UserRowProps {
   user: User;
+  onView: (user: User) => void;
   onEdit: (user: User) => void;
   onDelete: (user: User) => void;
 }
 
-export const UserRow = ({ user, onEdit, onDelete }: UserRowProps) => {
+export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
   return (
     <TableRow className="hover:bg-slate-50/50 transition-colors border-slate-50/50 group h-24">
       <TableCell className="px-8">
@@ -91,6 +93,13 @@ export const UserRow = ({ user, onEdit, onDelete }: UserRowProps) => {
             align="end"
             className="rounded-[1.5rem] border-none shadow-premium p-3 min-w-[200px] bg-white"
           >
+            <DropdownMenuItem
+              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest"
+              onClick={() => onView(user)}
+            >
+              <Info className="h-4 w-4 mr-3 text-slate-300" />
+              View Details
+            </DropdownMenuItem>
             <DropdownMenuItem
               className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest"
               onClick={() => onEdit(user)}

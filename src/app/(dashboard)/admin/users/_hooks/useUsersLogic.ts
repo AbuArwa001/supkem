@@ -22,6 +22,7 @@ export const useUsersLogic = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const {
     data: userData,
@@ -54,6 +55,11 @@ export const useUsersLogic = () => {
     setIsEditModalOpen(true);
   };
 
+  const handleOpenDetail = (user: any) => {
+    setSelectedUser(user);
+    setIsDetailOpen(true);
+  };
+
   return {
     isAdmin,
     users,
@@ -73,6 +79,9 @@ export const useUsersLogic = () => {
     setIsEditModalOpen,
     selectedUser,
     handleDelete,
-    handleOpenEdit
+    handleOpenEdit,
+    isDetailOpen,
+    setIsDetailOpen,
+    handleOpenDetail,
   };
 };

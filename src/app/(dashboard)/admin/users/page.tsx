@@ -48,6 +48,9 @@ export default function UsersPage() {
     selectedUser,
     handleDelete,
     handleOpenEdit,
+    isDetailOpen,
+    setIsDetailOpen,
+    handleOpenDetail,
   } = useUsersLogic();
 
   if (!isAdmin) {
@@ -85,6 +88,7 @@ export default function UsersPage() {
           onNext={() => setPage((p) => p + 1)}
           hasPrev={hasPrev}
           hasNext={hasNext}
+          onView={handleOpenDetail}
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
           searchQuery={searchQuery}
@@ -96,6 +100,8 @@ export default function UsersPage() {
         onAddOpenChange={setIsAddModalOpen}
         isEditOpen={isEditModalOpen}
         onEditOpenChange={setIsEditModalOpen}
+        isDetailOpen={isDetailOpen}
+        onDetailOpenChange={setIsDetailOpen}
         selectedUser={selectedUser}
         onSuccess={mutate}
       />

@@ -2,12 +2,15 @@
 
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { UserForm } from "@/components/forms/UserForm";
+import { UserDetailsSheet } from "./UserDetailsSheet";
 
 interface UserDialogsProps {
   isAddOpen: boolean;
   onAddOpenChange: (open: boolean) => void;
   isEditOpen: boolean;
   onEditOpenChange: (open: boolean) => void;
+  isDetailOpen: boolean;
+  onDetailOpenChange: (open: boolean) => void;
   selectedUser: any;
   onSuccess: () => void;
 }
@@ -17,6 +20,8 @@ export const UserDialogs = ({
   onAddOpenChange,
   isEditOpen,
   onEditOpenChange,
+  isDetailOpen,
+  onDetailOpenChange,
   selectedUser,
   onSuccess,
 }: UserDialogsProps) => {
@@ -68,6 +73,12 @@ export const UserDialogs = ({
           </div>
         </DialogContent>
       </Dialog>
+
+      <UserDetailsSheet
+        isOpen={isDetailOpen}
+        onOpenChange={onDetailOpenChange}
+        user={selectedUser}
+      />
     </>
   );
 };
