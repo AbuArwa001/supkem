@@ -24,7 +24,7 @@ export const NewsService = {
      * @returns List of news items.
      */
     async getNews(): Promise<NewsItem[]> {
-        const response = await api.get<NewsItem[] | NewsResponse>("/news/");
+        const response = await api.get<NewsItem[] | NewsResponse>("/news/news/");
         if (Array.isArray(response.data)) {
             return response.data;
         }
@@ -37,7 +37,7 @@ export const NewsService = {
      * @returns The created news item.
      */
     async createNews(data: FormData): Promise<NewsItem> {
-        const response = await api.post<NewsItem>("/news/", data, {
+        const response = await api.post<NewsItem>("/news/news/", data, {
             headers: { "Content-Type": "multipart/form-data" }
         });
         return response.data;
@@ -50,7 +50,7 @@ export const NewsService = {
      * @returns The updated news item.
      */
     async updateNews(slug: string, data: FormData): Promise<NewsItem> {
-        const response = await api.patch<NewsItem>(`/news/${slug}/`, data, {
+        const response = await api.patch<NewsItem>(`/news/news/${slug}/`, data, {
             headers: { "Content-Type": "multipart/form-data" }
         });
         return response.data;
