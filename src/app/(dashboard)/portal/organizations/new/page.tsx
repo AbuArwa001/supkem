@@ -1,5 +1,17 @@
 "use client";
 
+async function fetchAllPages(url: string, getter: (u: string) => Promise<any>) {
+  let results: any[] = [];
+  let next: string | null = url;
+  while (next) {
+    const res = await getter(next);
+    const data = res.data;
+    results = results.concat(data.results ?? data);
+    next = data.next ?? null;
+  }
+  return results;
+}
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
@@ -47,10 +59,11 @@ export default function RegisterOrganization() {
     const regionId = e.target.value;
     setFormData((prev) => ({ ...prev, region: regionId, county_council: "" }));
     try {
-      const res = await api.get(
+      const all = await fetchAllPages(
         `/locations/county-councils/?region=${regionId}`,
+        (url) => api.get(url),
       );
-      setCouncils(res.data.results || res.data);
+      setCouncils(all);
     } catch (err) {
       console.error("Failed to fetch councils", err);
     }
