@@ -34,7 +34,7 @@ export default function RegisterOrganization() {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const res = await api.get("/locations/locations/regions/");
+        const res = await api.get("/locations/regions/");
         setRegions(res.data.results || res.data);
       } catch (err) {
         console.error("Failed to fetch regions", err);
@@ -48,7 +48,7 @@ export default function RegisterOrganization() {
     setFormData((prev) => ({ ...prev, region: regionId, county_council: "" }));
     try {
       const res = await api.get(
-        `/locations/locations/county-councils/?region=${regionId}`,
+        `/locations/county-councils/?region=${regionId}`,
       );
       setCouncils(res.data.results || res.data);
     } catch (err) {
