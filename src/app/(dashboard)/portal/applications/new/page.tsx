@@ -866,7 +866,7 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
                       <input
                         type="text"
-                        placeholder="Khalfani Athman"
+                        placeholder="S"
                         className={cn(
                           "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
                           errors.husband_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
@@ -979,7 +979,7 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
                       <input
                         type="text"
-                        placeholder="Riziki Mohamed"
+                        placeholder="Salma Salim"
                         className={cn(
                           "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
                           errors.wife_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
@@ -993,7 +993,7 @@ export default function SubmitApplication() {
                       <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID / Passport No.</label>
                       <input
                         type="text"
-                        placeholder="ID NO: 32288080"
+                        placeholder="ID NO: XXXXXXXX"
                         className={cn(
                           "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
                           errors.wife_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
