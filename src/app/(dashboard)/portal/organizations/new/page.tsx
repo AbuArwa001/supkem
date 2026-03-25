@@ -27,8 +27,8 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterOrganization() {
   const [loading, setLoading] = useState(false);
-  const [regions, setRegions] = useState([]);
-  const [councils, setCouncils] = useState([]);
+  const [regions, setRegions] = useState<any[]>([]);
+  const [councils, setCouncils] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     type: "Mosque",
