@@ -7,14 +7,17 @@ async function fetchAllPages(url: string, getter: (u: string) => Promise<any>) {
     const res = await getter(next);
     const data = res.data;
     results = results.concat(data.results ?? data);
-    // DRF returns an absolute URL for `next`; strip the origin so the
-    // axios instance resolves it against its own configured baseURL.
+    // DRF's `next` is an absolute URL that already includes the /api/v1 prefix.
+    // Passing it directly would double up the axios baseURL prefix.
+    // Instead, grab only the query string and graft it onto the original
+    // relative path so axios resolves it correctly against its baseURL.
     if (data.next) {
       try {
-        const parsed = new URL(data.next);
-        next = parsed.pathname + parsed.search;
+        const nextSearch = new URL(data.next).search;
+        const basePath: string = next.split("?")[0];
+        next = basePath + nextSearch;
       } catch {
-        next = data.next;
+        next = null;
       }
     } else {
       next = null;
