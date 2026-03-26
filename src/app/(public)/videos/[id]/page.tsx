@@ -3,6 +3,7 @@ import Link from "next/link";
 import api, { API_BASE_URL } from "@/lib/api";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/news/VideoPlayer";
+import ShareButton from "@/components/news/ShareButton";
 
 async function getVideo(id: string) {
     try {
@@ -90,9 +91,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
                         <div className="space-y-6">
                             <div className="bg-white rounded-[16px] p-6 shadow-xl shadow-black/5 border border-slate-100 space-y-6">
                                 <p className="text-xs font-black uppercase tracking-widest text-foreground/40 px-2">Actions</p>
-                                <button className="w-full py-4 bg-primary text-white rounded-[20px] font-bold text-sm hover-lift flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
-                                    <Share2 size={18} /> Share Briefing
-                                </button>
+                                <ShareButton title={video.title} />
                                 <Link
                                     href="/news"
                                     className="w-full py-4 bg-slate-50 text-primary rounded-[20px] font-bold text-sm hover:bg-primary/5 transition-all flex items-center justify-center gap-2 border border-slate-100"
