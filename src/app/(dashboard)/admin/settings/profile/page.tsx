@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuth } from "@/hooks/useAuth";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   User,
   Mail,
@@ -23,11 +23,23 @@ export default function ProfileSettings() {
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    first_name: user?.first_name || "",
-    middle_name: user?.middle_name || "",
-    last_name: user?.last_name || "",
-    phone: user?.phone || "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    phone_number: "",
   });
+
+  // Pre-fill form when user data is available
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        first_name: user.first_name || "",
+        middle_name: user.middle_name || "",
+        last_name: user.last_name || "",
+        phone_number: user.phone_number || "",
+      });
+    }
+  }, [user]);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
@@ -176,11 +188,12 @@ export default function ProfileSettings() {
                     size={20}
                   />
                   <input
-                    value={formData.phone}
+                    value={formData.phone_number}
                     onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
+                      setFormData({ ...formData, phone_number: e.target.value })
                     }
                     className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
+                    placeholder="+254 7XX XXX XXX"
                   />
                 </div>
               </div>
