@@ -39,7 +39,7 @@ interface SystemParameter {
     description: string;
     value: string;
     data_type: 'string' | 'number' | 'boolean' | 'json';
-    category: 'general' | 'financial' | 'logistics' | 'notifications' | 'system';
+    category: 'general' | 'financial' | 'notifications' | 'system';
     updated_at: string;
 }
 

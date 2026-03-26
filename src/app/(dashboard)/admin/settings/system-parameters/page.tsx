@@ -37,7 +37,7 @@ interface SystemParameter {
     description: string;
     value: string;
     data_type: 'string' | 'number' | 'boolean' | 'json';
-    category: 'general' | 'financial' | 'logistics' | 'notifications' | 'system';
+    category: 'general' | 'financial' | 'notifications' | 'system';
     updated_at: string;
 }
 
@@ -61,7 +61,6 @@ const item = {
 const CATEGORY_CONFIG: Record<ParameterCategory, { label: string; icon: any; color: string }> = {
     general: { label: "General", icon: LayoutDashboard, color: "text-indigo-600 bg-indigo-50" },
     financial: { label: "Financial", icon: DollarSign, color: "text-emerald-600 bg-emerald-50" },
-    logistics: { label: "Logistics", icon: Truck, color: "text-amber-600 bg-amber-50" },
     notifications: { label: "Notifications", icon: Bell, color: "text-rose-600 bg-rose-50" },
     system: { label: "System", icon: Cpu, color: "text-slate-600 bg-slate-50" },
 };
