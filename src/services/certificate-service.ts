@@ -5,6 +5,8 @@ export interface Certificate {
   serial_number: string;
   issued_at: string;
   expires_at: string | null;
+  service_name?: string;
+  organization_name?: string;
   application: string | number;
   application_detail?: {
     service_name: string;
