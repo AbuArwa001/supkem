@@ -16,7 +16,7 @@ export async function sendContactEmail(formData: FormData) {
         }
 
         const { data, error } = await resend.emails.send({
-            from: "SUPKEM Portal <noreply@supkem.co.ke>",
+            from: "SUPKEM Portal <contact@supkem.co.ke>",
             to: ["info@supkem.org"],
             // bcc: [email],
             replyTo: email,
