@@ -220,7 +220,8 @@ export default function PortalProfileSettings() {
               <span className="text-secondary font-black">
                 {user?.role?.role_name || "Portal User"}
               </span>
-              . Keep your contact information up to date to receive important updates.
+              . Keep your contact information up to date to receive important
+              updates.
             </p>
           </div>
         </div>
