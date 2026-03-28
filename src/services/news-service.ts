@@ -37,7 +37,8 @@ export const NewsGalleryService = {
         files.forEach((f) => data.append("images", f));
         const response = await api.post<NewsGalleryItem[]>(
             `/news/news/${slug}/gallery/`,
-            data
+            data,
+            { headers: { "Content-Type": "multipart/form-data" } }
         );
         return response.data;
     },
@@ -74,7 +75,9 @@ export const NewsService = {
      * @returns The created news item.
      */
     async createNews(data: FormData): Promise<NewsItem> {
-        const response = await api.post<NewsItem>("/news/news/", data);
+        const response = await api.post<NewsItem>("/news/news/", data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
         return response.data;
     },
 
@@ -85,7 +88,9 @@ export const NewsService = {
      * @returns The updated news item.
      */
     async updateNews(slug: string, data: FormData): Promise<NewsItem> {
-        const response = await api.patch<NewsItem>(`/news/news/${slug}/`, data);
+        const response = await api.patch<NewsItem>(`/news/news/${slug}/`, data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
         return response.data;
     },
 
@@ -120,12 +125,16 @@ export const NewsPaperService = {
     },
 
     async createNewsPaper(data: FormData): Promise<NewsPaperItem> {
-        const response = await api.post<NewsPaperItem>("/news/news_papers/", data);
+        const response = await api.post<NewsPaperItem>("/news/news_papers/", data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
         return response.data;
     },
 
     async updateNewsPaper(id: string, data: FormData): Promise<NewsPaperItem> {
-        const response = await api.patch<NewsPaperItem>(`/news/news_papers/${id}/`, data);
+        const response = await api.patch<NewsPaperItem>(`/news/news_papers/${id}/`, data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
         return response.data;
     },
 
