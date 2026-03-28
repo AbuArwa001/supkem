@@ -25,6 +25,12 @@ export default function AdminNews() {
     handleCloseModal,
     handleSubmit,
     handleDelete,
+    pendingGalleryFiles,
+    savedGallery,
+    isDeletingGalleryId,
+    handleAddGalleryFiles,
+    handleRemovePendingFile,
+    handleDeleteSavedImage,
   } = useNewsLogic();
 
   return (
@@ -50,6 +56,12 @@ export default function AdminNews() {
         setFormData={setFormData}
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
+        pendingGalleryFiles={pendingGalleryFiles}
+        savedGallery={savedGallery}
+        isDeletingGalleryId={isDeletingGalleryId}
+        onAddGalleryFiles={handleAddGalleryFiles}
+        onRemovePendingFile={handleRemovePendingFile}
+        onDeleteSavedImage={handleDeleteSavedImage}
       />
     </div>
   );

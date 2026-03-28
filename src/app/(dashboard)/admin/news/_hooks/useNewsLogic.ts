@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { NewsService, NewsItem } from "@/services/news-service";
+import { NewsService, NewsGalleryService, NewsItem, NewsGalleryItem } from "@/services/news-service";
 
 export function useNewsLogic() {
     const [news, setNews] = useState<NewsItem[]>([]);
@@ -11,9 +11,14 @@ export function useNewsLogic() {
         title: "",
         content: "",
         is_published: true,
-        featured_image: null as File | null
+        featured_image: null as File | null,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Gallery state
+    const [pendingGalleryFiles, setPendingGalleryFiles] = useState<File[]>([]);
+    const [savedGallery, setSavedGallery] = useState<NewsGalleryItem[]>([]);
+    const [isDeletingGalleryId, setIsDeletingGalleryId] = useState<string | null>(null);
 
     const fetchNews = async () => {
         setLoading(true);
@@ -38,22 +43,47 @@ export function useNewsLogic() {
                 title: item.title,
                 content: item.content,
                 is_published: item.is_published,
-                featured_image: null
+                featured_image: null,
             });
+            setSavedGallery(item.gallery || []);
         } else {
             setEditingItem(null);
             setFormData({
                 title: "",
                 content: "",
                 is_published: true,
-                featured_image: null
+                featured_image: null,
             });
+            setSavedGallery([]);
         }
+        setPendingGalleryFiles([]);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+        setPendingGalleryFiles([]);
+    };
+
+    const handleAddGalleryFiles = (files: File[]) => {
+        setPendingGalleryFiles((prev) => [...prev, ...files]);
+    };
+
+    const handleRemovePendingFile = (index: number) => {
+        setPendingGalleryFiles((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleDeleteSavedImage = async (galleryId: string) => {
+        if (!editingItem) return;
+        setIsDeletingGalleryId(galleryId);
+        try {
+            await NewsGalleryService.deleteImage(editingItem.slug, galleryId);
+            setSavedGallery((prev) => prev.filter((img) => img.id !== galleryId));
+        } catch (err) {
+            console.error("Failed to delete gallery image", err);
+        } finally {
+            setIsDeletingGalleryId(null);
+        }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -69,11 +99,20 @@ export function useNewsLogic() {
         }
 
         try {
+            let slug: string;
             if (editingItem) {
-                await NewsService.updateNews(editingItem.slug, data);
+                const updated = await NewsService.updateNews(editingItem.slug, data);
+                slug = updated.slug;
             } else {
-                await NewsService.createNews(data);
+                const created = await NewsService.createNews(data);
+                slug = created.slug;
             }
+
+            // Upload pending gallery images after save
+            if (pendingGalleryFiles.length > 0) {
+                await NewsGalleryService.addImages(slug, pendingGalleryFiles);
+            }
+
             setIsModalOpen(false);
             fetchNews();
         } catch (err) {
@@ -115,5 +154,12 @@ export function useNewsLogic() {
         handleSubmit,
         handleDelete,
         fetchNews,
+        // Gallery
+        pendingGalleryFiles,
+        savedGallery,
+        isDeletingGalleryId,
+        handleAddGalleryFiles,
+        handleRemovePendingFile,
+        handleDeleteSavedImage,
     };
 }

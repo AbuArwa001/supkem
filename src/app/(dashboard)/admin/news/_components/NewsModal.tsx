@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Image as ImageIcon, CheckCircle2, Loader2 } from "lucide-react";
+import {
+  X,
+  Image as ImageIcon,
+  CheckCircle2,
+  Loader2,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import dynamic from "next/dynamic";
-import { NewsItem } from "@/services/news-service";
+import { NewsItem, NewsGalleryItem } from "@/services/news-service";
 import { cn } from "@/lib/utils";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
@@ -20,10 +27,82 @@ interface NewsModalProps {
   setFormData: (data: any) => void;
   isSubmitting: boolean;
   onSubmit: (e: React.FormEvent) => void;
+  // Gallery props
+  pendingGalleryFiles: File[];
+  savedGallery: NewsGalleryItem[];
+  isDeletingGalleryId: string | null;
+  onAddGalleryFiles: (files: File[]) => void;
+  onRemovePendingFile: (index: number) => void;
+  onDeleteSavedImage: (id: string) => void;
+}
+
+/** Renders a thumbnail for a pending (local) gallery file. */
+function PendingGalleryThumb({
+  file,
+  index,
+  onRemove,
+}: {
+  file: File;
+  index: number;
+  onRemove: (i: number) => void;
+}) {
+  const url = React.useMemo(() => URL.createObjectURL(file), [file]);
+  React.useEffect(() => () => URL.revokeObjectURL(url), [url]);
+
+  return (
+    <div className="relative group rounded-xl overflow-hidden aspect-square border border-border">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={url} alt={file.name} className="w-full h-full object-cover" />
+      <button
+        type="button"
+        onClick={() => onRemove(index)}
+        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
+        aria-label="Remove image"
+      >
+        <Trash2 size={18} />
+      </button>
+    </div>
+  );
+}
+
+/** Renders a thumbnail for an already-saved gallery image. */
+function SavedGalleryThumb({
+  item,
+  isDeleting,
+  onDelete,
+}: {
+  item: NewsGalleryItem;
+  isDeleting: boolean;
+  onDelete: (id: string) => void;
+}) {
+  return (
+    <div className="relative group rounded-xl overflow-hidden aspect-square border border-border">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.image}
+        alt={item.caption || "Gallery image"}
+        className="w-full h-full object-cover"
+      />
+      <button
+        type="button"
+        onClick={() => onDelete(item.id)}
+        disabled={isDeleting}
+        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white disabled:cursor-not-allowed"
+        aria-label="Delete image"
+      >
+        {isDeleting ? (
+          <Loader2 size={18} className="animate-spin" />
+        ) : (
+          <Trash2 size={18} />
+        )}
+      </button>
+    </div>
+  );
 }
 
 /**
- * Modal component for creating and editing news items.
+ * Modal component for creating and editing news items,
+ * including gallery image uploads.
  */
 export function NewsModal({
   isOpen,
@@ -33,7 +112,36 @@ export function NewsModal({
   setFormData,
   isSubmitting,
   onSubmit,
+  pendingGalleryFiles,
+  savedGallery,
+  isDeletingGalleryId,
+  onAddGalleryFiles,
+  onRemovePendingFile,
+  onDeleteSavedImage,
 }: NewsModalProps) {
+  const handleGalleryDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer.files).filter((f) =>
+        f.type.startsWith("image/")
+      );
+      if (files.length > 0) onAddGalleryFiles(files);
+    },
+    [onAddGalleryFiles]
+  );
+
+  const handleGalleryInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(e.target.files || []);
+      if (files.length > 0) onAddGalleryFiles(files);
+      e.target.value = "";
+    },
+    [onAddGalleryFiles]
+  );
+
+  const totalGalleryCount =
+    savedGallery.length + pendingGalleryFiles.length;
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -51,6 +159,7 @@ export function NewsModal({
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
             className="relative w-full max-w-2xl bg-white rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
           >
+            {/* Header */}
             <div className="p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
                 {editingItem ? "Edit News" : "Create News"}
@@ -65,8 +174,9 @@ export function NewsModal({
 
             <form
               onSubmit={onSubmit}
-              className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar"
+              className="p-8 space-y-6 max-h-[75vh] overflow-y-auto custom-scrollbar"
             >
+              {/* Title */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
                   Title
@@ -82,6 +192,7 @@ export function NewsModal({
                 />
               </div>
 
+              {/* Content */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
                   Content (Markdown Supported)
@@ -105,6 +216,7 @@ export function NewsModal({
                 </div>
               </div>
 
+              {/* Featured Image & Status */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
@@ -157,7 +269,7 @@ export function NewsModal({
                           "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
                           formData.is_published
                             ? "bg-primary border-primary"
-                            : "border-border group-hover:border-primary/30",
+                            : "border-border group-hover:border-primary/30"
                         )}
                       >
                         {formData.is_published && (
@@ -172,7 +284,83 @@ export function NewsModal({
                 </div>
               </div>
 
-              <div className="pt-8 flex items-center gap-4">
+              {/* Gallery Upload Section */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between px-1">
+                  <label className="text-sm font-bold text-primary uppercase tracking-widest">
+                    News Gallery
+                    {totalGalleryCount > 0 && (
+                      <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold normal-case tracking-normal">
+                        {totalGalleryCount} image{totalGalleryCount !== 1 ? "s" : ""}
+                      </span>
+                    )}
+                  </label>
+                </div>
+
+                {/* Drop zone */}
+                <div
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleGalleryDrop}
+                  className="relative border-2 border-dashed border-border hover:border-primary/40 rounded-2xl p-6 transition-all group bg-primary/[0.01] hover:bg-primary/[0.03]"
+                >
+                  <input
+                    type="file"
+                    id="gallery-upload"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={handleGalleryInputChange}
+                  />
+                  <label
+                    htmlFor="gallery-upload"
+                    className="flex flex-col items-center gap-2 cursor-pointer text-foreground/40 group-hover:text-primary/60 transition-colors"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <Plus size={20} className="text-primary" />
+                    </div>
+                    <span className="text-sm font-semibold">
+                      Drop images here or click to browse
+                    </span>
+                    <span className="text-xs">
+                      Supports JPG, PNG, WEBP · Multiple files allowed
+                    </span>
+                  </label>
+                </div>
+
+                {/* Gallery grid */}
+                {totalGalleryCount > 0 && (
+                  <div className="grid grid-cols-4 gap-3">
+                    {/* Saved (server-side) images */}
+                    {savedGallery.map((item) => (
+                      <SavedGalleryThumb
+                        key={item.id}
+                        item={item}
+                        isDeleting={isDeletingGalleryId === item.id}
+                        onDelete={onDeleteSavedImage}
+                      />
+                    ))}
+
+                    {/* Pending (local) files queued for upload */}
+                    {pendingGalleryFiles.map((file, i) => (
+                      <PendingGalleryThumb
+                        key={`${file.name}-${i}`}
+                        file={file}
+                        index={i}
+                        onRemove={onRemovePendingFile}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {pendingGalleryFiles.length > 0 && (
+                  <p className="text-xs text-primary/50 px-1 font-medium">
+                    {pendingGalleryFiles.length} image{pendingGalleryFiles.length !== 1 ? "s" : ""} queued · will upload on save
+                  </p>
+                )}
+              </div>
+
+              {/* Actions */}
+              <div className="pt-4 flex items-center gap-4">
                 <button
                   type="button"
                   onClick={onClose}

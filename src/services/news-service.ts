@@ -1,5 +1,11 @@
 import api from "@/lib/api";
 
+export interface NewsGalleryItem {
+    id: string;
+    image: string;
+    caption: string | null;
+}
+
 export interface NewsItem {
     id: string;
     title: string;
@@ -9,11 +15,43 @@ export interface NewsItem {
     is_published: boolean;
     created_at: string;
     updated_at: string;
+    gallery: NewsGalleryItem[];
 }
 
 export interface NewsResponse {
     results?: NewsItem[];
 }
+
+/**
+ * Service to handle news gallery image API calls.
+ */
+export const NewsGalleryService = {
+    /**
+     * Uploads one or more gallery images to a news article.
+     * @param slug The news article slug.
+     * @param files Array of image files to upload.
+     * @returns The created gallery image records.
+     */
+    async addImages(slug: string, files: File[]): Promise<NewsGalleryItem[]> {
+        const data = new FormData();
+        files.forEach((f) => data.append("images", f));
+        const response = await api.post<NewsGalleryItem[]>(
+            `/news/news/${slug}/gallery/`,
+            data,
+            { headers: { "Content-Type": "multipart/form-data" } }
+        );
+        return response.data;
+    },
+
+    /**
+     * Deletes a gallery image by its ID.
+     * @param slug The news article slug.
+     * @param galleryId The gallery image ID.
+     */
+    async deleteImage(slug: string, galleryId: string): Promise<void> {
+        await api.delete(`/news/news/${slug}/gallery/${galleryId}/`);
+    },
+};
 
 /**
  * Service to handle news-related API calls.
