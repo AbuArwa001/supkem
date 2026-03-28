@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { NewsService, NewsGalleryService, NewsItem, NewsGalleryItem } from "@/services/news-service";
+import { toast } from "sonner";
 
 export function useNewsLogic() {
     const [news, setNews] = useState<NewsItem[]>([]);
@@ -27,6 +28,7 @@ export function useNewsLogic() {
             setNews(data);
         } catch (err) {
             console.error("Failed to fetch news", err);
+            toast.error("Failed to fetch news.");
         } finally {
             setLoading(false);
         }
@@ -79,8 +81,10 @@ export function useNewsLogic() {
         try {
             await NewsGalleryService.deleteImage(editingItem.slug, galleryId);
             setSavedGallery((prev) => prev.filter((img) => img.id !== galleryId));
+            toast.success("Gallery image deleted");
         } catch (err) {
             console.error("Failed to delete gallery image", err);
+            toast.error("Failed to delete gallery image");
         } finally {
             setIsDeletingGalleryId(null);
         }
@@ -110,13 +114,25 @@ export function useNewsLogic() {
 
             // Upload pending gallery images after save
             if (pendingGalleryFiles.length > 0) {
-                await NewsGalleryService.addImages(slug, pendingGalleryFiles);
+                try {
+                    await NewsGalleryService.addImages(slug, pendingGalleryFiles);
+                    toast.success(editingItem ? "News updated with gallery successfully!" : "News created with gallery successfully!");
+                } catch (galleryError: any) {
+                    console.error("Gallery upload failed", galleryError);
+                    toast.error(
+                        galleryError.response?.data?.detail 
+                        || "News saved, but gallery images failed to upload (file too large or invalid)."
+                    );
+                }
+            } else {
+                toast.success(editingItem ? "News updated successfully!" : "News created successfully!");
             }
 
             setIsModalOpen(false);
             fetchNews();
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to save news", err);
+            toast.error(err.response?.data?.detail || "Failed to save news.");
         } finally {
             setIsSubmitting(false);
         }
