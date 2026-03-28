@@ -1,4 +1,28 @@
-import api from "@/lib/api";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import api, { API_BASE_URL } from "@/lib/api";
+
+async function postMultipart<T>(endpoint: string, data: FormData): Promise<T> {
+    const token = Cookies.get('access_token');
+    const response = await axios.post<T>(`${API_BASE_URL}/api/v1${endpoint}`, data, {
+        headers: {
+            // We specifically do NOT set Content-Type so Axios natively injects the boundary
+            Authorization: token ? `Bearer ${token}` : "",
+        }
+    });
+    return response.data;
+}
+
+async function patchMultipart<T>(endpoint: string, data: FormData): Promise<T> {
+    const token = Cookies.get('access_token');
+    const response = await axios.patch<T>(`${API_BASE_URL}/api/v1${endpoint}`, data, {
+        headers: {
+            // We specifically do NOT set Content-Type so Axios natively injects the boundary
+            Authorization: token ? `Bearer ${token}` : "",
+        }
+    });
+    return response.data;
+}
 
 export interface NewsGalleryItem {
     id: string;
@@ -35,12 +59,7 @@ export const NewsGalleryService = {
     async addImages(slug: string, files: File[]): Promise<NewsGalleryItem[]> {
         const data = new FormData();
         files.forEach((f) => data.append("images", f));
-        const response = await api.post<NewsGalleryItem[]>(
-            `/news/news/${slug}/gallery/`,
-            data,
-            { headers: { "Content-Type": "multipart/form-data" } }
-        );
-        return response.data;
+        return await postMultipart<NewsGalleryItem[]>(`/news/news/${slug}/gallery/`, data);
     },
 
     /**
@@ -75,10 +94,7 @@ export const NewsService = {
      * @returns The created news item.
      */
     async createNews(data: FormData): Promise<NewsItem> {
-        const response = await api.post<NewsItem>("/news/news/", data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-        return response.data;
+        return await postMultipart<NewsItem>("/news/news/", data);
     },
 
     /**
@@ -88,10 +104,7 @@ export const NewsService = {
      * @returns The updated news item.
      */
     async updateNews(slug: string, data: FormData): Promise<NewsItem> {
-        const response = await api.patch<NewsItem>(`/news/news/${slug}/`, data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-        return response.data;
+        return await patchMultipart<NewsItem>(`/news/news/${slug}/`, data);
     },
 
     /**
@@ -125,17 +138,11 @@ export const NewsPaperService = {
     },
 
     async createNewsPaper(data: FormData): Promise<NewsPaperItem> {
-        const response = await api.post<NewsPaperItem>("/news/news_papers/", data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-        return response.data;
+        return await postMultipart<NewsPaperItem>("/news/news_papers/", data);
     },
 
     async updateNewsPaper(id: string, data: FormData): Promise<NewsPaperItem> {
-        const response = await api.patch<NewsPaperItem>(`/news/news_papers/${id}/`, data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-        return response.data;
+        return await patchMultipart<NewsPaperItem>(`/news/news_papers/${id}/`, data);
     },
 
     async deleteNewsPaper(id: string): Promise<void> {
