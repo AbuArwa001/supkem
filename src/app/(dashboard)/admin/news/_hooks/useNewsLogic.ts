@@ -115,13 +115,21 @@ export function useNewsLogic() {
             // Upload pending gallery images after save
             if (pendingGalleryFiles.length > 0) {
                 try {
-                    await NewsGalleryService.addImages(slug, pendingGalleryFiles);
-                    toast.success(editingItem ? "News updated with gallery successfully!" : "News created with gallery successfully!");
+                    const galleryResult = await NewsGalleryService.addImages(slug, pendingGalleryFiles);
+                    // Backend may return {created, errors} on 207 Multi-Status (partial success)
+                    const result = galleryResult as any;
+                    if (result?.errors?.length > 0 && result?.created?.length > 0) {
+                        toast.warning(
+                            `News saved, but ${result.errors.length} image(s) failed to upload.`
+                        );
+                    } else {
+                        toast.success(editingItem ? "News updated with gallery successfully!" : "News created with gallery successfully!");
+                    }
                 } catch (galleryError: any) {
                     console.error("Gallery upload failed", galleryError);
                     toast.error(
-                        galleryError.message 
-                        || "News saved, but gallery images failed to upload (file too large or invalid)."
+                        galleryError.message
+                        || "News saved, but gallery images failed to upload."
                     );
                 }
             } else {
