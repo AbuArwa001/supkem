@@ -13,9 +13,10 @@ import { VideoItem } from "@/app/(public)/news/_services/newsService";
 
 interface VideoBriefingsProps {
   videos: VideoItem[];
+  limit?: number;
 }
 
-export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
+export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefingsProps) {
   const { data: videos } = useSWR<VideoItem[]>(
     `${API_BASE}/api/v1/videos/`,
     (url: string) =>
@@ -29,6 +30,9 @@ export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
   );
 
   if (!videos || videos.length === 0) return null;
+
+  const displayVideos = limit > 0 ? videos.slice(0, limit) : videos;
+  const hasMore = limit > 0 && videos.length > limit;
 
   return (
     <section className="max-w-7xl mx-auto px-6 space-y-12">
@@ -47,7 +51,7 @@ export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {videos.map((video, i) => {
+        {displayVideos.map((video, i) => {
           const videoUrl = video.video_file.startsWith("https")
             ? video.video_file
             : `${API_BASE_URL}${video.video_file.startsWith("/") ? "" : "/"}${video.video_file}`;
@@ -87,6 +91,17 @@ export function VideoBriefings({ videos: initialVideos }: VideoBriefingsProps) {
           );
         })}
       </div>
+
+      {hasMore && (
+        <div className="flex justify-center pt-8">
+            <Link
+                href="/news/videos"
+                className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
+            >
+                View All Video Briefings <ArrowRight size={18} />
+            </Link>
+        </div>
+      )}
     </section>
   );
 }

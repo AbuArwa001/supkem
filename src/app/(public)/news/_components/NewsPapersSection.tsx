@@ -11,9 +11,10 @@ import { NewsPaperItem } from "@/app/(public)/news/_services/newsService";
 
 interface NewsPapersSectionProps {
     newsPapers: NewsPaperItem[];
+    limit?: number;
 }
 
-export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersSectionProps) {
+export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: NewsPapersSectionProps) {
     const { data: newsPapers } = useSWR<NewsPaperItem[]>(
         `${API_BASE}/api/v1/news/news_papers/`,
         (url: string) =>
@@ -28,6 +29,9 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersS
 
     if (!newsPapers || newsPapers.length === 0) return null;
 
+    const displayPapers = limit > 0 ? newsPapers.slice(0, limit) : newsPapers;
+    const hasMore = limit > 0 && newsPapers.length > limit;
+
     return (
         <section className="max-w-7xl mx-auto px-6 space-y-12">
             <div className="flex items-center gap-4">
@@ -41,7 +45,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersS
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-10">
-                {newsPapers.map((paper, i) => {
+                {displayPapers.map((paper, i) => {
                     const imageUrl = paper.cover_image
                         ? paper.cover_image.startsWith('http')
                             ? paper.cover_image
@@ -102,6 +106,17 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers }: NewsPapersS
                     );
                 })}
             </div>
+
+            {hasMore && (
+                <div className="flex justify-center pt-8">
+                    <Link
+                        href="/news/papers"
+                        className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
+                    >
+                        View All Newspapers <ArrowRight size={18} />
+                    </Link>
+                </div>
+            )}
         </section>
     );
 }

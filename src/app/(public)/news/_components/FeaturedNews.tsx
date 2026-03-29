@@ -11,6 +11,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender
 
 interface FeaturedNewsProps {
     newsItems: NewsItem[];
+    limit?: number;
 }
 
 const extractFirstImage = (content: string) => {
@@ -18,7 +19,7 @@ const extractFirstImage = (content: string) => {
     return match ? match[1] : null;
 };
 
-export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps) {
+export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: FeaturedNewsProps) {
     const { data: newsItems } = useSWR(
         `${API_BASE}/api/v1/news/news/`,
         (url: string) =>
@@ -31,7 +32,8 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
         { fallbackData: initialNewsItems, refreshInterval: 30000 }
     );
 
-    console.log(API_BASE);
+    const displayNews = limit > 0 ? newsItems.slice(0, limit) : newsItems;
+    const hasMore = limit > 0 && newsItems.length > limit;
 
     return (
         <section className="max-w-7xl mx-auto px-6 space-y-12">
@@ -46,11 +48,11 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {newsItems.length > 0 ? (
+                {displayNews.length > 0 ? (
                     <>
                         {/* Large Feature (First Item) */}
                         {(() => {
-                            const item = newsItems[0];
+                            const item = displayNews[0];
                             const extractedImg = extractFirstImage(item.content);
                             const imageSource = item.featured_image
                                 ? (item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
@@ -88,7 +90,7 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
                         })()}
 
                         <div className="space-y-8 flex flex-col">
-                            {newsItems.slice(1).map((item: NewsItem, i: number) => {
+                            {displayNews.slice(1).map((item: NewsItem, i: number) => {
                                 const extractedImg = extractFirstImage(item.content);
                                 const imageSource = item.featured_image
                                     ? (item.featured_image.startsWith('http') ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith('/') ? '' : '/'}${item.featured_image}`)
@@ -144,6 +146,17 @@ export function FeaturedNews({ newsItems: initialNewsItems }: FeaturedNewsProps)
                     </div>
                 )}
             </div>
+
+            {hasMore && (
+                <div className="flex justify-center pt-8">
+                    <Link
+                        href="/news/articles"
+                        className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
+                    >
+                        View All News Articles <ArrowRight size={18} />
+                    </Link>
+                </div>
+            )}
         </section>
     );
 }
