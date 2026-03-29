@@ -120,7 +120,7 @@ export function useNewsLogic() {
                 } catch (galleryError: any) {
                     console.error("Gallery upload failed", galleryError);
                     toast.error(
-                        galleryError.response?.data?.detail 
+                        galleryError.message 
                         || "News saved, but gallery images failed to upload (file too large or invalid)."
                     );
                 }
