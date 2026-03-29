@@ -82,11 +82,11 @@ export function NewsGallery({ items }: { items: GalleryItem[] }) {
 
             {/* Lightbox Modal */}
             {selectedIndex !== null && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm">
                     {/* Close Button */}
                     <button
                         onClick={closeLightbox}
-                        className="absolute top-4 right-4 p-3 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all z-50"
+                        className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all z-[10000]"
                         aria-label="Close lightbox"
                     >
                         <X size={24} />
