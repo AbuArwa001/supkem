@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { notFound } from "next/navigation";
+import { NewsGallery } from "../_components/NewsGallery";
 
 async function getArticle(slug: string) {
     try {
@@ -100,38 +101,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
 
                 {/* Gallery Section */}
                 {article.gallery && article.gallery.length > 0 && (
-                    <div className="mt-12 bg-white rounded-[20px] p-8 lg:p-12 shadow-2xl shadow-black/10 border border-slate-100">
-                        <h2 className="text-2xl font-black font-outfit text-primary mb-8 border-b border-border pb-4">
-                            Image Gallery
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {article.gallery.map((item: { id: string; image: string; caption: string | null }) => {
-                                const imageUrl = item.image.startsWith('http') 
-                                    ? item.image 
-                                    : `${API_BASE_URL}${item.image.startsWith('/') ? '' : '/'}${item.image}`;
-                                
-                                return (
-                                    <div key={item.id} className="relative aspect-square rounded-2xl overflow-hidden group shadow-lg">
-                                        <Image
-                                            src={imageUrl}
-                                            alt={item.caption || "Gallery image"}
-                                            fill
-                                            className="object-cover group-hover:scale-110 transition-transform duration-500"
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        />
-                                        {/* Optional Caption Overlay */}
-                                        {item.caption && (
-                                            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                                <p className="text-white text-sm font-medium line-clamp-2">
-                                                    {item.caption}
-                                                </p>
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </div>
+                    <NewsGallery items={article.gallery} />
                 )}
 
                 {/* Back CTA */}
