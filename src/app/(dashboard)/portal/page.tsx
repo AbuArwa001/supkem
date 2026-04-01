@@ -1,12 +1,15 @@
 "use client";
 
-import { useAuth } from "@/hooks/useAuth";
+// External libraries
 import { FileText, ShieldCheck, Clock } from "lucide-react";
-import { useDashboardData } from "./_hooks/useDashboardData";
-import PortalWelcomeBanner from "./_components/PortalWelcomeBanner";
-import StatCard from "./_components/StatCard";
-import ActiveApplicationsList from "./_components/ActiveApplicationsList";
-import PortalSidebar from "./_components/PortalSidebar";
+
+// Internal modules
+import { useAuth } from "@/hooks/useAuth";
+import { useDashboardData } from "@/app/(dashboard)/portal/_hooks/useDashboardData";
+import PortalWelcomeBanner from "@/app/(dashboard)/portal/_components/PortalWelcomeBanner";
+import StatCard from "@/app/(dashboard)/portal/_components/StatCard";
+import ActiveApplicationsList from "@/app/(dashboard)/portal/_components/ActiveApplicationsList";
+import PortalSidebar from "@/app/(dashboard)/portal/_components/PortalSidebar";
 
 export default function UserPortal() {
   const { user } = useAuth();
