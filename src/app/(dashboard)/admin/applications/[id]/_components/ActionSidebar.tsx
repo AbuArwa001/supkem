@@ -38,6 +38,13 @@ export default function ActionSidebar({
           </div>
         </div>
 
+        {(!app.payment || app.payment.status !== "Completed") && (
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-100 relative z-10 text-sm font-medium">
+            <strong className="block text-amber-400 mb-1">⚠️ Payment Incomplete</strong>
+            Admin override: You can still process this application even though the payment was not completed by the user.
+          </div>
+        )}
+
         <div className="space-y-4 relative z-10">
           <button
             onClick={() => handleAction("Approved")}
