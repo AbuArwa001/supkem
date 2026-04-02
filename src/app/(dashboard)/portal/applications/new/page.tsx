@@ -144,9 +144,11 @@ export default function SubmitApplication() {
         />
       </form>
 
-      {showPaymentModal && createdAppId && (
+      {showPaymentModal && createdAppId && selectedService && (
         <PaymentModal
           applicationId={createdAppId}
+          serviceName={selectedService.name}
+          serviceFee={selectedService.fee ? Number(selectedService.fee) : 1500}
           onSuccess={() => {
             setShowPaymentModal(false);
             router.push(`/portal/applications/${createdAppId}`);
