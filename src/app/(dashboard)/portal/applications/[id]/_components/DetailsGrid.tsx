@@ -11,6 +11,11 @@ interface DetailsGridProps {
     user_name: string;
     submitted_at: string;
     updated_at: string;
+    payment?: {
+      status: string;
+      amount: string;
+      receipt_number?: string;
+    };
   };
 }
 
@@ -42,6 +47,16 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
           <DetailItem label="Submission Date" value={new Date(application.submitted_at).toLocaleDateString()} />
           <DetailItem label="Last Updated" value={new Date(application.updated_at).toLocaleDateString()} />
           <DetailItem label="Application ID" value={application.id} isMono />
+          <DetailItem 
+            label="Payment Status" 
+            value={application.payment ? application.payment.status : "Pending/Unpaid"} 
+          />
+          {application.payment?.amount && (
+            <DetailItem label="Amount" value={`KES ${application.payment.amount}`} />
+          )}
+          {application.payment?.receipt_number && (
+            <DetailItem label="Receipt No." value={application.payment.receipt_number} isMono />
+          )}
         </div>
       </motion.div>
 
