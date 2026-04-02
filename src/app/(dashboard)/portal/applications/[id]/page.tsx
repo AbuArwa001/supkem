@@ -59,7 +59,7 @@ export default function ApplicationDetail() {
         <PaymentModal
           applicationId={application.id}
           serviceName={application.service_name || "Service Payment"}
-          serviceFee={1500} // The backend actually calculates the real fee dynamically anyway via initiate_payment
+          serviceFee={Number(application.service_fee) || 0}
           onSuccess={() => {
             setShowPaymentModal(false);
             if (refreshParams) refreshParams();
