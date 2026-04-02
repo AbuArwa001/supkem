@@ -15,7 +15,7 @@ import { useApplicationDetailLogic } from "@/app/(dashboard)/admin/applications/
 export default function ApplicationDetail() {
   const params = useParams();
   const id = params.id as string | string[];
-  const { app, loading, submitting, handleAction, router } =
+  const { app, loading, submitting, handleAction, handleDelete, router } =
     useApplicationDetailLogic(id);
 
   if (loading) {
@@ -60,6 +60,7 @@ export default function ApplicationDetail() {
           app={app}
           submitting={submitting}
           handleAction={handleAction}
+          handleDelete={handleDelete}
         />
       </div>
     </div>

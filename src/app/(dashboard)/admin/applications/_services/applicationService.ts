@@ -17,5 +17,8 @@ export const applicationService = {
     },
     updateApplicationStatus: async (id: string | number, status: string): Promise<void> => {
         await api.post(`/applications/applications/${id}/update_status/`, { status });
+    },
+    deleteApplication: async (id: string | number): Promise<void> => {
+        await api.delete(`/applications/applications/${id}/`);
     }
 };

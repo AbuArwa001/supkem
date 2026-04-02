@@ -36,11 +36,25 @@ export function useApplicationDetailLogic(id: string | string[]) {
         }
     };
 
+    const handleDelete = async () => {
+        if (!confirm("Are you sure you want to permanently delete this application?")) return;
+        setSubmitting(true);
+        try {
+            await applicationService.deleteApplication(id as string);
+            router.push("/admin/applications");
+        } catch (err) {
+            console.error("Delete failed", err);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
     return {
         app,
         loading,
         submitting,
         handleAction,
+        handleDelete,
         router
     };
 }

@@ -1,4 +1,4 @@
-import { ThumbsUp, ThumbsDown } from "lucide-react";
+import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TimelineStatus from "@/app/(dashboard)/admin/applications/[id]/_components/TimelineStatus";
 
@@ -6,12 +6,14 @@ interface ActionSidebarProps {
   app: any;
   submitting: boolean;
   handleAction: (status: string) => void;
+  handleDelete: () => void;
 }
 
 export default function ActionSidebar({
   app,
   submitting,
   handleAction,
+  handleDelete,
 }: ActionSidebarProps) {
   return (
     <div className="space-y-8">
@@ -55,6 +57,16 @@ export default function ActionSidebar({
       </div>
 
       <TimelineStatus app={app} />
+
+      <div className="pt-4 border-t border-border">
+        <button
+          onClick={handleDelete}
+          disabled={submitting}
+          className="w-full py-4 bg-red-50 text-red-500 border border-red-100 rounded-[20px] font-bold text-base hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+        >
+          <Trash2 size={20} /> Delete Application
+        </button>
+      </div>
     </div>
   );
 }
