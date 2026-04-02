@@ -29,6 +29,11 @@ export function PaymentModal({ applicationId, onSuccess, onClose }: PaymentModal
     }
   };
 
+  const handleCancel = () => {
+    setStatus("error");
+    setErrorMsg("Payment was cancelled by the user.");
+  };
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (status === "waiting") {
@@ -43,7 +48,7 @@ export function PaymentModal({ applicationId, onSuccess, onClose }: PaymentModal
             }, 2000);
           } else if (appData.payment?.status === "Failed") {
             setStatus("error");
-            setErrorMsg("Payment failed or was cancelled.");
+            setErrorMsg("Payment failed or was cancelled remotely.");
             clearInterval(interval);
           }
         } catch (e) {
@@ -59,11 +64,9 @@ export function PaymentModal({ applicationId, onSuccess, onClose }: PaymentModal
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="px-6 py-4 border-b border-gray-100 flex justify-between items-center bg-green-50">
           <h3 className="font-semibold text-lg text-green-900">Complete Payment</h3>
-          {(status === "idle" || status === "error") && (
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-              <XCircle className="w-6 h-6" />
-            </button>
-          )}
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <XCircle className="w-6 h-6" />
+          </button>
         </div>
         
         <div className="p-6 space-y-6">
@@ -94,20 +97,26 @@ export function PaymentModal({ applicationId, onSuccess, onClose }: PaymentModal
 
           {status === "initiating" && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
-              <Loader2 className="w-12 h-12 text-primary animate-spin" />
+              <Loader2 className="w-12 h-12 text-[#0b4a2d] animate-spin" />
               <p className="text-gray-600 font-medium text-center">Initiating STK Push...</p>
+              <button onClick={handleCancel} className="text-sm text-red-500 hover:text-red-700 underline mt-2">
+                Cancel
+              </button>
             </div>
           )}
 
           {status === "waiting" && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="relative">
-                <Loader2 className="w-12 h-12 text-primary animate-spin" />
+                <Loader2 className="w-12 h-12 text-[#0b4a2d] animate-spin" />
               </div>
               <div className="text-center space-y-2">
                 <p className="font-medium text-gray-900">Awaiting Payment Confirmation</p>
                 <p className="text-sm text-gray-500">Please check your phone and enter your M-Pesa PIN. Do not close this window.</p>
               </div>
+              <button onClick={handleCancel} className="text-sm text-red-500 hover:text-red-700 underline mt-4">
+                Cancel Waiting
+              </button>
             </div>
           )}
 

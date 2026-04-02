@@ -4,6 +4,7 @@ import { useState } from "react";
 import AdminSidebar from "@/components/AdminSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
+import { KnockNotifications } from "@/components/KnockNotifications";
 
 export default function AdminLayout({
   children,
@@ -22,8 +23,7 @@ export default function AdminLayout({
           onClose={() => setIsSidebarOpen(false)}
         />
         <main className="flex-1 overflow-x-hidden min-h-screen">
-          {/* Mobile Header */}
-          <header className="lg:hidden flex items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50">
+          <header className="flex lg:hidden items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center border border-white/10">
                 <img src="/logo.svg" alt="SUPKEM Logo" className="w-5 h-5" />
@@ -32,12 +32,21 @@ export default function AdminLayout({
                 SUPKEM Admin
               </span>
             </div>
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="p-2 hover:bg-white/5 rounded-xl transition-colors"
-            >
-              <Menu size={24} />
-            </button>
+            <div className="flex items-center gap-4">
+              <KnockNotifications />
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="p-2 hover:bg-white/5 rounded-xl transition-colors"
+              >
+                <Menu size={24} />
+              </button>
+            </div>
+          </header>
+
+          <header className="hidden lg:flex items-center justify-end px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+            <div className="flex items-center gap-4">
+              <KnockNotifications />
+            </div>
           </header>
 
           <div className="p-4 md:p-10">
