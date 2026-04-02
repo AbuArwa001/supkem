@@ -6,6 +6,7 @@ import { ApplicationHeader } from "./_components/ApplicationHeader";
 import { StatusBanner } from "./_components/StatusBanner";
 import { DetailsGrid } from "./_components/DetailsGrid";
 import { CertificateBanner } from "./_components/CertificateBanner";
+import { PaymentModal } from "@/app/(dashboard)/portal/applications/new/_components/PaymentModal";
 
 /**
  * Portal Application Detail Page
@@ -17,8 +18,13 @@ export default function ApplicationDetail() {
     loading, 
     error, 
     handleBack, 
-    handleReturnToDashboard 
+    handleReturnToDashboard,
+    showPaymentModal,
+    setShowPaymentModal,
+    refreshParams
   } = useApplicationLogic();
+
+  const isPaymentPending = !application?.payment || application.payment.status !== "Completed";
 
   if (loading) {
     return <LoadingState />;
@@ -39,12 +45,27 @@ export default function ApplicationDetail() {
       <StatusBanner 
         status={application.status} 
         certification={application.certification} 
+        isPaymentPending={isPaymentPending}
+        onPayClick={() => setShowPaymentModal(true)}
       />
 
       <DetailsGrid application={application} />
 
       {application.status === "Approved" && application.certification && (
         <CertificateBanner certificationId={application.certification.id} />
+      )}
+
+      {showPaymentModal && application && (
+        <PaymentModal
+          applicationId={application.id}
+          serviceName={application.service_name || "Service Payment"}
+          serviceFee={1500} // The backend actually calculates the real fee dynamically anyway via initiate_payment
+          onSuccess={() => {
+            setShowPaymentModal(false);
+            if (refreshParams) refreshParams();
+          }}
+          onClose={() => setShowPaymentModal(false)}
+        />
       )}
     </div>
   );

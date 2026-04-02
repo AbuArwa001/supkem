@@ -9,9 +9,11 @@ interface StatusBannerProps {
   certification?: {
     serial_number: string;
   };
+  isPaymentPending?: boolean;
+  onPayClick?: () => void;
 }
 
-export const StatusBanner = ({ status, certification }: StatusBannerProps) => {
+export const StatusBanner = ({ status, certification, isPaymentPending, onPayClick }: StatusBannerProps) => {
   const getStatusConfig = () => {
     switch (status) {
       case "Approved":
@@ -41,7 +43,12 @@ export const StatusBanner = ({ status, certification }: StatusBannerProps) => {
     }
   };
 
-  const config = getStatusConfig();
+  const config = isPaymentPending ? {
+    bg: "bg-amber-600",
+    icon: ShieldAlert,
+    textColor: "text-amber-100"
+  } : getStatusConfig();
+  
   const StatusIcon = config.icon;
 
   return (
@@ -60,7 +67,7 @@ export const StatusBanner = ({ status, certification }: StatusBannerProps) => {
           Current Status
         </p>
         <h2 className="text-4xl md:text-5xl font-black font-outfit tracking-tight">
-          {status}
+          {isPaymentPending ? "Pending Payment" : status}
         </h2>
         {status === "Approved" && certification && (
           <p className={cn(config.textColor, "font-medium")}>
@@ -69,8 +76,18 @@ export const StatusBanner = ({ status, certification }: StatusBannerProps) => {
         )}
       </div>
 
-      <div className="relative z-10 w-24 h-24 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shrink-0">
-        <StatusIcon size={40} />
+      <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+        {isPaymentPending && (
+          <button
+            onClick={onPayClick}
+            className="px-6 py-3 bg-white text-amber-700 rounded-xl font-bold hover:bg-amber-50 hover:scale-105 transition-all shadow-xl"
+          >
+            Complete Payment
+          </button>
+        )}
+        <div className="w-24 h-24 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shrink-0">
+          <StatusIcon size={40} />
+        </div>
       </div>
     </motion.div>
   );

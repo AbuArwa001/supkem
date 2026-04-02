@@ -33,11 +33,16 @@ export function ApplicationCard({
           <span
             className={cn(
               "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-              getStatusStyles(application.status),
+              (!application.payment || application.payment.status !== "Completed")
+                ? "bg-amber-100 text-amber-700 border-amber-200"
+                : getStatusStyles(application.status),
             )}
           >
-            <StatusIcon size={14} />
-            {application.status}
+            {(!application.payment || application.payment.status !== "Completed") ? (
+              <>Pending Payment</>
+            ) : (
+              <><StatusIcon size={14} />{application.status}</>
+            )}
           </span>
         </div>
 

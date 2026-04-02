@@ -10,23 +10,24 @@ export const useApplicationLogic = () => {
   const [application, setApplication] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const fetchApplication = async () => {
+    try {
+      const res = await api.get(`/applications/applications/${params.id}/`);
+      setApplication(res.data);
+    } catch (err: any) {
+      console.error("Failed to fetch application", err);
+      setError(
+        err.response?.data?.detail ||
+        "Application not found or you don't have access.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchApplication = async () => {
-      try {
-        const res = await api.get(`/applications/applications/${params.id}/`);
-        setApplication(res.data);
-      } catch (err: any) {
-        console.error("Failed to fetch application", err);
-        setError(
-          err.response?.data?.detail ||
-          "Application not found or you don't have access.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (params.id) {
       fetchApplication();
     }
@@ -41,5 +42,8 @@ export const useApplicationLogic = () => {
     error,
     handleBack,
     handleReturnToDashboard,
+    showPaymentModal,
+    setShowPaymentModal,
+    refreshParams: fetchApplication,
   };
 };
