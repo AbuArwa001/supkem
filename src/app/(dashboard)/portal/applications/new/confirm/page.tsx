@@ -4,7 +4,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect, Suspense } from "react";
 import { 
   FileText, ArrowLeft, ShieldCheck, Clock, CreditCard,
-  Loader2, CheckCircle2, XCircle, Phone
+  Loader2, CheckCircle2, XCircle
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/lib/api";
@@ -29,6 +29,24 @@ function ConfirmPageContent() {
   const [errorMsg, setErrorMsg] = useState("");
   const [appData, setAppData] = useState<any>(null);
 
+  // Formats a Kenyan phone number to 07XX XXX XXX display format
+  const formatPhone = (raw: string): string => {
+    let digits = raw.replace(/\D/g, "");
+    if (digits.startsWith("254") && digits.length > 3) digits = "0" + digits.slice(3);
+    digits = digits.slice(0, 10);
+    if (digits.length <= 4) return digits;
+    if (digits.length <= 7) return `${digits.slice(0, 4)} ${digits.slice(4)}`;
+    return `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`;
+  };
+
+  // Validates a Kenyan Safaricom / Airtel number (07xx or 01xx, 10 digits)
+  const isValidPhone = (formatted: string): boolean => {
+    const digits = formatted.replace(/\D/g, "");
+    return /^0(7|1)\d{8}$/.test(digits);
+  };
+
+  const displayRef = appId ? `APP-${appId.split('-').pop()?.toUpperCase()}` : "PENDING";
+
   useEffect(() => {
     if (appId) {
       getApplication(appId).then(setAppData).catch(console.error);
@@ -37,21 +55,23 @@ function ConfirmPageContent() {
 
   useEffect(() => {
     if (user?.phone_number && !phoneNumber) {
-        setPhoneNumber(user.phone_number);
+      setPhoneNumber(formatPhone(user.phone_number));
     }
-  }, [user, phoneNumber]);
-
-  const displayRef = appId ? `APP-${appId.split('-').pop()?.toUpperCase()}` : "PENDING";
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handlePay = async () => {
     if (!phoneNumber.trim()) {
       setErrorMsg("Please enter your M-Pesa phone number.");
       return;
     }
+    if (!isValidPhone(phoneNumber)) {
+      setErrorMsg("Enter a valid Kenyan number, e.g. 0712 345 678.");
+      return;
+    }
     setErrorMsg("");
     setStatus("initiating");
     try {
-      await initiatePayment(appId, phoneNumber.trim());
+      await initiatePayment(appId, phoneNumber.replace(/\s/g, ""));
       setStatus("waiting");
     } catch (err: any) {
       setStatus("error");
@@ -72,7 +92,10 @@ function ConfirmPageContent() {
   // Poll for payment status
   useEffect(() => {
     if (status !== "waiting") return;
+    let attempts = 0;
+    const maxAttempts = 40; // ~2 minutes at 3s intervals
     const interval = setInterval(async () => {
+      attempts++;
       try {
         const data = await getApplication(appId);
         setAppData(data);
@@ -85,7 +108,11 @@ function ConfirmPageContent() {
           }, 2500);
         } else if (payStatus === "Failed") {
           setStatus("error");
-          setErrorMsg("Payment failed or was rejected. Please try again.");
+          setErrorMsg("The M-Pesa payment was declined or cancelled. Please ensure you entered the correct PIN and have sufficient balance, then try again.");
+          clearInterval(interval);
+        } else if (attempts >= maxAttempts) {
+          setStatus("error");
+          setErrorMsg("Payment confirmation timed out. If you completed the M-Pesa prompt, please wait a moment and refresh this page.");
           clearInterval(interval);
         }
       } catch {
@@ -261,14 +288,45 @@ function ConfirmPageContent() {
                       <label className="block text-xs font-black uppercase tracking-[0.1em] text-white/60 ml-2">
                         Mobile Money Number
                       </label>
-                      <input
-                        type="tel"
-                        placeholder="e.g. 0712 345 678"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                        onKeyDown={(e) => e.key === "Enter" && handlePay()}
-                        className="w-full bg-white/5 border border-white/10 rounded-[20px] px-6 py-5 text-xl font-bold text-white focus:bg-white/10 focus:ring-2 focus:ring-[#25D366]/50 focus:border-[#25D366] outline-none transition-all placeholder:text-white/20"
-                      />
+                      <div className="relative">
+                        <input
+                          type="tel"
+                          inputMode="numeric"
+                          placeholder="0712 345 678"
+                          value={phoneNumber}
+                          onChange={(e) => {
+                            setErrorMsg("");
+                            setPhoneNumber(formatPhone(e.target.value));
+                          }}
+                          onKeyDown={(e) => e.key === "Enter" && handlePay()}
+                          maxLength={12}
+                          className={`w-full bg-white/5 border rounded-[20px] px-6 py-5 pr-14 text-xl font-bold text-white focus:bg-white/10 focus:ring-2 focus:ring-[#25D366]/50 outline-none transition-all placeholder:text-white/20 ${
+                            phoneNumber && !isValidPhone(phoneNumber)
+                              ? "border-red-500/50 focus:border-red-500"
+                              : isValidPhone(phoneNumber)
+                              ? "border-[#25D366]/50 focus:border-[#25D366]"
+                              : "border-white/10 focus:border-[#25D366]"
+                          }`}
+                        />
+                        {/* Validation icon */}
+                        <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none">
+                          {isValidPhone(phoneNumber) ? (
+                            <div className="w-7 h-7 rounded-full bg-[#25D366]/20 flex items-center justify-center">
+                              <CheckCircle2 className="w-4 h-4 text-[#25D366]" />
+                            </div>
+                          ) : phoneNumber.length > 3 ? (
+                            <div className="w-7 h-7 rounded-full bg-red-500/20 flex items-center justify-center">
+                              <XCircle className="w-4 h-4 text-red-400" />
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                      {/* Hint line */}
+                      <p className="text-[11px] text-white/30 font-bold uppercase tracking-wider ml-2">
+                        {isValidPhone(phoneNumber)
+                          ? `✓ Sending to ${phoneNumber}`
+                          : "Safaricom or Airtel Kenya number"}
+                      </p>
                     </div>
 
                     {errorMsg && (
@@ -280,7 +338,8 @@ function ConfirmPageContent() {
 
                     <button
                       onClick={handlePay}
-                      className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-5 px-6 rounded-[20px] font-black text-xl shadow-[0_0_40px_rgba(37,211,102,0.3)] hover:shadow-[0_0_60px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 transition-all duration-300"
+                      disabled={!isValidPhone(phoneNumber)}
+                      className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-[#25D366] disabled:hover:shadow-none disabled:hover:translate-y-0 text-white py-5 px-6 rounded-[20px] font-black text-xl shadow-[0_0_40px_rgba(37,211,102,0.3)] hover:shadow-[0_0_60px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 transition-all duration-300"
                     >
                       <CreditCard className="w-6 h-6" />
                       Pay KES {fee.toLocaleString()} Now
