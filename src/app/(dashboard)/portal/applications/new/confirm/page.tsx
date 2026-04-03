@@ -27,12 +27,21 @@ function ConfirmPageContent() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [status, setStatus] = useState<"idle" | "initiating" | "waiting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [appData, setAppData] = useState<any>(null);
+
+  useEffect(() => {
+    if (appId) {
+      getApplication(appId).then(setAppData).catch(console.error);
+    }
+  }, [appId]);
 
   useEffect(() => {
     if (user?.phone_number && !phoneNumber) {
         setPhoneNumber(user.phone_number);
     }
   }, [user, phoneNumber]);
+
+  const displayRef = appId ? `APP-${appId.split('-').pop()?.toUpperCase()}` : "PENDING";
 
   const handlePay = async () => {
     if (!phoneNumber.trim()) {
@@ -65,8 +74,9 @@ function ConfirmPageContent() {
     if (status !== "waiting") return;
     const interval = setInterval(async () => {
       try {
-        const appData = await getApplication(appId);
-        const payStatus = appData.payment?.status;
+        const data = await getApplication(appId);
+        setAppData(data);
+        const payStatus = data.payment?.status;
         if (payStatus === "Completed") {
           setStatus("success");
           clearInterval(interval);
@@ -146,9 +156,29 @@ function ConfirmPageContent() {
                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Reference Number</p>
                    <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl px-6 py-4 flex items-center justify-between">
                      <p className="font-mono text-lg font-bold text-slate-700 tracking-wider">
-                       {appId || "PENDING"}
+                       {displayRef}
                      </p>
                      <Clock className="w-5 h-5 text-slate-400" />
+                   </div>
+                 </div>
+
+                 <div className="grid grid-cols-2 gap-4">
+                   <div>
+                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Date Created</p>
+                     <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+                       <p className="font-bold text-slate-700 text-sm">
+                         {appData?.submitted_at ? new Date(appData.submitted_at).toLocaleDateString('en-GB') : "Today"}
+                       </p>
+                     </div>
+                   </div>
+                   <div>
+                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Status</p>
+                     <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
+                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-700">
+                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                         {appData?.status || "Pending Payment"}
+                       </span>
+                     </div>
                    </div>
                  </div>
 
@@ -162,6 +192,7 @@ function ConfirmPageContent() {
                      <div>
                        <p className="font-bold text-slate-800 text-lg leading-tight">{user.first_name} {user.last_name}</p>
                        <p className="text-sm font-medium text-slate-500 mt-1">{user.email}</p>
+                       <p className="text-sm font-medium text-slate-500">{user.phone_number}</p>
                      </div>
                    </div>
                  </div>
