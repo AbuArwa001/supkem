@@ -96,10 +96,12 @@ function ConfirmPageContent() {
   }, [status, appId, router]);
 
   return (
-    <div className="min-h-screen bg-slate-50 relative overflow-hidden py-10 px-4 md:px-8 lg:px-12 flex flex-col items-center">
-      {/* Decorative Background Blur */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+    <div
+      className="min-h-screen relative overflow-hidden py-10 px-4 md:px-8 lg:px-12 flex flex-col items-center"
+      style={{ backgroundImage: "url('/payment-bg.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundAttachment: "fixed" }}
+    >
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-[#01200f]/80 backdrop-blur-[2px] pointer-events-none z-0" />
 
       <div className="w-full max-w-6xl animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10">
         
@@ -107,22 +109,22 @@ function ConfirmPageContent() {
         <div className="mb-12">
           <button
             onClick={() => router.push("/portal/applications")}
-            className="group flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors mb-8"
+            className="group flex items-center gap-2 text-white/60 hover:text-white font-bold transition-colors mb-8"
           >
-            <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center group-hover:scale-110 transition-transform">
-              <ArrowLeft className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-white/20 transition-all">
+              <ArrowLeft className="w-4 h-4 text-white" />
             </div>
             Back to Applications
           </button>
           
           <div className="flex flex-col md:flex-row md:items-center gap-5">
-            <div className="w-16 h-16 bg-gradient-to-br from-[#0b4a2d] to-[#06331e] rounded-2xl flex items-center justify-center shadow-lg shadow-[#0b4a2d]/20 shrink-0">
-              <ShieldCheck className="w-8 h-8 text-emerald-100" />
+            <div className="w-16 h-16 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl flex items-center justify-center shadow-lg shrink-0">
+              <ShieldCheck className="w-8 h-8 text-emerald-300" />
             </div>
             <div>
-              <h1 className="text-4xl font-black font-outfit text-slate-800 tracking-tight">Complete Payment</h1>
-              <p className="text-slate-500 font-medium text-lg mt-1">
-                Review your application details and pay securely via M-Pesa STK push.
+              <h1 className="text-4xl font-black font-outfit text-white tracking-tight drop-shadow-lg">Secure Checkout</h1>
+              <p className="text-white/60 font-medium text-lg mt-1">
+                Review your application and pay securely via M-Pesa STK push.
               </p>
             </div>
           </div>
@@ -132,50 +134,50 @@ function ConfirmPageContent() {
           
           {/* Left Column: Application Info */}
           <div className="lg:col-span-5 space-y-8">
-            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] shadow-xl shadow-slate-200/40 border border-white overflow-hidden p-8">
+            <div className="bg-white/10 backdrop-blur-xl rounded-[32px] shadow-2xl border border-white/20 overflow-hidden p-8">
               
               <div className="flex items-center gap-4 mb-8">
-                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-600">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white">
                   <FileText className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold font-outfit text-slate-800 leading-tight">Order Details</h3>
-                  <p className="text-xs uppercase tracking-widest font-bold text-slate-400 mt-1">Application Checkout</p>
+                  <h3 className="text-xl font-bold font-outfit text-white leading-tight">Order Details</h3>
+                  <p className="text-xs uppercase tracking-widest font-bold text-white/40 mt-1">Application Checkout</p>
                 </div>
               </div>
 
-               <div className="space-y-8">
+               <div className="space-y-6">
                  <div>
-                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Service Requested</p>
-                   <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
-                     <p className="text-xl font-black text-slate-800 leading-snug">{serviceName}</p>
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 ml-1">Service Requested</p>
+                   <div className="bg-white/5 border border-white/10 rounded-2xl px-6 py-5">
+                     <p className="text-xl font-black text-white leading-snug">{serviceName}</p>
                    </div>
                  </div>
                  
                  <div>
-                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Reference Number</p>
-                   <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl px-6 py-4 flex items-center justify-between">
-                     <p className="font-mono text-lg font-bold text-slate-700 tracking-wider">
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 ml-1">Reference Number</p>
+                   <div className="bg-white/5 border border-dashed border-white/20 rounded-2xl px-6 py-4 flex items-center justify-between">
+                     <p className="font-mono text-lg font-bold text-emerald-300 tracking-wider">
                        {displayRef}
                      </p>
-                     <Clock className="w-5 h-5 text-slate-400" />
+                     <Clock className="w-5 h-5 text-white/40" />
                    </div>
                  </div>
 
                  <div className="grid grid-cols-2 gap-4">
                    <div>
-                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Date Created</p>
-                     <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
-                       <p className="font-bold text-slate-700 text-sm">
+                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 ml-1">Date Created</p>
+                     <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                       <p className="font-bold text-white text-sm">
                          {appData?.submitted_at ? new Date(appData.submitted_at).toLocaleDateString('en-GB') : "Today"}
                        </p>
                      </div>
                    </div>
                    <div>
-                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Status</p>
-                     <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3">
-                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-700">
-                         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse"></span>
+                     <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 ml-1">Status</p>
+                     <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3">
+                       <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
                          {appData?.status || "Pending Payment"}
                        </span>
                      </div>
@@ -184,15 +186,15 @@ function ConfirmPageContent() {
 
                  {user && (
                  <div>
-                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Applicant Profile</p>
-                   <div className="flex items-center gap-4 px-2">
-                     <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center font-black text-xl border border-emerald-100 shrink-0">
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white/40 mb-2 ml-1">Applicant Profile</p>
+                   <div className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-2xl px-5 py-4">
+                     <div className="w-14 h-14 bg-emerald-500/20 text-emerald-300 rounded-full flex items-center justify-center font-black text-xl border border-emerald-400/30 shrink-0">
                        {user.first_name?.[0]}{user.last_name?.[0]}
                      </div>
                      <div>
-                       <p className="font-bold text-slate-800 text-lg leading-tight">{user.first_name} {user.last_name}</p>
-                       <p className="text-sm font-medium text-slate-500 mt-1">{user.email}</p>
-                       <p className="text-sm font-medium text-slate-500">{user.phone_number}</p>
+                       <p className="font-bold text-white text-lg leading-tight">{user.first_name} {user.last_name}</p>
+                       <p className="text-sm font-medium text-white/50 mt-0.5">{user.email}</p>
+                       <p className="text-sm font-medium text-white/50">{user.phone_number}</p>
                      </div>
                    </div>
                  </div>
@@ -200,15 +202,15 @@ function ConfirmPageContent() {
                </div>
             </div>
             
-            <div className="flex items-center gap-3 justify-center text-slate-400 bg-white/50 backdrop-blur-md border border-white rounded-2xl py-4 shadow-sm">
-              <ShieldCheck className="w-5 h-5 text-emerald-500" />
+            <div className="flex items-center gap-3 justify-center text-white/40 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl py-4">
+              <ShieldCheck className="w-5 h-5 text-emerald-400" />
               <span className="text-xs font-black tracking-[0.1em] uppercase">256-Bit SSL Encrypted Checkout</span>
             </div>
           </div>
 
           {/* Right Column: Payment Details */}
           <div className="lg:col-span-7">
-            <div className="bg-[#0b4a2d] bg-[url('/payment-bg.png')] bg-cover bg-center bg-blend-soft-light rounded-[40px] shadow-2xl shadow-[#0b4a2d]/30 overflow-hidden relative border border-[#0b4a2d]/50">
+            <div className="bg-black/30 backdrop-blur-xl rounded-[40px] shadow-2xl overflow-hidden relative border border-white/20">
               {/* Premium Dark Modal Effects */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-[60px] pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#25D366]/10 rounded-full blur-[60px] pointer-events-none" />
