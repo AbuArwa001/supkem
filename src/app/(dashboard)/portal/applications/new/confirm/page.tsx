@@ -86,116 +86,149 @@ function ConfirmPageContent() {
   }, [status, appId, router]);
 
   return (
-    <div className="min-h-[85vh] bg-slate-50/50 flex flex-col items-center py-10 px-4">
-      <div className="w-full max-w-5xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="min-h-screen bg-slate-50 relative overflow-hidden py-10 px-4 md:px-8 lg:px-12 flex flex-col items-center">
+      {/* Decorative Background Blur */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[120px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+
+      <div className="w-full max-w-6xl animate-in fade-in slide-in-from-bottom-8 duration-700 relative z-10">
         
-        {/* Header */}
-        <div className="mb-10">
+        {/* Header Section */}
+        <div className="mb-12">
           <button
             onClick={() => router.push("/portal/applications")}
-            className="flex items-center gap-2 text-slate-500 hover:text-slate-800 font-semibold transition-colors mb-6"
+            className="group flex items-center gap-2 text-slate-500 hover:text-slate-800 font-bold transition-colors mb-8"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <ArrowLeft className="w-4 h-4" />
+            </div>
             Back to Applications
           </button>
           
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-[#0b4a2d]/10 rounded-2xl flex items-center justify-center">
-              <ShieldCheck className="w-8 h-8 text-[#0b4a2d]" />
+          <div className="flex flex-col md:flex-row md:items-center gap-5">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#0b4a2d] to-[#06331e] rounded-2xl flex items-center justify-center shadow-lg shadow-[#0b4a2d]/20 shrink-0">
+              <ShieldCheck className="w-8 h-8 text-emerald-100" />
             </div>
             <div>
-              <h1 className="text-3xl font-black text-slate-800">Complete Payment</h1>
-              <p className="text-slate-500 font-medium mt-1">
-                Review your application details and pay securely via M-Pesa.
+              <h1 className="text-4xl font-black font-outfit text-slate-800 tracking-tight">Complete Payment</h1>
+              <p className="text-slate-500 font-medium text-lg mt-1">
+                Review your application details and pay securely via M-Pesa STK push.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           
           {/* Left Column: Application Info */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-slate-800">Application Summary</h3>
-            <div className="bg-white rounded-[24px] shadow-sm border border-slate-200 overflow-hidden">
-               <div className="bg-slate-50 px-8 py-5 flex items-center gap-4 border-b border-slate-200">
-                  <div className="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center border border-slate-100">
-                    <FileText className="w-6 h-6 text-slate-500" />
-                  </div>
-                  <div>
-                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Type</p>
-                    <p className="text-slate-800 font-bold">Application Checkout</p>
-                  </div>
-               </div>
-               <div className="p-8 space-y-8">
+          <div className="lg:col-span-5 space-y-8">
+            <div className="bg-white/70 backdrop-blur-xl rounded-[32px] shadow-xl shadow-slate-200/40 border border-white overflow-hidden p-8">
+              
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-12 h-12 rounded-2xl bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-600">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold font-outfit text-slate-800 leading-tight">Order Details</h3>
+                  <p className="text-xs uppercase tracking-widest font-bold text-slate-400 mt-1">Application Checkout</p>
+                </div>
+              </div>
+
+               <div className="space-y-8">
                  <div>
-                   <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Service Requested</p>
-                   <p className="text-xl font-black text-slate-800">{serviceName}</p>
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Service Requested</p>
+                   <div className="bg-white border border-slate-200 rounded-2xl px-6 py-5 shadow-sm">
+                     <p className="text-xl font-black text-slate-800 leading-snug">{serviceName}</p>
+                   </div>
                  </div>
+                 
                  <div>
-                   <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Reference Number</p>
-                   <p className="font-mono bg-slate-100 text-slate-700 px-4 py-2 rounded-xl inline-block font-bold tracking-wide">
-                     {appId || "N/A"}
-                   </p>
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Reference Number</p>
+                   <div className="bg-slate-50 border border-dashed border-slate-300 rounded-2xl px-6 py-4 flex items-center justify-between">
+                     <p className="font-mono text-lg font-bold text-slate-700 tracking-wider">
+                       {appId || "PENDING"}
+                     </p>
+                     <Clock className="w-5 h-5 text-slate-400" />
+                   </div>
                  </div>
+
                  {user && (
                  <div>
-                   <p className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Applicant Profile</p>
-                   <p className="font-bold text-slate-700">{user.first_name} {user.last_name}</p>
-                   <p className="text-sm font-medium text-slate-500">{user.email}</p>
+                   <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 ml-1">Applicant Profile</p>
+                   <div className="flex items-center gap-4 px-2">
+                     <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center font-black text-xl border border-emerald-100 shrink-0">
+                       {user.first_name?.[0]}{user.last_name?.[0]}
+                     </div>
+                     <div>
+                       <p className="font-bold text-slate-800 text-lg leading-tight">{user.first_name} {user.last_name}</p>
+                       <p className="text-sm font-medium text-slate-500 mt-1">{user.email}</p>
+                     </div>
+                   </div>
                  </div>
                  )}
                </div>
             </div>
+            
+            <div className="flex items-center gap-3 justify-center text-slate-400 bg-white/50 backdrop-blur-md border border-white rounded-2xl py-4 shadow-sm">
+              <ShieldCheck className="w-5 h-5 text-emerald-500" />
+              <span className="text-xs font-black tracking-[0.1em] uppercase">256-Bit SSL Encrypted Checkout</span>
+            </div>
           </div>
 
           {/* Right Column: Payment Details */}
-          <div className="space-y-6">
-            <h3 className="text-xl font-bold text-slate-800">Payment Details</h3>
-            
-            <div className="bg-white rounded-[24px] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden relative">
-              
+          <div className="lg:col-span-7">
+            <div className="bg-[#0b4a2d] rounded-[40px] shadow-2xl shadow-[#0b4a2d]/30 overflow-hidden relative border border-[#0b4a2d]/50">
+              {/* Premium Dark Modal Effects */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-[60px] pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#25D366]/10 rounded-full blur-[60px] pointer-events-none" />
+              <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] pointer-events-none mix-blend-overlay" />
+
               {/* Fee Breakdown */}
-              <div className="p-8 pb-6 border-b border-dashed border-slate-200 space-y-4 relative z-10 bg-white">
-                <div className="flex justify-between items-center text-sm font-semibold text-slate-500">
-                  <span>Subtotal</span>
-                  <span className="text-slate-700">KES {fee.toLocaleString()}</span>
+              <div className="p-10 border-b border-white/10 relative z-10">
+                <h3 className="text-white/60 text-xs font-black uppercase tracking-[0.2em] mb-6">Payment Summary</h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center text-sm font-semibold text-white/80">
+                    <span>Subtotal</span>
+                    <span className="text-white">KES {fee.toLocaleString()}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm font-semibold text-white/80">
+                    <span>Service Charge</span>
+                    <span className="text-white">KES 0</span>
+                  </div>
+                  <div className="flex justify-between items-center text-sm font-semibold text-white/80">
+                    <span>VAT (Included)</span>
+                    <span className="text-emerald-300">KES 0</span>
+                  </div>
                 </div>
-                <div className="flex justify-between items-center text-sm font-semibold text-slate-500">
-                  <span>Service Charge</span>
-                  <span className="text-slate-700">KES 0</span>
-                </div>
-                <div className="flex justify-between items-center text-sm font-semibold text-slate-500">
-                  <span>VAT (Included)</span>
-                  <span className="text-slate-700">KES 0</span>
-                </div>
-                <div className="pt-5 mt-3 border-t border-slate-100 flex justify-between items-end">
-                  <span className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-1">Total Payable</span>
-                  <span className="text-4xl font-black text-[#0b4a2d]">KES {fee.toLocaleString()}</span>
+                <div className="pt-6 mt-6 border-t border-white/10 flex justify-between items-end">
+                  <span className="text-white/60 font-black uppercase tracking-widest text-sm mb-1">Total Due</span>
+                  <span className="text-5xl font-black text-white font-outfit tracking-tight">KES {fee.toLocaleString()}</span>
                 </div>
               </div>
 
               {/* M-Pesa Interactive Area */}
-              <div className="p-8 bg-slate-50 relative min-h-[320px] flex flex-col justify-center">
+              <div className="p-10 bg-gradient-to-b from-[#06331e] to-[#01140b] relative z-10 min-h-[380px] flex flex-col justify-center">
                 
                 {status === "idle" && (
-                  <div className="space-y-6 animate-in fade-in duration-300">
-                    <div className="flex items-center gap-4 mb-4">
-                      {/* M-Pesa styled logo block */}
-                      <div className="w-14 h-14 bg-white rounded-2xl shadow-sm border border-slate-200 flex items-center justify-center p-2">
+                  <div className="space-y-8 animate-in fade-in duration-500">
+                    <div className="flex items-center gap-5">
+                      <div className="w-16 h-16 bg-white rounded-2xl shadow-lg border border-white/10 flex items-center justify-center p-2 shrink-0">
                         <div className="w-full h-full bg-[#25D366] rounded-xl flex items-center justify-center">
-                          <Phone className="w-6 h-6 text-white" />
+                          <Phone className="w-7 h-7 text-white" />
                         </div>
                       </div>
                       <div>
-                        <h4 className="text-lg font-black text-slate-800 tracking-tight">M-Pesa Express</h4>
-                        <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">Secure STK Push</p>
+                        <h4 className="text-2xl font-black text-white tracking-tight">M-Pesa Express</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="flex w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></span>
+                          <p className="text-xs text-white/60 font-bold uppercase tracking-widest">Instant STK Push</p>
+                        </div>
                       </div>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">
-                        M-pesa Phone Number
+                    <div className="space-y-3">
+                      <label className="block text-xs font-black uppercase tracking-[0.1em] text-white/60 ml-2">
+                        Mobile Money Number
                       </label>
                       <input
                         type="tel"
@@ -203,12 +236,12 @@ function ConfirmPageContent() {
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handlePay()}
-                        className="w-full bg-white border border-slate-200 rounded-2xl px-5 py-4 text-lg font-black text-slate-800 focus:ring-4 focus:ring-[#25D366]/20 focus:border-[#25D366] outline-none transition-all placeholder:text-slate-300 placeholder:font-medium shadow-sm"
+                        className="w-full bg-white/5 border border-white/10 rounded-[20px] px-6 py-5 text-xl font-bold text-white focus:bg-white/10 focus:ring-2 focus:ring-[#25D366]/50 focus:border-[#25D366] outline-none transition-all placeholder:text-white/20"
                       />
                     </div>
 
                     {errorMsg && (
-                      <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700 font-bold">
+                      <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-sm text-red-400 font-bold">
                         <XCircle className="w-5 h-5 shrink-0 mt-0.5" />
                         <p>{errorMsg}</p>
                       </div>
@@ -216,46 +249,51 @@ function ConfirmPageContent() {
 
                     <button
                       onClick={handlePay}
-                      className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 px-6 rounded-2xl font-black text-lg shadow-xl shadow-[#25D366]/30 hover:scale-[1.02] transition-all duration-200"
+                      className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-5 px-6 rounded-[20px] font-black text-xl shadow-[0_0_40px_rgba(37,211,102,0.3)] hover:shadow-[0_0_60px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 transition-all duration-300"
                     >
-                      <CreditCard className="w-5 h-5" />
-                      Pay KES {fee.toLocaleString()}
+                      <CreditCard className="w-6 h-6" />
+                      Pay KES {fee.toLocaleString()} Now
                     </button>
                     
-                    <p className="text-xs text-center text-slate-400 font-bold uppercase tracking-wider mt-2">
-                      Prompt sent to your phone. Enter <strong className="text-slate-500">M-Pesa PIN</strong> to confirm.
+                    <p className="text-[11px] text-center text-white/40 font-bold uppercase tracking-wider mt-2">
+                      Prompt sent securely to your device. Pin confirmation required.
                     </p>
                   </div>
                 )}
 
                 {status === "initiating" && (
-                  <div className="flex flex-col items-center justify-center text-center space-y-5 animate-in zoom-in-95 duration-300">
-                    <Loader2 className="w-12 h-12 text-[#25D366] animate-spin" />
+                  <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in duration-500">
+                    <div className="relative">
+                      <div className="w-20 h-20 bg-[#25D366]/20 rounded-full flex items-center justify-center">
+                        <Loader2 className="w-10 h-10 text-[#25D366] animate-spin" />
+                      </div>
+                      <div className="absolute inset-0 border-2 border-[#25D366]/40 rounded-full animate-ping" />
+                    </div>
                     <div>
-                      <h4 className="text-lg font-black text-slate-800">Connecting...</h4>
-                      <p className="text-sm text-slate-500 font-medium mt-1">Sending request to Safaricom</p>
+                      <h4 className="text-2xl font-black text-white">Secure Connection...</h4>
+                      <p className="text-white/50 font-medium mt-2 text-lg">Handshaking with Safaricom M-Pesa</p>
                     </div>
                   </div>
                 )}
 
                 {status === "waiting" && (
-                  <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in-95 duration-300">
+                  <div className="flex flex-col items-center justify-center text-center space-y-8 animate-in zoom-in duration-500">
                     <div className="relative">
-                      <div className="w-20 h-20 bg-blue-50 border-4 border-blue-100 rounded-full flex items-center justify-center relative z-10">
-                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                      <div className="w-24 h-24 bg-white/10 border border-white/20 rounded-full flex items-center justify-center relative z-10 backdrop-blur-md">
+                        <div className="w-16 h-16 border-4 border-t-[#25D366] border-white/10 rounded-full animate-spin" />
                       </div>
-                      <div className="absolute inset-0 bg-blue-100 rounded-full animate-ping opacity-40 z-0" />
+                      <div className="absolute inset-0 bg-[#25D366]/20 rounded-full animate-ping z-0" />
                     </div>
-                    <div>
-                      <h4 className="text-xl font-black text-slate-800">Awaiting Your PIN</h4>
-                      <p className="text-sm font-medium text-slate-500 mt-2 px-4 leading-relaxed">
-                        A prompt has been sent to <strong>{phoneNumber}</strong>.<br />
-                        Please enter your M-Pesa PIN to complete payment.
+                    <div className="space-y-3">
+                      <h4 className="text-3xl font-black text-white tracking-tight">Check Your Phone</h4>
+                      <p className="text-base font-medium text-white/70 max-w-sm mx-auto leading-relaxed">
+                        An M-Pesa prompt has been sent to <strong className="text-white">{phoneNumber}</strong>.<br />
+                        Please enter your PIN to authorize payment.
                       </p>
                     </div>
                     <button
                       onClick={handleCancel}
-                      className="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-colors mt-2"
+                      className="px-6 py-2 rounded-full border border-white/10 text-xs font-bold uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 transition-all"
                     >
                       Cancel Transaction
                     </button>
@@ -263,41 +301,42 @@ function ConfirmPageContent() {
                 )}
 
                 {status === "success" && (
-                  <div className="flex flex-col items-center justify-center text-center space-y-5 animate-in zoom-in-95 duration-300">
-                    <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-12 h-12 text-green-600" />
+                  <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in duration-500">
+                    <div className="w-28 h-28 bg-[#25D366]/20 rounded-full flex items-center justify-center mb-2">
+                      <CheckCircle2 className="w-14 h-14 text-[#25D366]" />
                     </div>
                     <div>
-                      <h4 className="text-2xl font-black text-green-800">Payment Successful!</h4>
-                      <p className="text-sm text-slate-500 mt-2 font-medium">Your application is being processed.</p>
+                      <h4 className="text-3xl font-black text-white">Payment Successful</h4>
+                      <p className="text-white/60 mt-2 font-medium text-lg">Your application is now processing.</p>
+                      <div className="mt-8 flex items-center justify-center gap-2 text-[#25D366]">
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        <span className="text-xs font-bold uppercase tracking-widest">Redirecting</span>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {status === "error" && (
-                  <div className="flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in-95 duration-300">
-                    <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center">
-                      <XCircle className="w-10 h-10 text-red-600" />
+                  <div className="flex flex-col items-center justify-center text-center space-y-8 animate-in zoom-in duration-500">
+                    <div className="w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center">
+                      <XCircle className="w-12 h-12 text-red-500" />
                     </div>
                     <div className="w-full">
-                      <h4 className="text-xl font-black text-red-800">Payment Failed</h4>
-                      <p className="text-sm font-bold text-red-600 mt-3 bg-red-50 px-4 py-3 rounded-xl border border-red-100 w-full">{errorMsg}</p>
+                      <h4 className="text-2xl font-black text-white">Transaction Failed</h4>
+                      <div className="mt-4 bg-red-500/10 border border-red-500/30 px-6 py-4 rounded-[20px]">
+                        <p className="text-red-400 font-bold">{errorMsg}</p>
+                      </div>
                     </div>
                     <button
                       onClick={handleRetry}
-                      className="w-full bg-white border border-slate-200 text-slate-700 py-4 px-6 rounded-2xl font-black shadow-sm hover:bg-slate-50 transition-colors"
+                      className="w-full bg-white text-[#0b4a2d] hover:bg-slate-100 py-5 px-6 rounded-[20px] font-black text-xl shadow-lg transform hover:-translate-y-1 transition-all duration-300"
                     >
-                      Try Again
+                      Retry Payment
                     </button>
                   </div>
                 )}
 
               </div>
-            </div>
-            
-            <div className="flex items-center gap-2 justify-center text-slate-400 pt-2">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span className="text-xs font-black tracking-widest uppercase">Secure encrypted checkout</span>
             </div>
           </div>
           
