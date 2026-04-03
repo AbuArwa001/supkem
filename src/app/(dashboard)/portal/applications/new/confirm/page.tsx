@@ -104,7 +104,7 @@ function ConfirmPageContent() {
           setStatus("success");
           clearInterval(interval);
           setTimeout(() => {
-            router.push(`/portal/applications/${appId}`);
+            router.push(`/portal/applications/${appId}/invoice`);
           }, 2500);
         } else if (payStatus === "Failed") {
           setStatus("error");
