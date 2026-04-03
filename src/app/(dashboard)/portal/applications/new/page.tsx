@@ -12,8 +12,6 @@ import { TravelVisaDetailsForm } from "./_components/TravelVisaDetailsForm";
 import { EmploymentDetailsForm } from "./_components/EmploymentDetailsForm";
 import { ApplicationSidebar } from "./_components/ApplicationSidebar";
 import { FormNavigation } from "./_components/FormNavigation";
-import { PaymentModal } from "./_components/PaymentModal";
-import { useRouter } from "next/navigation";
 
 export default function SubmitApplication() {
   const {
@@ -37,12 +35,7 @@ export default function SubmitApplication() {
     handleSubmit,
     setFormData,
     setErrors,
-    showPaymentModal,
-    setShowPaymentModal,
-    createdAppId,
   } = useSubmitApplicationLogic();
-
-  const router = useRouter();
 
   const isOtherService = isHajjUmrahService || isEducationService || isTravelVisaService || isEmploymentService;
 
@@ -144,21 +137,6 @@ export default function SubmitApplication() {
         />
       </form>
 
-      {showPaymentModal && createdAppId && selectedService && (
-        <PaymentModal
-          applicationId={createdAppId}
-          serviceName={selectedService.name}
-          serviceFee={selectedService.fee ? Number(selectedService.fee) : 1500}
-          onSuccess={() => {
-            setShowPaymentModal(false);
-            router.push(`/portal/applications/${createdAppId}`);
-          }}
-          onClose={() => {
-            setShowPaymentModal(false);
-            router.push(`/portal/applications`);
-          }}
-        />
-      )}
     </div>
   );
 }

@@ -76,8 +76,6 @@ export function useSubmitApplicationLogic() {
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [createdAppId, setCreatedAppId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -243,8 +241,10 @@ export function useSubmitApplicationLogic() {
         employment_details: isEmploymentService ? formData.employment_details : null,
       };
       const response = await submitApplication(payload);
-      setCreatedAppId(response.id);
-      setShowPaymentModal(true);
+      const fee = selectedService?.fee ? Number(selectedService.fee) : 1500;
+      router.push(
+        `/portal/applications/new/confirm?appId=${response.id}&service=${encodeURIComponent(selectedService?.name ?? "Service")}&fee=${fee}`
+      );
     } catch (err) {
       console.error("Submission failed", err);
     } finally {
@@ -275,8 +275,5 @@ export function useSubmitApplicationLogic() {
     handleNextStep,
     handlePrevStep,
     handleSubmit,
-    showPaymentModal,
-    setShowPaymentModal,
-    createdAppId,
   };
 }
