@@ -177,7 +177,7 @@ function ConfirmPageContent() {
 
           {/* Right Column: Payment Details */}
           <div className="lg:col-span-7">
-            <div className="bg-[#0b4a2d] rounded-[40px] shadow-2xl shadow-[#0b4a2d]/30 overflow-hidden relative border border-[#0b4a2d]/50">
+            <div className="bg-[#0b4a2d] bg-[url('/payment-bg.png')] bg-cover bg-center bg-blend-soft-light rounded-[40px] shadow-2xl shadow-[#0b4a2d]/30 overflow-hidden relative border border-[#0b4a2d]/50">
               {/* Premium Dark Modal Effects */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-[60px] pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#25D366]/10 rounded-full blur-[60px] pointer-events-none" />
@@ -212,10 +212,8 @@ function ConfirmPageContent() {
                 {status === "idle" && (
                   <div className="space-y-8 animate-in fade-in duration-500">
                     <div className="flex items-center gap-5">
-                      <div className="w-16 h-16 bg-white rounded-2xl shadow-lg border border-white/10 flex items-center justify-center p-2 shrink-0">
-                        <div className="w-full h-full bg-[#25D366] rounded-xl flex items-center justify-center">
-                          <Phone className="w-7 h-7 text-white" />
-                        </div>
+                      <div className="w-24 h-14 bg-white rounded-2xl shadow-lg border border-white/10 flex items-center justify-center p-3 shrink-0">
+                        <img src="/M-PESA_LOGO-01.svg" alt="M-PESA" className="w-full h-full object-contain" />
                       </div>
                       <div>
                         <h4 className="text-2xl font-black text-white tracking-tight">M-Pesa Express</h4>
