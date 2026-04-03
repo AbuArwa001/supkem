@@ -2,6 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { Organization, Service, FormData } from "./types";
 import { fetchOrganizations, fetchServices, submitApplication } from "./services";
+import { useAuth } from "@/hooks/useAuth";
 
 const initialFormData: FormData = {
   organization: "",
@@ -77,6 +78,26 @@ export function useSubmitApplicationLogic() {
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const router = useRouter();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      const fullName = [user.first_name, user.middle_name, user.last_name]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
+      
+      if (fullName) {
+        setFormData((prev) => ({
+          ...prev,
+          pilgrim_details: { ...prev.pilgrim_details, full_name: fullName },
+          education_details: { ...prev.education_details, full_name: fullName },
+          travel_visa_details: { ...prev.travel_visa_details, full_name: fullName },
+          employment_details: { ...prev.employment_details, full_name: fullName },
+        }));
+      }
+    }
+  }, [user]);
 
   useEffect(() => {
     const loadData = async () => {
