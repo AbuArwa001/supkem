@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Menu, X, LayoutDashboard, ChevronRight } from "lucide-react";
+import { Menu, X, LayoutDashboard, ChevronRight, Globe, Languages } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Cookies from "js-cookie";
 
@@ -13,6 +13,7 @@ const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [showArabicComingSoon, setShowArabicComingSoon] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -80,6 +81,21 @@ const Navbar = () => {
                 </div>
 
                 <div className="hidden md:flex items-center gap-4">
+                    {/* Language Toggle */}
+                    <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-full border border-slate-200">
+                      <button 
+                        className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-white text-slate-900 rounded-full shadow-sm"
+                      >
+                        EN
+                      </button>
+                      <button 
+                        onClick={() => setShowArabicComingSoon(true)}
+                        className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                      >
+                        AR
+                      </button>
+                    </div>
+
                     {isLoggedIn ? (
                         <Link
                             href="/admin"
@@ -162,6 +178,22 @@ const Navbar = () => {
                         <div className="h-px bg-slate-100 my-4" />
 
                         <div className="flex flex-col gap-3">
+                            <div className="flex items-center justify-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Language</p>
+                                <div className="flex items-center gap-1 p-1 bg-white rounded-full border border-slate-200">
+                                  <button className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest bg-slate-900 text-white rounded-full">EN</button>
+                                  <button 
+                                    onClick={() => {
+                                      setIsOpen(false);
+                                      setShowArabicComingSoon(true);
+                                    }}
+                                    className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400"
+                                  >
+                                    AR
+                                  </button>
+                                </div>
+                            </div>
+
                             <Link
                                 href="/login"
                                 className="text-center py-4 bg-slate-50 text-slate-700 rounded-2xl font-bold hover:bg-slate-100 transition-colors border border-slate-200"
@@ -177,6 +209,49 @@ const Navbar = () => {
                         </div>
                     </motion.div>
                 )}
+            </AnimatePresence>
+
+            {/* Arabic Coming Soon Modal */}
+            <AnimatePresence>
+              {showArabicComingSoon && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onClick={() => setShowArabicComingSoon(false)}
+                    className="absolute inset-0 bg-slate-900/40 backdrop-blur-md"
+                  />
+                  <motion.div 
+                    initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                    className="relative w-full max-w-md bg-white rounded-[32px] overflow-hidden shadow-2xl border border-white"
+                  >
+                    <div className="p-10 text-center space-y-6">
+                      <div className="w-20 h-20 bg-emerald-50 rounded-[24px] flex items-center justify-center mx-auto mb-4 border border-emerald-100 rotate-6 group-hover:rotate-0 transition-transform duration-500">
+                        <Languages size={40} className="text-[#0b4a2d]" />
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <h3 className="text-3xl font-black font-outfit text-slate-900 tracking-tight">
+                          Arabic Version <br/>Coming Soon
+                        </h3>
+                        <p className="text-slate-500 font-medium leading-relaxed">
+                          We are currently engineering a full bilingual experience to better serve the global Muslim community. This feature will be launched as part of our upcoming Digital Transformation phase.
+                        </p>
+                      </div>
+
+                      <button 
+                        onClick={() => setShowArabicComingSoon(false)}
+                        className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-800 hover:shadow-xl hover:shadow-slate-900/20 transition-all active:scale-95"
+                      >
+                        JazakAllah Khairan
+                      </button>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
             </AnimatePresence>
         </nav>
     );
