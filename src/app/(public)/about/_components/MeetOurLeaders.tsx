@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User, Linkedin, Twitter, Mail } from "lucide-react";
+import { User, Linkedin, Twitter, Mail, Facebook } from "lucide-react";
 import {
   LeadershipService,
   LeadershipProfile,
@@ -103,15 +103,36 @@ export function MeetOurLeaders() {
                     </div>
 
                     <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
-                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                        <Linkedin size={18} />
-                      </button>
-                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                        <Twitter size={18} />
-                      </button>
-                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                        <Mail size={18} />
-                      </button>
+                      {leader.linkedin_url && (
+                        <a 
+                          href={leader.linkedin_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                        >
+                          <Linkedin size={18} />
+                        </a>
+                      )}
+                      {leader.twitter_url && (
+                        <a 
+                          href={leader.twitter_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                        >
+                          <Twitter size={18} />
+                        </a>
+                      )}
+                      {leader.facebook_url && (
+                        <a 
+                          href={leader.facebook_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                        >
+                          <Facebook size={18} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
