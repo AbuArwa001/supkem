@@ -240,6 +240,9 @@ const Navbar = () => {
                         <p className="text-slate-500 font-medium leading-relaxed">
                           We are currently engineering a full bilingual experience to better serve the global Muslim community. This feature will be launched as part of our upcoming Digital Transformation phase.
                         </p>
+                        <p className="text-[#0b4a2d] font-bold leading-relaxed text-lg" dir="rtl">
+                          نحن نعمل حالياً على تطوير تجربة كاملة ثنائية اللغة لخدمة المجتمع الإسلامي العالمي بشكل أفضل. سيتم إطلاق هذه الميزة كجزء من مرحلة التحول الرقمي القادمة.
+                        </p>
                       </div>
 
                       <button 
