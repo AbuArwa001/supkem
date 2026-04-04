@@ -9,6 +9,9 @@ export interface LeadershipProfile {
   bio: string | null;
   order: number;
   is_active: boolean;
+  twitter_url?: string;
+  linkedin_url?: string;
+  facebook_url?: string;
   created_at: string;
   updated_at: string;
 }

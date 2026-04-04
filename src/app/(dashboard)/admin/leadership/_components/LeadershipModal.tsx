@@ -6,6 +6,9 @@ import {
   CheckCircle2,
   Loader2,
   User,
+  Twitter,
+  Linkedin,
+  Facebook,
 } from "lucide-react";
 import { LeadershipProfile } from "@/services/leadership-service";
 import { cn } from "@/lib/utils";
@@ -21,6 +24,9 @@ interface LeadershipModalProps {
     order: number;
     is_active: boolean;
     photo: File | null;
+    twitter_url: string;
+    linkedin_url: string;
+    facebook_url: string;
   };
   setFormData: (data: any) => void;
   isSubmitting: boolean;
@@ -185,6 +191,57 @@ export function LeadershipModal({
                     }
                     className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-bold text-primary transition-all text-sm"
                   />
+                </div>
+              </div>
+
+              {/* Social Links Section */}
+              <div className="space-y-6 pt-6 border-t border-border/50">
+                <p className="text-[11px] font-black text-primary/40 uppercase tracking-[0.3em]">
+                  Social Media Presence
+                </p>
+                
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="relative">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
+                      <Linkedin size={18} />
+                    </div>
+                    <input
+                      value={formData.linkedin_url}
+                      onChange={(e) =>
+                        setFormData({ ...formData, linkedin_url: e.target.value })
+                      }
+                      placeholder="LinkedIn Profile URL"
+                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
+                      <Twitter size={18} />
+                    </div>
+                    <input
+                      value={formData.twitter_url}
+                      onChange={(e) =>
+                        setFormData({ ...formData, twitter_url: e.target.value })
+                      }
+                      placeholder="Twitter / X Profile URL"
+                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors">
+                      <Facebook size={18} />
+                    </div>
+                    <input
+                      value={formData.facebook_url}
+                      onChange={(e) =>
+                        setFormData({ ...formData, facebook_url: e.target.value })
+                      }
+                      placeholder="Facebook Profile URL"
+                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                    />
+                  </div>
                 </div>
               </div>
 

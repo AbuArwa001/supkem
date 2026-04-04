@@ -15,6 +15,9 @@ export function useLeadershipLogic() {
     order: 0,
     is_active: true,
     photo: null as File | null,
+    twitter_url: "",
+    linkedin_url: "",
+    facebook_url: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -45,6 +48,9 @@ export function useLeadershipLogic() {
         order: item.order,
         is_active: item.is_active,
         photo: null,
+        twitter_url: item.twitter_url || "",
+        linkedin_url: item.linkedin_url || "",
+        facebook_url: item.facebook_url || "",
       });
     } else {
       setEditingItem(null);
@@ -55,6 +61,9 @@ export function useLeadershipLogic() {
         order: 0,
         is_active: true,
         photo: null,
+        twitter_url: "",
+        linkedin_url: "",
+        facebook_url: "",
       });
     }
     setIsModalOpen(true);
@@ -77,6 +86,9 @@ export function useLeadershipLogic() {
     if (formData.photo) {
       data.append("photo", formData.photo);
     }
+    data.append("twitter_url", formData.twitter_url);
+    data.append("linkedin_url", formData.linkedin_url);
+    data.append("facebook_url", formData.facebook_url);
 
     try {
       if (editingItem) {
