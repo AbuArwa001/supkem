@@ -1,6 +1,12 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Image as ImageIcon, CheckCircle2, Loader2, User } from "lucide-react";
+import {
+  X,
+  Image as ImageIcon,
+  CheckCircle2,
+  Loader2,
+  User,
+} from "lucide-react";
 import { LeadershipProfile } from "@/services/leadership-service";
 import { cn } from "@/lib/utils";
 
@@ -45,7 +51,7 @@ export function LeadershipModal({
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-xl bg-white rounded-[40px] shadow-2xl overflow-hidden border border-border"
+            className="relative w-full max-w-xl bg-white rounded-[20px] shadow-2xl overflow-hidden border border-border"
           >
             {/* Header */}
             <div className="p-8 border-b border-border flex items-center justify-between bg-slate-50/50">
@@ -61,7 +67,10 @@ export function LeadershipModal({
                 onClick={onClose}
                 className="p-3 hover:bg-white rounded-2xl transition-all hover:shadow-md border border-transparent hover:border-border group"
               >
-                <X size={24} className="text-foreground/30 group-hover:text-primary transition-colors" />
+                <X
+                  size={24}
+                  className="text-foreground/30 group-hover:text-primary transition-colors"
+                />
               </button>
             </div>
 
@@ -140,12 +149,20 @@ export function LeadershipModal({
                     >
                       {formData.photo ? (
                         <>
-                          <CheckCircle2 size={18} className="text-emerald-500" />
-                          <span className="text-emerald-600 truncate max-w-[150px]">{formData.photo.name}</span>
+                          <CheckCircle2
+                            size={18}
+                            className="text-emerald-500"
+                          />
+                          <span className="text-emerald-600 truncate max-w-[150px]">
+                            {formData.photo.name}
+                          </span>
                         </>
                       ) : (
                         <>
-                          <ImageIcon size={18} className="group-hover:text-primary transition-colors" />
+                          <ImageIcon
+                            size={18}
+                            className="group-hover:text-primary transition-colors"
+                          />
                           <span>Select Photo</span>
                         </>
                       )}
@@ -161,7 +178,10 @@ export function LeadershipModal({
                     type="number"
                     value={formData.order}
                     onChange={(e) =>
-                      setFormData({ ...formData, order: parseInt(e.target.value) || 0 })
+                      setFormData({
+                        ...formData,
+                        order: parseInt(e.target.value) || 0,
+                      })
                     }
                     className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-bold text-primary transition-all text-sm"
                   />
@@ -186,7 +206,7 @@ export function LeadershipModal({
                       "w-7 h-7 rounded-lg border-2 flex items-center justify-center transition-all",
                       formData.is_active
                         ? "bg-primary border-primary shadow-lg shadow-primary/20 scale-110"
-                        : "border-border group-hover:border-primary/30"
+                        : "border-border group-hover:border-primary/30",
                     )}
                   >
                     {formData.is_active && (

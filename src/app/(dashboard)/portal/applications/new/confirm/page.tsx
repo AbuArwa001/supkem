@@ -304,7 +304,7 @@ function ConfirmPageContent() {
 
           {/* Right Column: Payment Details */}
           <div className="lg:col-span-7">
-            <div className="bg-black/30 backdrop-blur-xl rounded-[40px] shadow-2xl overflow-hidden relative border border-white/20">
+            <div className="bg-black/30 backdrop-blur-xl rounded-[20px] shadow-2xl overflow-hidden relative border border-white/20">
               {/* Premium Dark Modal Effects */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-[60px] pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#25D366]/10 rounded-full blur-[60px] pointer-events-none" />

@@ -3,7 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User, Linkedin, Twitter, Mail } from "lucide-react";
-import { LeadershipService, LeadershipProfile } from "@/services/leadership-service";
+import {
+  LeadershipService,
+  LeadershipProfile,
+} from "@/services/leadership-service";
 import Image from "next/image";
 
 export function MeetOurLeaders() {
@@ -28,12 +31,12 @@ export function MeetOurLeaders() {
     return (
       <section className="py-32 px-6 bg-slate-50">
         <div className="max-w-7xl mx-auto space-y-12 animate-pulse">
-            <div className="h-10 w-64 bg-slate-200 rounded-full mx-auto" />
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {[1, 2, 3].map(i => (
-                    <div key={i} className="h-[500px] bg-slate-200 rounded-[40px]" />
-                ))}
-            </div>
+          <div className="h-10 w-64 bg-slate-200 rounded-full mx-auto" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-[500px] bg-slate-200 rounded-[20px]" />
+            ))}
+          </div>
         </div>
       </section>
     );
@@ -56,8 +59,9 @@ export function MeetOurLeaders() {
             Meet Our Leaders
           </h2>
           <p className="text-xl text-foreground/60 font-medium leading-relaxed">
-            Leading with integrity and dedication, the SUPKEM leadership is committed 
-            to representing the interests of the Muslim community in Kenya.
+            Leading with integrity and dedication, the SUPKEM leadership is
+            committed to representing the interests of the Muslim community in
+            Kenya.
           </p>
         </div>
 
@@ -71,7 +75,7 @@ export function MeetOurLeaders() {
               transition={{ delay: i * 0.2 }}
               className="group relative"
             >
-              <div className="relative aspect-[3/4] rounded-[40px] overflow-hidden bg-white shadow-2xl transition-all duration-700 group-hover:-translate-y-4 group-hover:shadow-primary/20 border border-border/50">
+              <div className="relative aspect-[3/4] rounded-[20px] overflow-hidden bg-white shadow-2xl transition-all duration-700 group-hover:-translate-y-4 group-hover:shadow-primary/20 border border-border/50">
                 {leader.photo ? (
                   <Image
                     src={leader.photo}
@@ -85,7 +89,7 @@ export function MeetOurLeaders() {
                     <User size={120} />
                   </div>
                 )}
-                
+
                 {/* Overlay content */}
                 <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                   <div className="space-y-4">
@@ -97,17 +101,17 @@ export function MeetOurLeaders() {
                         {leader.name}
                       </h3>
                     </div>
-                    
+
                     <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
-                        <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                            <Linkedin size={18} />
-                        </button>
-                        <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                            <Twitter size={18} />
-                        </button>
-                        <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
-                            <Mail size={18} />
-                        </button>
+                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+                        <Linkedin size={18} />
+                      </button>
+                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+                        <Twitter size={18} />
+                      </button>
+                      <button className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+                        <Mail size={18} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -116,9 +120,9 @@ export function MeetOurLeaders() {
               {/* Bio snippet */}
               {leader.bio && (
                 <div className="mt-8 px-4">
-                    <p className="text-sm text-foreground/50 font-medium leading-relaxed italic border-l-2 border-primary/20 pl-4 py-2">
-                        {leader.bio}
-                    </p>
+                  <p className="text-sm text-foreground/50 font-medium leading-relaxed italic border-l-2 border-primary/20 pl-4 py-2">
+                    {leader.bio}
+                  </p>
                 </div>
               )}
             </motion.div>
@@ -126,12 +130,12 @@ export function MeetOurLeaders() {
         </div>
 
         <div className="pt-12 text-center">
-            <div className="inline-block p-1 rounded-[24px] bg-white shadow-xl shadow-primary/5 border border-border overflow-hidden">
-                <div className="px-8 py-5 rounded-[20px] bg-primary/[0.02] border border-primary/5 text-sm font-bold text-primary flex items-center gap-3">
-                    <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-                    Transparent & Accountable Governance
-                </div>
+          <div className="inline-block p-1 rounded-[24px] bg-white shadow-xl shadow-primary/5 border border-border overflow-hidden">
+            <div className="px-8 py-5 rounded-[20px] bg-primary/[0.02] border border-primary/5 text-sm font-bold text-primary flex items-center gap-3">
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
+              Transparent & Accountable Governance
             </div>
+          </div>
         </div>
       </div>
     </section>
