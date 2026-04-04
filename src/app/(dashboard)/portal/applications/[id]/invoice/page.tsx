@@ -106,6 +106,7 @@ function InvoicePageContent() {
 
       {/* Invoice Card */}
       <div
+        id="invoice-printable"
         ref={printRef}
         className="max-w-4xl mx-auto bg-white rounded-[16px] shadow-2xl shadow-slate-200/60 overflow-hidden print:shadow-none print:rounded-none"
       >
@@ -385,18 +386,30 @@ function InvoicePageContent() {
       {/* Print styles */}
       <style jsx global>{`
         @media print {
-          body * {
-            visibility: hidden;
+          body {
+            background: white !important;
+            padding: 0 !important;
+            margin: 0 !important;
           }
-          #invoice-printable,
-          #invoice-printable * {
-            visibility: visible;
+          /* Hide everything except the printable area */
+          body > :not(#invoice-printable),
+          .print\:hidden {
+            display: none !important;
           }
           #invoice-printable {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
+            position: static !important;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+          }
+          /* Ensure backgrounds are printed if the user enables them */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
         }
       `}</style>
