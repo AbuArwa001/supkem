@@ -10,7 +10,14 @@ export const useApplicationLogic = () => {
   const [application, setApplication] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
+
+  const handlePay = () => {
+    if (!application) return;
+    const appId = application.id;
+    const serviceName = application.service?.name || application.service_name || "Service";
+    const fee = application.service?.fee || application.service_fee || 0;
+    router.push(`/portal/applications/new/confirm?appId=${appId}&service=${encodeURIComponent(serviceName)}&fee=${fee}`);
+  };
 
   const fetchApplication = async () => {
     try {
@@ -42,8 +49,7 @@ export const useApplicationLogic = () => {
     error,
     handleBack,
     handleReturnToDashboard,
-    showPaymentModal,
-    setShowPaymentModal,
+    handlePay,
     refreshParams: fetchApplication,
   };
 };

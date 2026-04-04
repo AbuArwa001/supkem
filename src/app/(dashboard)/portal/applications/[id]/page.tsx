@@ -19,8 +19,7 @@ export default function ApplicationDetail() {
     error, 
     handleBack, 
     handleReturnToDashboard,
-    showPaymentModal,
-    setShowPaymentModal,
+    handlePay,
     refreshParams
   } = useApplicationLogic();
 
@@ -46,26 +45,13 @@ export default function ApplicationDetail() {
         status={application.status} 
         certification={application.certification} 
         isPaymentPending={isPaymentPending}
-        onPayClick={() => setShowPaymentModal(true)}
+        onPayClick={handlePay}
       />
 
       <DetailsGrid application={application} />
 
       {application.status === "Approved" && application.certification && (
         <CertificateBanner certificationId={application.certification.id} />
-      )}
-
-      {showPaymentModal && application && (
-        <PaymentModal
-          applicationId={application.id}
-          serviceName={application.service_name || "Service Payment"}
-          serviceFee={Number(application.service_fee) || 0}
-          onSuccess={() => {
-            setShowPaymentModal(false);
-            if (refreshParams) refreshParams();
-          }}
-          onClose={() => setShowPaymentModal(false)}
-        />
       )}
     </div>
   );

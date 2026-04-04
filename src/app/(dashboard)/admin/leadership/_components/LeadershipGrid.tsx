@@ -22,7 +22,7 @@ export function LeadershipGrid({
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="h-96 bg-slate-100 animate-pulse rounded-[32px] border border-slate-200"
+            className="h-96 bg-slate-100 animate-pulse rounded-[16px] border border-slate-200"
           />
         ))}
       </div>
@@ -31,7 +31,7 @@ export function LeadershipGrid({
 
   if (profiles.length === 0) {
     return (
-      <div className="text-center py-24 bg-white rounded-[32px] border border-dashed border-border flex flex-col items-center justify-center space-y-4">
+      <div className="text-center py-24 bg-white rounded-[16px] border border-dashed border-border flex flex-col items-center justify-center space-y-4">
         <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center text-primary/40">
           <User size={40} />
         </div>
@@ -53,7 +53,7 @@ export function LeadershipGrid({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1 }}
-          className="group relative bg-white rounded-[32px] border border-border shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all h-full flex flex-col overflow-hidden"
+          className="group relative bg-white rounded-[16px] border border-border shadow-sm hover:shadow-2xl hover:shadow-primary/5 transition-all h-full flex flex-col overflow-hidden"
         >
           {/* Status Badge */}
           <div className="absolute top-6 right-6 z-10">
@@ -95,7 +95,7 @@ export function LeadershipGrid({
                 {item.name}
               </h3>
             </div>
-            
+
             {item.bio && (
               <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-3 italic">
                 "{item.bio}"
@@ -107,7 +107,10 @@ export function LeadershipGrid({
                 onClick={() => onEdit(item)}
                 className="flex-1 flex items-center justify-center gap-2 py-3 bg-primary/[0.03] text-primary hover:bg-primary hover:text-white rounded-xl font-bold text-sm transition-all active:scale-95 group/btn border border-primary/10"
               >
-                <Edit2 size={16} className="transition-transform group-hover/btn:rotate-12" />
+                <Edit2
+                  size={16}
+                  className="transition-transform group-hover/btn:rotate-12"
+                />
                 Edit Profile
               </button>
               <button
