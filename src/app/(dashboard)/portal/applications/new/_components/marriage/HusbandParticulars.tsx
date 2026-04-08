@@ -1,13 +1,21 @@
+// External libraries
 import { User } from "lucide-react";
+
+// Internal — UI atoms, types
+import { FormField, inputBase, inputNormal, borderFor } from "@/app/(dashboard)/portal/applications/new/_components/ui/FormField";
 import { cn } from "@/lib/utils";
+import type { MarriageDetails } from "@/app/(dashboard)/portal/applications/new/_types";
 
 interface HusbandParticularsProps {
-  data: any;
+  data: MarriageDetails;
   errors: Record<string, string>;
   onChange: (field: string, value: string) => void;
 }
 
 export function HusbandParticulars({ data, errors, onChange }: HusbandParticularsProps) {
+  const field = (name: string) => cn(inputBase, borderFor(errors[name]));
+  const on = (key: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => onChange(key, e.target.value);
+
   return (
     <div className="space-y-8">
       <div className="flex items-center gap-4 group">
@@ -15,106 +23,38 @@ export function HusbandParticulars({ data, errors, onChange }: HusbandParticular
           <User size={24} />
         </div>
         <div>
-          <h3 className="text-2xl font-black font-outfit text-slate-800">Husband's Particulars</h3>
+          <h3 className="text-2xl font-black font-outfit text-slate-800">Husband&apos;s Particulars</h3>
           <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Details of the Groom</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Full Name</label>
-          <input
-            type="text"
-            placeholder="Full Name"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_name}
-            onChange={(e) => onChange('husband_name', e.target.value)}
-          />
-          {errors.husband_name && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_name}</p>}
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">ID / Passport No.</label>
-          <input
-            type="text"
-            placeholder="ID / Passport"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_id_passport}
-            onChange={(e) => onChange('husband_id_passport', e.target.value)}
-          />
-          {errors.husband_id_passport && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_id_passport}</p>}
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Age</label>
-          <input
-            type="text"
-            placeholder="Age"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_age ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_age}
-            onChange={(e) => onChange('husband_age', e.target.value)}
-          />
-          {errors.husband_age && <p className="text-[10px] text-rose-500 font-bold mt-1 ml-1">{errors.husband_age}</p>}
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Marital Status</label>
-          <select
-            className="w-full bg-slate-50 border border-slate-200 rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm"
-            value={data.husband_marital_status}
-            onChange={(e) => onChange('husband_marital_status', e.target.value)}
-          >
+        <FormField label="Full Name" error={errors.husband_name}>
+          <input type="text" placeholder="Full Name" className={field("husband_name")} value={data.husband_name} onChange={on("husband_name")} />
+        </FormField>
+        <FormField label="ID / Passport No." error={errors.husband_id_passport}>
+          <input type="text" placeholder="ID / Passport" className={field("husband_id_passport")} value={data.husband_id_passport} onChange={on("husband_id_passport")} />
+        </FormField>
+        <FormField label="Age" error={errors.husband_age}>
+          <input type="text" placeholder="Age" className={field("husband_age")} value={data.husband_age} onChange={on("husband_age")} />
+        </FormField>
+        <FormField label="Marital Status">
+          <select className={cn(inputBase, inputNormal)} value={data.husband_marital_status} onChange={on("husband_marital_status")}>
             <option>First Marriage</option>
             <option>Divorced</option>
             <option>Widower</option>
             <option>Polygamous</option>
           </select>
-        </div>
-        <div className="space-y-2 md:col-span-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Occupation</label>
-          <input
-            type="text"
-            placeholder="Occupation"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_occupation ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_occupation}
-            onChange={(e) => onChange('husband_occupation', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (County)</label>
-          <input
-            type="text"
-            placeholder="County"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_residence_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_residence_county}
-            onChange={(e) => onChange('husband_residence_county', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Residence (Sub-County)</label>
-          <input
-            type="text"
-            placeholder="Sub-County"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.husband_residence_sub_county ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.husband_residence_sub_county}
-            onChange={(e) => onChange('husband_residence_sub_county', e.target.value)}
-          />
-        </div>
+        </FormField>
+        <FormField label="Occupation" error={errors.husband_occupation} colSpan>
+          <input type="text" placeholder="Occupation" className={field("husband_occupation")} value={data.husband_occupation} onChange={on("husband_occupation")} />
+        </FormField>
+        <FormField label="Residence (County)" error={errors.husband_residence_county}>
+          <input type="text" placeholder="County" className={field("husband_residence_county")} value={data.husband_residence_county} onChange={on("husband_residence_county")} />
+        </FormField>
+        <FormField label="Residence (Sub-County)" error={errors.husband_residence_sub_county}>
+          <input type="text" placeholder="Sub-County" className={field("husband_residence_sub_county")} value={data.husband_residence_sub_county} onChange={on("husband_residence_sub_county")} />
+        </FormField>
       </div>
     </div>
   );

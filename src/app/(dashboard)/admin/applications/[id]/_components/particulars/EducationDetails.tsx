@@ -1,6 +1,7 @@
 import { GraduationCap } from "lucide-react";
+import type { EducationDetails as EducationDetailsType } from "@/app/(dashboard)/portal/applications/new/_types";
 
-export default function EducationDetails({ details }: { details: any }) {
+export default function EducationDetails({ details }: { details?: EducationDetailsType | null }) {
   if (!details) return null;
 
   return (

@@ -1,54 +1,51 @@
 "use client";
 
+// React/Next.js core
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import api from "@/lib/api";
+
+// Internal — services
+import { portalApplicationService } from "@/app/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
+import type { PortalApplicationDetail } from "@/app/(dashboard)/portal/applications/new/_types";
 
 export const useApplicationLogic = () => {
   const params = useParams();
   const router = useRouter();
-  const [application, setApplication] = useState<any>(null);
+  const [application, setApplication] = useState<PortalApplicationDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const handlePay = () => {
-    if (!application) return;
-    const appId = application.id;
-    const serviceName = application.service?.name || application.service_name || "Service";
-    const fee = application.service?.fee || application.service_fee || 0;
-    router.push(`/portal/applications/new/confirm?appId=${appId}&service=${encodeURIComponent(serviceName)}&fee=${fee}`);
-  };
-
   const fetchApplication = async () => {
     try {
-      const res = await api.get(`/applications/applications/${params.id}/`);
-      setApplication(res.data);
-    } catch (err: any) {
-      console.error("Failed to fetch application", err);
-      setError(
-        err.response?.data?.detail ||
-        "Application not found or you don't have access.",
-      );
+      const data = await portalApplicationService.fetchById(params.id as string);
+      setApplication(data as PortalApplicationDetail);
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { detail?: string } } };
+      setError(apiError.response?.data?.detail ?? "Application not found or you don't have access.");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (params.id) {
-      fetchApplication();
-    }
+    if (params.id) fetchApplication();
   }, [params.id]);
 
-  const handleBack = () => router.back();
-  const handleReturnToDashboard = () => router.push("/portal");
+  const handlePay = () => {
+    if (!application) return;
+    const appId = application.id;
+    const svc = (application as any).service;
+    const serviceName = svc?.name ?? application.service_name ?? "Service";
+    const fee = svc?.fee ?? application.service_fee ?? 0;
+    router.push(`/portal/applications/new/confirm?appId=${appId}&service=${encodeURIComponent(serviceName)}&fee=${fee}`);
+  };
 
   return {
     application,
     loading,
     error,
-    handleBack,
-    handleReturnToDashboard,
+    handleBack: () => router.back(),
+    handleReturnToDashboard: () => router.push("/portal"),
     handlePay,
     refreshParams: fetchApplication,
   };

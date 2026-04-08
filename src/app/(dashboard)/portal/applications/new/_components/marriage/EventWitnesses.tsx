@@ -1,13 +1,21 @@
+// External libraries
 import { Users } from "lucide-react";
+
+// Internal — UI atoms, types
+import { FormField, inputBase, borderFor } from "@/app/(dashboard)/portal/applications/new/_components/ui/FormField";
 import { cn } from "@/lib/utils";
+import type { MarriageDetails } from "@/app/(dashboard)/portal/applications/new/_types";
 
 interface EventWitnessesProps {
-  data: any;
+  data: MarriageDetails;
   errors: Record<string, string>;
   onChange: (field: string, value: string) => void;
 }
 
 export function EventWitnesses({ data, errors, onChange }: EventWitnessesProps) {
+  const field = (name: string) => cn(inputBase, borderFor(errors[name]));
+  const on = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => onChange(key, e.target.value);
+
   return (
     <div className="space-y-8 pt-8 border-t border-slate-100">
       <div className="flex items-center gap-4 group">
@@ -15,89 +23,30 @@ export function EventWitnesses({ data, errors, onChange }: EventWitnessesProps) 
           <Users size={24} />
         </div>
         <div>
-          <h3 className="text-2xl font-black font-outfit text-slate-800">Event & Witnesses</h3>
+          <h3 className="text-2xl font-black font-outfit text-slate-800">Event &amp; Witnesses</h3>
           <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">Marriage Event Details</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Place of Marriage</label>
-          <input
-            type="text"
-            placeholder="Place"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.place_of_marriage ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.place_of_marriage}
-            onChange={(e) => onChange('place_of_marriage', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Date of Marriage</label>
-          <input
-            type="date"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.date_of_marriage ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.date_of_marriage}
-            onChange={(e) => onChange('date_of_marriage', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 1 Name</label>
-          <input
-            type="text"
-            placeholder="Name"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.witness_1_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.witness_1_name}
-            onChange={(e) => onChange('witness_1_name', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 1 ID/Passport</label>
-          <input
-            type="text"
-            placeholder="ID / Passport"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.witness_1_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.witness_1_id_passport}
-            onChange={(e) => onChange('witness_1_id_passport', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 2 Name</label>
-          <input
-            type="text"
-            placeholder="Name"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.witness_2_name ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.witness_2_name}
-            onChange={(e) => onChange('witness_2_name', e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-xs font-black uppercase tracking-widest text-slate-500 ml-1">Witness 2 ID/Passport</label>
-          <input
-            type="text"
-            placeholder="ID / Passport"
-            className={cn(
-              "w-full bg-slate-50 border rounded-2xl px-6 py-4 focus:ring-2 focus:ring-primary focus:bg-white outline-none transition-all font-bold text-slate-700 shadow-sm",
-              errors.witness_2_id_passport ? "border-rose-300 ring-rose-100 ring-4" : "border-slate-200"
-            )}
-            value={data.witness_2_id_passport}
-            onChange={(e) => onChange('witness_2_id_passport', e.target.value)}
-          />
-        </div>
+        <FormField label="Place of Marriage" error={errors.place_of_marriage}>
+          <input type="text" placeholder="Place" className={field("place_of_marriage")} value={data.place_of_marriage} onChange={on("place_of_marriage")} />
+        </FormField>
+        <FormField label="Date of Marriage" error={errors.date_of_marriage}>
+          <input type="date" className={field("date_of_marriage")} value={data.date_of_marriage} onChange={on("date_of_marriage")} />
+        </FormField>
+        <FormField label="Witness 1 Name" error={errors.witness_1_name}>
+          <input type="text" placeholder="Name" className={field("witness_1_name")} value={data.witness_1_name} onChange={on("witness_1_name")} />
+        </FormField>
+        <FormField label="Witness 1 ID/Passport" error={errors.witness_1_id}>
+          <input type="text" placeholder="ID / Passport" className={field("witness_1_id")} value={data.witness_1_id} onChange={on("witness_1_id")} />
+        </FormField>
+        <FormField label="Witness 2 Name" error={errors.witness_2_name}>
+          <input type="text" placeholder="Name" className={field("witness_2_name")} value={data.witness_2_name} onChange={on("witness_2_name")} />
+        </FormField>
+        <FormField label="Witness 2 ID/Passport" error={errors.witness_2_id}>
+          <input type="text" placeholder="ID / Passport" className={field("witness_2_id")} value={data.witness_2_id} onChange={on("witness_2_id")} />
+        </FormField>
       </div>
     </div>
   );

@@ -1,9 +1,13 @@
+// External libraries
 import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react";
+
+// Internal components & types
 import { cn } from "@/lib/utils";
 import TimelineStatus from "@/app/(dashboard)/admin/applications/[id]/_components/TimelineStatus";
+import type { ApplicationDetail } from "@/app/(dashboard)/admin/applications/_types";
 
 interface ActionSidebarProps {
-  app: any;
+  app: ApplicationDetail;
   submitting: boolean;
   handleAction: (status: string) => void;
   handleDelete: () => void;
