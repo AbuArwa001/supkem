@@ -32,6 +32,7 @@ const Navbar = () => {
     ];
 
     return (
+        <>
         <nav
             className={cn(
                 "fixed top-0 left-0 right-0 z-50 transition-all duration-500 py-3 px-4 sm:px-6",
@@ -210,10 +211,11 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+        </nav>
 
-            {/* Arabic Coming Soon Modal */}
-            <AnimatePresence>
-              {showArabicComingSoon && (
+        {/* Arabic Coming Soon Modal */}
+        <AnimatePresence>
+          {showArabicComingSoon && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
                   <motion.div 
                     initial={{ opacity: 0 }}
@@ -256,7 +258,7 @@ const Navbar = () => {
                 </div>
               )}
             </AnimatePresence>
-        </nav>
+        </>
     );
 };
 
