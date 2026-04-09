@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const PortalSidebar = ({
   isOpen,
@@ -30,6 +30,7 @@ const PortalSidebar = ({
   onClose?: () => void;
 }) => {
   const t = useTranslations("Dashboard.portal.nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -67,21 +68,22 @@ const PortalSidebar = ({
           width: isCollapsed ? 80 : 300,
         }}
         className={cn(
-          "h-screen sticky top-0 bg-[#0A1A14] border-r border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
+          "h-screen sticky top-0 bg-[#0A1A14] border-r ltr:border-r rtl:border-l border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
           "fixed lg:sticky",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          isOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full lg:translate-x-0",
         )}
       >
         {/* Retract Toggle Button (Desktop) */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-primary rounded-full items-center justify-center border border-white/10 text-white z-[70] transition-transform hover:scale-110"
+          className="hidden lg:flex absolute ltr:-right-3 rtl:-left-3 top-20 w-6 h-6 bg-primary rounded-full items-center justify-center border border-white/10 text-white z-[70] transition-transform hover:scale-110"
         >
           <ChevronRight
             size={14}
             className={cn(
               "transition-transform duration-300",
-              !isCollapsed && "rotate-180",
+              !isCollapsed && "ltr:rotate-180 rtl:rotate-0",
+              !isCollapsed && locale === 'ar' && "rotate-180",
             )}
           />
         </button>
@@ -89,7 +91,7 @@ const PortalSidebar = ({
         {/* Mobile Close Button */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-6 right-6 p-2 text-white/40 hover:text-white transition-colors"
+          className="lg:hidden absolute top-6 ltr:right-6 rtl:left-6 p-2 text-white/40 hover:text-white transition-colors"
         >
           <X size={24} />
         </button>

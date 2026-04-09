@@ -6,11 +6,14 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
 import { KnockNotifications } from "@/components/KnockNotifications";
 
+import { useTranslations } from "next-intl";
+
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const t = useTranslations("Dashboard.admin.overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
@@ -29,7 +32,7 @@ export default function AdminLayout({
                 <img src="/logo.svg" alt="SUPKEM Logo" className="w-5 h-5" />
               </div>
               <span className="font-outfit font-black tracking-tight tracking-widest text-xs uppercase">
-                SUPKEM Admin
+                {t("adminHeading")}
               </span>
             </div>
             <div className="flex items-center gap-4">
@@ -51,7 +54,7 @@ export default function AdminLayout({
 
           <div className="p-4 md:p-10">
             <div className="max-w-7xl mx-auto uppercase tracking-widest text-[10px] font-black text-foreground/20 mb-2">
-              SUPKEM Digital Administration Portal
+              {t("adminSubheading")}
             </div>
             {children}
           </div>

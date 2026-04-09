@@ -21,6 +21,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import { useTranslations, useLocale } from "next-intl";
 
 const AdminSidebar = ({
   isOpen,
@@ -29,22 +30,25 @@ const AdminSidebar = ({
   isOpen?: boolean;
   onClose?: () => void;
 }) => {
+  const t = useTranslations("Dashboard.admin.nav");
+  const tp = useTranslations("Dashboard.portal.nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
-    { name: "Overview", href: "/admin", icon: LayoutDashboard },
-    { name: "Organizations", href: "/admin/organizations", icon: Building2 },
-    { name: "Applications", href: "/admin/applications", icon: FileText },
-    { name: "Certificates", href: "/admin/certificates", icon: Award },
-    { name: "News CMS", href: "/admin/news", icon: FileText },
-    { name: "News Papers", href: "/admin/news-papers", icon: FileText },
-    { name: "Leadership", href: "/admin/leadership", icon: Users },
-    { name: "Video Briefings", href: "/admin/videos", icon: Video },
-    { name: "Services CMS", href: "/admin/services", icon: Settings },
-    { name: "User Management", href: "/admin/users", icon: Users },
-    { name: "Settings", href: "/admin/settings", icon: Settings },
+    { name: t("overview"), href: "/admin", icon: LayoutDashboard },
+    { name: t("organizations"), href: "/admin/organizations", icon: Building2 },
+    { name: t("applications"), href: "/admin/applications", icon: FileText },
+    { name: t("certificates"), href: "/admin/certificates", icon: Award },
+    { name: t("newsCms"), href: "/admin/news", icon: FileText },
+    { name: t("newsPapers"), href: "/admin/news-papers", icon: FileText },
+    { name: t("leadership"), href: "/admin/leadership", icon: Users },
+    { name: t("videoBriefings"), href: "/admin/videos", icon: Video },
+    { name: t("services"), href: "/admin/services", icon: Settings },
+    { name: t("users"), href: "/admin/users", icon: Users },
+    { name: t("settings"), href: "/admin/settings", icon: Settings },
   ];
 
   return (
@@ -67,21 +71,22 @@ const AdminSidebar = ({
           width: isCollapsed ? 80 : 300,
         }}
         className={cn(
-          "h-screen sticky top-0 bg-[#0A1A14] border-r border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
+          "h-screen sticky top-0 bg-[#0A1A14] border-r ltr:border-r rtl:border-l border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
           "fixed lg:sticky",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          isOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full lg:translate-x-0",
         )}
       >
         {/* Retract Toggle Button (Desktop) */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden lg:flex absolute -right-3 top-20 w-6 h-6 bg-primary rounded-full items-center justify-center border border-white/10 text-white z-[70] transition-transform hover:scale-110"
+          className="hidden lg:flex absolute ltr:-right-3 rtl:-left-3 top-20 w-6 h-6 bg-primary rounded-full items-center justify-center border border-white/10 text-white z-[70] transition-transform hover:scale-110"
         >
           <ChevronRight
             size={14}
             className={cn(
               "transition-transform duration-300",
-              !isCollapsed && "rotate-180",
+              !isCollapsed && "ltr:rotate-180 rtl:rotate-0",
+              !isCollapsed && locale === 'ar' && "rotate-180",
             )}
           />
         </button>
@@ -89,7 +94,7 @@ const AdminSidebar = ({
         {/* Mobile Close Button */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-6 right-6 p-2 text-white/40 hover:text-white transition-colors"
+          className="lg:hidden absolute top-6 ltr:right-6 rtl:left-6 p-2 text-white/40 hover:text-white transition-colors"
         >
           <X size={24} />
         </button>
@@ -122,7 +127,7 @@ const AdminSidebar = ({
                 SUPKEM
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-400/80 mt-1">
-                Administrator
+                {t("administrator")}
               </p>
             </motion.div>
           )}
@@ -138,7 +143,7 @@ const AdminSidebar = ({
           {!isCollapsed && (
             <div className="px-4 pb-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">
-                Main Menu
+                {t("mainMenu")}
               </p>
             </div>
           )}
@@ -223,10 +228,10 @@ const AdminSidebar = ({
                 className="overflow-hidden"
               >
                 <p className="font-bold text-white truncate text-sm leading-tight">
-                  {user?.full_name || "Admin User"}
+                  {user?.full_name || tp("member")}
                 </p>
                 <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest truncate mt-0.5">
-                  {user?.role?.role_name || "Super Admin"}
+                  {user?.role?.role_name || t("administrator")}
                 </p>
               </motion.div>
             )}
@@ -249,7 +254,7 @@ const AdminSidebar = ({
                 animate={{ opacity: 1, x: 0 }}
                 className="text-sm"
               >
-                Secure Sign Out
+                {tp("signOut")}
               </motion.span>
             )}
           </button>

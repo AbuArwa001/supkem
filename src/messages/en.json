@@ -357,7 +357,9 @@
         "videoBriefings": "Video Briefings",
         "pressUpdates": "Press Updates",
         "optimal": "Systems Optimal",
-        "optimalDesc": "No urgent deadlines or delayed applications detected."
+        "optimalDesc": "No urgent deadlines or delayed applications detected.",
+        "adminHeading": "SUPKEM Admin",
+        "adminSubheading": "SUPKEM Digital Administration Portal"
       },
       "metrics": {
         "organizations": "Organizations",
@@ -368,10 +370,36 @@
       },
       "tables": {
         "recentApps": "Recent Applications",
-        "org": "Organization",
-        "service": "Service",
-        "date": "Date",
-        "manage": "Manage"
+        "viewPipeline": "View Pipeline",
+        "appId": "Application ID",
+        "orgDetail": "Organization Detail",
+        "status": "Current Status",
+        "activity": "Activity",
+        "empty": "No recent applications found."
+      },
+      "report": {
+        "title": "Data Insights Report",
+        "systems": "Analytical Systems",
+        "export": "Export PDF",
+        "growthTrend": "Application Growth Trend",
+        "last30Days": "Last 30 Days",
+        "growthAnalysis": "Growth analysis shows consistent submission patterns with a {percentage} increase compared to the previous cycle.",
+        "distribution": "Workflow Distribution"
+      },
+      "nav": {
+        "overview": "Overview",
+        "organizations": "Organizations",
+        "applications": "Applications",
+        "certificates": "Certificates",
+        "newsCms": "News CMS",
+        "newsPapers": "News Papers",
+        "leadership": "Leadership",
+        "videoBriefings": "Video Briefings",
+        "services": "Services CMS",
+        "users": "User Management",
+        "settings": "Settings",
+        "mainMenu": "Main Menu",
+        "administrator": "Administrator"
       }
     }
   }

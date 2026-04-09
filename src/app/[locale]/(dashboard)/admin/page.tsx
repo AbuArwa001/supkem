@@ -15,12 +15,15 @@ import { ReportModal } from "./_components/ReportModal";
 import { DashboardSkeleton } from "./_components/DashboardSkeleton";
 import { ApplicationsTable } from "./_components/ApplicationsTable";
 import { Sidebar } from "./_components/Sidebar";
+import { useTranslations } from "next-intl";
 
 /**
  * Admin Dashboard - Main Overview Page.
  * Adheres to 200-line readability constraint.
  */
 export default function AdminOverview() {
+  const t = useTranslations("Dashboard.admin.overview");
+  const tc = useTranslations("Dashboard.common");
   const { data, isLoading, isReportOpen, setIsReportOpen } =
     useAdminDashboard();
 
@@ -59,21 +62,20 @@ export default function AdminOverview() {
             animate={{ opacity: 1, x: 0 }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-black tracking-widest uppercase"
           >
-            <Activity size={10} /> Live Dashboard
+            <Activity size={10} /> {tc("liveDashboard")}
           </motion.div>
           <h1 className="text-3xl md:text-4xl font-black font-outfit text-slate-900 tracking-tight leading-none">
-            System Overview
+            {t("heading")}
           </h1>
           <p className="text-slate-500 font-medium text-sm md:text-lg max-w-xl leading-relaxed">
-            Monitor digital operations, application pipelines, and community
-            growth metrics.
+            {t("desc")}
           </p>
         </div>
         <button
           onClick={() => setIsReportOpen(true)}
           className="w-full md:w-auto px-8 py-4 bg-slate-900 text-white rounded-[20px] font-bold hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-900/20 transition-all flex items-center justify-center gap-3"
         >
-          <BarChart3 size={20} /> Generate Report
+          <BarChart3 size={20} /> {tc("generateReport")}
         </button>
       </div>
 

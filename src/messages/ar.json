@@ -369,7 +369,9 @@
         "videoBriefings": "إيجازات الفيديو",
         "pressUpdates": "التحديثات الصحفية",
         "optimal": "النظام يعمل بكفاءة",
-        "optimalDesc": "لم يتم الكشف عن مواعيد نهائية عاجلة أو طلبات متأخرة."
+        "optimalDesc": "لم يتم الكشف عن مواعيد نهائية عاجلة أو طلبات متأخرة.",
+        "adminHeading": "إدارة سوبكيم",
+        "adminSubheading": "بوابة الإدارة الرقمية لسوبكيم"
       },
       "metrics": {
         "organizations": "المنظمات",
@@ -380,10 +382,36 @@
       },
       "tables": {
         "recentApps": "الطلبات الأخيرة",
-        "org": "المنظمة",
-        "service": "الخدمة",
-        "date": "التاريخ",
-        "manage": "إدارة"
+        "viewPipeline": "عرض مسار الطلبات",
+        "appId": "رقم الطلب",
+        "orgDetail": "تفاصيل المنظمة",
+        "status": "الحالة الحالية",
+        "activity": "النشاط",
+        "empty": "لم يتم العثور على طلبات أخيرة."
+      },
+      "report": {
+        "title": "تقرير بيانات التحليلات",
+        "systems": "الأنظمة التحليلية",
+        "export": "تصدير PDF",
+        "growthTrend": "اتجاه نمو الطلبات",
+        "last30Days": "آخر 30 يومًا",
+        "growthAnalysis": "يظهر تحليل النمو أنماط تقديم ثابتة مع زيادة بنسبة {percentage} مقارنة بالدورة السابقة.",
+        "distribution": "توزيع مسار العمل"
+      },
+      "nav": {
+        "overview": "نظرة عامة",
+        "organizations": "المنظمات",
+        "applications": "الطلبات",
+        "certificates": "الشهادات",
+        "newsCms": "إدارة الأخبار",
+        "newsPapers": "الصحف",
+        "leadership": "القيادة",
+        "videoBriefings": "إيجازات الفيديو",
+        "services": "إدارة الخدمات",
+        "users": "إدارة المستخدمين",
+        "settings": "الإعدادات",
+        "mainMenu": "القائمة الرئيسية",
+        "administrator": "المدير"
       }
     }
   }

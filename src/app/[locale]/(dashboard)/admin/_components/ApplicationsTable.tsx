@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowUpRight, CheckCircle2, AlertCircle, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface Application {
   id: string | number;
@@ -18,17 +19,19 @@ interface ApplicationsTableProps {
 }
 
 export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
+  const t = useTranslations("Dashboard.admin.tables");
+
   return (
     <div className="xl:col-span-2 space-y-6">
       <div className="flex items-center justify-between">
         <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
-          Recent Applications
+          {t("recentApps")}
         </h3>
         <Link
           href="/admin/applications"
           className="text-xs md:text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group whitespace-nowrap"
         >
-          View Pipeline{" "}
+          {t("viewPipeline")}{" "}
           <ArrowUpRight
             size={16}
             className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
@@ -42,16 +45,16 @@ export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/50">
                 <th className="px-6 md:px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                  Application ID
+                  {t("appId")}
                 </th>
                 <th className="px-6 md:px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                  Organization Detail
+                  {t("orgDetail")}
                 </th>
                 <th className="px-6 md:px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                  Current Status
+                  {t("status")}
                 </th>
                 <th className="px-6 md:px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">
-                  Activity
+                  {t("activity")}
                 </th>
               </tr>
             </thead>
@@ -109,7 +112,7 @@ export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
                     colSpan={4}
                     className="px-8 py-10 text-center text-slate-400 font-medium"
                   >
-                    No recent applications found.
+                    {t("empty")}
                   </td>
                 </tr>
               )}

@@ -11,6 +11,7 @@ import {
   Video,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface Deadline {
   title: string;
@@ -23,19 +24,22 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ deadlines }: SidebarProps) => {
+  const t = useTranslations("Dashboard.admin.overview");
+  const tc = useTranslations("Dashboard.common");
+
   return (
     <div className="space-y-8">
       {/* Upcoming Deadlines */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
-            Upcoming Deadlines
+            {t("deadlines")}
           </h3>
           <Link
             href="/admin/deadlines"
             className="text-xs md:text-sm font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 group whitespace-nowrap"
           >
-            View All{" "}
+            {tc("viewAll")}{" "}
             <ArrowUpRight
               size={16}
               className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
@@ -89,10 +93,10 @@ export const Sidebar = ({ deadlines }: SidebarProps) => {
               </div>
               <div className="space-y-2 relative z-10">
                 <p className="text-xl font-black font-outfit text-slate-900 tracking-tight">
-                  Systems Optimal
+                  {t("optimal")}
                 </p>
                 <p className="text-sm text-slate-400 font-medium max-w-[200px] mx-auto leading-relaxed">
-                  No urgent deadlines or delayed applications detected.
+                  {t("optimalDesc")}
                 </p>
               </div>
             </div>
@@ -103,7 +107,7 @@ export const Sidebar = ({ deadlines }: SidebarProps) => {
       {/* Quick Actions / CMS Shortcuts */}
       <div className="space-y-6">
         <h3 className="text-xl md:text-2xl font-black font-outfit text-slate-900">
-          Media Management
+          {t("mediaManagement")}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
           <Link
@@ -114,9 +118,9 @@ export const Sidebar = ({ deadlines }: SidebarProps) => {
               <FileText size={20} />
             </div>
             <div className="flex-1">
-              <p className="font-bold text-slate-900 leading-tight">News CMS</p>
+              <p className="font-bold text-slate-900 leading-tight">{t("newsCms")}</p>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                Manage Articles
+                {t("manageArticles")}
               </p>
             </div>
             <Plus
@@ -134,10 +138,10 @@ export const Sidebar = ({ deadlines }: SidebarProps) => {
             </div>
             <div className="flex-1">
               <p className="font-bold text-slate-900 leading-tight">
-                Video Briefings
+                {t("videoBriefings")}
               </p>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
-                Press Updates
+                {t("pressUpdates")}
               </p>
             </div>
             <Plus

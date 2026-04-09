@@ -5,6 +5,7 @@ import { X, FileDown, BarChart3, TrendingUp, Layers } from "lucide-react";
 import { pdfService } from "../_services/pdfService";
 import { AreaChart, BarChart } from "./Charts";
 import { ReportOrganizationSector } from "./ReportOrganizationSector";
+import { useTranslations } from "next-intl";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -13,6 +14,9 @@ interface ReportModalProps {
 }
 
 export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
+  const t = useTranslations("Dashboard.admin.report");
+  const tc = useTranslations("Dashboard.common");
+
   const handleDownload = () => {
     const filename = `SUPKEM_Analytical_Report_${new Date().toISOString().split("T")[0]}.pdf`;
     pdfService.downloadElementAsPdf("report-content", filename);
@@ -41,11 +45,11 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                 <div className="flex items-center gap-2 text-indigo-600">
                   <BarChart3 size={20} />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                    Analytical Systems
+                    {t("systems")}
                   </span>
                 </div>
                 <h2 className="text-2xl md:text-3xl font-black font-outfit text-slate-900">
-                  Data Insights Report
+                  {t("title")}
                 </h2>
               </div>
               <div className="flex items-center gap-3">
@@ -53,7 +57,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                   onClick={handleDownload}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
                 >
-                  <FileDown size={18} /> Export PDF
+                  <FileDown size={18} /> {t("export")}
                 </button>
                 <button
                   onClick={onClose}
@@ -75,21 +79,19 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold font-outfit text-slate-900 flex items-center gap-2">
                       <TrendingUp className="text-indigo-600" size={20} />{" "}
-                      Application Growth Trend
+                      {t("growthTrend")}
                     </h3>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-100 px-3 py-1 rounded-full">
-                      Last 30 Days
+                      {t("last30Days")}
                     </span>
                   </div>
                   <div className="p-8 bg-slate-50 border border-slate-100 rounded-[16px]">
                     <AreaChart data={data?.growth_trend || []} />
                   </div>
                   <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                    Growth analysis shows consistent submission patterns with a{" "}
-                    <span className="text-indigo-600 font-bold">
-                      18% increase
-                    </span>{" "}
-                    compared to the previous cycle.
+                    {t.rich("growthAnalysis", {
+                      percentage: (chunks) => <span className="text-indigo-600 font-bold">{chunks} 18%</span>
+                    })}
                   </p>
                 </div>
 
@@ -97,8 +99,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold font-outfit text-slate-900 flex items-center gap-2">
-                      <Layers className="text-amber-500" size={20} /> Workflow
-                      Distribution
+                      <Layers className="text-amber-500" size={20} /> {t("distribution")}
                     </h3>
                   </div>
                   <div className="p-8 bg-slate-50 border border-slate-100 rounded-[16px]">
