@@ -13,6 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserRow } from "./UserRow";
 import { UserPagination } from "./UserPagination";
+import { useTranslations } from "next-intl";
 
 interface User {
   id: string | number;
@@ -53,6 +54,8 @@ export const UsersTable = ({
   onDelete,
   searchQuery,
 }: UsersTableProps) => {
+  const t = useTranslations("Dashboard.admin.users.table");
+
   return (
     <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden">
       <CardHeader className="border-b border-slate-50 p-8">
@@ -62,7 +65,7 @@ export const UsersTable = ({
           </CardTitle>
           <p className="text-[10px] text-slate-400 font-black mt-1 uppercase tracking-widest flex items-center gap-2">
             <UsersIcon className="h-3 w-3" />
-            {totalCount} Verified Members
+            {t("verifiedMembers", { totalCount })}
           </p>
         </div>
       </CardHeader>
@@ -71,20 +74,20 @@ export const UsersTable = ({
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent border-slate-50/50 h-16">
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 px-8">
-                  Member Details
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 px-8 text-start">
+                  {t("memberDetails")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                  System Role
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                  {t("systemRole")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                  Location
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                  {t("location")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                  Status
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                  {t("status")}
                 </TableHead>
-                <TableHead className="text-right px-8 font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
-                  Actions
+                <TableHead className="text-end px-8 font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
+                  {t("actions")}
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -115,7 +118,7 @@ export const UsersTable = ({
                         <UsersIcon className="h-16 w-16 text-slate-200" />
                       </div>
                       <p className="text-slate-400 font-black italic uppercase tracking-widest text-[10px]">
-                        No results found for "{searchQuery}"
+                        {t("noResults", { searchQuery })}
                       </p>
                     </div>
                   </TableCell>
@@ -137,3 +140,4 @@ export const UsersTable = ({
     </Card>
   );
 };
+

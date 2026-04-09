@@ -19,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 interface User {
   id: string | number;
@@ -38,14 +39,16 @@ interface UserRowProps {
 }
 
 export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
+  const t = useTranslations("Dashboard.admin.users.row");
+
   return (
     <TableRow className="hover:bg-slate-50/50 transition-colors border-slate-50/50 group h-24">
-      <TableCell className="px-8">
-        <div className="flex items-center space-x-4">
+      <TableCell className="px-8 text-start">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse">
           <div className="bg-slate-100 h-12 w-12 rounded-2xl flex items-center justify-center text-slate-400 group-hover:bg-rose-600 group-hover:text-white transition-all duration-500">
             <UsersIcon className="h-6 w-6" />
           </div>
-          <div>
+          <div className="text-start">
             <p className="font-black text-slate-900 tracking-tighter text-lg leading-none mb-1 uppercase font-outfit">
               {user.full_name}
             </p>
@@ -55,36 +58,36 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
           </div>
         </div>
       </TableCell>
-      <TableCell>
+      <TableCell className="text-start">
         <Badge
           variant="outline"
           className="rounded-xl border-rose-100 bg-rose-50/50 text-rose-600 font-black text-[9px] px-3 py-1 uppercase tracking-widest flex items-center w-fit gap-2"
         >
           <Shield className="h-3 w-3" />
-          {user.role?.role_name || user.role_name || "MEMBER"}
+          {user.role?.role_name || user.role_name || t("member")}
         </Badge>
       </TableCell>
-      <TableCell>
+      <TableCell className="text-start">
         <div className="flex items-center text-slate-600 font-black text-[10px] uppercase tracking-wider gap-2">
           <MapPin className="h-3 w-3 text-slate-300" />
           {user.location || "N/A"}
         </div>
       </TableCell>
-      <TableCell>
+      <TableCell className="text-start">
         <Badge
           variant={user.is_active ? "default" : "secondary"}
           className={`rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-tighter ${user.is_active ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-slate-100 text-slate-400"}`}
         >
-          {user.is_active ? "Active" : "Disabled"}
+          {user.is_active ? t("active") : t("disabled")}
         </Badge>
       </TableCell>
-      <TableCell className="text-right px-8">
+      <TableCell className="text-end px-8">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-xl hover:bg-slate-100 h-10 w-10"
+              className="rounded-xl hover:bg-slate-100 h-10 w-10 outline-none focus:ring-0"
             >
               <MoreVertical className="h-5 w-5 text-slate-400" />
             </Button>
@@ -94,25 +97,25 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
             className="rounded-[1.5rem] border-none shadow-premium p-3 min-w-[200px] bg-white"
           >
             <DropdownMenuItem
-              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest"
+              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest flex items-center gap-3 rtl:flex-row-reverse"
               onClick={() => onView(user)}
             >
-              <Info className="h-4 w-4 mr-3 text-slate-300" />
-              View Details
+              <Info className="h-4 w-4 text-slate-300" />
+              {t("viewDetails")}
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest"
+              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-slate-600 focus:bg-slate-50 focus:text-slate-900 transition-all uppercase tracking-widest flex items-center gap-3 rtl:flex-row-reverse"
               onClick={() => onEdit(user)}
             >
-              <Edit2 className="h-4 w-4 mr-3 text-slate-300" />
-              Edit Account
+              <Edit2 className="h-4 w-4 text-slate-300" />
+              {t("editAccount")}
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-700 transition-all uppercase tracking-widest"
+              className="rounded-xl font-black text-[10px] py-4 px-4 cursor-pointer text-rose-600 focus:bg-rose-50 focus:text-rose-700 transition-all uppercase tracking-widest flex items-center gap-3 rtl:flex-row-reverse"
               onClick={() => onDelete(user)}
             >
-              <Trash2 className="h-4 w-4 mr-3 opacity-40" />
-              Remove Access
+              <Trash2 className="h-4 w-4 opacity-40" />
+              {t("removeAccess")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -120,3 +123,4 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
     </TableRow>
   );
 };
+
