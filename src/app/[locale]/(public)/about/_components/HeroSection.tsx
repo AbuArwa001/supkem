@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export function HeroSection() {
+  const t = useTranslations("About");
+
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden py-32 px-6 bg-slate-950">
       <div className="absolute inset-0 z-0">
@@ -34,17 +36,16 @@ export function HeroSection() {
         >
           <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-white text-sm font-bold tracking-tight backdrop-blur-md">
             <span className="flex h-2 w-2 rounded-full bg-secondary animate-pulse" />
-            Since 1973: Over 50 Years of Impact
+            {t("impact")}
           </div>
           <h1 className="text-6xl lg:text-9xl font-black font-outfit text-white tracking-tighter leading-none">
-            The Voice of <br />
+            {t("voice")} <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-white to-amber-300 italic">
-              Cohesion
+              {t("cohesion")}
             </span>
           </h1>
           <p className="text-xl lg:text-3xl text-white/80 max-w-4xl mx-auto leading-relaxed font-medium italic">
-            "The umbrella body of all Muslim organizations, societies, Mosque
-            committees and groups in Kenya."
+            &ldquo;{t("description")}&rdquo;
           </p>
         </motion.div>
       </div>

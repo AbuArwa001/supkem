@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { useHeroSlider } from "@/app/_hooks/useHeroSlider";
+import { useHeroSlider } from "../_hooks/useHeroSlider";
+import { useTranslations } from "next-intl";
 
 const SLIDES = [
   { url: "/images/slider/olesaudib.jpg", alt: "International Relations" },
@@ -57,6 +58,8 @@ const HeroSlider = () => {
 };
 
 export const Hero = () => {
+  const t = useTranslations("Hero");
+
   return (
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 px-6">
       <HeroSlider />
@@ -70,19 +73,18 @@ export const Hero = () => {
         >
           <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-sm font-bold tracking-tight shadow-2xl">
             <span className="flex h-2.5 w-2.5 rounded-full bg-secondary animate-ping" />
-            The Voice of Kenya's Muslim Community
+            {t("badge")}
           </div>
 
           <div className="space-y-6">
             <h1 className="text-7xl lg:text-9xl font-black font-outfit leading-[0.85] text-white tracking-tighter drop-shadow-2xl">
-              Uniting the <br />
+              {t("heading1")} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-300 via-white to-amber-300 italic text-glow">
-                Ummah
+                {t("heading2")}
               </span>
             </h1>
             <p className="text-2xl lg:text-3xl text-white/90 leading-relaxed max-w-xl font-medium drop-shadow-md">
-              Streamlining registration, certification, and community
-              empowerment through digital excellence.
+              {t("desc")}
             </p>
           </div>
 
@@ -91,14 +93,14 @@ export const Hero = () => {
               href="/register"
               className="px-10 py-5 bg-primary text-white rounded-[24px] font-bold flex items-center gap-3 hover:scale-105 hover:shadow-primary/50 transition-all text-xl shadow-2xl shadow-primary/30 group"
             >
-              Start Registration{" "}
+              {t("startReg")}{" "}
               <ArrowRight className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               href="/about"
               className="px-10 py-5 bg-white/10 backdrop-blur-md border-2 border-white/20 text-white rounded-[24px] font-bold flex items-center gap-3 hover:bg-white/20 transition-all text-xl"
             >
-              Explore Mission
+              {t("exploreMission")}
             </Link>
           </div>
 
@@ -106,14 +108,14 @@ export const Hero = () => {
             <div className="space-y-1">
               <p className="text-4xl font-black font-outfit text-white">47</p>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">
-                Counties Active
+                {t("counties")}
               </p>
             </div>
             <div className="w-px h-10 bg-white/20" />
             <div className="space-y-1">
               <p className="text-4xl font-black font-outfit text-white">10k+</p>
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/60">
-                Organizations
+                {t("organizations")}
               </p>
             </div>
           </div>
@@ -142,7 +144,7 @@ export const Hero = () => {
                 SUPKEM
               </h3>
               <p className="text-xs font-black uppercase tracking-[0.4em] text-slate-500 leading-relaxed max-w-[220px] mx-auto">
-                Supreme Council of Kenya Muslims
+                {t("council")}
               </p>
             </div>
           </div>

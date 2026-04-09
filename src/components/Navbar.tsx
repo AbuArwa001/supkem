@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import {
@@ -26,6 +26,8 @@ const Navbar = () => {
   const locale = useLocale();
   const isArabicEnabled = process.env.NEXT_PUBLIC_ENABLE_ARABIC_API === "true";
 
+  const t = useTranslations("Navbar");
+
   const handleARClick = () => {
     if (isArabicEnabled) {
       router.replace({ pathname }, { locale: "ar" });
@@ -48,11 +50,11 @@ const Navbar = () => {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Services", href: "/services" },
-    { name: "News", href: "/news" },
-    { name: "Contact", href: "/contact" },
+    { name: t("home"), href: "/" },
+    { name: t("about"), href: "/about" },
+    { name: t("services"), href: "/services" },
+    { name: t("news"), href: "/news" },
+    { name: t("contact"), href: "/contact" },
   ];
 
   return (
@@ -151,7 +153,7 @@ const Navbar = () => {
                 className="flex items-center gap-2 px-6 py-2.5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-slate-800 transition-all hover:scale-105 hover:shadow-lg hover:shadow-slate-900/20"
               >
                 <LayoutDashboard size={16} />
-                Dashboard
+                {t("dashboard")}
               </Link>
             ) : (
               <div className="flex items-center gap-3">
@@ -164,7 +166,7 @@ const Navbar = () => {
                       : "text-slate-700 hover:text-slate-900 hover:bg-slate-900/5",
                   )}
                 >
-                  Login
+                  {t("login")}
                 </Link>
                 <Link
                   href="/register"
@@ -175,7 +177,7 @@ const Navbar = () => {
                       : "bg-slate-900 text-white hover:bg-slate-800 hover:shadow-slate-900/20",
                   )}
                 >
-                  Apply Now{" "}
+                  {t("applyNow")}{" "}
                   <ChevronRight
                     size={14}
                     className="group-hover:translate-x-0.5 transition-transform"
@@ -244,7 +246,7 @@ const Navbar = () => {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                    Language
+                    {t("language")}
                   </p>
                   <div className="flex items-center gap-1 p-1 bg-white rounded-full border border-slate-200">
                     <button 
@@ -278,13 +280,13 @@ const Navbar = () => {
                   href="/login"
                   className="text-center py-4 bg-slate-50 text-slate-700 rounded-2xl font-bold hover:bg-slate-100 transition-colors border border-slate-200"
                 >
-                  Member Login
+                  {t("memberLogin")}
                 </Link>
                 <Link
                   href="/register"
                   className="text-center py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/10 flex items-center justify-center gap-2"
                 >
-                  Apply Now <ChevronRight size={16} />
+                  {t("applyNow")} <ChevronRight size={16} />
                 </Link>
               </div>
             </motion.div>
@@ -315,15 +317,11 @@ const Navbar = () => {
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="text-3xl font-black font-outfit text-slate-900 tracking-tight">
-                    Arabic Version <br />
-                    Coming Soon
+                  <h3 className="text-3xl font-black font-outfit text-slate-900 tracking-tight whitespace-pre-line">
+                    {t("arabicComingSoon")}
                   </h3>
                   <p className="text-slate-500 font-medium leading-relaxed">
-                    We are currently engineering a full bilingual experience to
-                    better serve the global Muslim community. This feature will
-                    be launched as part of our upcoming Digital Transformation
-                    phase.
+                    {t("comingSoonDesc")}
                   </p>
                   <p
                     className="text-[#0b4a2d] font-bold leading-relaxed text-lg"
@@ -339,7 +337,7 @@ const Navbar = () => {
                   onClick={() => setShowArabicComingSoon(false)}
                   className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-slate-800 hover:shadow-xl hover:shadow-slate-900/20 transition-all active:scale-95"
                 >
-                  JazakAllah Khairan
+                  {t("jazakAllah")}
                 </button>
               </div>
             </motion.div>

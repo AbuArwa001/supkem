@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface ActiveApplicationsListProps {
   apps: any[];
@@ -11,12 +12,26 @@ interface ActiveApplicationsListProps {
 }
 
 export default function ActiveApplicationsList({ apps, loading }: ActiveApplicationsListProps) {
+  const t = useTranslations("Dashboard.portal.activeApps");
+  const tc = useTranslations("Dashboard.common");
+
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "Under Review":
+        return t("status.underReview");
+      case "Submitted":
+        return t("status.submitted");
+      default:
+        return t("status.inProgress");
+    }
+  };
+
   return (
     <div className="lg:col-span-2 space-y-8">
       <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-black font-outfit text-slate-900 tracking-tight">Active Applications</h3>
+        <h3 className="text-2xl font-black font-outfit text-slate-900 tracking-tight">{t("heading")}</h3>
         <Link href="/portal/applications" className="text-sm font-bold text-slate-400 hover:text-primary transition-colors flex items-center gap-1 group">
-          View All <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+          {tc("viewAll")} <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
@@ -25,7 +40,7 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
           <div className="p-12 text-center text-slate-400 animate-pulse font-bold uppercase tracking-widest">Loading...</div>
         ) : apps.length === 0 ? (
           <div className="p-12 text-center text-slate-500 font-medium border-2 border-slate-200 border-dashed rounded-[16px] bg-white">
-            No active applications found.
+            {t("empty")}
           </div>
         ) : (
           apps.map((app, i) => (
@@ -40,7 +55,7 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
                     <div className="flex items-center gap-3 text-xs text-slate-500 font-bold">
                       <span className="bg-slate-100 px-2 py-0.5 rounded text-[10px] text-slate-600">#{String(app.id).substring(0, 8).toUpperCase()}</span>
                       <span>•</span>
-                      <span className="truncate max-w-[200px]">{app?.organization_name || "Organization"}</span>
+                      <span className="truncate max-w-[200px]">{app?.organization_name || t("org")}</span>
                     </div>
                   </div>
                 </div>
@@ -51,7 +66,7 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
                       app?.status === "Submitted" ? "bg-blue-50 text-blue-700 border-blue-200" :
                         "bg-slate-50 text-slate-700 border-slate-200")}>
                     <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", app?.status === "Under Review" ? "bg-amber-500" : "bg-blue-500")} />
-                    {app?.status || "In Progress"}
+                    {getStatusLabel(app?.status)}
                   </span>
                   <p className="text-xs text-slate-400 font-bold">{app?.submitted_at ? new Date(app.submitted_at).toLocaleDateString() : "N/A"}</p>
                 </div>

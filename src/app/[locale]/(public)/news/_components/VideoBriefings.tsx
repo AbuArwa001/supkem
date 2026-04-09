@@ -5,11 +5,10 @@ import { Film, PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";
 import { API_BASE_URL } from "@/lib/api";
-
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
-
 import { VideoItem } from "@/app/(public)/news/_services/newsService";
+import { useTranslations } from "next-intl";
+
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
 interface VideoBriefingsProps {
   videos: VideoItem[];
@@ -17,6 +16,8 @@ interface VideoBriefingsProps {
 }
 
 export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefingsProps) {
+  const t = useTranslations("NewsPage.videos");
+
   const { data: videos } = useSWR<VideoItem[]>(
     `${API_BASE}/api/v1/videos/`,
     (url: string) =>
@@ -42,11 +43,9 @@ export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefi
         </div>
         <div>
           <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">
-            Video Briefings
+            {t("heading")}
           </h2>
-          <p className="text-foreground/60 font-medium">
-            Watch the latest press conferences and council updates.
-          </p>
+          <p className="text-foreground/60 font-medium">{t("desc")}</p>
         </div>
       </div>
 
@@ -76,14 +75,12 @@ export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefi
                   {video.title}
                 </h3>
                 {video.description && (
-                  <p className="text-sm text-foreground/60 line-clamp-2">
-                    {video.description}
-                  </p>
+                  <p className="text-sm text-foreground/60 line-clamp-2">{video.description}</p>
                 )}
                 <div className="pt-4 mt-auto border-t border-border/50 flex items-center justify-between text-xs font-bold text-foreground/30 uppercase tracking-widest">
                   <span>{new Date(video.created_at).toLocaleDateString()}</span>
                   <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                    Watch Now <ArrowRight size={14} />
+                    {t("watchNow")} <ArrowRight size={14} />
                   </span>
                 </div>
               </div>
@@ -94,12 +91,12 @@ export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefi
 
       {hasMore && (
         <div className="flex justify-center pt-8">
-            <Link
-                href="/news/videos"
-                className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
-            >
-                View All Video Briefings <ArrowRight size={18} />
-            </Link>
+          <Link
+            href="/news/videos"
+            className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
+          >
+            {t("viewAll")} <ArrowRight size={18} />
+          </Link>
         </div>
       )}
     </section>

@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://supkem-drf.onrender.com';
-
+// export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://supkem-drf.onrender.com';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const api = axios.create({
     baseURL: `${API_BASE_URL}/api/v1`, // Using the provided production URL
     headers: {
@@ -23,7 +23,7 @@ api.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
         const isAuthRequest = originalRequest.url?.includes('/token/');
-        
+
         if (error.response?.status === 401 && !originalRequest._retry && !isAuthRequest) {
             originalRequest._retry = true;
             try {

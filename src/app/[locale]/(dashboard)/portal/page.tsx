@@ -5,34 +5,36 @@ import { FileText, ShieldCheck, Clock } from "lucide-react";
 
 // Internal modules
 import { useAuth } from "@/hooks/useAuth";
-import { useDashboardData } from "@/app/(dashboard)/portal/_hooks/useDashboardData";
-import PortalWelcomeBanner from "@/app/(dashboard)/portal/_components/PortalWelcomeBanner";
-import StatCard from "@/app/(dashboard)/portal/_components/StatCard";
-import ActiveApplicationsList from "@/app/(dashboard)/portal/_components/ActiveApplicationsList";
-import PortalSidebar from "@/app/(dashboard)/portal/_components/PortalSidebar";
+import { useDashboardData } from "./_hooks/useDashboardData";
+import PortalWelcomeBanner from "./_components/PortalWelcomeBanner";
+import StatCard from "./_components/StatCard";
+import ActiveApplicationsList from "./_components/ActiveApplicationsList";
+import PortalSidebar from "./_components/PortalSidebar";
+import { useTranslations } from "next-intl";
 
 export default function UserPortal() {
   const { user } = useAuth();
   const { activeApps, certsDocs, lettersDocs, loading } = useDashboardData();
+  const t = useTranslations("Dashboard.portal.metrics");
 
   const metrics = [
     {
       icon: FileText,
-      label: "Active Applications",
+      label: t("activeApps"),
       value: activeApps.length.toString().padStart(2, "0"),
       color: "bg-gradient-to-br from-amber-600 to-amber-700",
       delay: 0.1,
     },
     {
       icon: ShieldCheck,
-      label: "Certificates",
+      label: t("certificates"),
       value: certsDocs.length.toString().padStart(2, "0"),
       color: "bg-gradient-to-br from-indigo-600 to-indigo-700",
       delay: 0.2,
     },
     {
       icon: Clock,
-      label: "Letters Issued",
+      label: t("letters"),
       value: lettersDocs.length.toString().padStart(2, "0"),
       color: "bg-gradient-to-br from-blue-600 to-blue-700",
       delay: 0.3,

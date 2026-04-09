@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function RegisterSuccess() {
+  const t = useTranslations("Auth.register");
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-primary/[0.02] px-6">
       <motion.div
@@ -14,13 +17,8 @@ export function RegisterSuccess() {
         <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
           <CheckCircle2 size={40} />
         </div>
-        <h2 className="text-3xl font-bold font-outfit text-primary">
-          Application Received!
-        </h2>
-        <p className="text-foreground/60 leading-relaxed font-medium">
-          Your account has been created. Please log in to complete your
-          organization registration and application.
-        </p>
+        <h2 className="text-3xl font-bold font-outfit text-primary">{t("successHeading")}</h2>
+        <p className="text-foreground/60 leading-relaxed font-medium">{t("successDesc")}</p>
         <div className="pt-4">
           <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
             <motion.div

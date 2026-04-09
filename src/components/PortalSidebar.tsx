@@ -20,6 +20,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const PortalSidebar = ({
   isOpen,
@@ -28,21 +29,22 @@ const PortalSidebar = ({
   isOpen?: boolean;
   onClose?: () => void;
 }) => {
+  const t = useTranslations("Dashboard.portal.nav");
   const pathname = usePathname();
   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const menuItems = [
-    { name: "Dashboard", href: "/portal", icon: LayoutDashboard },
+    { name: t("dashboard"), href: "/portal", icon: LayoutDashboard },
     {
-      name: "My Organizations",
+      name: t("organizations"),
       href: "/portal/organizations",
       icon: Building2,
     },
-    { name: "My Applications", href: "/portal/applications", icon: FileText },
-    { name: "My Certificates", href: "/portal/certificates", icon: Award },
-    { name: "My Letters", href: "/portal/letters", icon: Mail },
-    { name: "Profile Settings", href: "/portal/profile", icon: Settings },
+    { name: t("applications"), href: "/portal/applications", icon: FileText },
+    { name: t("certificates"), href: "/portal/certificates", icon: Award },
+    { name: t("letters"), href: "/portal/letters", icon: Mail },
+    { name: t("profile"), href: "/portal/profile", icon: Settings },
   ];
 
   return (
@@ -120,7 +122,7 @@ const PortalSidebar = ({
                 SUPKEM
               </p>
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary mt-1">
-                Digital Portal
+                {t("digitalPortal")}
               </p>
             </motion.div>
           )}
@@ -136,7 +138,7 @@ const PortalSidebar = ({
           {!isCollapsed && (
             <div className="px-4 pb-2">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">
-                User Menu
+                {t("userMenu")}
               </p>
             </div>
           )}
@@ -221,10 +223,10 @@ const PortalSidebar = ({
                 className="overflow-hidden"
               >
                 <p className="font-bold text-white truncate text-sm leading-tight">
-                  {user?.full_name || "Member"}
+                  {user?.full_name || t("member")}
                 </p>
                 <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest truncate mt-0.5">
-                  Portal User
+                  {t("portalUser")}
                 </p>
               </motion.div>
             )}
@@ -247,7 +249,7 @@ const PortalSidebar = ({
                 animate={{ opacity: 1, x: 0 }}
                 className="text-sm"
               >
-                Secure Sign Out
+                {t("signOut")}
               </motion.span>
             )}
           </button>

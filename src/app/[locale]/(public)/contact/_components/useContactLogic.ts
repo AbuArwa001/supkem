@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { sendContactEmail } from "@/app/(public)/contact/_actions/sendContactEmail";
+import { sendContactEmail } from "@/app/[locale]/(public)/contact/_actions/sendContactEmail";
 
 export function useContactLogic() {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -9,11 +9,11 @@ export function useContactLogic() {
         const form = e.currentTarget;
         e.preventDefault();
         setIsSubmitting(true);
-        
+
         try {
             const formData = new FormData(form);
             const result = await sendContactEmail(formData);
-            
+
             if (result.error) {
                 toast.error(result.error);
             } else {

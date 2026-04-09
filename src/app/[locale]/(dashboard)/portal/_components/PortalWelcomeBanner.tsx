@@ -3,12 +3,15 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { FilePlus, Plus, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface PortalWelcomeBannerProps {
   user: any;
 }
 
 export default function PortalWelcomeBanner({ user }: PortalWelcomeBannerProps) {
+  const t = useTranslations("Dashboard.portal.welcome");
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -24,22 +27,22 @@ export default function PortalWelcomeBanner({ user }: PortalWelcomeBannerProps) 
           <div className="space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white font-bold text-[10px] uppercase tracking-widest">
               <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-              Portal Access Alpha
+              {t("badge")}
             </div>
             <h1 className="text-4xl md:text-6xl font-black font-outfit text-white tracking-tight leading-none">
-              Salam, <span className="text-secondary">{user?.full_name?.split(" ")[0] || "Member"}</span>
+              {t("salam")}, <span className="text-secondary">{user?.full_name?.split(" ")[0] || t("member")}</span>
             </h1>
             <p className="text-sm md:text-lg text-slate-300 font-medium max-w-md leading-relaxed">
-              Manage your community certifications and institutional compliance in one unified digital space.
+              {t("desc")}
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/portal/applications/new" className="px-8 py-4 bg-white text-slate-950 rounded-2xl font-black text-sm flex items-center justify-center gap-2 hover:scale-105 transition-all shadow-xl">
-              <FilePlus size={18} /> New Application
+              <FilePlus size={18} /> {t("newApp")}
             </Link>
             <Link href="/portal/organizations/new" className="px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-2xl font-black text-sm flex items-center justify-center gap-2 hover:bg-white/20 transition-all">
-              <Plus size={18} /> Register Institution
+              <Plus size={18} /> {t("regInst")}
             </Link>
           </div>
         </div>
@@ -51,15 +54,15 @@ export default function PortalWelcomeBanner({ user }: PortalWelcomeBannerProps) 
                 <ShieldCheck size={24} />
               </div>
               <div>
-                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Compliance Status</p>
-                <p className="text-xl font-black text-white">Trust Verified</p>
+                <p className="text-xs font-bold text-white/60 uppercase tracking-widest">{t("compliance")}</p>
+                <p className="text-xl font-black text-white">{t("trustVerified")}</p>
               </div>
             </div>
             <div className="space-y-3">
               <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                 <div className="h-full w-[85%] bg-secondary rounded-full" />
               </div>
-              <p className="text-[10px] font-bold text-white/40 text-right">85% Profile Completion</p>
+              <p className="text-[10px] font-bold text-white/40 text-right">85% {t("completion")}</p>
             </div>
           </motion.div>
         </div>

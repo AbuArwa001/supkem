@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const PARTNERS = [
   { name: "Ministry of Hajj and Umrah", src: "/images/partners/hajj.svg" },
@@ -19,11 +20,13 @@ const PARTNERS = [
 ];
 
 export const Partners = () => {
+  const t = useTranslations("Home");
+
   return (
     <section className="py-24 border-y border-slate-100 bg-[#F8FAFC] grainy-bg">
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <p className="text-center text-[11px] font-black uppercase tracking-[0.5em] text-primary/40 mb-16">
-          Strategic Alliances & Global Stakeholders
+          {t("partners.subtitle")}
         </p>
         <div className="flex flex-wrap justify-center lg:justify-between gap-16 items-center">
           {PARTNERS.map((p, i) => (

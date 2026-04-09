@@ -1,6 +1,6 @@
-import { ServicesCTA } from "@/app/(public)/services/_components/ServicesCTA";
-import { ServicesGrid } from "@/app/(public)/services/_components/ServicesGrid";
-import { ServicesHero } from "@/app/(public)/services/_components/ServicesHero";
+import { ServicesCTA } from "@/app/[locale]/(public)/services/_components/ServicesCTA";
+import { ServicesGrid } from "@/app/[locale]/(public)/services/_components/ServicesGrid";
+import { ServicesHero } from "@/app/[locale]/(public)/services/_components/ServicesHero";
 
 export default function ServicesPage() {
     return (

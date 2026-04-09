@@ -2,15 +2,18 @@
 
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
-
-const CONTACT_DETAILS = [
-    { icon: MapPin, title: "Headquarters", detail: "Islamia House, Njugu Lane, Nairobi, Kenya" },
-    { icon: Phone, title: "Phone Support", detail: "+254 (0) 20 2243129 / 224890" },
-    { icon: Mail, title: "Email Inquiry", detail: "info@supkem.org" },
-    { icon: Clock, title: "Office Hours", detail: "Mon - Fri: 8:00 AM - 5:00 PM" }
-];
+import { useTranslations } from "next-intl";
 
 export function ContactInfo() {
+    const t = useTranslations("ContactPage.info");
+
+    const CONTACT_DETAILS = [
+        { icon: MapPin, title: t("headquarters"), detail: "Islamia House, Njugu Lane, Nairobi, Kenya" },
+        { icon: Phone, title: t("phone"), detail: "+254 (0) 20 2243129 / 224890" },
+        { icon: Mail, title: t("email"), detail: "info@supkem.org" },
+        { icon: Clock, title: t("hours"), detail: t("hoursDetail") },
+    ];
+
     return (
         <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -19,9 +22,9 @@ export function ContactInfo() {
             className="space-y-16"
         >
             <div className="space-y-6">
-                <h2 className="text-5xl font-black font-outfit text-primary tracking-tight">Get in Touch</h2>
+                <h2 className="text-5xl font-black font-outfit text-primary tracking-tight">{t("heading")}</h2>
                 <p className="text-xl text-foreground/50 font-medium leading-relaxed">
-                    Our team is dedicated to serving the community. Visit us or use the form to send a direct message.
+                    {t("desc")}
                 </p>
             </div>
 

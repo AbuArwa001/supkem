@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
-import "../../globals.css";
+import "@/app/globals.css";
 import MainLayoutWrapper from "@/components/MainLayoutWrapper";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/next";
@@ -32,12 +32,12 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  
+
   if (!routing.locales.includes(locale as any)) {
     // Next 15 specific setup, the notFound() call would be here.
     // For now we'll just allow it to continue or fail gracefully
   }
-  
+
   const messages = await getMessages();
 
   return (

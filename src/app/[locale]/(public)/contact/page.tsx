@@ -1,6 +1,6 @@
-import { ContactForm } from "@/app/(public)/contact/_components/ContactForm";
-import { ContactHero } from "@/app/(public)/contact/_components/ContactHero";
-import { ContactInfo } from "@/app/(public)/contact/_components/ContactInfo";
+import { ContactForm } from "@/app/[locale]/(public)/contact/_components/ContactForm";
+import { ContactHero } from "@/app/[locale]/(public)/contact/_components/ContactHero";
+import { ContactInfo } from "@/app/[locale]/(public)/contact/_components/ContactInfo";
 
 export default function ContactPage() {
     return (

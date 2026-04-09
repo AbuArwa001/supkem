@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const CTA = () => {
+  const t = useTranslations("Home");
+
   return (
     <section className="py-32 px-6 bg-white overflow-hidden relative">
       <div className="absolute top-0 left-0 w-full h-1/2 bg-gradient-to-b from-[#0B211B] to-transparent -z-10" />
@@ -16,14 +19,13 @@ export const CTA = () => {
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-10">
               <h2 className="text-5xl lg:text-8xl font-black font-outfit text-white leading-[0.9] tracking-tighter">
-                Start Your <br />
+                {t("cta.heading")} <br />
                 <span className="text-secondary italic text-glow tracking-wider">
-                  Journey
+                  {t("cta.subheading")}
                 </span>
               </h2>
               <p className="text-xl text-white/50 leading-relaxed font-medium italic border-l-4 border-primary/40 pl-8 max-w-lg">
-                Step into the future of community management. Secure, efficient,
-                and faith-aligned.
+                {t("cta.desc")}
               </p>
             </div>
 
@@ -32,17 +34,14 @@ export const CTA = () => {
                 href="/register"
                 className="px-10 py-6 bg-primary text-white rounded-[12px] font-black text-xl hover:bg-secondary hover:text-primary transition-all flex items-center justify-center gap-3 group shadow-xl shadow-primary/20"
               >
-                Register Now{" "}
-                <ArrowRight
-                  size={24}
-                  className="group-hover:translate-x-2 transition-transform"
-                />
+                {t("cta.registerNow")}{" "}
+                <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
               </Link>
               <Link
                 href="/login"
                 className="px-10 py-6 bg-white/5 backdrop-blur-xl border border-white/10 text-white rounded-[12px] font-black text-xl hover:bg-white/10 transition-all flex items-center justify-center gap-3"
               >
-                Portal Access
+                {t("cta.portalAccess")}
               </Link>
             </div>
           </div>

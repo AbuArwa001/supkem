@@ -6,6 +6,7 @@ import useSWR from "swr";
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { NewsItem } from "@/app/(public)/news/_services/newsService";
+import { useTranslations } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
@@ -20,6 +21,8 @@ const extractFirstImage = (content: string) => {
 };
 
 export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: FeaturedNewsProps) {
+    const t = useTranslations("NewsPage.news");
+
     const { data: newsItems } = useSWR(
         `${API_BASE}/api/v1/news/news/`,
         (url: string) =>
@@ -42,8 +45,8 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                     <BookOpen className="text-primary" size={28} />
                 </div>
                 <div>
-                    <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">Latest News Articles</h2>
-                    <p className="text-foreground/60 font-medium">Read our recent publications and stories.</p>
+                    <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">{t("heading")}</h2>
+                    <p className="text-foreground/60 font-medium">{t("desc")}</p>
                 </div>
             </div>
 
@@ -62,12 +65,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                 <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
                                     <Link href={`/news/${item.slug}`} className="block">
                                         <div className="aspect-video bg-primary/5 rounded-[16px] overflow-hidden mb-8 relative">
-                                            <Image
-                                                src={imageSource}
-                                                alt={item.title}
-                                                fill
-                                                className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                            />
+                                            <Image src={imageSource} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                                         </div>
                                         <div className="space-y-4">
                                             <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
@@ -81,7 +79,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                                 {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 150)}...
                                             </p>
                                             <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
-                                                Read Full Story <ArrowRight size={14} />
+                                                {t("readMore")} <ArrowRight size={14} />
                                             </button>
                                         </div>
                                     </Link>
@@ -100,12 +98,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                     <Link href={`/news/${item.slug}`} key={i} className="block group/item">
                                         <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
                                             <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[16px] overflow-hidden shrink-0 relative">
-                                                <Image
-                                                    src={imageSource}
-                                                    alt={item.title}
-                                                    fill
-                                                    className="object-cover group-hover/item:scale-110 transition-transform duration-500"
-                                                />
+                                                <Image src={imageSource} alt={item.title} fill className="object-cover group-hover/item:scale-110 transition-transform duration-500" />
                                             </div>
                                             <div className="space-y-3 py-2 flex-1 flex flex-col justify-center">
                                                 <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
@@ -118,7 +111,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                                     {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 100)}...
                                                 </p>
                                                 <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
-                                                    Details <ArrowRight size={12} />
+                                                    {t("details")} <ArrowRight size={12} />
                                                 </span>
                                             </div>
                                         </div>
@@ -128,8 +121,8 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                             {newsItems.length <= 1 && (
                                 <div className="p-8 rounded-[20px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
                                     <BookOpen size={40} className="text-secondary" />
-                                    <h4 className="text-xl font-bold font-outfit">More News Coming Soon</h4>
-                                    <p className="text-sm font-medium opacity-60">Check back later for more updates.</p>
+                                    <h4 className="text-xl font-bold font-outfit">{t("comingSoon")}</h4>
+                                    <p className="text-sm font-medium opacity-60">{t("comingSoonDesc")}</p>
                                 </div>
                             )}
                         </div>
@@ -140,8 +133,8 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                             <BookOpen size={40} className="text-primary/40" />
                         </div>
                         <div className="space-y-2">
-                            <h2 className="text-3xl font-bold font-outfit text-primary">No published news found</h2>
-                            <p className="text-foreground/60">Check back soon for latest announcements from SUPKEM.</p>
+                            <h2 className="text-3xl font-bold font-outfit text-primary">{t("noNews")}</h2>
+                            <p className="text-foreground/60">{t("noNewsDesc")}</p>
                         </div>
                     </div>
                 )}
@@ -153,7 +146,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                         href="/news/articles"
                         className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
                     >
-                        View All News Articles <ArrowRight size={18} />
+                        {t("viewAll")} <ArrowRight size={18} />
                     </Link>
                 </div>
             )}

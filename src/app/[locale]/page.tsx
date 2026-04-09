@@ -1,9 +1,9 @@
-import { Hero } from "@/app/_components/Hero";
-import { Partners } from "@/app/_components/Partners";
-import { ProgramAreas } from "@/app/_components/ProgramAreas";
-import { Services } from "@/app/_components/Services";
-import { HomeGallery } from "@/app/_components/HomeGallery";
-import { CTA } from "@/app/_components/CTA";
+import { Hero } from "./_components/Hero";
+import { Partners } from "./_components/Partners";
+import { ProgramAreas } from "./_components/ProgramAreas";
+import { Services } from "./_components/Services";
+import { HomeGallery } from "./_components/HomeGallery";
+import { CTA } from "./_components/CTA";
 
 /**
  * High-performance, SEO-optimized home page for SUPKEM.

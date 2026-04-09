@@ -2,14 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { User, Linkedin, Twitter, Mail, Facebook } from "lucide-react";
-import {
-  LeadershipService,
-  LeadershipProfile,
-} from "@/services/leadership-service";
+import { User, Linkedin, Twitter, Facebook } from "lucide-react";
+import { LeadershipService, LeadershipProfile } from "@/services/leadership-service";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export function MeetOurLeaders() {
+  const t = useTranslations("AboutPage.meetLeaders");
   const [leaders, setLeaders] = useState<LeadershipProfile[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,22 +45,19 @@ export function MeetOurLeaders() {
 
   return (
     <section className="py-32 px-6 bg-slate-50 relative overflow-hidden">
-      {/* Decorative patterns */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-primary/[0.03] rounded-full translate-x-1/2 -translate-y-1/2 blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/[0.03] rounded-full -translate-x-1/2 translate-y-1/2 blur-3xl" />
 
       <div className="max-w-7xl mx-auto space-y-24 relative z-10">
         <div className="text-center space-y-6 max-w-3xl mx-auto">
           <p className="text-sm font-black uppercase tracking-[0.4em] text-secondary">
-            Governance
+            {t("subtitle")}
           </p>
           <h2 className="text-5xl lg:text-7xl font-black font-outfit text-primary tracking-tighter">
-            Meet Our Leaders
+            {t("heading")}
           </h2>
           <p className="text-xl text-foreground/60 font-medium leading-relaxed">
-            Leading with integrity and dedication, the SUPKEM leadership is
-            committed to representing the interests of the Muslim community in
-            Kenya.
+            {t("desc")}
           </p>
         </div>
 
@@ -90,7 +86,6 @@ export function MeetOurLeaders() {
                   </div>
                 )}
 
-                {/* Overlay content */}
                 <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/90 via-black/40 to-transparent translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                   <div className="space-y-4">
                     <div>
@@ -104,32 +99,20 @@ export function MeetOurLeaders() {
 
                     <div className="flex items-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity delay-200 duration-500">
                       {leader.linkedin_url && (
-                        <a 
-                          href={leader.linkedin_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                        >
+                        <a href={leader.linkedin_url} target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
                           <Linkedin size={18} />
                         </a>
                       )}
                       {leader.twitter_url && (
-                        <a 
-                          href={leader.twitter_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                        >
+                        <a href={leader.twitter_url} target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
                           <Twitter size={18} />
                         </a>
                       )}
                       {leader.facebook_url && (
-                        <a 
-                          href={leader.facebook_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-                        >
+                        <a href={leader.facebook_url} target="_blank" rel="noopener noreferrer"
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
                           <Facebook size={18} />
                         </a>
                       )}
@@ -138,7 +121,6 @@ export function MeetOurLeaders() {
                 </div>
               </div>
 
-              {/* Bio snippet */}
               {leader.bio && (
                 <div className="mt-8 px-4">
                   <p className="text-sm text-foreground/50 font-medium leading-relaxed italic border-l-2 border-primary/20 pl-4 py-2">
@@ -154,7 +136,7 @@ export function MeetOurLeaders() {
           <div className="inline-block p-1 rounded-[24px] bg-white shadow-xl shadow-primary/5 border border-border overflow-hidden">
             <div className="px-8 py-5 rounded-[20px] bg-primary/[0.02] border border-primary/5 text-sm font-bold text-primary flex items-center gap-3">
               <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-              Transparent & Accountable Governance
+              {t("accountability")}
             </div>
           </div>
         </div>

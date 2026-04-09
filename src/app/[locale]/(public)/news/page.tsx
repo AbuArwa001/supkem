@@ -1,9 +1,9 @@
-import { FeaturedNews } from "@/app/(public)/news/_components/FeaturedNews";
-import { NewsHero } from "@/app/(public)/news/_components/NewsHero";
-import { VideoBriefings } from "@/app/(public)/news/_components/VideoBriefings";
-import { NewsPapersSection } from "@/app/(public)/news/_components/NewsPapersSection";
+import { FeaturedNews } from "@/app/[locale]/(public)/news/_components/FeaturedNews";
+import { NewsHero } from "@/app/[locale]/(public)/news/_components/NewsHero";
+import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBriefings";
+import { NewsPapersSection } from "@/app/[locale]/(public)/news/_components/NewsPapersSection";
 
-import { getNews, getVideos, getNewsPapers } from "@/app/(public)/news/_services/newsService";
+import { getNews, getVideos, getNewsPapers } from "@/app/[locale]/(public)/news/_services/newsService";
 
 export const revalidate = 60; // Revalidate the page cache every 60 seconds
 

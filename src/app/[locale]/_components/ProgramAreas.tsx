@@ -4,35 +4,36 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Heart, Shield, Users, BookOpen, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
-const PROGRAMS = [
+const getPrograms = (t: any) => [
   {
-    title: "Programmes",
-    desc: "Implementing interventions in education, economic empowerment, health, peace building, and climate change.",
+    title: t("programs.prog1.title"),
+    desc: t("programs.prog1.desc"),
     icon: Heart,
     color: "bg-teal-50 text-teal-600",
     accent: "border-teal-200",
     href: "/strategic-focus/programmes",
   },
   {
-    title: "Institutional Strengthening",
-    desc: "Building solid internal structures through robust governance, resource mobilization, and HR development.",
+    title: t("programs.prog2.title"),
+    desc: t("programs.prog2.desc"),
     icon: Shield,
     color: "bg-indigo-50 text-indigo-600",
     accent: "border-indigo-200",
     href: "/strategic-focus/institutional-strengthening",
   },
   {
-    title: "Partnership & Collaboration",
-    desc: "Fostering strategic engagement with government, non-state actors, and faith-based institutions.",
+    title: t("programs.prog3.title"),
+    desc: t("programs.prog3.desc"),
     icon: Users,
     color: "bg-amber-50 text-amber-600",
     accent: "border-amber-200",
     href: "/strategic-focus/partnership-and-collaboration",
   },
   {
-    title: "Cross Cutting Areas",
-    desc: "Ensuring effective delivery through comprehensive research, monitoring, evaluation, and strategic communication.",
+    title: t("programs.prog4.title"),
+    desc: t("programs.prog4.desc"),
     icon: BookOpen,
     color: "bg-rose-50 text-rose-600",
     accent: "border-rose-200",
@@ -41,6 +42,9 @@ const PROGRAMS = [
 ];
 
 export const ProgramAreas = () => {
+  const t = useTranslations("Home");
+  const programs = getPrograms(t);
+
   return (
     <section
       id="strategic-focus"
@@ -51,20 +55,19 @@ export const ProgramAreas = () => {
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-24">
           <div className="space-y-6">
             <p className="text-xs font-black uppercase tracking-[0.4em] text-secondary">
-              Operational Pillars
+              {t("programs.subtitle")}
             </p>
             <h2 className="text-6xl lg:text-8xl font-black font-outfit text-primary tracking-tighter leading-[0.9]">
-              Strategic Focus
+              {t("programs.title")}
             </h2>
           </div>
           <p className="text-2xl text-slate-400 max-w-lg font-medium italic border-l-8 border-secondary/20 pl-8 leading-relaxed">
-            "Guided by four core pillars to deliver programmatic and
-            institutional growth for the Ummah."
+            &ldquo;{t("programs.quote")}&rdquo;
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {PROGRAMS.map((prog, i) => (
+          {programs.map((prog, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 30 }}
@@ -95,7 +98,7 @@ export const ProgramAreas = () => {
                 href={prog.href}
                 className="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all uppercase tracking-widest text-xs"
               >
-                Learn More <ArrowRight size={16} />
+                {t("programs.learnMore")} <ArrowRight size={16} />
               </Link>
             </motion.div>
           ))}

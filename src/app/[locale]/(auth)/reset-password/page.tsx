@@ -6,7 +6,6 @@ import Image from "next/image";
 import {
   Lock,
   Loader2,
-  ArrowRight,
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
@@ -14,8 +13,10 @@ import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import api from "@/lib/api";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useTranslations } from "next-intl";
 
 function ResetPasswordForm() {
+  const t = useTranslations("Auth.resetPassword");
   const searchParams = useSearchParams();
   const router = useRouter();
   const [token, setToken] = useState("");
@@ -27,11 +28,11 @@ function ResetPasswordForm() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const t = searchParams.get("token");
-    const u = searchParams.get("uid");
-    if (t && u) {
-      setToken(t);
-      setUid(u);
+    const tParam = searchParams.get("token");
+    const uParam = searchParams.get("uid");
+    if (tParam && uParam) {
+      setToken(tParam);
+      setUid(uParam);
     } else {
       setError("Invalid or missing reset link parameters.");
     }
@@ -80,11 +81,10 @@ function ResetPasswordForm() {
           <CheckCircle2 size={40} className="text-green-600" />
         </div>
         <h1 className="text-3xl font-bold text-primary font-outfit">
-          Password Reset!
+          {t("successHeading")}
         </h1>
         <p className="text-foreground/60">
-          Your password has been successfully updated. Redirecting you to
-          login...
+          {t("successDesc")}
         </p>
         <div className="pt-4">
           <Loader2 className="animate-spin text-primary mx-auto" />
@@ -126,10 +126,10 @@ function ResetPasswordForm() {
 
       <div className="space-y-2 mb-8 w-full text-center">
         <h1 className="text-3xl font-bold font-outfit text-primary tracking-tight">
-          Set New Password
+          {t("heading")}
         </h1>
         <p className="text-foreground/60">
-          Choose a strong, secure password for your account.
+          {t("subheading")}
         </p>
       </div>
 
@@ -147,7 +147,7 @@ function ResetPasswordForm() {
 
         <div className="space-y-2">
           <label className="text-xs font-black text-primary/40 uppercase tracking-[0.2em] ml-1">
-            New Password
+            {t("newPassword")}
           </label>
           <div className="relative group">
             <Lock
@@ -167,7 +167,7 @@ function ResetPasswordForm() {
 
         <div className="space-y-2">
           <label className="text-xs font-black text-primary/40 uppercase tracking-[0.2em] ml-1">
-            Confirm Password
+            {t("confirmPassword")}
           </label>
           <div className="relative group">
             <Lock
@@ -193,7 +193,7 @@ function ResetPasswordForm() {
             <Loader2 className="animate-spin" />
           ) : (
             <>
-              Reset Password <CheckCircle2 size={20} />
+              {t("resetButton")} <CheckCircle2 size={20} />
             </>
           )}
         </button>
@@ -203,6 +203,7 @@ function ResetPasswordForm() {
 }
 
 export default function ResetPasswordPage() {
+  const t = useTranslations("Auth.resetPassword");
   return (
     <div className="min-h-screen flex bg-white font-inter">
       {/* Left Side: Form */}
@@ -225,7 +226,7 @@ export default function ResetPasswordPage() {
       <div className="hidden lg:flex flex-1 relative bg-primary overflow-hidden items-center justify-center">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
-          <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[80px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/20 rounded-full blur-[100px] animate-pulse" />
         </div>
 
         <div className="relative z-10 p-20 text-center space-y-8 max-w-2xl text-white">
@@ -237,12 +238,10 @@ export default function ResetPasswordPage() {
             <Lock size={80} className="text-secondary" />
           </motion.div>
           <h2 className="text-5xl font-bold font-outfit leading-tight">
-            Identity Secured
+            {t("identitySecured")}
           </h2>
           <p className="text-xl text-white/70 leading-relaxed font-light">
-            Passwords are the first line of defense. By updating your
-            credentials, you ensure your workspace remains protected under
-            SUPKEM standards.
+            {t("identityDesc")}
           </p>
         </div>
       </div>

@@ -1,60 +1,31 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  Heart,
-  FileCheck,
-  BookOpen,
-  Briefcase,
-  MapPin,
-  Award,
-} from "lucide-react";
+import { Heart, FileCheck, BookOpen, Briefcase, MapPin, Award } from "lucide-react";
+import { useTranslations } from "next-intl";
 
-const SERVICES = [
-  {
-    title: "Marriage Registration",
-    desc: "Coordination of marriage officers under the Islamic faith.",
-    icon: Heart,
-  },
-  {
-    title: "Halal Certification",
-    desc: "Regulating and issuing Halal accreditation across Kenya.",
-    icon: FileCheck,
-  },
-  {
-    title: "Study Abroad Letters",
-    desc: "Support letters for students pursuing education abroad.",
-    icon: BookOpen,
-  },
-  {
-    title: "Employment Referral",
-    desc: "Referral services for local and international employment.",
-    icon: Briefcase,
-  },
-  {
-    title: "Pilgrimage Services",
-    desc: "Coordinating Hajj and Umrah missions for Kenyan Muslims.",
-    icon: MapPin,
-  },
-  {
-    title: "Membership Accreditation",
-    desc: "Recognition for organizations under our umbrella body.",
-    icon: Award,
-  },
-];
+const ICONS = [Heart, FileCheck, BookOpen, Briefcase, MapPin, Award];
+const SVC_KEYS = ["svc1", "svc2", "svc3", "svc4", "svc5", "svc6"] as const;
 
 export const Services = () => {
+  const t = useTranslations("Home");
+
+  const SERVICES = SVC_KEYS.map((key, i) => ({
+    title: t(`services.${key}.title`),
+    desc: t(`services.${key}.desc`),
+    icon: ICONS[i],
+  }));
+
   return (
     <section className="py-40 px-6 bg-[#0B211B] relative overflow-hidden">
       <div className="absolute inset-0 mesh-gradient opacity-20" />
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center space-y-8 mb-32">
           <h2 className="text-6xl lg:text-8xl font-black font-outfit text-white tracking-tighter text-glow">
-            Digital Services
+            {t("services.title")}
           </h2>
           <p className="text-teal-100/60 max-w-2xl mx-auto text-2xl font-medium leading-relaxed">
-            Comprehensive digital frameworks designed to empower our community
-            with efficiency and speed.
+            {t("services.subtitle")}
           </p>
         </div>
 
