@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ServicesHeaderProps {
     searchTerm: string;
@@ -9,11 +10,17 @@ interface ServicesHeaderProps {
 }
 
 export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: ServicesHeaderProps) {
+    const t = useTranslations("Dashboard.admin.services");
+
     return (
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-1">
-                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">Services CMS</h1>
-                <p className="text-foreground/60 font-medium">Manage and configure organizational services.</p>
+                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
+                    {t("heading")}
+                </h1>
+                <p className="text-foreground/60 font-medium">
+                    {t("desc")}
+                </p>
             </div>
 
             <div className="flex items-center gap-4">
@@ -22,7 +29,7 @@ export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: Ser
                     <input
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        placeholder="Search services..."
+                        placeholder={t("search")}
                         className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
                     />
                 </div>
@@ -31,9 +38,10 @@ export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: Ser
                     onClick={onAddService}
                     className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center gap-2"
                 >
-                    <Plus size={20} /> Add Service
+                    <Plus size={20} /> {t("addService")}
                 </button>
             </div>
         </div>
     );
 }
+

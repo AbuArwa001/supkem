@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface AIGenerationModalProps {
     prompt: string;
@@ -18,6 +19,8 @@ export function AIGenerationModal({
     onGenerate,
     onClose
 }: AIGenerationModalProps) {
+    const t = useTranslations("Dashboard.admin.services.aiModal");
+
     return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <motion.div
@@ -37,18 +40,24 @@ export function AIGenerationModal({
                     <div className="w-16 h-16 bg-secondary/10 text-secondary rounded-3xl flex items-center justify-center mx-auto mb-4">
                         <Sparkles size={32} />
                     </div>
-                    <h3 className="text-2xl font-bold font-outfit text-primary">AI Content Assistant</h3>
-                    <p className="text-foreground/60">Tell me what this service is about, and I'll write a professional description for you.</p>
+                    <h3 className="text-2xl font-bold font-outfit text-primary">
+                        {t("title")}
+                    </h3>
+                    <p className="text-foreground/60">
+                        {t("subtitle")}
+                    </p>
                 </div>
 
                 <div className="space-y-4">
-                    <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Describe the service briefly...</label>
+                    <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
+                        {t("promptLabel")}
+                    </label>
                     <textarea
                         required
                         rows={4}
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
-                        placeholder="e.g. A halal certification for restaurants including site inspection and audit..."
+                        placeholder={t("promptPlaceholder")}
                         className="w-full px-6 py-4 bg-secondary/[0.02] border border-border focus:border-secondary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none"
                     />
                 </div>
@@ -58,7 +67,7 @@ export function AIGenerationModal({
                         onClick={onClose}
                         className="flex-1 px-6 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all font-outfit"
                     >
-                        Cancel
+                        {t("cancel")}
                     </button>
                     <button
                         onClick={onGenerate}
@@ -68,11 +77,11 @@ export function AIGenerationModal({
                         {isGenerating ? (
                             <>
                                 <Loader2 className="animate-spin" size={20} />
-                                Generating...
+                                {t("generating")}
                             </>
                         ) : (
                             <>
-                                <Sparkles size={20} /> Generate Now
+                                <Sparkles size={20} /> {t("generateNow")}
                             </>
                         )}
                     </button>
@@ -81,3 +90,4 @@ export function AIGenerationModal({
         </div>
     );
 }
+

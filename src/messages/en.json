@@ -100,7 +100,8 @@
       "badge": "Latest Announcements",
       "heading1": "News &",
       "heading2": "Press",
-      "desc": "Stay updated with the latest announcements, events, and reports from the Supreme Council."
+      "desc": "Stay updated with the latest announcements, events, and reports from the Supreme Council.",
+      "backToNews": "Back to News Hub"
     },
     "videos": {
       "heading": "Video Briefings",
@@ -125,25 +126,148 @@
       "badge": "Facilitating Excellence",
       "heading1": "Core",
       "heading2": "Services",
-      "desc": "Providing professional, transparent, and efficient digital services to the Kenyan Muslim community."
+      "desc": "Providing professional, transparent, and efficient digital services to the Kenyan Muslim community.",
+      "backToServices": "Back to all Services"
     },
     "grid": {
       "viewDetails": "View Service Details",
-      "svc1": { "title": "Organization Registration", "desc": "Official recognition and enrollment for mosques, schools, and Muslim NGOs in Kenya.", "category": "Administrative" },
-      "svc2": { "title": "Halal Certification", "desc": "Rigorous vetting and accreditation for businesses and products to ensure Halal compliance.", "category": "Certification" },
-      "svc3": { "title": "Advocacy & Legal Support", "desc": "Representing the interest of the Muslim community in legal and governmental affairs.", "category": "Community" },
-      "svc4": { "title": "Educational Programs", "desc": "Scholarship coordination and curriculum support for Islamic educational institutions.", "category": "Education" },
-      "svc5": { "title": "Social Welfare", "desc": "Coordinating humanitarian aid and social support during times of need.", "category": "Welfare" },
-      "svc6": { "title": "Conflict Resolution", "desc": "Mediation services for organizational and community disputes within the Ummah.", "category": "Legal" },
-      "svc7": { "title": "Marriage Certificates", "desc": "Islamic marriage certification for Muslim couples, legally recognized under Kenyan law.", "category": "Individuals" },
-      "svc8": { "title": "Hajj & Umrah Facilitation", "desc": "Official support letters and logistical guidance for sacred pilgrimages.", "category": "Individuals" },
-      "svc9": { "title": "Travel Visa Advisory", "desc": "Visa advisory services and official letters of support for religious and educational travel abroad.", "category": "Individuals" },
-      "svc10": { "title": "Study Abroad Letters", "desc": "Official recommendation letters to support Muslim students applying for scholarships and universities abroad.", "category": "Individuals" }
+      "svc1": { 
+        "title": "Organization Registration", 
+        "subtitle": "Official recognition and enrollment",
+        "desc": "Official recognition and enrollment for mosques, schools, and Muslim NGOs in Kenya.", 
+        "category": "Administrative",
+        "features": [
+          "Digital Certificate issuance upon approval",
+          "Official inclusion in the National Ummah Directory",
+          "Guidance on regulatory compliance and governance"
+        ],
+        "details": "Registering your organization under SUPKEM provides not only official recognition but also integrates your entity into a unified national network. This ensures you receive timely updates, access to capacity-building programs, and a unified voice in national matters affecting the Muslim community."
+      },
+      "svc2": { 
+        "title": "Halal Certification", 
+        "subtitle": "Rigorous vetting and accreditation",
+        "desc": "Rigorous vetting and accreditation for businesses and products to ensure Halal compliance.", 
+        "category": "Certification",
+        "features": [
+          "Rigorous on-site inspections and auditing",
+          "Issuance of globally recognized Halal logo",
+          "Continuous compliance monitoring and support"
+        ],
+        "details": "Our Halal Certification process guarantees that products consumed by the Muslim Ummah adhere strictly to Sharia guidelines. We provide a transparent, efficient, and recognized certification process that boosts consumer confidence both locally and internationally."
+      },
+      "svc3": { 
+        "title": "Advocacy & Legal Support", 
+        "subtitle": "Representing the community's interest",
+        "desc": "Representing the interest of the Muslim community in legal and governmental affairs.", 
+        "category": "Community",
+        "features": [
+          "Legal counsel and representation for Islamic institutions",
+          "Policy advocacy at National and County levels",
+          "Protection against discrimination and marginalization"
+        ],
+        "details": "SUPKEM stands as the unified voice for Muslims in Kenya. Our legal and advocacy wing works tirelessly with state and non-state actors to ensure that laws, policies, and national dialogues reflect and protect the interests, rights, and dignity of the Muslim Ummah."
+      },
+      "svc4": { 
+        "title": "Educational Programs", 
+        "subtitle": "Empowering the next generation",
+        "desc": "Scholarship coordination and curriculum support for Islamic educational institutions.", 
+        "category": "Education",
+        "features": [
+          "Coordination of local and international scholarships",
+          "Support for Integrated Islamic Education Curricula",
+          "Teacher training and capacity building programs"
+        ],
+        "details": "Education is a central pillar of societal progress. We collaborate with global educational partners and the Ministry of Education to secure scholarships, improve school infrastructure, and ensure Islamic Religious Education (IRE) standards are upheld."
+      },
+      "svc5": { 
+        "title": "Social Welfare", 
+        "subtitle": "Humanitarian aid and social support",
+        "desc": "Coordinating humanitarian aid and social support during times of need.", 
+        "category": "Welfare",
+        "features": [
+          "Emergency relief and disaster management",
+          "Transparent Zakat and Sadaqah distribution",
+          "Support programs for orphans and the destitute"
+        ],
+        "details": "Guided by the principles of compassion and charity in Islam, our Social Welfare department mobilizes resources to support the vulnerable. From drought relief in ASAL regions to urban poverty alleviation, we ensure aid reaches those who need it most."
+      },
+      "svc6": { 
+        "title": "Conflict Resolution", 
+        "subtitle": "Fostering peace within the Ummah",
+        "desc": "Mediation services for organizational and community disputes within the Ummah.", 
+        "category": "Legal",
+        "features": [
+          "Mediation of mosque committee disputes",
+          "Islamic marriage (Nikah) and divorce counselling",
+          "Community cohesion and peace-building dialogues"
+        ],
+        "details": "Peace and unity are paramount. Our conflict resolution services provide a neutral, Sharia-compliant platform to mediate disputes, averting protracted legal battles and preserving harmony within families, mosques, and the broader community."
+      },
+      "svc7": { 
+        "title": "Marriage Certificates", 
+        "subtitle": "Islamic marriage (Nikah) certification",
+        "desc": "Islamic marriage certification for Muslim couples, legally recognized under Kenyan law.", 
+        "category": "Individuals",
+        "features": [
+          "Sharia-compliant Nikah certification",
+          "Legal recognition under Kenyan Statutes",
+          "Marriage counseling and pre-marital resources",
+          "Secure digital record keeping"
+        ],
+        "details": "A valid marriage certificate is essential for various legal and administrative procedures. SUPKEM provides certified Nikah documents that are recognized by the Registrar of Marriages in Kenya. We guide couples through the process, ensuring all religious requirements are met while aligning with national legal standards."
+      },
+      "svc8": { 
+        "title": "Hajj & Umrah Facilitation", 
+        "subtitle": "Guidance for the sacred journey",
+        "desc": "Official support letters and logistical guidance for sacred pilgrimages.", 
+        "category": "Individuals",
+        "features": [
+          "Official embassy support letters",
+          "Logistics and travel protocol guidance",
+          "Pre-departure educational seminars",
+          " pilgrim welfare coordination"
+        ],
+        "details": "The journey to the Holy Lands is a significant milestone for every Muslim. Our department works closely with the Hajj Mission and travel agencies to ensure pilgrims are well-prepared. We provide the necessary recommendation letters for visa processing and conduct orientation sessions to help you perform your rituals with ease and focus."
+      },
+      "svc9": { 
+        "title": "Travel Visa Advisory", 
+        "subtitle": "Support for religious and educational travel",
+        "desc": "Visa advisory services and official letters of support for religious and educational travel abroad.", 
+        "category": "Individuals",
+        "features": [
+          "Specialized religious travel advisory",
+          "Official SUPKEM recommendation letters",
+          "Documentation review and verification",
+          "Support for students and religious scholars"
+        ],
+        "details": "Applying for visas for religious or educational travel can be complex. SUPKEM provides formal support letters to embassies, verifying the religious or academic nature of your travel. While we do not issue visas, our advisory service helps ensure your application is well-documented and meets the necessary criteria for consideration."
+      },
+      "svc10": { 
+        "title": "Study Abroad Letters", 
+        "subtitle": "Supporting educational aspirations",
+        "desc": "Official recommendation letters to support Muslim students applying for scholarships and universities abroad.", 
+        "category": "Individuals",
+        "features": [
+          "University admission recommendation letters",
+          "Scholarship support documentation",
+          "Academic pathway and institution guidance",
+          "Verification of student credentials"
+        ],
+        "details": "We are committed to the academic advancement of the Muslim youth. For students seeking higher education abroad, SUPKEM provides official letters that vouch for the student's background and aspirations. These letters are often required or highly valued by international universities and scholarship boards as part of the admission and vetting process."
+      }
     },
     "cta": {
       "heading": "Need a custom certification?",
       "desc": "Our team is ready to guide you through complex registration and certification requirements.",
       "contactSupport": "Contact Support"
+    },
+    "detail": {
+      "overview": "Overview",
+      "details": "Service Details",
+      "whatsIncluded": "What's Included",
+      "readyToApply": "Ready to Apply?",
+      "applyDesc": "Start your application process digitally through our portal.",
+      "startApp": "Start Application"
     }
   },
   "Hero": {
@@ -283,7 +407,12 @@
       "action": "Action",
       "liveDashboard": "Live Dashboard",
       "records": "Records",
-      "generateReport": "Generate Report"
+      "generateReport": "Generate Report",
+      "loading": "Loading...",
+      "application": "Application",
+      "na": "N/A",
+      "certification": "Certification",
+      "officialLetter": "Official Letter"
     },
     "portal": {
       "welcome": {
@@ -375,7 +504,12 @@
         "orgDetail": "Organization Detail",
         "status": "Current Status",
         "activity": "Activity",
-        "empty": "No recent applications found."
+        "empty": "No recent applications found.",
+        "statusLabels": {
+          "approved": "Approved",
+          "rejected": "Rejected",
+          "pending": "Pending"
+        }
       },
       "report": {
         "title": "Data Insights Report",
@@ -385,6 +519,172 @@
         "last30Days": "Last 30 Days",
         "growthAnalysis": "Growth analysis shows consistent submission patterns with a {percentage} increase compared to the previous cycle.",
         "distribution": "Workflow Distribution"
+      },
+      "news": {
+        "heading": "News CMS",
+        "desc": "Manage latest updates and announcements.",
+        "search": "Search news...",
+        "createNews": "Create News",
+        "empty": "No news items found.",
+        "published": "Published",
+        "draft": "Draft",
+        "editNews": "Edit News",
+        "title": "Title",
+        "titlePlaceholder": "Enter news title...",
+        "contentLabel": "Content (Markdown Supported)",
+        "contentPlaceholder": "Write your news story in markdown...",
+        "featuredImage": "Featured Image",
+        "selectImage": "Select Image",
+        "status": "Status",
+        "gallery": "News Gallery",
+        "image": "image",
+        "images": "images",
+        "dropImages": "Drop images here or click to browse",
+        "fileSupports": "Supports JPG, PNG, WEBP · Multiple files allowed",
+        "queued": "queued · will upload on save",
+        "cancel": "Cancel",
+        "saving": "Saving...",
+        "updateNews": "Update News",
+        "removeImage": "Remove image",
+        "deleteImage": "Delete image",
+        "galleryImageAlt": "Gallery image"
+      },
+      "organizations": {
+        "heading": "Organization Audit",
+        "desc": "Monitoring all {totalCount} registered entities.",
+        "search": "Search organizations...",
+        "filters": {
+          "all": "All",
+          "pending": "Pending",
+          "accredited": "Accredited",
+          "suspended": "Suspended"
+        },
+        "viewRegistry": "View Registry",
+        "apps": "Apps",
+        "certs": "Certs"
+      },
+      "services": {
+        "heading": "Services CMS",
+        "desc": "Manage and configure organizational services.",
+        "search": "Search services...",
+        "addService": "Add Service",
+        "table": {
+          "details": "Service Details",
+          "category": "Category",
+          "fee": "Fee",
+          "status": "Status",
+          "actions": "Actions",
+          "noDesc": "No description provided.",
+          "active": "Active",
+          "inactive": "Inactive",
+          "noServices": "No services found."
+        },
+        "modal": {
+          "edit": "Edit Service",
+          "new": "New Service",
+          "name": "Service Name",
+          "namePlaceholder": "Enter service name...",
+          "desc": "Description",
+          "generateAI": "Generate with AI",
+          "descPlaceholder": "Describe the service details...",
+          "feeLabel": "Fee (KES)",
+          "statusLabel": "Initial Status",
+          "activeService": "Active Service",
+          "cancel": "Cancel",
+          "saving": "Saving...",
+          "update": "Update Service",
+          "create": "Create Service"
+        },
+        "aiModal": {
+          "title": "AI Content Assistant",
+          "subtitle": "Tell me what this service is about, and I'll write a professional description for you.",
+          "promptLabel": "Describe the service briefly...",
+          "promptPlaceholder": "e.g. A halal certification for restaurants including site inspection and audit...",
+          "cancel": "Cancel",
+          "generating": "Generating...",
+          "generateNow": "Generate Now"
+        }
+      },
+      "users": {
+        "heading": "Team Management",
+        "desc": "Administrate operational staff and system access privileges.",
+        "addUser": "ADD USER",
+        "searchPlaceholder": "Search team members by name or email...",
+        "table": {
+          "title": "Team Directory",
+          "verifiedMembers": "{totalCount} Verified Members",
+          "memberDetails": "Member Details",
+          "systemRole": "System Role",
+          "location": "Location",
+          "status": "Status",
+          "actions": "Actions",
+          "noResults": "No results found for \"{searchQuery}\""
+        },
+        "row": {
+          "member": "MEMBER",
+          "active": "Active",
+          "disabled": "Disabled",
+          "viewDetails": "View Details",
+          "editAccount": "Edit Account",
+          "removeAccess": "Remove Access"
+        },
+        "details": {
+          "title": "User Details",
+          "email": "Email Address",
+          "phone": "Phone Number",
+          "locationBranch": "Location / Branch",
+          "memberSince": "Member Since",
+          "userId": "User ID",
+          "accountStatus": "Account Status",
+          "verifiedActive": "Verified Active",
+          "suspendedDisabled": "Suspended / Disabled",
+          "systemName": "SUPKEM TEAM MANAGEMENT SYSTEM"
+        },
+        "dialogs": {
+          "newAccount": "New Account",
+          "registerDesc": "Register team member",
+          "editAccount": "Edit Account",
+          "modifyDesc": "Modify team member profile"
+        },
+        "restricted": {
+          "title": "Access Restricted",
+          "desc": "You do not have the required administrative clearance to manage the team directory."
+        },
+        "pagination": {
+          "page": "Registry Page {page}",
+          "prev": "PREV",
+          "next": "NEXT"
+        }
+      },
+      "leadership": {
+        "heading": "Leadership & Governance",
+        "desc": "Manage SUPKEM officials and board members.",
+        "search": "Search leaders...",
+        "addLeader": "Add Leader",
+        "empty": "No leaders found",
+        "addDesc": "Start by adding a new leadership profile.",
+        "live": "Live",
+        "hidden": "Hidden",
+        "editProfile": "Edit Profile",
+        "editOfficial": "Edit Official",
+        "addOfficial": "Add New Official",
+        "editorTitle": "Leadership Profile Editor",
+        "fullName": "Full Name",
+        "officialTitle": "Official Title",
+        "bioLabel": "Professional Bio / Description",
+        "bioPlaceholder": "Tell us about their role and background...",
+        "profilePhoto": "Profile Photo",
+        "selectPhoto": "Select Photo",
+        "displayOrder": "Display Order",
+        "socialLabel": "Social Media Presence",
+        "linkedinPlaceholder": "LinkedIn Profile URL",
+        "twitterPlaceholder": "Twitter / X Profile URL",
+        "facebookPlaceholder": "Facebook Profile URL",
+        "visibleWebsite": "Visible on website",
+        "discard": "Discard",
+        "processing": "Processing...",
+        "republish": "Re-publish Profile",
+        "publish": "Publish Profile"
       },
       "nav": {
         "overview": "Overview",

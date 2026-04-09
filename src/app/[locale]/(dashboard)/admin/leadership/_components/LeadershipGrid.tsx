@@ -2,6 +2,7 @@ import React from "react";
 import { Edit2, Trash2, User, CheckCircle2, XCircle } from "lucide-react";
 import { LeadershipProfile } from "@/services/leadership-service";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface LeadershipGridProps {
   profiles: LeadershipProfile[];
@@ -16,6 +17,8 @@ export function LeadershipGrid({
   onEdit,
   onDelete,
 }: LeadershipGridProps) {
+  const t = useTranslations("Dashboard.admin.leadership");
+
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -36,9 +39,9 @@ export function LeadershipGrid({
           <User size={40} />
         </div>
         <div>
-          <h3 className="text-2xl font-bold text-primary">No leaders found</h3>
+          <h3 className="text-2xl font-bold text-primary">{t("empty")}</h3>
           <p className="text-foreground/50 font-medium">
-            Start by adding a new leadership profile.
+            {t("addDesc")}
           </p>
         </div>
       </div>
@@ -59,11 +62,11 @@ export function LeadershipGrid({
           <div className="absolute top-6 right-6 z-10">
             {item.is_active ? (
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100 shadow-sm">
-                <CheckCircle2 size={12} /> Live
+                <CheckCircle2 size={12} /> {t("live")}
               </div>
             ) : (
               <div className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-50 text-slate-400 rounded-full text-[10px] font-black uppercase tracking-widest border border-slate-100 shadow-sm">
-                <XCircle size={12} /> Hidden
+                <XCircle size={12} /> {t("hidden")}
               </div>
             )}
           </div>
@@ -111,7 +114,7 @@ export function LeadershipGrid({
                   size={16}
                   className="transition-transform group-hover/btn:rotate-12"
                 />
-                Edit Profile
+                {t("editProfile")}
               </button>
               <button
                 onClick={() => onDelete(item.id)}
@@ -127,3 +130,4 @@ export function LeadershipGrid({
     </div>
   );
 }
+

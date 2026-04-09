@@ -11,6 +11,7 @@ import {
 import dynamic from "next/dynamic";
 import { NewsItem, NewsGalleryItem } from "@/services/news-service";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -48,6 +49,7 @@ function PendingGalleryThumb({
 }) {
   const url = React.useMemo(() => URL.createObjectURL(file), [file]);
   React.useEffect(() => () => URL.revokeObjectURL(url), [url]);
+  const t = useTranslations("Dashboard.admin.news");
 
   return (
     <div className="relative group rounded-xl overflow-hidden aspect-square border border-border">
@@ -57,7 +59,7 @@ function PendingGalleryThumb({
         type="button"
         onClick={() => onRemove(index)}
         className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white"
-        aria-label="Remove image"
+        aria-label={t("removeImage")}
       >
         <Trash2 size={18} />
       </button>
@@ -75,12 +77,13 @@ function SavedGalleryThumb({
   isDeleting: boolean;
   onDelete: (id: string) => void;
 }) {
+  const t = useTranslations("Dashboard.admin.news");
   return (
     <div className="relative group rounded-xl overflow-hidden aspect-square border border-border">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={item.image}
-        alt={item.caption || "Gallery image"}
+        alt={item.caption || t("galleryImageAlt")}
         className="w-full h-full object-cover"
       />
       <button
@@ -88,7 +91,7 @@ function SavedGalleryThumb({
         onClick={() => onDelete(item.id)}
         disabled={isDeleting}
         className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white disabled:cursor-not-allowed"
-        aria-label="Delete image"
+        aria-label={t("deleteImage")}
       >
         {isDeleting ? (
           <Loader2 size={18} className="animate-spin" />
@@ -119,6 +122,8 @@ export function NewsModal({
   onRemovePendingFile,
   onDeleteSavedImage,
 }: NewsModalProps) {
+  const t = useTranslations("Dashboard.admin.news");
+
   const handleGalleryDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -162,7 +167,7 @@ export function NewsModal({
             {/* Header */}
             <div className="p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
-                {editingItem ? "Edit News" : "Create News"}
+                {editingItem ? t("editNews") : t("createNews")}
               </h2>
               <button
                 onClick={onClose}
@@ -179,7 +184,7 @@ export function NewsModal({
               {/* Title */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Title
+                  {t("title")}
                 </label>
                 <input
                   required
@@ -187,7 +192,7 @@ export function NewsModal({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  placeholder="Enter news title..."
+                  placeholder={t("titlePlaceholder")}
                   className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                 />
               </div>
@@ -195,7 +200,7 @@ export function NewsModal({
               {/* Content */}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Content (Markdown Supported)
+                  {t("contentLabel")}
                 </label>
                 <div
                   data-color-mode="light"
@@ -210,7 +215,7 @@ export function NewsModal({
                     height={300}
                     className="!border-none"
                     textareaProps={{
-                      placeholder: "Write your news story in markdown...",
+                      placeholder: t("contentPlaceholder"),
                     }}
                   />
                 </div>
@@ -220,7 +225,7 @@ export function NewsModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    Featured Image
+                    {t("featuredImage")}
                   </label>
                   <div className="relative group">
                     <input
@@ -242,14 +247,14 @@ export function NewsModal({
                       <ImageIcon size={20} />
                       {formData.featured_image
                         ? formData.featured_image.name
-                        : "Select Image"}
+                        : t("selectImage")}
                     </label>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    Status
+                    {t("status")}
                   </label>
                   <div className="flex items-center gap-4 py-4">
                     <label className="flex items-center gap-2 cursor-pointer group">
@@ -277,7 +282,7 @@ export function NewsModal({
                         )}
                       </div>
                       <span className="font-bold text-primary text-sm">
-                        Published
+                        {t("published")}
                       </span>
                     </label>
                   </div>
@@ -288,10 +293,10 @@ export function NewsModal({
               <div className="space-y-3">
                 <div className="flex items-center justify-between px-1">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest">
-                    News Gallery
+                    {t("gallery")}
                     {totalGalleryCount > 0 && (
-                      <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold normal-case tracking-normal">
-                        {totalGalleryCount} image{totalGalleryCount !== 1 ? "s" : ""}
+                      <span className="ml-2 rtl:mr-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full font-semibold normal-case tracking-normal">
+                        {totalGalleryCount} {totalGalleryCount === 1 ? t("image") : t("images")}
                       </span>
                     )}
                   </label>
@@ -318,11 +323,11 @@ export function NewsModal({
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                       <Plus size={20} className="text-primary" />
                     </div>
-                    <span className="text-sm font-semibold">
-                      Drop images here or click to browse
+                    <span className="text-sm font-semibold text-center">
+                      {t("dropImages")}
                     </span>
-                    <span className="text-xs">
-                      Supports JPG, PNG, WEBP · Multiple files allowed
+                    <span className="text-xs text-center">
+                      {t("fileSupports")}
                     </span>
                   </label>
                 </div>
@@ -354,7 +359,7 @@ export function NewsModal({
 
                 {pendingGalleryFiles.length > 0 && (
                   <p className="text-xs text-primary/50 px-1 font-medium">
-                    {pendingGalleryFiles.length} image{pendingGalleryFiles.length !== 1 ? "s" : ""} queued · will upload on save
+                    {pendingGalleryFiles.length} {pendingGalleryFiles.length === 1 ? t("image") : t("images")} {t("queued")}
                   </p>
                 )}
               </div>
@@ -366,7 +371,7 @@ export function NewsModal({
                   onClick={onClose}
                   className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all font-outfit"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   disabled={isSubmitting}
@@ -375,12 +380,12 @@ export function NewsModal({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={20} />
-                      Saving...
+                      {t("saving")}
                     </>
                   ) : editingItem ? (
-                    "Update News"
+                    t("updateNews")
                   ) : (
-                    "Create News"
+                    t("createNews")
                   )}
                 </button>
               </div>
@@ -391,3 +396,4 @@ export function NewsModal({
     </AnimatePresence>
   );
 }
+

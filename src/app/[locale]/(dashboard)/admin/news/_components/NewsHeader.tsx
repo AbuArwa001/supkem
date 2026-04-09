@@ -1,5 +1,6 @@
 import React from "react";
 import { Search, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface NewsHeaderProps {
   searchTerm: string;
@@ -15,14 +16,16 @@ export function NewsHeader({
   onSearchChange,
   onCreateClick,
 }: NewsHeaderProps) {
+  const t = useTranslations("Dashboard.admin.news");
+
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
       <div className="space-y-1">
         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-          News CMS
+          {t("heading")}
         </h1>
         <p className="text-foreground/60 font-medium">
-          Manage latest updates and announcements.
+          {t("desc")}
         </p>
       </div>
 
@@ -35,7 +38,7 @@ export function NewsHeader({
           <input
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search news..."
+            placeholder={t("search")}
             className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
           />
         </div>
@@ -44,9 +47,10 @@ export function NewsHeader({
           onClick={onCreateClick}
           className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex items-center gap-2 transition-all active:scale-95"
         >
-          <Plus size={20} /> Create News
+          <Plus size={20} /> {t("createNews")}
         </button>
       </div>
     </div>
   );
 }
+

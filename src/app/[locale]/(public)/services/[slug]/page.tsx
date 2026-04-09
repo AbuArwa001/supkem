@@ -3,6 +3,7 @@
 import { use } from "react";
 import { notFound } from "next/navigation";
 import { CheckCircle2, FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ShieldCheck, Heart, Plane, FileText, BookOpen } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { SERVICES_DATA } from "@/app/[locale]/(public)/services/[slug]/_data/servicesData";
 import { ServiceHero } from "@/app/[locale]/(public)/services/[slug]/_components/ServiceHero";
@@ -21,6 +22,9 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
         notFound();
     }
 
+    const t = useTranslations(`ServicesPage.grid.${service.tKey}`);
+    const features = t.raw("features") as string[];
+
     const IconComponent = iconMap[service.icon] || CheckCircle2;
 
     return (
@@ -30,9 +34,10 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
             <section className="max-w-7xl mx-auto px-6 -mt-16 relative z-20">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <ServiceArticle service={service} />
-                    <ServiceSidebar features={service.features} IconComponent={IconComponent} />
+                    <ServiceSidebar features={features} IconComponent={IconComponent} />
                 </div>
             </section>
         </main>
     );
 }
+

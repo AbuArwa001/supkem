@@ -1,13 +1,11 @@
 "use client";
 
 import Link from "next/link";
-
 import { motion } from "framer-motion";
 import { Building2, MapPin, ChevronRight, MoreVertical } from "lucide-react";
-
 import { cn } from "@/lib/utils";
-
 import { Organization } from "./types";
+import { useTranslations } from "next-intl";
 
 interface OrganizationCardProps {
     org: Organization;
@@ -16,6 +14,8 @@ interface OrganizationCardProps {
 }
 
 export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps) {
+    const t = useTranslations("Dashboard.admin.organizations");
+    
     const isAccredited = org.accreditation_status === "Accredited";
     const isPending = org.accreditation_status === "Pending" || !org.accreditation_status;
     const statusText = org.accreditation_status || "Pending";
@@ -55,7 +55,7 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
                                 "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shrink-0 border",
                                 statusBadgeClass
                             )}>
-                                {statusText}
+                                {t(`filters.${statusText.toLowerCase()}`)}
                             </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
@@ -73,13 +73,13 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
                                 <p className="text-lg font-black text-primary">
                                     {formatCount(org.apps_count)}
                                 </p>
-                                <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Apps</p>
+                                <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">{t("apps")}</p>
                             </div>
                             <div className="text-center bg-secondary/[0.02] p-3 rounded-2xl flex-1 border border-secondary/5 hover:bg-secondary/5 transition-colors">
                                 <p className="text-lg font-black text-secondary">
                                     {formatCount(org.certs_count)}
                                 </p>
-                                <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">Certs</p>
+                                <p className="text-[10px] uppercase font-bold text-foreground/40 tracking-widest leading-none">{t("certs")}</p>
                             </div>
                         </div>
                     )}
@@ -94,7 +94,7 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
                     href={`/admin/organizations/${org.id}`}
                     className="flex-1 px-6 py-4 bg-primary/[0.03] text-primary rounded-2xl font-bold text-sm hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
                 >
-                    View Registry <ChevronRight size={16} />
+                    {t("viewRegistry")} <ChevronRight size={16} />
                 </Link>
                 <button className="p-4 bg-white border border-border rounded-2xl text-foreground/40 hover:text-primary hover:border-primary/20 transition-all">
                     <MoreVertical size={20} />
@@ -103,3 +103,4 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
         </motion.div>
     );
 }
+

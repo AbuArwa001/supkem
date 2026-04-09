@@ -5,6 +5,7 @@ import Image from "next/image";
 import { NewsItem } from "@/services/news-service";
 import { API_BASE_URL } from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface NewsCardProps {
   item: NewsItem;
@@ -17,6 +18,8 @@ interface NewsCardProps {
  * Individual news card component.
  */
 export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
+  const t = useTranslations("Dashboard.admin.news");
+
   const imageUrl = item.featured_image
     ? item.featured_image.startsWith("http")
       ? item.featured_image
@@ -50,7 +53,7 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
                 : "bg-amber-100 text-amber-700",
             )}
           >
-            {item.is_published ? "Published" : "Draft"}
+            {item.is_published ? t("published") : t("draft")}
           </span>
         </div>
       </div>
@@ -88,3 +91,4 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
     </motion.div>
   );
 }
+

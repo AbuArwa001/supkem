@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { X, Sparkles, DollarSign, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceFormData, ServiceItem } from "./types";
+import { useTranslations } from "next-intl";
 
 interface ServiceFormModalProps {
     editingItem: ServiceItem | null;
@@ -26,6 +27,8 @@ export function ServiceFormModal({
     onClose,
     onOpenAIGeneration
 }: ServiceFormModalProps) {
+    const t = useTranslations("Dashboard.admin.services.modal");
+
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
@@ -43,7 +46,7 @@ export function ServiceFormModal({
             >
                 <div className="p-8 border-b border-border flex items-center justify-between">
                     <h2 className="text-2xl font-bold font-outfit text-primary">
-                        {editingItem ? "Edit Service" : "New Service"}
+                        {editingItem ? t("edit") : t("new")}
                     </h2>
                     <button onClick={onClose} className="p-2 hover:bg-primary/5 rounded-xl transition-colors">
                         <X size={24} />
@@ -53,17 +56,17 @@ export function ServiceFormModal({
                 <form onSubmit={onSubmit} className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Service Name</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("name")}</label>
                             <input
                                 required
                                 value={formData.name}
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Enter service name..."
+                                placeholder={t("namePlaceholder")}
                                 className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Category</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("name")}</label>
                             <select
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -76,42 +79,42 @@ export function ServiceFormModal({
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between px-1">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest">Description</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest">{t("desc")}</label>
                             <button
                                 type="button"
                                 onClick={onOpenAIGeneration}
                                 className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-secondary hover:text-secondary/80 transition-colors"
                             >
-                                <Sparkles size={14} /> Generate with AI
+                                <Sparkles size={14} /> {t("generateAI")}
                             </button>
                         </div>
                         <textarea
                             rows={6}
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            placeholder="Describe the service details..."
+                            placeholder={t("descPlaceholder")}
                             className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none"
                         />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1 text-primary">Fee (KES)</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1 text-primary">{t("feeLabel")}</label>
                             <div className="relative">
-                                <DollarSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30" />
+                                <DollarSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 ltr:left-4 rtl:right-4" />
                                 <input
                                     required
                                     type="number"
                                     value={formData.fee}
                                     onChange={(e) => setFormData({ ...formData, fee: e.target.value })}
                                     placeholder="0.00"
-                                    className="w-full pl-12 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
+                                    className="w-full ltr:pl-12 rtl:pr-12 px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">Initial Status</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("statusLabel")}</label>
                             <div className="flex items-center gap-4 py-4">
                                 <label className="flex items-center gap-2 cursor-pointer group">
                                     <input
@@ -126,7 +129,7 @@ export function ServiceFormModal({
                                     )}>
                                         {formData.is_active && <CheckCircle2 size={14} className="text-white" />}
                                     </div>
-                                    <span className="font-bold text-primary text-sm">Active Service</span>
+                                    <span className="font-bold text-primary text-sm">{t("activeService")}</span>
                                 </label>
                             </div>
                         </div>
@@ -138,7 +141,7 @@ export function ServiceFormModal({
                             onClick={onClose}
                             className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all"
                         >
-                            Cancel
+                            {t("cancel")}
                         </button>
                         <button
                             disabled={isSubmitting}
@@ -147,10 +150,10 @@ export function ServiceFormModal({
                             {isSubmitting ? (
                                 <>
                                     <Loader2 className="animate-spin" size={20} />
-                                    Saving...
+                                    {t("saving")}
                                 </>
                             ) : (
-                                editingItem ? "Update Service" : "Create Service"
+                                editingItem ? t("update") : t("create")
                             )}
                         </button>
                     </div>
@@ -159,3 +162,4 @@ export function ServiceFormModal({
         </div>
     );
 }
+

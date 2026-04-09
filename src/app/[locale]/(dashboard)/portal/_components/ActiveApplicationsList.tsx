@@ -37,7 +37,9 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
 
       <div className="space-y-4">
         {loading ? (
-          <div className="p-12 text-center text-slate-400 animate-pulse font-bold uppercase tracking-widest">Loading...</div>
+          <div className="p-12 text-center text-slate-400 animate-pulse font-bold uppercase tracking-widest">
+            {tc("loading")}
+          </div>
         ) : apps.length === 0 ? (
           <div className="p-12 text-center text-slate-500 font-medium border-2 border-slate-200 border-dashed rounded-[16px] bg-white">
             {t("empty")}
@@ -51,7 +53,9 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
                     <Search className="w-8 h-8" strokeWidth={1.5} />
                   </div>
                   <div className="space-y-1">
-                    <h4 className="text-xl md:text-2xl font-black font-outfit text-slate-900 leading-tight">{app?.service_name || "Application"}</h4>
+                    <h4 className="text-xl md:text-2xl font-black font-outfit text-slate-900 leading-tight">
+                      {app?.service_name || tc("application")}
+                    </h4>
                     <div className="flex items-center gap-3 text-xs text-slate-500 font-bold">
                       <span className="bg-slate-100 px-2 py-0.5 rounded text-[10px] text-slate-600">#{String(app.id).substring(0, 8).toUpperCase()}</span>
                       <span>•</span>
@@ -68,7 +72,9 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
                     <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", app?.status === "Under Review" ? "bg-amber-500" : "bg-blue-500")} />
                     {getStatusLabel(app?.status)}
                   </span>
-                  <p className="text-xs text-slate-400 font-bold">{app?.submitted_at ? new Date(app.submitted_at).toLocaleDateString() : "N/A"}</p>
+                  <p className="text-xs text-slate-400 font-bold">
+                    {app?.submitted_at ? new Date(app.submitted_at).toLocaleDateString() : tc("na")}
+                  </p>
                 </div>
               </motion.div>
             </Link>
@@ -78,3 +84,4 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
     </div>
   );
 }
+

@@ -1,8 +1,8 @@
 "use client";
 
 import { Search, Grid, List } from "lucide-react";
-
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface OrganizationHeaderProps {
     totalCount: number;
@@ -19,11 +19,17 @@ export function OrganizationHeader({
     viewMode,
     onViewModeChange
 }: OrganizationHeaderProps) {
+    const t = useTranslations("Dashboard.admin.organizations");
+
     return (
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-1">
-                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">Organization Audit</h1>
-                <p className="text-foreground/60 font-medium">Monitoring all {totalCount} registered entities.</p>
+                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
+                    {t("heading")}
+                </h1>
+                <p className="text-foreground/60 font-medium">
+                    {t("desc", { totalCount })}
+                </p>
             </div>
 
             <div className="flex items-center gap-4">
@@ -32,7 +38,7 @@ export function OrganizationHeader({
                     <input
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
-                        placeholder="Search organizations..."
+                        placeholder={t("search")}
                         className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
                     />
                 </div>
@@ -61,3 +67,4 @@ export function OrganizationHeader({
         </div>
     );
 }
+

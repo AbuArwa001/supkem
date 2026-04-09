@@ -21,6 +21,17 @@ interface ApplicationsTableProps {
 export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
   const t = useTranslations("Dashboard.admin.tables");
 
+  const getStatusLabel = (status: string) => {
+    switch (status) {
+      case "Approved":
+        return t("statusLabels.approved");
+      case "Rejected":
+        return t("statusLabels.rejected");
+      default:
+        return t("statusLabels.pending");
+    }
+  };
+
   return (
     <div className="xl:col-span-2 space-y-6">
       <div className="flex items-center justify-between">
@@ -98,7 +109,7 @@ export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
                       ) : (
                         <Clock size={12} />
                       )}
-                      {app.status}
+                      {getStatusLabel(app.status)}
                     </span>
                   </td>
                   <td className="px-6 md:px-8 py-5 md:py-6 text-xs md:text-sm font-semibold text-slate-500 text-right">
@@ -123,3 +134,4 @@ export const ApplicationsTable = ({ applications }: ApplicationsTableProps) => {
     </div>
   );
 };
+

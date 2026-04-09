@@ -1,5 +1,6 @@
 import React from "react";
 import { Plus, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface LeadershipHeaderProps {
   searchTerm: string;
@@ -12,14 +13,16 @@ export function LeadershipHeader({
   onSearchChange,
   onCreateClick,
 }: LeadershipHeaderProps) {
+  const t = useTranslations("Dashboard.admin.leadership");
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div className="space-y-1">
         <h1 className="text-4xl font-black font-outfit text-primary tracking-tight">
-          Leadership & Governance
+          {t("heading")}
         </h1>
         <p className="text-foreground/50 font-medium tracking-wide">
-          Manage SUPKEM officials and board members.
+          {t("desc")}
         </p>
       </div>
 
@@ -32,7 +35,7 @@ export function LeadershipHeader({
           <input
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search leaders..."
+            placeholder={t("search")}
             className="w-full pl-12 pr-6 py-4 bg-white border border-border focus:border-primary/20 rounded-2xl outline-none font-medium transition-all shadow-sm"
           />
         </div>
@@ -41,9 +44,10 @@ export function LeadershipHeader({
           className="px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2 shrink-0 premium-gradient shadow-primary/20"
         >
           <Plus size={20} />
-          <span>Add Leader</span>
+          <span>{t("addLeader")}</span>
         </button>
       </div>
     </div>
   );
 }
+

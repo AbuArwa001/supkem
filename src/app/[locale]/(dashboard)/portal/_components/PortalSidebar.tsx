@@ -28,7 +28,9 @@ export default function PortalSidebar({ certificates, letters }: PortalSidebarPr
               <button className="p-2 text-slate-400 hover:text-emerald-600 transition-colors"><Download size={16} /></button>
             </div>
             <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest mb-1">{tc("verified")}</p>
-            <h4 className="text-lg font-bold text-slate-900 leading-tight mb-4">{cert?.application_detail?.service_name || "Certification"}</h4>
+            <h4 className="text-lg font-bold text-slate-900 leading-tight mb-4">
+              {cert?.application_detail?.service_name || tc("certification")}
+            </h4>
             <Link href={`/portal/certificates/${cert.id}`} className="text-[10px] font-black text-slate-400 hover:text-primary uppercase tracking-widest flex items-center gap-1">
               {t("certificates.registry")} <ChevronRight size={14} />
             </Link>
@@ -48,7 +50,9 @@ export default function PortalSidebar({ certificates, letters }: PortalSidebarPr
               <div className="w-10 h-10 rounded-xl bg-white text-blue-600 flex items-center justify-center shadow-sm border border-blue-100"><FileText size={20} /></div>
               <button className="p-2 text-slate-400 hover:text-blue-600 transition-colors"><Download size={16} /></button>
             </div>
-            <h4 className="text-lg font-bold text-slate-900 leading-tight mb-4">{cert?.application_detail?.service_name || "Official Letter"}</h4>
+            <h4 className="text-lg font-bold text-slate-900 leading-tight mb-4">
+              {cert?.application_detail?.service_name || tc("officialLetter")}
+            </h4>
             <Link href={`/portal/letters/${cert.id}`} className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-[10px] font-black text-blue-600 uppercase tracking-widest border border-blue-100 shadow-sm">
               {t("letters.view")} <ExternalLink size={12} />
             </Link>
@@ -68,3 +72,4 @@ export default function PortalSidebar({ certificates, letters }: PortalSidebarPr
     </div>
   );
 }
+

@@ -1,12 +1,20 @@
+"use client";
+
 import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBriefings";
 import { getVideos } from "@/app/[locale]/(public)/news/_services/newsService";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
+import { VideoItem } from "@/app/(public)/news/_services/newsService";
 
-export const revalidate = 60;
+export default function VideoBriefingsPage() {
+    const t = useTranslations("NewsPage.hero");
+    const [videos, setVideos] = useState<VideoItem[]>([]);
 
-export default async function VideoBriefingsPage() {
-    const videos = await getVideos();
+    useEffect(() => {
+        getVideos().then(setVideos);
+    }, []);
 
     return (
         <div className="pt-32 pb-24 bg-slate-50 min-h-screen">
@@ -15,10 +23,11 @@ export default async function VideoBriefingsPage() {
                     href="/news"
                     className="inline-flex items-center gap-2 text-primary hover:text-secondary transition-colors font-bold uppercase tracking-widest text-xs bg-primary/5 px-4 py-2 rounded-full"
                 >
-                    <ArrowLeft size={14} /> Back to News Hub
+                    <ArrowLeft size={14} /> {t("backToNews")}
                 </Link>
             </div>
             <VideoBriefings videos={videos} limit={0} />
         </div>
     );
 }
+

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { LeadershipProfile } from "@/services/leadership-service";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface LeadershipModalProps {
   isOpen: boolean;
@@ -42,6 +43,8 @@ export function LeadershipModal({
   isSubmitting,
   onSubmit,
 }: LeadershipModalProps) {
+  const t = useTranslations("Dashboard.admin.leadership");
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -63,10 +66,10 @@ export function LeadershipModal({
             <div className="p-8 border-b border-border flex items-center justify-between bg-slate-50/50">
               <div className="space-y-1">
                 <h2 className="text-2xl font-black font-outfit text-primary tracking-tight">
-                  {editingItem ? "Edit Official" : "Add New Official"}
+                  {editingItem ? t("editOfficial") : t("addOfficial")}
                 </h2>
                 <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest">
-                  Leadership Profile Editor
+                  {t("editorTitle")}
                 </p>
               </div>
               <button
@@ -87,7 +90,7 @@ export function LeadershipModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-border/50">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-primary uppercase tracking-[0.25em] px-1">
-                    Full Name
+                    {t("fullName")}
                   </label>
                   <input
                     required
@@ -102,7 +105,7 @@ export function LeadershipModal({
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-primary uppercase tracking-[0.25em] px-1">
-                    Official Title
+                    {t("officialTitle")}
                   </label>
                   <input
                     required
@@ -118,14 +121,14 @@ export function LeadershipModal({
 
               <div className="space-y-2">
                 <label className="text-[10px] font-black text-primary uppercase tracking-[0.25em] px-1">
-                  Professional Bio / Description
+                  {t("bioLabel")}
                 </label>
                 <textarea
                   value={formData.bio}
                   onChange={(e) =>
                     setFormData({ ...formData, bio: e.target.value })
                   }
-                  placeholder="Tell us about their role and background..."
+                  placeholder={t("bioPlaceholder")}
                   rows={4}
                   className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none text-sm"
                 />
@@ -134,7 +137,7 @@ export function LeadershipModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-border/50">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-primary uppercase tracking-[0.25em] px-1">
-                    Profile Photo
+                    {t("profilePhoto")}
                   </label>
                   <div className="relative group">
                     <input
@@ -169,7 +172,7 @@ export function LeadershipModal({
                             size={18}
                             className="group-hover:text-primary transition-colors"
                           />
-                          <span>Select Photo</span>
+                          <span>{t("selectPhoto")}</span>
                         </>
                       )}
                     </label>
@@ -178,7 +181,7 @@ export function LeadershipModal({
 
                 <div className="space-y-2">
                   <label className="text-[10px] font-black text-primary uppercase tracking-[0.25em] px-1">
-                    Display Order
+                    {t("displayOrder")}
                   </label>
                   <input
                     type="number"
@@ -197,7 +200,7 @@ export function LeadershipModal({
               {/* Social Links Section */}
               <div className="space-y-6 pt-6 border-t border-border/50">
                 <p className="text-[11px] font-black text-primary/40 uppercase tracking-[0.3em]">
-                  Social Media Presence
+                  {t("socialLabel")}
                 </p>
                 
                 <div className="grid grid-cols-1 gap-4">
@@ -210,8 +213,8 @@ export function LeadershipModal({
                       onChange={(e) =>
                         setFormData({ ...formData, linkedin_url: e.target.value })
                       }
-                      placeholder="LinkedIn Profile URL"
-                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                      placeholder={t("linkedinPlaceholder")}
+                      className="w-full ltr:pl-14 rtl:pr-14 ltr:pr-6 rtl:pl-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
                     />
                   </div>
 
@@ -224,8 +227,8 @@ export function LeadershipModal({
                       onChange={(e) =>
                         setFormData({ ...formData, twitter_url: e.target.value })
                       }
-                      placeholder="Twitter / X Profile URL"
-                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                      placeholder={t("twitterPlaceholder")}
+                      className="w-full ltr:pl-14 rtl:pr-14 ltr:pr-6 rtl:pl-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
                     />
                   </div>
 
@@ -238,8 +241,8 @@ export function LeadershipModal({
                       onChange={(e) =>
                         setFormData({ ...formData, facebook_url: e.target.value })
                       }
-                      placeholder="Facebook Profile URL"
-                      className="w-full pl-14 pr-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
+                      placeholder={t("facebookPlaceholder")}
+                      className="w-full ltr:pl-14 rtl:pr-14 ltr:pr-6 rtl:pl-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-sm"
                     />
                   </div>
                 </div>
@@ -271,7 +274,7 @@ export function LeadershipModal({
                     )}
                   </div>
                   <span className="font-black text-primary text-xs uppercase tracking-widest">
-                    Visible on website
+                    {t("visibleWebsite")}
                   </span>
                 </label>
               </div>
@@ -283,7 +286,7 @@ export function LeadershipModal({
                   onClick={onClose}
                   className="flex-1 px-8 py-5 bg-foreground/[0.03] text-primary rounded-[20px] font-black text-xs uppercase tracking-widest hover:bg-foreground/[0.06] transition-all active:scale-95 border border-border"
                 >
-                  Discard
+                  {t("discard")}
                 </button>
                 <button
                   disabled={isSubmitting}
@@ -292,12 +295,12 @@ export function LeadershipModal({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={18} />
-                      Processing...
+                      {t("processing")}
                     </>
                   ) : editingItem ? (
-                    "Re-publish Profile"
+                    t("republish")
                   ) : (
-                    "Publish Profile"
+                    t("publish")
                   )}
                 </button>
               </div>
@@ -308,3 +311,4 @@ export function LeadershipModal({
     </AnimatePresence>
   );
 }
+

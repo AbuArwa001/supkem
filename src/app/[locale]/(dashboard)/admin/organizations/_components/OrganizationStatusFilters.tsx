@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface OrganizationStatusFiltersProps {
     activeFilter: string;
@@ -13,6 +14,8 @@ export function OrganizationStatusFilters({
     onFilterChange,
     statuses = ["All", "Pending", "Accredited", "Suspended"]
 }: OrganizationStatusFiltersProps) {
+    const t = useTranslations("Dashboard.admin.organizations.filters");
+
     return (
         <div className="flex bg-slate-100 p-1 rounded-2xl w-fit">
             {statuses.map((status) => (
@@ -26,9 +29,10 @@ export function OrganizationStatusFilters({
                             : "text-slate-500 hover:text-slate-700 hover:bg-white/50"
                     )}
                 >
-                    {status}
+                    {t(status.toLowerCase())}
                 </button>
             ))}
         </div>
     );
 }
+

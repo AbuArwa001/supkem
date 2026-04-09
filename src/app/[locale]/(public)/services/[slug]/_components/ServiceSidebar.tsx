@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle2, FileCheck, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ServiceSidebarProps {
   features: string[];
@@ -13,6 +14,8 @@ export function ServiceSidebar({
   features,
   IconComponent,
 }: ServiceSidebarProps) {
+  const t = useTranslations("ServicesPage.detail");
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -29,7 +32,7 @@ export function ServiceSidebar({
           />
         </div>
         <h3 className="text-xl font-bold font-outfit mb-8 relative z-10">
-          What's Included
+          {t("whatsIncluded")}
         </h3>
         <ul className="space-y-5 relative z-10">
           {features.map((feature, idx) => (
@@ -48,17 +51,17 @@ export function ServiceSidebar({
         </div>
         <div>
           <h4 className="text-xl font-bold text-slate-800 mb-2">
-            Ready to Apply?
+            {t("readyToApply")}
           </h4>
           <p className="text-slate-500 text-sm">
-            Start your application process digitally through our portal.
+            {t("applyDesc")}
           </p>
         </div>
         <Link
           href="/portal/applications"
           className="w-full py-4 bg-primary text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-secondary hover:text-primary transition-all shadow-lg hover:shadow-xl group"
         >
-          Start Application{" "}
+          {t("startApp")}{" "}
           <ArrowRight
             size={18}
             className="group-hover:translate-x-1 transition-transform"
@@ -68,3 +71,4 @@ export function ServiceSidebar({
     </motion.div>
   );
 }
+
