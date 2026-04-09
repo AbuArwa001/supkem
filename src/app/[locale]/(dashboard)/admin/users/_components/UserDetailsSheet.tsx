@@ -17,6 +17,7 @@ import useSWR from "swr";
 import { userService } from "../_services/userService";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import { useTranslations } from "next-intl";
 
 interface UserDetailsSheetProps {
   isOpen: boolean;
@@ -29,6 +30,9 @@ export const UserDetailsSheet = ({
   onOpenChange,
   user: initialUser,
 }: UserDetailsSheetProps) => {
+  const t = useTranslations("Dashboard.admin.users.details");
+  const tr = useTranslations("Dashboard.admin.users.row");
+
   // Fetch full user data to get all fields
   const { data: user, isLoading } = useSWR(
     isOpen && initialUser?.id ? `/users/users/${initialUser.id}/` : null,
@@ -42,7 +46,7 @@ export const UserDetailsSheet = ({
       <div className="bg-slate-100 p-2.5 rounded-xl text-slate-400">
         <Icon size={18} />
       </div>
-      <div className="space-y-1">
+      <div className="space-y-1 text-start">
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 leading-none">
           {label}
         </p>
@@ -66,14 +70,14 @@ export const UserDetailsSheet = ({
             
             <div>
               <DialogTitle className="text-3xl font-black tracking-tight uppercase font-outfit">
-                {displayUser?.full_name || "User Details"}
+                {displayUser?.full_name || t("title")}
               </DialogTitle>
               <div className="flex items-center justify-center gap-2 mt-2">
                 <Badge className="bg-rose-600 hover:bg-rose-700 text-white font-black text-[10px] uppercase tracking-widest px-3 py-1 rounded-xl border-none">
-                  {displayUser?.role?.role_name || displayUser?.role_name || "MEMBER"}
+                  {displayUser?.role?.role_name || displayUser?.role_name || tr("member")}
                 </Badge>
                 <Badge variant={displayUser?.is_active ? "default" : "secondary"} className={`rounded-xl px-3 py-1 text-[10px] font-black uppercase tracking-widest ${displayUser?.is_active ? "bg-emerald-500 text-white" : "bg-white/10 text-white/60"}`}>
-                  {displayUser?.is_active ? "Active" : "Disabled"}
+                  {displayUser?.is_active ? tr("active") : tr("disabled")}
                 </Badge>
               </div>
             </div>
@@ -97,33 +101,33 @@ export const UserDetailsSheet = ({
             <div className="grid grid-cols-1 gap-1">
               <DetailRow 
                 icon={Mail} 
-                label="Email Address" 
+                label={t("email")} 
                 value={displayUser?.email} 
               />
               <DetailRow 
                 icon={Phone} 
-                label="Phone Number" 
+                label={t("phone")} 
                 value={displayUser?.phone_number} 
               />
               <DetailRow 
                 icon={MapPin} 
-                label="Location / Branch" 
+                label={t("locationBranch")} 
                 value={displayUser?.location} 
               />
               <DetailRow 
                 icon={Calendar} 
-                label="Member Since" 
+                label={t("memberSince")} 
                 value={displayUser?.created_at ? format(new Date(displayUser.created_at), "MMMM dd, yyyy") : null} 
               />
               <DetailRow 
                 icon={Hash} 
-                label="User ID" 
+                label={t("userId")} 
                 value={displayUser?.id} 
               />
               <DetailRow 
                 icon={displayUser?.is_active ? CheckCircle2 : XCircle} 
-                label="Account Status" 
-                value={displayUser?.is_active ? "Verified Active" : "Suspended / Disabled"}
+                label={t("accountStatus")} 
+                value={displayUser?.is_active ? t("verifiedActive") : t("suspendedDisabled")}
                 className={displayUser?.is_active ? "text-emerald-600" : "text-rose-600"}
               />
             </div>
@@ -132,10 +136,11 @@ export const UserDetailsSheet = ({
 
         <div className="p-8 bg-slate-50 border-t border-slate-100 flex justify-center">
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                SUPKEM TEAM MANAGEMENT SYSTEM
+                {t("systemName")}
             </p>
         </div>
       </DialogContent>
     </Dialog>
   );
 };
+

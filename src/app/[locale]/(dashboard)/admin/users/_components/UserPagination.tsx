@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface UserPaginationProps {
   page: number;
@@ -19,10 +20,12 @@ export const UserPagination = ({
   hasNext,
   isLoading,
 }: UserPaginationProps) => {
+  const t = useTranslations("Dashboard.admin.users.pagination");
+
   return (
     <div className="p-8 border-t border-slate-50 flex items-center justify-between">
       <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-        Registry Page {page}
+        {t("page", { page })}
       </p>
       <div className="flex gap-2">
         <Button
@@ -32,7 +35,7 @@ export const UserPagination = ({
           disabled={!hasPrev || isLoading}
           className="rounded-xl font-black text-[10px] px-4 uppercase tracking-widest h-10"
         >
-          PREV
+          {t("prev")}
         </Button>
         <Button
           variant="outline"
@@ -41,9 +44,10 @@ export const UserPagination = ({
           disabled={!hasNext || isLoading}
           className="rounded-xl font-black text-[10px] px-4 uppercase tracking-widest h-10"
         >
-          NEXT
+          {t("next")}
         </Button>
       </div>
     </div>
   );
 };
+

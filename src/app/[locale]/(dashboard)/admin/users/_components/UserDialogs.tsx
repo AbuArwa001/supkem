@@ -3,6 +3,7 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { UserForm } from "@/components/forms/UserForm";
 import { UserDetailsSheet } from "./UserDetailsSheet";
+import { useTranslations } from "next-intl";
 
 interface UserDialogsProps {
   isAddOpen: boolean;
@@ -25,6 +26,8 @@ export const UserDialogs = ({
   selectedUser,
   onSuccess,
 }: UserDialogsProps) => {
+  const t = useTranslations("Dashboard.admin.users.dialogs");
+
   return (
     <>
       <Dialog open={isAddOpen} onOpenChange={onAddOpenChange}>
@@ -32,10 +35,10 @@ export const UserDialogs = ({
           <div className="bg-gradient-to-br from-rose-600 to-rose-700 p-10 text-white text-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10" />
             <DialogTitle className="text-3xl font-black tracking-tight uppercase">
-              New Account
+              {t("newAccount")}
             </DialogTitle>
             <p className="text-rose-100/70 text-[11px] font-black mt-2 uppercase tracking-[0.2em]">
-              Register team member
+              {t("registerDesc")}
             </p>
           </div>
           <div className="p-10">
@@ -54,10 +57,10 @@ export const UserDialogs = ({
           <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-10 text-white text-center relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10" />
             <DialogTitle className="text-3xl font-black tracking-tight uppercase">
-              Edit Account
+              {t("editAccount")}
             </DialogTitle>
             <p className="text-slate-300 text-[11px] font-black mt-2 uppercase tracking-[0.2em]">
-              Modify team member profile
+              {t("modifyDesc")}
             </p>
           </div>
           <div className="p-10">
@@ -82,3 +85,4 @@ export const UserDialogs = ({
     </>
   );
 };
+
