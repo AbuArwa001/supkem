@@ -1,5 +1,5 @@
-import { VideoBriefings } from "@/app/(public)/news/_components/VideoBriefings";
-import { getVideos } from "@/app/(public)/news/_services/newsService";
+import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBriefings";
+import { getVideos } from "@/app/[locale]/(public)/news/_services/newsService";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
