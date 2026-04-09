@@ -4,10 +4,10 @@ import { use } from "react";
 import { notFound } from "next/navigation";
 import { CheckCircle2, FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ShieldCheck, Heart, Plane, FileText, BookOpen } from "lucide-react";
 
-import { SERVICES_DATA } from "@/app/(public)/services/[slug]/_data/servicesData";
-import { ServiceHero } from "@/app/(public)/services/[slug]/_components/ServiceHero";
-import { ServiceArticle } from "@/app/(public)/services/[slug]/_components/ServiceArticle";
-import { ServiceSidebar } from "@/app/(public)/services/[slug]/_components/ServiceSidebar";
+import { SERVICES_DATA } from "@/app/[locale]/(public)/services/[slug]/_data/servicesData";
+import { ServiceHero } from "@/app/[locale]/(public)/services/[slug]/_components/ServiceHero";
+import { ServiceArticle } from "@/app/[locale]/(public)/services/[slug]/_components/ServiceArticle";
+import { ServiceSidebar } from "@/app/[locale]/(public)/services/[slug]/_components/ServiceSidebar";
 
 const iconMap: Record<string, React.ElementType> = {
     FileCheck, Users, Briefcase, GraduationCap, HeartHandshake, ShieldCheck, Heart, Plane, FileText, BookOpen
