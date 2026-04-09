@@ -1,41 +1,9 @@
+// src/app/layout.tsx
+// Minimal root layout — the real layout lives at [locale]/layout.tsx
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
-import "./globals.css";
-import MainLayoutWrapper from "@/components/MainLayoutWrapper";
-import { Toaster } from "sonner";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  variable: "--font-outfit",
-});
-
 export const metadata: Metadata = {
   title: "SUPKEM | Supreme Council of Kenya Muslims",
-  description: "Official Content Management and Application System for SUPKEM",
 };
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en" className={`${inter.variable} ${outfit.variable}`}>
-      <body className="font-inter antialiased">
-        <MainLayoutWrapper>
-          {children}
-        </MainLayoutWrapper>
-        <Toaster position="top-right" richColors />
-        <Analytics />
-        <SpeedInsights />
-      </body>
-    </html>
-  );
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

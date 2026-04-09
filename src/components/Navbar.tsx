@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
+import { useLocale } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import {
@@ -22,6 +22,23 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showArabicComingSoon, setShowArabicComingSoon] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const locale = useLocale();
+  const isArabicEnabled = process.env.NEXT_PUBLIC_ENABLE_ARABIC_API === "true";
+
+  const handleARClick = () => {
+    if (isArabicEnabled) {
+      router.replace({ pathname }, { locale: "ar" });
+    } else {
+      setShowArabicComingSoon(true);
+    }
+  };
+
+  const handleENClick = () => {
+    if (isArabicEnabled) {
+      router.replace({ pathname }, { locale: "en" });
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -108,12 +125,21 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-4">
             {/* Language Toggle */}
             <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-full border border-slate-200">
-              <button className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-white text-slate-900 rounded-full shadow-sm">
+              <button 
+                onClick={handleENClick}
+                className={cn(
+                  "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full transition-colors",
+                  locale === "en" ? "bg-white text-slate-900 shadow-sm" : "text-slate-400 hover:text-slate-600"
+                )}
+              >
                 EN
               </button>
               <button
-                onClick={() => setShowArabicComingSoon(true)}
-                className="px-3 py-1 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-colors"
+                onClick={handleARClick}
+                className={cn(
+                  "px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full transition-colors",
+                  locale === "ar" ? "bg-white text-slate-900 shadow-sm" : "text-slate-400 hover:text-slate-600"
+                )}
               >
                 AR
               </button>
@@ -221,15 +247,27 @@ const Navbar = () => {
                     Language
                   </p>
                   <div className="flex items-center gap-1 p-1 bg-white rounded-full border border-slate-200">
-                    <button className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest bg-slate-900 text-white rounded-full">
+                    <button 
+                      onClick={() => {
+                        setIsOpen(false);
+                        handleENClick();
+                      }}
+                      className={cn(
+                        "px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full",
+                        locale === "en" ? "bg-slate-900 text-white" : "text-slate-400"
+                      )}
+                    >
                       EN
                     </button>
                     <button
                       onClick={() => {
                         setIsOpen(false);
-                        setShowArabicComingSoon(true);
+                        handleARClick();
                       }}
-                      className="px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-slate-400"
+                      className={cn(
+                        "px-4 py-1.5 text-[10px] font-black uppercase tracking-widest",
+                        locale === "ar" ? "bg-slate-900 text-white rounded-full" : "text-slate-400"
+                      )}
                     >
                       AR
                     </button>
