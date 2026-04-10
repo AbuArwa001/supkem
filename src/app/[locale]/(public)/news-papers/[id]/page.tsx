@@ -1,7 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { ChevronLeft, Download, Calendar, BookOpen } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { API_BASE_URL } from "@/lib/api";

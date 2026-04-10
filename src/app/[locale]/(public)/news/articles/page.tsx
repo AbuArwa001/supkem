@@ -1,6 +1,6 @@
 import { FeaturedNews } from "@/app/[locale]/(public)/news/_components/FeaturedNews";
 import { getNews } from "@/app/[locale]/(public)/news/_services/newsService";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 
 import { getTranslations } from "next-intl/server";

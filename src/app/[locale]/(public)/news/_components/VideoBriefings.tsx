@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Film, PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";

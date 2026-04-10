@@ -1,5 +1,5 @@
 import { Calendar, User, ArrowLeft, PlayCircle, Film, Share2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import api, { API_BASE_URL } from "@/lib/api";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/news/VideoPlayer";

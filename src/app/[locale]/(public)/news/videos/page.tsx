@@ -2,7 +2,7 @@
 
 import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBriefings";
 import { getVideos } from "@/app/[locale]/(public)/news/_services/newsService";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";

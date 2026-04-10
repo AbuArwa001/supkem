@@ -1,5 +1,5 @@
 import { Calendar, User, ArrowLeft, BookOpen } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import api, { API_BASE_URL } from "@/lib/api";
 import ReactMarkdown from "react-markdown";
