@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { VideoItem } from "@/app/(public)/news/_services/newsService";
+import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
 
 export default function VideoBriefingsPage() {
     const t = useTranslations("NewsPage.hero");

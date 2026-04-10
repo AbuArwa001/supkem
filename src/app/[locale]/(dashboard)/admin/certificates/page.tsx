@@ -6,9 +6,9 @@
 import { Award, Search } from "lucide-react";
 
 // Internal components
-import CertificateCard from "@/app/(dashboard)/admin/certificates/_components/CertificateCard";
-import IssueCertificateModal from "@/app/(dashboard)/admin/certificates/_components/IssueCertificateModal";
-import { useCertificatesLogic } from "@/app/(dashboard)/admin/certificates/_hooks/useCertificatesLogic";
+import CertificateCard from "@/app/[locale]/(dashboard)/admin/certificates/_components/CertificateCard";
+import IssueCertificateModal from "@/app/[locale]/(dashboard)/admin/certificates/_components/IssueCertificateModal";
+import { useCertificatesLogic } from "@/app/[locale]/(dashboard)/admin/certificates/_hooks/useCertificatesLogic";
 
 export default function AdminCertificates() {
   const {

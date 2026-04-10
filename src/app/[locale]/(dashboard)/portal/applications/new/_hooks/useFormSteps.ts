@@ -2,8 +2,8 @@
 import { useState } from "react";
 
 // Internal — validation utils, types
-import { deriveServiceFlags, validateStep } from "@/app/(dashboard)/portal/applications/new/_utils/validation";
-import type { ApplicationFormData, Service } from "@/app/(dashboard)/portal/applications/new/_types";
+import { deriveServiceFlags, validateStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_utils/validation";
+import type { ApplicationFormData, Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export function useFormSteps(
   formData: ApplicationFormData,

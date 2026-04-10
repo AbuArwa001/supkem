@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Award, X, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { EligibleApplication } from "@/app/(dashboard)/admin/certificates/_types";
+import { EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 
 interface IssueCertificateModalProps {
   isOpen: boolean;

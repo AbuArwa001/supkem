@@ -5,7 +5,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
-import { NewsItem } from "@/app/(public)/news/_services/newsService";
+import { NewsItem } from "@/app/[locale]/(public)/news/_services/newsService";
 import { useTranslations } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";

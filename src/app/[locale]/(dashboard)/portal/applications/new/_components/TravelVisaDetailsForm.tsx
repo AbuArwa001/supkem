@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Plane } from "lucide-react";
 import { FormField, inputBase, inputReadOnly, borderFor } from "./ui/FormField";
 import { cn } from "@/lib/utils";
-import type { TravelVisaDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { TravelVisaDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface Props {
   data: TravelVisaDetails;

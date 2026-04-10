@@ -6,18 +6,18 @@ import { ApplicationHeader } from "./_components/ApplicationHeader";
 import { StatusBanner } from "./_components/StatusBanner";
 import { DetailsGrid } from "./_components/DetailsGrid";
 import { CertificateBanner } from "./_components/CertificateBanner";
-import { PaymentModal } from "@/app/(dashboard)/portal/applications/new/_components/PaymentModal";
+import { PaymentModal } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/PaymentModal";
 
 /**
  * Portal Application Detail Page
  * Adheres to 200-line limit and logic separation via custom hooks.
  */
 export default function ApplicationDetail() {
-  const { 
-    application, 
-    loading, 
-    error, 
-    handleBack, 
+  const {
+    application,
+    loading,
+    error,
+    handleBack,
     handleReturnToDashboard,
     handlePay,
     refreshParams
@@ -35,15 +35,15 @@ export default function ApplicationDetail() {
 
   return (
     <div className="space-y-8 pb-20 max-w-5xl mx-auto">
-      <ApplicationHeader 
-        id={application.id} 
-        submittedAt={application.submitted_at} 
-        onBack={handleBack} 
+      <ApplicationHeader
+        id={application.id}
+        submittedAt={application.submitted_at}
+        onBack={handleBack}
       />
 
-      <StatusBanner 
-        status={application.status} 
-        certification={application.certification} 
+      <StatusBanner
+        status={application.status}
+        certification={application.certification}
         isPaymentPending={isPaymentPending}
         onPayClick={handlePay}
       />

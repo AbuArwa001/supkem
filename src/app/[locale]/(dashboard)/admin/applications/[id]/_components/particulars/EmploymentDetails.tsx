@@ -1,5 +1,5 @@
 import { Briefcase } from "lucide-react";
-import type { EmploymentDetails as EmploymentDetailsType } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { EmploymentDetails as EmploymentDetailsType } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export default function EmploymentDetails({ details }: { details?: EmploymentDetailsType | null }) {
   if (!details) return null;

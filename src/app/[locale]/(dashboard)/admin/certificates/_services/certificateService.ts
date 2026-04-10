@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import { Certificate, EligibleApplication } from "@/app/(dashboard)/admin/certificates/_types";
+import { Certificate, EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 
 export const certificateService = {
   fetchCertificates: async (): Promise<Certificate[]> => {
@@ -11,7 +11,7 @@ export const certificateService = {
       return [];
     }
   },
-  
+
   fetchEligibleApplications: async (): Promise<EligibleApplication[]> => {
     try {
       const res = await api.get("/applications/applications/approved_no_cert/");

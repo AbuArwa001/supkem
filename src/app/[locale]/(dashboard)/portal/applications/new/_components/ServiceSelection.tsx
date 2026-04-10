@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Layout, FilePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Service } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface ServiceCardProps {
   service: Service;
@@ -16,7 +16,7 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
       className={cn(
         "p-6 rounded-[16px] border-2 cursor-pointer transition-all flex flex-col gap-4 group relative overflow-hidden",
         selected ? "border-primary bg-primary/[0.03] shadow-2xl shadow-primary/10" :
-        hasError ? "border-rose-200 bg-rose-50/20 shadow-inner" : "border-slate-100 hover:border-primary/20 bg-white"
+          hasError ? "border-rose-200 bg-rose-50/20 shadow-inner" : "border-slate-100 hover:border-primary/20 bg-white"
       )}
     >
       <input type="radio" name="service" value={service.id} className="hidden" onChange={() => onSelect(service)} />

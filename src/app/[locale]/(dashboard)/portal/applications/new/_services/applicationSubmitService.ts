@@ -3,7 +3,7 @@
 import api from "@/lib/api";
 
 // Types
-import type { Organization, Service } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { Organization, Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export const applicationSubmitService = {
   fetchOrganizations: (): Promise<Organization[]> =>

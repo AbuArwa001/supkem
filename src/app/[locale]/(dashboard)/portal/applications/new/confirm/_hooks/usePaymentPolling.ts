@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { applicationSubmitService } from "@/app/(dashboard)/portal/applications/new/_services/applicationSubmitService";
+import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
 
 interface PollProps {
   appId: string;

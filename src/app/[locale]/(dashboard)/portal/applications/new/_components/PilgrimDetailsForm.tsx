@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { User } from "lucide-react";
 import { FormField, inputBase, inputReadOnly, borderFor } from "./ui/FormField";
 import { cn } from "@/lib/utils";
-import type { PilgrimDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { PilgrimDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface Props {
   data: PilgrimDetails;

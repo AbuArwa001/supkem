@@ -3,8 +3,8 @@ import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react";
 
 // Internal components & types
 import { cn } from "@/lib/utils";
-import TimelineStatus from "@/app/(dashboard)/admin/applications/[id]/_components/TimelineStatus";
-import type { ApplicationDetail } from "@/app/(dashboard)/admin/applications/_types";
+import TimelineStatus from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/TimelineStatus";
+import type { ApplicationDetail } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 interface ActionSidebarProps {
   app: ApplicationDetail;

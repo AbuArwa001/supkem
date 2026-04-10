@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { certificateService } from "@/app/(dashboard)/admin/certificates/_services/certificateService";
-import { Certificate, EligibleApplication } from "@/app/(dashboard)/admin/certificates/_types";
+import { certificateService } from "@/app/[locale]/(dashboard)/admin/certificates/_services/certificateService";
+import { Certificate, EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 
 export function useCertificatesLogic() {
   const [certificates, setCertificates] = useState<Certificate[]>([]);
@@ -29,7 +29,7 @@ export function useCertificatesLogic() {
         setEligibleApplications(data);
         setIsLoadingApplications(false);
       };
-      
+
       fetchEligible();
       setMessage(null);
       setSelectedAppId("");

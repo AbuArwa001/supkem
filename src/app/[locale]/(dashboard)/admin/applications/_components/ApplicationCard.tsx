@@ -18,7 +18,7 @@ import {
 import { cn } from "@/lib/utils";
 
 // Types
-import { Application } from "@/app/(dashboard)/admin/applications/_types";
+import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 interface ApplicationCardProps {
   application: Application;

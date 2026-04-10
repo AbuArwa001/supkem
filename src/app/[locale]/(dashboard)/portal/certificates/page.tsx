@@ -4,10 +4,10 @@
 import { AlertCircle } from "lucide-react";
 
 // Internal modules
-import { useCertificatesLogic } from "@/app/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
-import CertificatesSkeleton from "@/app/(dashboard)/portal/certificates/_components/CertificatesSkeleton";
-import EmptyCertificates from "@/app/(dashboard)/portal/certificates/_components/EmptyCertificates";
-import CertificateCard from "@/app/(dashboard)/portal/certificates/_components/CertificateCard";
+import { useCertificatesLogic } from "@/app/[locale]/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
+import CertificatesSkeleton from "@/app/[locale]/(dashboard)/portal/certificates/_components/CertificatesSkeleton";
+import EmptyCertificates from "@/app/[locale]/(dashboard)/portal/certificates/_components/EmptyCertificates";
+import CertificateCard from "@/app/[locale]/(dashboard)/portal/certificates/_components/CertificateCard";
 
 export default function CertificatesPage() {
   const { certificates, groupedCertificates, isLoading, error } =

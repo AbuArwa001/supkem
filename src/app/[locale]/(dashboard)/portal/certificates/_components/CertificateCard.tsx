@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Award, ShieldCheck, Calendar, Download, ChevronRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { ICertificate } from "@/app/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
+import { ICertificate } from "@/app/[locale]/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
 
 export default function CertificateCard({ cert }: { cert: ICertificate }) {
   const isValid = cert.status === "Valid" || cert.status === "Active";
@@ -11,14 +11,14 @@ export default function CertificateCard({ cert }: { cert: ICertificate }) {
   const statusColors = isValid
     ? "bg-emerald-50 text-emerald-600 border-emerald-200"
     : isExpired
-    ? "bg-red-50 text-red-600 border-red-200"
-    : "bg-slate-50 text-slate-600 border-slate-200";
+      ? "bg-red-50 text-red-600 border-red-200"
+      : "bg-slate-50 text-slate-600 border-slate-200";
 
   const statusDotColors = isValid
     ? "bg-emerald-500"
     : isExpired
-    ? "bg-red-500"
-    : "bg-slate-400";
+      ? "bg-red-500"
+      : "bg-slate-400";
 
   return (
     <Link

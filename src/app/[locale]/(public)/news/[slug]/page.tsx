@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { NewsGallery } from "../_components/NewsGallery";
 
 async function getArticle(slug: string) {
@@ -17,9 +18,10 @@ async function getArticle(slug: string) {
     }
 }
 
-export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = await params;
+export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
+    const { slug, locale } = await params;
     const article = await getArticle(slug);
+    const t = await getTranslations({ locale, namespace: "NewsPage.article" });
 
     if (!article || !article.is_published) {
         notFound();
@@ -49,7 +51,7 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
                         href="/news"
                         className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors font-bold uppercase tracking-widest text-xs bg-black/20 px-4 py-2 rounded-full backdrop-blur-md"
                     >
-                        <ArrowLeft size={14} /> Back to News
+                        <ArrowLeft size={14} /> {t("back")}
                     </Link>
                     <h1 className="text-4xl lg:text-6xl font-black font-outfit text-white leading-tight max-w-3xl">
                         {article.title}
@@ -57,10 +59,10 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
                     <div className="flex flex-wrap items-center gap-6 text-sm font-bold text-white/60 uppercase tracking-widest">
                         <span className="flex items-center gap-2">
                             <Calendar size={14} className="text-amber-400" />
-                            {new Date(article.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            {new Date(article.created_at).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                         </span>
                         <span className="flex items-center gap-2">
-                            <User size={14} className="text-amber-400" /> SUPKEM Press
+                            <User size={14} className="text-amber-400" /> {t("press")}
                         </span>
                     </div>
                 </div>
@@ -111,15 +113,15 @@ export default async function NewsArticlePage({ params }: { params: Promise<{ sl
                             <BookOpen size={22} className="text-primary" />
                         </div>
                         <div>
-                            <p className="font-bold text-primary">Read More from SUPKEM</p>
-                            <p className="text-sm text-foreground/60">Browse our latest news and announcements.</p>
+                            <p className="font-bold text-primary">{t("readMore")}</p>
+                            <p className="text-sm text-foreground/60">{t("browseDesc")}</p>
                         </div>
                     </div>
                     <Link
                         href="/news"
                         className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:bg-primary/90 transition-colors flex items-center gap-2 shrink-0 text-sm"
                     >
-                        <ArrowLeft size={14} /> All Articles
+                        <ArrowLeft size={14} /> {t("allArticles")}
                     </Link>
                 </div>
             </main>

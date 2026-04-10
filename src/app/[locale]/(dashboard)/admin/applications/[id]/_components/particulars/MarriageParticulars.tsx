@@ -2,7 +2,7 @@
 import { Heart } from "lucide-react";
 
 // Types
-import type { MarriageDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { MarriageDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 /** Reusable read-only display row for the admin particulars view */
 const DetailRow = ({ label, value }: { label: string; value: string }) => (

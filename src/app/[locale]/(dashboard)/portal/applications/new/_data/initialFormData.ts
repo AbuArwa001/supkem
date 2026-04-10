@@ -1,5 +1,5 @@
 // Types
-import type { ApplicationFormData } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { ApplicationFormData } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export const initialFormData: ApplicationFormData = {
   organization: "",

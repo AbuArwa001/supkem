@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // Internal — services & types
-import { applicationService } from "@/app/(dashboard)/admin/applications/_services/applicationService";
-import type { ApplicationDetail } from "@/app/(dashboard)/admin/applications/_types";
+import { applicationService } from "@/app/[locale]/(dashboard)/admin/applications/_services/applicationService";
+import type { ApplicationDetail } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 export function useApplicationDetailLogic(id: string | string[]) {
   const router = useRouter();

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 // Internal — services
-import { portalApplicationService } from "@/app/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
+import { portalApplicationService } from "@/app/[locale]/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
 
 interface InvoiceApp {
   payment?: { amount?: string; receipt_number?: string; updated_at?: string; status?: string };

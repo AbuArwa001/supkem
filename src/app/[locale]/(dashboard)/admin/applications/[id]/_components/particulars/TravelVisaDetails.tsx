@@ -1,5 +1,5 @@
 import { Globe } from "lucide-react";
-import type { TravelVisaDetails as TravelVisaDetailsType } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { TravelVisaDetails as TravelVisaDetailsType } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export default function TravelVisaDetails({ details }: { details?: TravelVisaDetailsType | null }) {
   if (!details) return null;

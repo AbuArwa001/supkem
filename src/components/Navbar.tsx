@@ -327,9 +327,7 @@ const Navbar = () => {
                     className="text-[#0b4a2d] font-bold leading-relaxed text-lg"
                     dir="rtl"
                   >
-                    نحن نعمل حالياً على تطوير تجربة كاملة ثنائية اللغة لخدمة
-                    المجتمع الإسلامي العالمي بشكل أفضل. سيتم إطلاق هذه الميزة
-                    كجزء من مرحلة التحول الرقمي القادمة.
+                    {t("comingSoonDescSecondary")}
                   </p>
                 </div>
 

@@ -3,15 +3,17 @@ import { notFound } from "next/navigation";
 import { ChevronLeft, Download, Calendar, BookOpen } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { getTranslations } from "next-intl/server";
 import { API_BASE_URL } from "@/lib/api";
-import { getNewsPaperById } from "@/app/(public)/news/_services/newsService";
+import { getNewsPaperById } from "@/app/[locale]/(public)/news/_services/newsService";
 
 export default async function NewsPaperViewPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }) {
-  const { id } = await params;
+  const { id, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "NewsPage.paperView" });
   const paper = await getNewsPaperById(id);
 
   if (!paper || !paper.is_published) {
@@ -28,16 +30,16 @@ export default async function NewsPaperViewPage({
     return (
       <div className="min-h-screen pt-32 pb-20 flex flex-col items-center justify-center space-y-4">
         <h1 className="text-3xl font-black font-outfit text-primary">
-          PDF Not Available
+          {t("notAvailable")}
         </h1>
         <p className="text-foreground/60">
-          The document for this issue is currently unavailable.
+          {t("notAvailableDesc")}
         </p>
         <Link
           href="/news"
           className="text-primary hover:underline font-bold mt-4"
         >
-          &larr; Back to News
+          &larr; {t("backToNews")}
         </Link>
       </div>
     );
@@ -70,7 +72,7 @@ export default async function NewsPaperViewPage({
               href="/news"
               className="inline-flex items-center gap-2 text-white/70 hover:text-white transition-colors font-bold uppercase tracking-widest text-xs bg-black/20 px-4 py-2 rounded-full backdrop-blur-md"
             >
-              <ChevronLeft size={14} /> Back to News
+              <ChevronLeft size={14} /> {t("backToNews")}
             </Link>
 
             <h1 className="text-4xl lg:text-6xl font-black font-outfit text-white leading-tight tracking-tight">
@@ -80,7 +82,7 @@ export default async function NewsPaperViewPage({
             <div className="flex flex-wrap items-center gap-6 text-sm font-bold text-white/60 uppercase tracking-widest">
               <span className="flex items-center gap-2">
                 <Calendar size={14} className="text-amber-400" />
-                {new Date(paper.published_date).toLocaleDateString("en-US", {
+                {new Date(paper.published_date).toLocaleDateString(locale === "ar" ? "ar-KE" : "en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -88,7 +90,7 @@ export default async function NewsPaperViewPage({
               </span>
               {paper.issue_number && (
                 <span className="text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
-                  Issue {paper.issue_number}
+                  {t("issue")} {paper.issue_number}
                 </span>
               )}
             </div>
@@ -106,9 +108,9 @@ export default async function NewsPaperViewPage({
                 <BookOpen size={24} className="text-primary" />
               </div>
               <div>
-                <p className="font-bold text-primary">Official Publication</p>
+                <p className="font-bold text-primary">{t("officialPub")}</p>
                 <p className="text-sm text-foreground/60">
-                  Supreme Council of Kenya Muslims (SUPKEM)
+                  {t("councilName")}
                 </p>
               </div>
             </div>
@@ -120,7 +122,7 @@ export default async function NewsPaperViewPage({
               className="px-8 py-4 bg-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center gap-3 w-full md:w-auto"
             >
               <Download size={20} />
-              Download PDF
+              {t("download")}
             </a>
           </div>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import { applicationService } from "@/app/(dashboard)/admin/applications/_services/applicationService";
-import { Application } from "@/app/(dashboard)/admin/applications/_types";
+import { applicationService } from "@/app/[locale]/(dashboard)/admin/applications/_services/applicationService";
+import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 export function useApplicationsLogic() {
     const [applications, setApplications] = useState<Application[]>([]);

@@ -1,4 +1,4 @@
-import type { MarriageDetails, PilgrimDetails, EducationDetails, TravelVisaDetails, EmploymentDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { MarriageDetails, PilgrimDetails, EducationDetails, TravelVisaDetails, EmploymentDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export interface Application {
   id: string | number;

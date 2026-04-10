@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { GraduationCap } from "lucide-react";
 
 // Internal — UI atoms, types
-import { FormField, inputBase, inputReadOnly, borderFor } from "@/app/(dashboard)/portal/applications/new/_components/ui/FormField";
+import { FormField, inputBase, inputReadOnly, borderFor } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/ui/FormField";
 import { cn } from "@/lib/utils";
-import type { EducationDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { EducationDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface EducationDetailsFormProps {
   data: EducationDetails;

@@ -2,7 +2,7 @@
 import { Plane, CalendarCheck, Briefcase, AlertCircle } from "lucide-react";
 
 // Types
-import type { PilgrimDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { PilgrimDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 const InfoItem = ({ label, value }: { label: string; value: string }) => (
   <div className="space-y-1">

@@ -1,5 +1,5 @@
 import api from "@/lib/api";
-import { Application } from "@/app/(dashboard)/admin/applications/_types";
+import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 export const applicationService = {
     fetchApplications: async (): Promise<Application[]> => {

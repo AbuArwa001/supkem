@@ -7,15 +7,15 @@ import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-const GALLERY_IMAGES = [
-  { src: "/images/slider/olesaudib.jpg", alt: "Community Leadership", span: "col-span-1 row-span-2" },
-  { src: "/images/slider/ole_olesapitb.jpg", alt: "Interfaith Engagement", span: "col-span-1" },
-  { src: "/images/slider/olerezo_nb.jpg", alt: "Strategic Planning", span: "col-span-1" },
-  { src: "/images/slider/image.png", alt: "Impact Initiatives", span: "col-span-2" },
-];
-
 export const HomeGallery = () => {
   const t = useTranslations("Home");
+
+  const GALLERY_IMAGES = [
+    { src: "/images/slider/olesaudib.jpg", alt: t("gallery.img1"), span: "col-span-1 row-span-2" },
+    { src: "/images/slider/ole_olesapitb.jpg", alt: t("gallery.img2"), span: "col-span-1" },
+    { src: "/images/slider/olerezo_nb.jpg", alt: t("gallery.img3"), span: "col-span-1" },
+    { src: "/images/slider/image.png", alt: t("gallery.img4"), span: "col-span-2" },
+  ];
 
   return (
     <section className="py-40 px-6 bg-slate-50 relative overflow-hidden">

@@ -2,9 +2,9 @@
 import { Heart } from "lucide-react";
 
 // Internal — UI atoms, types
-import { FormField, inputBase, inputNormal, borderFor } from "@/app/(dashboard)/portal/applications/new/_components/ui/FormField";
+import { FormField, inputBase, inputNormal, borderFor } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/ui/FormField";
 import { cn } from "@/lib/utils";
-import type { MarriageDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { MarriageDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface WifeParticularsProps {
   data: MarriageDetails;

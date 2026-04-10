@@ -3,15 +3,15 @@ import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 // Internal — hooks, services, data, types
-import { useFormSteps } from "@/app/(dashboard)/portal/applications/new/_hooks/useFormSteps";
-import { applicationSubmitService } from "@/app/(dashboard)/portal/applications/new/_services/applicationSubmitService";
-import { initialFormData } from "@/app/(dashboard)/portal/applications/new/_data/initialFormData";
+import { useFormSteps } from "@/app/[locale]/(dashboard)/portal/applications/new/_hooks/useFormSteps";
+import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
+import { initialFormData } from "@/app/[locale]/(dashboard)/portal/applications/new/_data/initialFormData";
 import { useAuth } from "@/hooks/useAuth";
 import type {
   ApplicationFormData,
   Organization,
   Service,
-} from "@/app/(dashboard)/portal/applications/new/_types";
+} from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export function useSubmitApplicationLogic() {
   const router = useRouter();

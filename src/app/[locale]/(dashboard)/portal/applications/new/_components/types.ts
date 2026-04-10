@@ -11,4 +11,4 @@ export type {
   ApplicationFormData as FormData,
   Service,
   Organization,
-} from "@/app/(dashboard)/portal/applications/new/_types";
+} from "@/app/[locale]/(dashboard)/portal/applications/new/_types";

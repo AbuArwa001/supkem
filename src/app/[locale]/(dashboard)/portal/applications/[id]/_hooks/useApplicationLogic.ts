@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 // Internal — services
-import { portalApplicationService } from "@/app/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
-import type { PortalApplicationDetail } from "@/app/(dashboard)/portal/applications/new/_types";
+import { portalApplicationService } from "@/app/[locale]/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
+import type { PortalApplicationDetail } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export const useApplicationLogic = () => {
   const params = useParams();

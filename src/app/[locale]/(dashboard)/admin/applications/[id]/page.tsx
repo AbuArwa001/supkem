@@ -7,10 +7,10 @@ import { useParams } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 // Internal components
-import OrganizationProfile from "@/app/(dashboard)/admin/applications/[id]/_components/OrganizationProfile";
-import ServiceDetails from "@/app/(dashboard)/admin/applications/[id]/_components/ServiceDetails";
-import ActionSidebar from "@/app/(dashboard)/admin/applications/[id]/_components/ActionSidebar";
-import { useApplicationDetailLogic } from "@/app/(dashboard)/admin/applications/[id]/_hooks/useApplicationDetailLogic";
+import OrganizationProfile from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/OrganizationProfile";
+import ServiceDetails from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/ServiceDetails";
+import ActionSidebar from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/ActionSidebar";
+import { useApplicationDetailLogic } from "@/app/[locale]/(dashboard)/admin/applications/[id]/_hooks/useApplicationDetailLogic";
 
 export default function ApplicationDetail() {
   const params = useParams();

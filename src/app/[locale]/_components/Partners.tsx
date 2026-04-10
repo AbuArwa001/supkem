@@ -4,23 +4,23 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const PARTNERS = [
-  { name: "Ministry of Hajj and Umrah", src: "/images/partners/hajj.svg" },
-  { name: "Ministry of Islamic Affairs (MOIA)", src: "/images/partners/Saudi_Ministry_of_Islamic_daawah_Affairs_Logo.png" },
-  { name: "Muslim World League", src: "/images/partners/mwl.svg" },
-  { name: "UAE Embassy Nairobi", src: "/images/partners/uae_flag.svg" },
-  { name: "Islamic Development Bank (IsDB)", src: "/images/partners/isdb.png" },
-  { name: "Royal Embassy of Saudi Arabia", src: "/images/partners/saudi_flag.svg" },
-  { name: "AMREF", src: "/AMREF.png" },
-  { name: "UKAID", src: "/UKAID.png" },
-  { name: "UNICEF", src: "/UNICEF.png" },
-  { name: "The Global Fund", src: "/GLOBAL FUND.png" },
-  { name: "Kenya Redcross", src: "/KEENYA REDCROSS.png" },
-  { name: "USAID", src: "/USAID.png" },
-];
-
 export const Partners = () => {
   const t = useTranslations("Home");
+
+  const PARTNERS = [
+    { name: t("partners.hajj"), src: "/images/partners/hajj.svg" },
+    { name: t("partners.moia"), src: "/images/partners/Saudi_Ministry_of_Islamic_daawah_Affairs_Logo.png" },
+    { name: t("partners.mwl"), src: "/images/partners/mwl.svg" },
+    { name: t("partners.uae"), src: "/images/partners/uae_flag.svg" },
+    { name: t("partners.isdb"), src: "/images/partners/isdb.png" },
+    { name: t("partners.saudi"), src: "/images/partners/saudi_flag.svg" },
+    { name: t("partners.amref"), src: "/AMREF.png" },
+    { name: t("partners.ukaid"), src: "/UKAID.png" },
+    { name: t("partners.unicef"), src: "/UNICEF.png" },
+    { name: t("partners.globalfund"), src: "/GLOBAL FUND.png" },
+    { name: t("partners.redcross"), src: "/KEENYA REDCROSS.png" },
+    { name: t("partners.usaid"), src: "/USAID.png" },
+  ];
 
   return (
     <section className="py-24 border-y border-slate-100 bg-[#F8FAFC] grainy-bg">

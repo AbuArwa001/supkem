@@ -7,7 +7,7 @@ import {
   Calendar,
   ChevronRight,
 } from "lucide-react";
-import { Certificate } from "@/app/(dashboard)/admin/certificates/_types";
+import { Certificate } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 
 export default function CertificateCard({
   cert,

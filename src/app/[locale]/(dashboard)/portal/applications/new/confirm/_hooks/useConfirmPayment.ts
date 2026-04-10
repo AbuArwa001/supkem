@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
-import { applicationSubmitService } from "@/app/(dashboard)/portal/applications/new/_services/applicationSubmitService";
+import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
 import { usePaymentPolling } from "./usePaymentPolling";
 
 type ConfirmStatus = "idle" | "initiating" | "waiting" | "success" | "error";

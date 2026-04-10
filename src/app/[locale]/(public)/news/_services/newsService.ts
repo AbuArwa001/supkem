@@ -38,7 +38,7 @@ export interface NewsPaperItem {
 
 async function serverFetch<T>(path: string): Promise<T | null> {
     try {
-        const res = await fetch(`${BASE}${path}`, { cache: "no-store" });
+        const res = await fetch(`${BASE}${path}`, { cache: "no-store", redirect: "follow" });
         if (!res.ok) {
             console.error(`API fetch failed: ${res.status} ${path}`);
             return null;

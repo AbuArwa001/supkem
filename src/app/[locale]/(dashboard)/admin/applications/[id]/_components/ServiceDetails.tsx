@@ -2,13 +2,13 @@
 import { motion } from "framer-motion";
 
 // Internal components & types
-import ServiceHeader from "@/app/(dashboard)/admin/applications/[id]/_components/ServiceHeader";
-import MarriageParticulars from "@/app/(dashboard)/admin/applications/[id]/_components/particulars/MarriageParticulars";
-import PilgrimParticulars from "@/app/(dashboard)/admin/applications/[id]/_components/particulars/PilgrimParticulars";
-import EducationDetails from "@/app/(dashboard)/admin/applications/[id]/_components/particulars/EducationDetails";
-import TravelVisaDetails from "@/app/(dashboard)/admin/applications/[id]/_components/particulars/TravelVisaDetails";
-import EmploymentDetails from "@/app/(dashboard)/admin/applications/[id]/_components/particulars/EmploymentDetails";
-import type { ApplicationDetail } from "@/app/(dashboard)/admin/applications/_types";
+import ServiceHeader from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/ServiceHeader";
+import MarriageParticulars from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/particulars/MarriageParticulars";
+import PilgrimParticulars from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/particulars/PilgrimParticulars";
+import EducationDetails from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/particulars/EducationDetails";
+import TravelVisaDetails from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/particulars/TravelVisaDetails";
+import EmploymentDetails from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/particulars/EmploymentDetails";
+import type { ApplicationDetail } from "@/app/[locale]/(dashboard)/admin/applications/_types";
 
 export default function ServiceDetails({ app }: { app: ApplicationDetail }) {
   if (!app) return null;

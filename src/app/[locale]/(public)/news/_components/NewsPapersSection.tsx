@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { BookOpen, ArrowRight } from "lucide-react";
 import useSWR from "swr";
+import { useTranslations } from "next-intl";
 import { API_BASE_URL } from "@/lib/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
-import { NewsPaperItem } from "@/app/(public)/news/_services/newsService";
+import { NewsPaperItem } from "@/app/[locale]/(public)/news/_services/newsService";
 
 interface NewsPapersSectionProps {
     newsPapers: NewsPaperItem[];
@@ -15,6 +16,7 @@ interface NewsPapersSectionProps {
 }
 
 export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: NewsPapersSectionProps) {
+    const t = useTranslations("NewsPage.papers");
     const { data: newsPapers } = useSWR<NewsPaperItem[]>(
         `${API_BASE}/api/v1/news/news_papers/`,
         (url: string) =>
@@ -39,8 +41,8 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: 
                     <BookOpen className="text-primary" size={28} />
                 </div>
                 <div>
-                    <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">The Muslim Newspaper</h2>
-                    <p className="text-foreground/60 font-medium">Read our latest and archived newspaper issues.</p>
+                    <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">{t("title")}</h2>
+                    <p className="text-foreground/60 font-medium">{t("desc")}</p>
                 </div>
             </div>
 
@@ -84,7 +86,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: 
                                 <div className="absolute top-4 right-4 z-20">
                                     {paper.issue_number && (
                                         <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-white shadow-lg">
-                                            Issue {paper.issue_number}
+                                            {t("issue")} {paper.issue_number}
                                         </span>
                                     )}
                                 </div>
@@ -98,7 +100,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: 
                                 <div className="pt-4 mt-auto border-t border-border/50 flex items-center justify-between text-xs font-bold text-foreground/30 uppercase tracking-widest">
                                     <span>{new Date(paper.published_date).toLocaleDateString()}</span>
                                     <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                                        Read <ArrowRight size={14} />
+                                        {t("read")} <ArrowRight size={14} />
                                     </span>
                                 </div>
                             </div>
@@ -113,7 +115,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: 
                         href="/news/papers"
                         className="px-8 py-4 bg-white hover:bg-primary/5 text-primary border-2 border-primary/20 rounded-full font-bold uppercase tracking-widest text-sm flex items-center gap-3 transition-all hover:gap-5"
                     >
-                        View All Newspapers <ArrowRight size={18} />
+                        {t("viewAll")} <ArrowRight size={18} />
                     </Link>
                 </div>
             )}

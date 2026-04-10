@@ -1,4 +1,4 @@
-import type { Service } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export interface ServiceFlags {
   isOrganizationRequired: boolean;

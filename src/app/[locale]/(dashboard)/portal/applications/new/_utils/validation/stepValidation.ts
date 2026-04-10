@@ -1,4 +1,4 @@
-import type { ApplicationFormData } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { ApplicationFormData } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 import type { ServiceFlags } from "./serviceFlags";
 
 export function validateStep(step: number, formData: ApplicationFormData, flags: ServiceFlags): Record<string, string> {

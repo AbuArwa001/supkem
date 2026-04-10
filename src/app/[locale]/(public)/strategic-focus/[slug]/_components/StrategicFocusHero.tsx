@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { StrategicPillar } from "../_data/strategicPillarsData";
 
 interface StrategicFocusHeroProps {
@@ -11,6 +12,7 @@ interface StrategicFocusHeroProps {
 }
 
 export default function StrategicFocusHero({ content }: StrategicFocusHeroProps) {
+    const t = useTranslations("StrategicFocus.hero");
     return (
         <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
             <Image
@@ -26,7 +28,7 @@ export default function StrategicFocusHero({ content }: StrategicFocusHeroProps)
             <div className="max-w-7xl mx-auto w-full px-6 relative z-10">
                 <Link href="/#strategic-focus" className="inline-flex items-center gap-2 text-white/70 hover:text-white mb-8 transition-colors group">
                     <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-medium tracking-wide">Back to Focus Areas</span>
+                    <span className="font-medium tracking-wide">{t("back")}</span>
                 </Link>
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
@@ -34,7 +36,7 @@ export default function StrategicFocusHero({ content }: StrategicFocusHeroProps)
                     transition={{ duration: 0.8 }}
                     className="max-w-3xl space-y-6"
                 >
-                    <p className="text-sm font-black uppercase tracking-[0.4em] text-secondary">Strategic Pillar</p>
+                    <p className="text-sm font-black uppercase tracking-[0.4em] text-secondary">{t("badge")}</p>
                     <h1 className="text-5xl lg:text-7xl font-black font-outfit text-white leading-[1.1] tracking-tight text-glow">
                         {content.title}
                     </h1>

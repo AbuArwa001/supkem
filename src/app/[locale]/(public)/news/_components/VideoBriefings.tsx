@@ -5,7 +5,7 @@ import { Film, PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";
 import { API_BASE_URL } from "@/lib/api";
-import { VideoItem } from "@/app/(public)/news/_services/newsService";
+import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
 import { useTranslations } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Archive } from "lucide-react";
 import { FormField, inputBase, inputReadOnly, borderFor } from "./ui/FormField";
 import { cn } from "@/lib/utils";
-import type { EmploymentDetails } from "@/app/(dashboard)/portal/applications/new/_types";
+import type { EmploymentDetails } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 interface Props {
   data: EmploymentDetails;

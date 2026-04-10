@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 
 // Internal — payment step components
-import { PaymentModalHeader } from "@/app/(dashboard)/portal/applications/new/_components/payment/PaymentModalHeader";
-import { ConfirmationStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/ConfirmationStep";
-import { PhoneEntryStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/PhoneEntryStep";
-import { InitiatingStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/InitiatingStep";
-import { WaitingStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/WaitingStep";
-import { SuccessStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/SuccessStep";
-import { ErrorStep } from "@/app/(dashboard)/portal/applications/new/_components/payment/ErrorStep";
-import { applicationSubmitService } from "@/app/(dashboard)/portal/applications/new/_services/applicationSubmitService";
+import { PaymentModalHeader } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/PaymentModalHeader";
+import { ConfirmationStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/ConfirmationStep";
+import { PhoneEntryStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/PhoneEntryStep";
+import { InitiatingStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/InitiatingStep";
+import { WaitingStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/WaitingStep";
+import { SuccessStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/SuccessStep";
+import { ErrorStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/ErrorStep";
+import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
 
 type PaymentStatus = "confirmation" | "idle" | "initiating" | "waiting" | "success" | "error";
 

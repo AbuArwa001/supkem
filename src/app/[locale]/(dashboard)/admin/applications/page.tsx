@@ -6,8 +6,8 @@
 import { Search } from "lucide-react";
 
 // Internal components
-import { useApplicationsLogic } from "@/app/(dashboard)/admin/applications/_hooks/useApplicationsLogic";
-import ApplicationCard from "@/app/(dashboard)/admin/applications/_components/ApplicationCard";
+import { useApplicationsLogic } from "@/app/[locale]/(dashboard)/admin/applications/_hooks/useApplicationsLogic";
+import ApplicationCard from "@/app/[locale]/(dashboard)/admin/applications/_components/ApplicationCard";
 import { cn } from "@/lib/utils";
 
 const FILTER_OPTIONS = ["all", "pending", "approved", "rejected"];

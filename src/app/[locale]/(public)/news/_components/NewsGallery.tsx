@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { API_BASE_URL } from "@/lib/api";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface GalleryItem {
     id: string;
@@ -13,6 +14,7 @@ interface GalleryItem {
 }
 
 export function NewsGallery({ items }: { items: GalleryItem[] }) {
+    const t = useTranslations("NewsPage.gallery");
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
     const [mounted, setMounted] = useState(false);
 
@@ -60,7 +62,7 @@ export function NewsGallery({ items }: { items: GalleryItem[] }) {
                 <button
                     onClick={closeLightbox}
                     className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all z-[100010]"
-                    aria-label="Close lightbox"
+                    aria-label={t("close")}
                 >
                     <X size={24} />
                 </button>
@@ -71,14 +73,14 @@ export function NewsGallery({ items }: { items: GalleryItem[] }) {
                         <button
                             onClick={showPrev}
                             className="absolute left-4 p-3 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all z-[100010] flex items-center justify-center group"
-                            aria-label="Previous image"
+                            aria-label={t("prev")}
                         >
                             <ChevronLeft size={32} className="group-hover:-translate-x-1 transition-transform" />
                         </button>
                         <button
                             onClick={showNext}
                             className="absolute right-4 p-3 text-white/50 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-all z-[100010] flex items-center justify-center group"
-                            aria-label="Next image"
+                            aria-label={t("next")}
                         >
                             <ChevronRight size={32} className="group-hover:translate-x-1 transition-transform" />
                         </button>
@@ -123,7 +125,7 @@ export function NewsGallery({ items }: { items: GalleryItem[] }) {
     return (
         <div className="mt-12 bg-white rounded-[20px] p-8 lg:p-12 shadow-2xl shadow-black/10 border border-slate-100">
             <h2 className="text-2xl font-black font-outfit text-primary mb-8 border-b border-border pb-4">
-                Image Gallery
+                {t("title")}
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {items.map((item, index) => {
@@ -147,7 +149,7 @@ export function NewsGallery({ items }: { items: GalleryItem[] }) {
                             {/* Hover Overlay */}
                             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
                                 <p className="text-white text-sm font-medium line-clamp-2">
-                                    {item.caption || "Click to view"}
+                                    {item.caption || t("clickToView")}
                                 </p>
                             </div>
                         </div>
