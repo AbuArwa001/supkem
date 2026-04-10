@@ -62,12 +62,12 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                 : (extractedImg || "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800");
 
                             return (
-                                <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-fit shadow-lg shadow-primary/5">
-                                    <Link href={`/news/${item.slug}`} className="block">
-                                        <div className="aspect-video bg-primary/5 rounded-[16px] overflow-hidden mb-8 relative">
+                                <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-full shadow-lg shadow-primary/5">
+                                    <Link href={`/news/${item.slug}`} className="block h-full flex flex-col">
+                                        <div className="aspect-video bg-primary/5 rounded-[16px] overflow-hidden mb-8 relative shrink-0">
                                             <Image src={imageSource} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
                                         </div>
-                                        <div className="space-y-4">
+                                        <div className="space-y-4 flex flex-col flex-1">
                                             <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
                                                 <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
                                                 <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> SUPKEM Press</span>
@@ -78,16 +78,18 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                             <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
                                                 {item.content.replace(/[#*`_~>\[\]\(\)]/g, '').replace(/\n+/g, ' ').substring(0, 150)}...
                                             </p>
-                                            <button className="pt-4 text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
-                                                {t("readMore")} <ArrowRight size={14} />
-                                            </button>
+                                            <div className="mt-auto pt-4">
+                                                <button className="text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
+                                                    {t("readMore")} <ArrowRight size={14} />
+                                                </button>
+                                            </div>
                                         </div>
                                     </Link>
                                 </div>
                             );
                         })()}
 
-                        <div className="space-y-8 flex flex-col">
+                        <div className="flex flex-col gap-8 h-full">
                             {displayNews.slice(1).map((item: NewsItem, i: number) => {
                                 const extractedImg = extractFirstImage(item.content);
                                 const imageSource = item.featured_image
@@ -95,8 +97,8 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                     : (extractedImg || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800");
 
                                 return (
-                                    <Link href={`/news/${item.slug}`} key={i} className="block group/item">
-                                        <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5">
+                                    <Link href={`/news/${item.slug}`} key={i} className="group/item flex-1 flex flex-col">
+                                        <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5 h-full">
                                             <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[16px] overflow-hidden shrink-0 relative">
                                                 <Image src={imageSource} alt={item.title} fill className="object-cover group-hover/item:scale-110 transition-transform duration-500" />
                                             </div>
