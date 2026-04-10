@@ -1,7 +1,7 @@
 "use client";
 
 import { Calendar, User, Film, CheckCircle2, Edit2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
 
 interface VideoMetadataSidebarProps {

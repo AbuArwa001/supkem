@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Edit2, Trash2, Video as VideoIcon, PlayCircle } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { API_BASE_URL } from "@/lib/api";
 import { VideoBriefingItem } from "../_hooks/useVideosLogic";

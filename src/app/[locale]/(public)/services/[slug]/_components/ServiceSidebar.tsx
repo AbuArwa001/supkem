@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
 import { CheckCircle2, FileCheck, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";

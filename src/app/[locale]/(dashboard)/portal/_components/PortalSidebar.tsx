@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ShieldCheck, Download, ChevronRight, FileText, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 

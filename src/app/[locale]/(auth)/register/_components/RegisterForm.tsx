@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { User, Mail, Phone, Lock, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { RegisterFormData, FieldErrors } from "./types";

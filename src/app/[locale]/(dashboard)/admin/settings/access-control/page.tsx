@@ -23,7 +23,7 @@ import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { RolePermissionsDialog } from "@/components/forms/RolePermissionsDialog";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 // --- Types ---
 interface Permission {

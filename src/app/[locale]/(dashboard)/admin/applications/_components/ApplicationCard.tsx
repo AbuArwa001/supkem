@@ -1,7 +1,7 @@
 "use client";
 
 // React/Next.js core
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 // External libraries
 import { motion } from "framer-motion";

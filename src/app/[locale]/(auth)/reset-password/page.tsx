@@ -10,7 +10,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useTranslations } from "next-intl";

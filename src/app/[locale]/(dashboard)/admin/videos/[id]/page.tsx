@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import { ArrowLeft, XCircle, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { API_BASE_URL } from "@/lib/api";
 import { useVideoDetailLogic } from "./_hooks/useVideoDetailLogic";
 import { VideoPreviewHeader } from "./_components/VideoPreviewHeader";

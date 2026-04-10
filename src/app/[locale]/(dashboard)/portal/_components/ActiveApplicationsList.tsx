@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { ChevronRight, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";

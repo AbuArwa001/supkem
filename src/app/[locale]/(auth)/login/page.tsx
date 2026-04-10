@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { useRouter } from "next/navigation";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useTranslations } from "next-intl";

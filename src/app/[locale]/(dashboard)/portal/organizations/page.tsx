@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 

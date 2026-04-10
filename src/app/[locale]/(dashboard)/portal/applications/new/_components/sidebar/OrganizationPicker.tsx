@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { FilePlus } from "lucide-react";
 import { Organization } from "../types";
 import { OrganizationOption } from "./OrganizationOption";

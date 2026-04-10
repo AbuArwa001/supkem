@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { CheckCircle2 } from "lucide-react";
 
 interface ApplicationReferenceProps {

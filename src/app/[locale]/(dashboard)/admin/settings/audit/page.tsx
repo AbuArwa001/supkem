@@ -31,7 +31,7 @@ import {
     Server,
     Shield
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { format } from "date-fns";

@@ -13,7 +13,7 @@ import {
   HelpCircle,
   AlertCircle,
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import SupportLetterTemplate from "@/components/SupportLetterTemplate";
 import StudyAbroadLetterTemplate from "@/components/StudyAbroadLetterTemplate";

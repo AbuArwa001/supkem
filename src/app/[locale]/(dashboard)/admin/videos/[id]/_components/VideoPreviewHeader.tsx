@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeft, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
 
 interface VideoPreviewHeaderProps {

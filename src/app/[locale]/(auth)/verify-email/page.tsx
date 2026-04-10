@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Loader2, CheckCircle2, AlertCircle, MailCheck } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import { useTranslations } from "next-intl";
 
