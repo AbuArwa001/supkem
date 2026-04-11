@@ -12,15 +12,18 @@ interface MainLayoutWrapperProps {
 const MainLayoutWrapper = ({ children }: MainLayoutWrapperProps) => {
   const pathname = usePathname();
 
+  // Normalize pathname to handle localized routes like /en/login or /ar/portal
+  const normalizedPath = pathname.replace(/^\/(en|ar)/, "") || "/";
+
   // Define routes that should NOT show the global Navbar and Footer
   const isDashboard =
-    pathname.startsWith("/admin") || pathname.startsWith("/portal");
+    normalizedPath.startsWith("/admin") || normalizedPath.startsWith("/portal");
   const isAuth =
-    pathname.startsWith("/login") ||
-    pathname.startsWith("/register") ||
-    pathname.startsWith("/forgot-password") ||
-    pathname.startsWith("/reset-password") ||
-    pathname.startsWith("/verify-email");
+    normalizedPath.startsWith("/login") ||
+    normalizedPath.startsWith("/register") ||
+    normalizedPath.startsWith("/forgot-password") ||
+    normalizedPath.startsWith("/reset-password") ||
+    normalizedPath.startsWith("/verify-email");
 
   // We don't want the default padding/margin for dashboard routes as they have their own sidebars
   const showGlobalNav = !isDashboard && !isAuth;

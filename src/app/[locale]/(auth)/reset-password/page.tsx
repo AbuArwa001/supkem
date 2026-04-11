@@ -9,8 +9,8 @@ import {
   CheckCircle2,
   AlertCircle,
 } from "lucide-react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { Link } from "@/i18n/routing";
+import { useSearchParams } from "next/navigation";
+import { useRouter, Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useTranslations } from "next-intl";

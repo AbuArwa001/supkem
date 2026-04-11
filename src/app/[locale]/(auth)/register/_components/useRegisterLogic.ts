@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { registerUserApi } from "./services";
 import { RegisterFormData, FieldErrors } from "./types";
 
