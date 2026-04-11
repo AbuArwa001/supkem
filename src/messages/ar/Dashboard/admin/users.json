@@ -1,0 +1,51 @@
+{
+  "heading": "إدارة الفريق",
+  "desc": "إدارة الموظفين التشغيليين وامتيازات الوصول إلى النظام.",
+  "addUser": "إضافة مستخدم",
+  "searchPlaceholder": "البحث عن أعضاء الفريق بالاسم أو البريد الإلكتروني...",
+  "table": {
+    "title": "دليل الفريق",
+    "verifiedMembers": "{totalCount} أعضاء تم التحقق منهم",
+    "memberDetails": "تفاصيل العضو",
+    "systemRole": "دور النظام",
+    "location": "الموقع",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "noResults": "لم يتم العثور على نتائج لـ \"{searchQuery}\""
+  },
+  "row": {
+    "member": "عضو",
+    "active": "نشط",
+    "disabled": "معطل",
+    "viewDetails": "عرض التفاصيل",
+    "editAccount": "تعديل الحساب",
+    "removeAccess": "إزالة الوصول"
+  },
+  "details": {
+    "title": "تفاصيل المستخدم",
+    "email": "عنوان البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "locationBranch": "الموقع / الفرع",
+    "memberSince": "عضو منذ",
+    "userId": "معرف المستخدم",
+    "accountStatus": "حالة الحساب",
+    "verifiedActive": "نشط مفعل",
+    "suspendedDisabled": "معلق / معطل",
+    "systemName": "نظام إدارة فريق SUPKEM"
+  },
+  "dialogs": {
+    "newAccount": "حساب جديد",
+    "registerDesc": "تسجيل عضو فريق",
+    "editAccount": "تعديل الحساب",
+    "modifyDesc": "تعديل ملف عضو الفريق"
+  },
+  "restricted": {
+    "title": "الوصول مقيد",
+    "desc": "ليس لديك التخليص الإداري المطلوب لإدارة دليل الفريق."
+  },
+  "pagination": {
+    "page": "صفحة السجل {page}",
+    "prev": "السابق",
+    "next": "التالي"
+  }
+}

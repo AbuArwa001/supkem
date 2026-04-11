@@ -1,0 +1,9 @@
+{
+  "title": "Data Insights Report",
+  "systems": "Analytical Systems",
+  "export": "Export PDF",
+  "growthTrend": "Application Growth Trend",
+  "last30Days": "Last 30 Days",
+  "growthAnalysis": "Growth analysis shows consistent submission patterns with a {percentage} increase compared to the previous cycle.",
+  "distribution": "Workflow Distribution"
+}

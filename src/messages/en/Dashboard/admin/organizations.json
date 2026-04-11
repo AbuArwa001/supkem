@@ -1,0 +1,14 @@
+{
+  "heading": "Organization Audit",
+  "desc": "Monitoring all {totalCount} registered entities.",
+  "search": "Search organizations...",
+  "filters": {
+    "all": "All",
+    "pending": "Pending",
+    "accredited": "Accredited",
+    "suspended": "Suspended"
+  },
+  "viewRegistry": "View Registry",
+  "apps": "Apps",
+  "certs": "Certs"
+}

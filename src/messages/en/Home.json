@@ -1,0 +1,83 @@
+{
+  "partners": {
+    "subtitle": "Strategic Alliances & Global Stakeholders",
+    "hajj": "Ministry of Hajj and Umrah",
+    "moia": "Ministry of Islamic Affairs (MOIA)",
+    "mwl": "Muslim World League",
+    "uae": "UAE Embassy Nairobi",
+    "isdb": "Islamic Development Bank (IsDB)",
+    "saudi": "Royal Embassy of Saudi Arabia",
+    "amref": "AMREF",
+    "ukaid": "UKAID",
+    "unicef": "UNICEF",
+    "globalfund": "The Global Fund",
+    "redcross": "Kenya Redcross",
+    "usaid": "USAID"
+  },
+  "programs": {
+    "subtitle": "Operational Pillars",
+    "title": "Strategic Focus",
+    "quote": "Guided by four core pillars to deliver programmatic and institutional growth for the Ummah.",
+    "prog1": {
+      "title": "Programmes",
+      "desc": "Implementing interventions in education, economic empowerment, health, peace building, and climate change."
+    },
+    "prog2": {
+      "title": "Institutional Strengthening",
+      "desc": "Building solid internal structures through robust governance, resource mobilization, and HR development."
+    },
+    "prog3": {
+      "title": "Partnership & Collaboration",
+      "desc": "Fostering strategic engagement with government, non-state actors, and faith-based institutions."
+    },
+    "prog4": {
+      "title": "Cross Cutting Areas",
+      "desc": "Ensuring effective delivery through comprehensive research, monitoring, evaluation, and strategic communication."
+    },
+    "learnMore": "Learn More"
+  },
+  "services": {
+    "title": "Digital Services",
+    "subtitle": "Comprehensive digital frameworks designed to empower our community with efficiency and speed.",
+    "svc1": {
+      "title": "Marriage Registration",
+      "desc": "Coordination of marriage officers under the Islamic faith."
+    },
+    "svc2": {
+      "title": "Halal Certification",
+      "desc": "Regulating and issuing Halal accreditation across Kenya."
+    },
+    "svc3": {
+      "title": "Study Abroad Letters",
+      "desc": "Support letters for students pursuing education abroad."
+    },
+    "svc4": {
+      "title": "Employment Referral",
+      "desc": "Referral services for local and international employment."
+    },
+    "svc5": {
+      "title": "Pilgrimage Services",
+      "desc": "Coordinating Hajj and Umrah missions for Kenyan Muslims."
+    },
+    "svc6": {
+      "title": "Membership Accreditation",
+      "desc": "Recognition for organizations under our umbrella body."
+    }
+  },
+  "gallery": {
+    "subtitle": "Community Impact",
+    "title": "Visual Legacy",
+    "viewGallery": "Explore Full Gallery",
+    "img1": "Community Leadership",
+    "img2": "Interfaith Engagement",
+    "img3": "Strategic Planning",
+    "img4": "Impact Initiatives"
+  },
+  "cta": {
+    "heading": "Start Your",
+    "subheading": "Journey",
+    "desc": "Step into the future of community management. Secure, efficient, and faith-aligned.",
+    "registerNow": "Register Now",
+    "portalAccess": "Portal Access"
+  }
+}

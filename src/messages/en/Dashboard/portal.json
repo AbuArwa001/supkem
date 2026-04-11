@@ -1,0 +1,61 @@
+{
+  "welcome": {
+    "salam": "Salam",
+    "member": "Member",
+    "badge": "Portal Access Alpha",
+    "desc": "Manage your community certifications and institutional compliance in one unified digital space.",
+    "newApp": "New Application",
+    "regInst": "Register Institution",
+    "compliance": "Compliance Status",
+    "trustVerified": "Trust Verified",
+    "completion": "Profile Completion"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "organizations": "My Organizations",
+    "applications": "My Applications",
+    "certificates": "My Certificates",
+    "letters": "My Letters",
+    "profile": "Profile Settings",
+    "userMenu": "User Menu",
+    "digitalPortal": "Digital Portal",
+    "portalUser": "Portal User",
+    "signOut": "Secure Sign Out",
+    "portalHeading": "SUPKEM Portal",
+    "portalSubheading": "SUPKEM Digital User Portal"
+  },
+  "sections": {
+    "certificates": {
+      "title": "Certificates",
+      "registry": "Registry Details"
+    },
+    "letters": {
+      "title": "Letters",
+      "view": "View Letter"
+    },
+    "help": {
+      "title": "Need Help?",
+      "desc": "Our support team is ready to assist with your compliance needs.",
+      "button": "Support Center"
+    }
+  },
+  "activeApps": {
+    "heading": "Active Pipeline",
+    "subheading": "Real-time tracking of your current applications and institutional updates.",
+    "appId": "Application ID",
+    "service": "Service Type",
+    "org": "Organization",
+    "trackStatus": "Track Status",
+    "empty": "No active applications found. Start your first request today.",
+    "status": {
+      "underReview": "Under Review",
+      "submitted": "Submitted",
+      "inProgress": "In Progress"
+    }
+  },
+  "metrics": {
+    "activeApps": "Active Applications",
+    "certificates": "Certificates",
+    "letters": "Letters Issued"
+  }
+}

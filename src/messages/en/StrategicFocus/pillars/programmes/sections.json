@@ -1,0 +1,137 @@
+[
+  {
+    "title": "Education",
+    "icon": "BookOpen",
+    "content": "Addressing low standards, poor infrastructure, and insufficient teaching capacity.",
+    "strategies": [
+      {
+        "name": "Promotion of Access to Quality Education",
+        "interventions": [
+          "Capacity building of teachers on competency-based curriculum.",
+          "Advocate for conversation of Madrasa teachers to TSC IRE teachers.",
+          "Build, maintain and manage schools from basic to university levels.",
+          "Provide scholarships for IRE teacher training students.",
+          "Sensitize communities on the need for education and technology."
+        ]
+      },
+      {
+        "name": "Supporting Muslim Education Institutions",
+        "interventions": [
+          "Advocate implementation of IRE within the competency-based curriculum.",
+          "Advocate for staffing of qualified IRE teachers.",
+          "Create partnerships to research matters affecting Muslim communities.",
+          "Collaborate on projects addressing low educational standards."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Countering & Transforming Violent Extremism (CVE)",
+    "icon": "Shield",
+    "content": "Proactively preventing radicalization and supporting rehabilitation.",
+    "strategies": [
+      {
+        "name": "Proactive Prevention",
+        "interventions": [
+          "Awareness creation on the negative effects of violent extremism.",
+          "Strategic partnerships with like-minded organizations on CVE management.",
+          "Participation in the design, review, and implementation of CVE policies."
+        ]
+      },
+      {
+        "name": "Rehabilitation and Reintegration",
+        "interventions": [
+          "Awareness creation on rehabilitation opportunities.",
+          "Support rehabilitation and reintegration of radicalized individuals.",
+          "Psychosocial and livelihoods support to reintegrated individuals."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Economic Empowerment",
+    "icon": "Briefcase",
+    "content": "Tackling high poverty levels and limited sharia-compliant opportunities.",
+    "strategies": [
+      {
+        "name": "Access to Sustainable Livelihoods",
+        "interventions": [
+          "Design and collaborate on livelihoods programmes.",
+          "Lobby for sharia-compliant economic policies.",
+          "Raise awareness on funding programs (women fund, youth fund, Uwezo)."
+        ]
+      },
+      {
+        "name": "Making Markets Work for the Poor",
+        "interventions": [
+          "Lobby and advocate for pro-poor economic policies.",
+          "Engage the private sector to create opportunities for poor communities."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Health",
+    "icon": "Heart",
+    "content": "Improving access to universal healthcare and vital health information.",
+    "strategies": [
+      {
+        "name": "Universal Health Care (UHC)",
+        "interventions": [
+          "Partner with GoK-NHIF to facilitate UHC access.",
+          "Create awareness on UHC opportunities.",
+          "Partner with private sector health institutions."
+        ]
+      },
+      {
+        "name": "Access to Information",
+        "interventions": [
+          "Create awareness on reproductive healthcare.",
+          "Create awareness on communicable and non-communicable diseases."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Peace Building and Conflict Transformation",
+    "icon": "Users",
+    "content": "Mitigating resource-based and inter-community conflicts.",
+    "strategies": [
+      {
+        "name": "National & County Peace Building",
+        "interventions": [
+          "Lobby and advocate in development and review of peace building laws.",
+          "Participate in the design and implementation of peace building initiatives.",
+          "Representation in strategic peace building and conflict resolution committees."
+        ]
+      },
+      {
+        "name": "Conflict Resolution Efforts",
+        "interventions": [
+          "Lobby for conflict resolution policies.",
+          "Implement mechanisms addressing conflicts within and between communities."
+        ]
+      }
+    ]
+  },
+  {
+    "title": "Climate Change Resilience Building",
+    "icon": "Globe",
+    "content": "Addressing the disproportionate impact of climate change on ASAL areas.",
+    "strategies": [
+      {
+        "name": "Promotion of Natural Resource Management",
+        "interventions": [
+          "Design/review environment management campaigns (tree planting, clean up).",
+          "Create awareness on natural resource management and conservation."
+        ]
+      },
+      {
+        "name": "Partnerships in Climate Change Management",
+        "interventions": [
+          "Create partnerships on implementation of climate change management interventions."
+        ]
+      }
+    ]
+  }
+]

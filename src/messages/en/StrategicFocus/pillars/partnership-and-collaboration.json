@@ -1,0 +1,75 @@
+{
+  "title": "Partnership & Collaboration",
+  "subtitle": "Fostering strategic engagement",
+  "description": "Building strong alliances with the government, non-state actors, and faith-based institutions to represent and empower the Muslim community.",
+  "sections": [
+    {
+      "title": "Engagement with the Government of Kenya (GoK)",
+      "icon": "Shield",
+      "content": "Developing formal and informal engagement mechanisms at National and County levels.",
+      "strategies": [
+        {
+          "name": "Formal and informal engagement",
+          "interventions": [
+            "Lobby and advocate in development / review of policies.",
+            "Engage relevant parliamentary committees on legislative processes.",
+            "Proactively engage Government on matters of interest to the Muslim community.",
+            "Establish formal working relationships with Government structures.",
+            "Negotiate opportunities and advise agencies on policies affecting Muslims."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Engagement with Non-State Actors",
+      "icon": "Users",
+      "content": "Regaining strategic influence in programming and representation.",
+      "strategies": [
+        {
+          "name": "Collaboration in Design & Implementation",
+          "interventions": [
+            "Mapping of relevant non-state actors.",
+            "Establishing formal working relationships (MoU, partnerships).",
+            "Participate in joint programming and funding mechanisms.",
+            "Create programming mechanisms and rules upheld by members."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Engagement with Faith-Based Institutions",
+      "icon": "Heart",
+      "content": "Deepening interfaith dialogue to address shared moral and social concerns.",
+      "strategies": [
+        {
+          "name": "Promotion of Interreligious Cohesion",
+          "interventions": [
+            "Participate and represent members in interreligious forums."
+          ]
+        },
+        {
+          "name": "Joint Programming",
+          "interventions": [
+            "Mobilize Muslim institutions on programming opportunities."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hajj Program",
+      "icon": "Globe",
+      "content": "Facilitating performance of the 5th pillar of Islam.",
+      "strategies": [
+        {
+          "name": "Facilitate Pilgrimage",
+          "interventions": [
+            "Develop and implement policies for the Hajj program.",
+            "Develop a policy and code of conduct for hajj agents.",
+            "Vet and license approved hajj agents.",
+            "Prepare and publish annual reports on the Hajj program."
+          ]
+        }
+      ]
+    }
+  ]
+}

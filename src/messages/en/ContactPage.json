@@ -1,0 +1,27 @@
+{
+  "hero": {
+    "badge": "We are here for you",
+    "heading1": "Contact",
+    "heading2": "Us",
+    "desc": "Have questions or need assistance? Reach out to the Supreme Council's headquarters."
+  },
+  "info": {
+    "heading": "Get in Touch",
+    "desc": "Our team is dedicated to serving the community. Visit us or use the form to send a direct message.",
+    "headquarters": "Headquarters",
+    "phone": "Phone Support",
+    "email": "Email Inquiry",
+    "hours": "Office Hours",
+    "hoursDetail": "Mon - Fri: 8:00 AM - 5:00 PM"
+  },
+  "form": {
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "subject": "Subject",
+    "subjectPlaceholder": "How can we help?",
+    "message": "Message",
+    "messagePlaceholder": "Tell us more about your inquiry...",
+    "send": "Send Message",
+    "sending": "Sending..."
+  }
+}

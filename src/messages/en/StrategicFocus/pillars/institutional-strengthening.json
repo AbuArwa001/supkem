@@ -1,0 +1,93 @@
+{
+  "title": "Institutional Strengthening",
+  "subtitle": "Building solid internal structures",
+  "description": "Driving organizational effectiveness through intense resource mobilization, governance reform, HR development, and creating a conducive working environment.",
+  "sections": [
+    {
+      "title": "Resource Mobilization",
+      "icon": "Briefcase",
+      "content": "Focusing on internal and external resource mobilization initiatives.",
+      "strategies": [
+        {
+          "name": "Internal Resource Mobilization",
+          "interventions": [
+            "Develop a business case on optimization of revenue from existing investments.",
+            "Proper management and accountability from existing investments.",
+            "Engage investment experts to develop sharia-compliant vehicles.",
+            "Develop internal capacity on resource mobilization."
+          ]
+        },
+        {
+          "name": "External Resource Mobilization",
+          "interventions": [
+            "Carry out donor mapping.",
+            "Develop and implement a resource mobilization strategy.",
+            "Engage in joint programming opportunities."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Governance",
+      "icon": "Shield",
+      "content": "Reforming structures for efficiency and effective mandate implementation.",
+      "strategies": [
+        {
+          "name": "Reforming Governance Structures",
+          "interventions": [
+            "Develop and implement a functional organogram.",
+            "Develop requisite governance policies (Code of Conduct, APIs, operations).",
+            "Develop a board charter and review SUPKEM's constitution.",
+            "Conduct and publish annual financial and organizational audits."
+          ]
+        },
+        {
+          "name": "Expanding Membership Base",
+          "interventions": [
+            "Awareness campaigns on the mandate, vision, and mission.",
+            "Mass mobilization and recruitment of Muslim women, PWDs and youth."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Human Resource Development",
+      "icon": "Users",
+      "content": "Streamlining and strengthening human resources for optimal delivery.",
+      "strategies": [
+        {
+          "name": "Strengthen HR Policies & Systems",
+          "interventions": [
+            "Develop a HR manual / policy.",
+            "Develop a business continuity plan.",
+            "Develop an organizational succession plan."
+          ]
+        },
+        {
+          "name": "HR Competency Development",
+          "interventions": [
+            "Map out required skills and conduct capacity gaps analysis.",
+            "Competitive recruitment for vacant positions.",
+            "Develop and implement a HR capacity building plan."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Office and Equipment Improvement",
+      "icon": "Briefcase",
+      "content": "Improving working conditions at both internal and external branches.",
+      "strategies": [
+        {
+          "name": "Creating a Conducive Work Environment",
+          "interventions": [
+            "Office environment assessment.",
+            "Acquisition of a new headquarters for SUPKEM.",
+            "Office rehabilitation and equipping.",
+            "Create and maintain an updated asset register."
+          ]
+        }
+      ]
+    }
+  ]
+}

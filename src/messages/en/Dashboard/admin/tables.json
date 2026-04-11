@@ -1,0 +1,14 @@
+{
+  "recentApps": "Recent Applications",
+  "viewPipeline": "View Pipeline",
+  "appId": "Application ID",
+  "orgDetail": "Organization Detail",
+  "status": "Current Status",
+  "activity": "Activity",
+  "empty": "No recent applications found.",
+  "statusLabels": {
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending": "Pending"
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "hero": {
+    "badge": "Latest Announcements",
+    "heading1": "News &",
+    "heading2": "Press",
+    "desc": "Stay updated with the latest announcements, events, and reports from the Supreme Council.",
+    "backToNews": "Back to News Hub"
+  },
+  "videos": {
+    "heading": "Video Briefings",
+    "desc": "Watch the latest press conferences and council updates.",
+    "watchNow": "Watch Now",
+    "viewAll": "View All Video Briefings"
+  },
+  "news": {
+    "heading": "Latest News Articles",
+    "desc": "Read our recent publications and stories.",
+    "readMore": "Read Full Story",
+    "details": "Details",
+    "comingSoon": "More News Coming Soon",
+    "comingSoonDesc": "Check back later for more updates.",
+    "noNews": "No published news found",
+    "noNewsDesc": "Check back soon for latest announcements from SUPKEM.",
+    "viewAll": "View All News Articles"
+  },
+  "gallery": {
+    "title": "Image Gallery",
+    "clickToView": "Click to view",
+    "close": "Close lightbox",
+    "prev": "Previous image",
+    "next": "Next image"
+  },
+  "papers": {
+    "title": "The Muslim Newspaper",
+    "desc": "Read our latest and archived newspaper issues.",
+    "issue": "Issue",
+    "read": "Read",
+    "viewAll": "View All Newspapers"
+  },
+  "article": {
+    "back": "Back to News",
+    "press": "SUPKEM Press",
+    "readMore": "Read More from SUPKEM",
+    "browseDesc": "Browse our latest news and announcements.",
+    "allArticles": "All Articles"
+  },
+  "paperView": {
+    "notAvailable": "PDF Not Available",
+    "notAvailableDesc": "The document for this issue is currently unavailable.",
+    "backToNews": "Back to News",
+    "officialPub": "Official Publication",
+    "councilName": "Supreme Council of Kenya Muslims (SUPKEM)",
+    "download": "Download PDF",
+    "issue": "Issue"
+  }
+}
