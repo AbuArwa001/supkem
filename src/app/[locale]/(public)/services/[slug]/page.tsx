@@ -22,8 +22,8 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
         notFound();
     }
 
-    const t = useTranslations(`ServicesPage.grid.${service.tKey}`);
-    const features = t.raw("features") as string[];
+    const t = useTranslations("ServicesPage.grid");
+    const features = t.raw(`${service.tKey}.features`) as string[];
 
     const IconComponent = iconMap[service.icon] || CheckCircle2;
 
