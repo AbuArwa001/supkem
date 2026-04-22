@@ -70,7 +70,7 @@ const PortalSidebar = ({
         className={cn(
           "h-screen sticky top-0 bg-[#0A1A14] border-r ltr:border-r rtl:border-l border-white/5 flex flex-col z-[60] text-slate-300 overflow-x-hidden",
           "fixed lg:sticky",
-          isOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full lg:translate-x-0",
+          isOpen ? "translate-x-0" : "ltr:-translate-x-full rtl:translate-x-full lg:translate-x-0 rtl:lg:translate-x-0 ltr:lg:translate-x-0",
         )}
       >
         {/* Retract Toggle Button (Desktop) */}
