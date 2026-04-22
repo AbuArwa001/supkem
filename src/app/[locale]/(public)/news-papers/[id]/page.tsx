@@ -14,7 +14,7 @@ export default async function NewsPaperViewPage({
 }) {
   const { id, locale } = await params;
   const t = await getTranslations({ locale, namespace: "NewsPage.paperView" });
-  const paper = await getNewsPaperById(id);
+  const paper = await getNewsPaperById(id, locale);
 
   if (!paper || !paper.is_published) {
     notFound();

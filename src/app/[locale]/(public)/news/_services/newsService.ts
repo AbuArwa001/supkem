@@ -36,9 +36,13 @@ export interface NewsPaperItem {
     updated_at: string;
 }
 
-async function serverFetch<T>(path: string): Promise<T | null> {
+async function serverFetch<T>(path: string, locale?: string): Promise<T | null> {
     try {
-        const res = await fetch(`${BASE}${path}`, { cache: "no-store", redirect: "follow" });
+        const headers: Record<string, string> = {};
+        if (locale) {
+            headers["Accept-Language"] = locale;
+        }
+        const res = await fetch(`${BASE}${path}`, { cache: "no-store", redirect: "follow", headers });
         if (!res.ok) {
             console.error(`API fetch failed: ${res.status} ${path}`);
             return null;
@@ -50,25 +54,25 @@ async function serverFetch<T>(path: string): Promise<T | null> {
     }
 }
 
-export async function getNews(): Promise<NewsItem[]> {
-    const data = await serverFetch<{ results?: NewsItem[] } | NewsItem[]>("/news/news/");
+export async function getNews(locale?: string): Promise<NewsItem[]> {
+    const data = await serverFetch<{ results?: NewsItem[] } | NewsItem[]>("/news/news/", locale);
     const items = Array.isArray(data) ? data : (data as any)?.results ?? [];
     return items.filter((item: NewsItem) => item.is_published);
 }
 
-export async function getVideos(): Promise<VideoItem[]> {
-    const data = await serverFetch<{ results?: VideoItem[] } | VideoItem[]>("/videos/");
+export async function getVideos(locale?: string): Promise<VideoItem[]> {
+    const data = await serverFetch<{ results?: VideoItem[] } | VideoItem[]>("/videos/", locale);
     const items = Array.isArray(data) ? data : (data as any)?.results ?? [];
     return items.filter((item: VideoItem) => item.is_published);
 }
 
-export async function getNewsPapers(): Promise<NewsPaperItem[]> {
-    const data = await serverFetch<{ results?: NewsPaperItem[] } | NewsPaperItem[]>("/news/news_papers/");
+export async function getNewsPapers(locale?: string): Promise<NewsPaperItem[]> {
+    const data = await serverFetch<{ results?: NewsPaperItem[] } | NewsPaperItem[]>("/news/news_papers/", locale);
     const items = Array.isArray(data) ? data : (data as any)?.results ?? [];
     return items.filter((item: NewsPaperItem) => item.is_published);
 }
 
-export async function getNewsPaperById(id: string): Promise<NewsPaperItem | null> {
-    return serverFetch<NewsPaperItem>(`/news/news_papers/${id}/`);
+export async function getNewsPaperById(id: string, locale?: string): Promise<NewsPaperItem | null> {
+    return serverFetch<NewsPaperItem>(`/news/news_papers/${id}/`, locale);
 }
 

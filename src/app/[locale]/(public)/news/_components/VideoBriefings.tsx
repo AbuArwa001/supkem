@@ -6,7 +6,7 @@ import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";
 import { API_BASE_URL } from "@/lib/api";
 import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
@@ -18,10 +18,12 @@ interface VideoBriefingsProps {
 export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefingsProps) {
   const t = useTranslations("NewsPage.videos");
 
+  const locale = useLocale();
+
   const { data: videos } = useSWR<VideoItem[]>(
-    `${API_BASE}/api/v1/videos/`,
-    (url: string) =>
-      fetch(url)
+    [`${API_BASE}/api/v1/videos/`, locale],
+    ([url, loc]: [string, string]) =>
+      fetch(url, { headers: { "Accept-Language": loc } })
         .then((r) => r.json())
         .then((d) => {
           const items = Array.isArray(d) ? d : (d?.results ?? []);
@@ -78,7 +80,7 @@ export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefi
                   <p className="text-sm text-foreground/60 line-clamp-2">{video.description}</p>
                 )}
                 <div className="pt-4 mt-auto border-t border-border/50 flex items-center justify-between text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                  <span>{new Date(video.created_at).toLocaleDateString()}</span>
+                  <span>{new Date(video.created_at).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                   <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                     {t("watchNow")} <ArrowRight size={14} />
                   </span>

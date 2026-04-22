@@ -4,7 +4,7 @@ import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { BookOpen, ArrowRight } from "lucide-react";
 import useSWR from "swr";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { API_BASE_URL } from "@/lib/api";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
@@ -17,10 +17,11 @@ interface NewsPapersSectionProps {
 
 export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: NewsPapersSectionProps) {
     const t = useTranslations("NewsPage.papers");
+    const locale = useLocale();
     const { data: newsPapers } = useSWR<NewsPaperItem[]>(
-        `${API_BASE}/api/v1/news/news_papers/`,
-        (url: string) =>
-            fetch(url)
+        [`${API_BASE}/api/v1/news/news_papers/`, locale],
+        ([url, loc]: [string, string]) =>
+            fetch(url, { headers: { "Accept-Language": loc } })
                 .then((r) => r.json())
                 .then((d) => {
                     const items = Array.isArray(d) ? d : d?.results ?? [];
@@ -98,7 +99,7 @@ export function NewsPapersSection({ newsPapers: initialNewsPapers, limit = 3 }: 
                                     {paper.title}
                                 </h3>
                                 <div className="pt-4 mt-auto border-t border-border/50 flex items-center justify-between text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                                    <span>{new Date(paper.published_date).toLocaleDateString()}</span>
+                                    <span>{new Date(paper.published_date).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                     <span className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
                                         {t("read")} <ArrowRight size={14} />
                                     </span>

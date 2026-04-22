@@ -6,7 +6,7 @@ import useSWR from "swr";
 import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
 import { API_BASE_URL } from "@/lib/api";
 import { NewsItem } from "@/app/[locale]/(public)/news/_services/newsService";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
@@ -22,11 +22,12 @@ const extractFirstImage = (content: string) => {
 
 export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: FeaturedNewsProps) {
     const t = useTranslations("NewsPage.news");
+    const locale = useLocale();
 
     const { data: newsItems } = useSWR(
-        `${API_BASE}/api/v1/news/news/`,
-        (url: string) =>
-            fetch(url)
+        [`${API_BASE}/api/v1/news/news/`, locale],
+        ([url, loc]: [string, string]) =>
+            fetch(url, { headers: { "Accept-Language": loc } })
                 .then((r) => r.json())
                 .then((d) => {
                     const items = Array.isArray(d) ? d : d?.results ?? [];
@@ -69,7 +70,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                         </div>
                                         <div className="space-y-4 flex flex-col flex-1">
                                             <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                                                <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                                <span className="flex items-center gap-1.5"><Calendar size={14} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                                 <span className="flex items-center gap-1.5"><User size={14} className="text-secondary" /> SUPKEM Press</span>
                                             </div>
                                             <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
@@ -104,7 +105,7 @@ export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: Feature
                                             </div>
                                             <div className="space-y-3 py-2 flex-1 flex flex-col justify-center">
                                                 <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
-                                                    <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString()}</span>
+                                                    <span className="flex items-center gap-1.5"><Calendar size={12} className="text-secondary" /> {new Date(item.created_at).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                                                 </div>
                                                 <h3 className="text-xl font-bold font-outfit text-primary leading-tight group-hover/item:text-secondary transition-colors line-clamp-2">
                                                     {item.title}

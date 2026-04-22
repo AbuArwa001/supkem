@@ -4,17 +4,18 @@ import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBr
 import { getVideos } from "@/app/[locale]/(public)/news/_services/newsService";
 import { Link } from "@/i18n/routing";
 import { ArrowLeft } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useEffect, useState } from "react";
 import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
 
 export default function VideoBriefingsPage() {
     const t = useTranslations("NewsPage.hero");
+    const locale = useLocale();
     const [videos, setVideos] = useState<VideoItem[]>([]);
 
     useEffect(() => {
-        getVideos().then(setVideos);
-    }, []);
+        getVideos(locale).then(setVideos);
+    }, [locale]);
 
     return (
         <div className="pt-32 pb-24 bg-slate-50 min-h-screen">
