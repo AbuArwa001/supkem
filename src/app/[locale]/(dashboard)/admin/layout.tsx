@@ -5,6 +5,7 @@ import AdminSidebar from "@/components/AdminSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
 import { KnockNotifications } from "@/components/KnockNotifications";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 import { useTranslations } from "next-intl";
 
@@ -36,6 +37,7 @@ export default function AdminLayout({
               </span>
             </div>
             <div className="flex items-center gap-4">
+              <LanguageToggle />
               <KnockNotifications />
               <button
                 onClick={() => setIsSidebarOpen(true)}
@@ -48,6 +50,7 @@ export default function AdminLayout({
 
           <header className="hidden lg:flex items-center justify-end px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
             <div className="flex items-center gap-4">
+              <LanguageToggle />
               <KnockNotifications />
             </div>
           </header>

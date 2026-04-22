@@ -4,6 +4,8 @@ import { useState } from "react";
 import PortalSidebar from "@/components/PortalSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
+import { KnockNotifications } from "@/components/KnockNotifications";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 import { useTranslations } from "next-intl";
 
@@ -33,12 +35,23 @@ export default function PortalLayout({
                 {t("portalHeading")}
               </span>
             </div>
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="p-2 hover:bg-white/5 rounded-xl transition-colors"
-            >
-              <Menu size={24} />
-            </button>
+            <div className="flex items-center gap-4">
+              <LanguageToggle />
+              <KnockNotifications />
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="p-2 hover:bg-white/5 rounded-xl transition-colors"
+              >
+                <Menu size={24} />
+              </button>
+            </div>
+          </header>
+
+          <header className="hidden lg:flex items-center justify-end px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+            <div className="flex items-center gap-4">
+              <LanguageToggle />
+              <KnockNotifications />
+            </div>
           </header>
 
           <div className="p-4 md:p-10">
