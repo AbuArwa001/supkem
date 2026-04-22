@@ -52,7 +52,7 @@ const Footer = () => {
                     </div>
                     <div className="flex items-center gap-3 text-sm text-white/70">
                         <Phone size={18} className="text-secondary shrink-0" />
-                        <Link href="tel:+254202243109">+254 20 22 43 109</Link>
+                        <Link href="tel:+254202243109">{t("phoneNumber")}</Link>
                     </div>
                     <div className="flex items-center gap-3 text-sm text-white/70">
                         <Mail size={18} className="text-secondary shrink-0" />

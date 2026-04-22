@@ -9,7 +9,7 @@ export function ContactInfo() {
 
     const CONTACT_DETAILS = [
         { icon: MapPin, title: t("headquarters"), detail: "Islamia House, Njugu Lane, Nairobi, Kenya" },
-        { icon: Phone, title: t("phone"), detail: "+254 (0) 20 2243129 / 224890" },
+        { icon: Phone, title: t("phone"), detail: t("phoneNumber") },
         { icon: Mail, title: t("email"), detail: "info@supkem.org" },
         { icon: Clock, title: t("hours"), detail: t("hoursDetail") },
     ];

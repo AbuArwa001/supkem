@@ -12,7 +12,8 @@
     "phone": "Phone Support",
     "email": "Email Inquiry",
     "hours": "Office Hours",
-    "hoursDetail": "Mon - Fri: 8:00 AM - 5:00 PM"
+    "hoursDetail": "Mon - Fri: 8:00 AM - 5:00 PM",
+    "phoneNumber": "+254 (0) 20 2243129 / 224890"
   },
   "form": {
     "fullName": "Full Name",

@@ -41,8 +41,8 @@ export default function LoginPage() {
   };
 
   const stats = [
-    { label: t("counties"), val: "47" },
-    { label: t("organizations"), val: "10k+" },
+    { label: t("counties"), val: t("countiesVal") },
+    { label: t("organizations"), val: t("organizationsVal") },
     { label: t("impact"), val: t("impactVal") },
   ];
 
