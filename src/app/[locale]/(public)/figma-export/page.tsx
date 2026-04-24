@@ -265,6 +265,189 @@ export default function FigmaExportPage() {
                     </div>
                 </div>
             </section>
+
+            {/* 4. PUBLIC LANDING PAGE (HERO & SERVICES) */}
+            <section className="space-y-4 max-w-7xl mx-auto">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 border-b pb-4">4. Public Landing Page (Hero)</h2>
+                <div className="bg-white rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50 border border-slate-200">
+                    {/* Header Nav */}
+                    <header className="h-[80px] bg-white border-b border-slate-100 flex items-center justify-between px-10">
+                        <div className="flex items-center gap-3">
+                            <div className="h-10 w-10 bg-emerald-700 rounded-lg"></div>
+                            <span className="font-black text-xl tracking-tight text-slate-900">SUPKEM</span>
+                        </div>
+                        <nav className="flex gap-8 text-sm font-semibold text-slate-600">
+                            <span className="text-emerald-700">Home</span>
+                            <span>About Us</span>
+                            <span>Services</span>
+                            <span>News</span>
+                            <span>Contact</span>
+                        </nav>
+                        <button className="px-6 py-2.5 bg-slate-900 text-white rounded-full font-bold text-sm">Portal Login</button>
+                    </header>
+                    {/* Hero Area */}
+                    <div className="relative bg-slate-50 px-10 py-32 flex flex-col items-center text-center overflow-hidden">
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[120px] -mt-32 -mr-32"></div>
+                        <span className="text-sm font-black text-emerald-700 uppercase tracking-widest bg-emerald-100 px-4 py-1.5 rounded-full mb-6 border border-emerald-200 relative z-10">National Membership Assembly</span>
+                        <h1 className="text-6xl font-black text-slate-900 tracking-tighter leading-[1.1] max-w-4xl relative z-10 mb-8">Uniting Communities Through Structured Digital Excellence.</h1>
+                        <p className="text-xl text-slate-500 max-w-2xl font-medium relative z-10 mb-10">Access your membership benefits, apply for Hajj certifications, and connect with national leadership in one unified digital platform.</p>
+                        <div className="flex gap-4 relative z-10">
+                            <button className="px-8 py-4 bg-emerald-700 text-white rounded-xl font-bold hover:bg-emerald-800 shadow-xl shadow-emerald-700/20">Create Free Account</button>
+                            <button className="px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 shadow-sm">Explore Services</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. AUTHENTICATION (LOGIN) */}
+            <section className="space-y-4 max-w-5xl mx-auto">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 border-b pb-4">5. Authentication (Login View)</h2>
+                <div className="flex h-[600px] bg-white rounded-3xl overflow-hidden shadow-2xl shadow-slate-200 border border-slate-200">
+                    <div className="w-1/2 bg-slate-900 p-12 flex flex-col justify-between relative overflow-hidden">
+                        <div className="absolute inset-0 bg-emerald-900/20"></div>
+                        <div className="relative z-10 flex gap-3 items-center">
+                            <div className="h-10 w-10 bg-emerald-500 rounded-lg"></div>
+                            <span className="font-black text-xl tracking-widest text-white">SUPKEM</span>
+                        </div>
+                        <div className="relative z-10 space-y-4 mt-auto">
+                            <h2 className="text-4xl font-black text-white leading-tight">Welcome Back to the Portal</h2>
+                            <p className="text-emerald-100/70 font-medium">Securely access your membership registry and administrative tools.</p>
+                        </div>
+                    </div>
+                    <div className="w-1/2 p-16 flex flex-col justify-center">
+                        <div className="space-y-2 mb-8">
+                            <h3 className="text-2xl font-bold text-slate-900">Sign In</h3>
+                            <p className="text-slate-500 text-sm">Enter your credentials below to access your account.</p>
+                        </div>
+                        <div className="space-y-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-widest text-slate-600">Email Address</label>
+                                <input type="email" placeholder="name@supkem.org" className="w-full h-12 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20" />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold uppercase tracking-widest text-slate-600 flex justify-between">
+                                    Password <span className="text-emerald-700 capitalize tracking-normal underline">Forgot?</span>
+                                </label>
+                                <input type="password" value="password123" readOnly className="w-full h-12 px-4 rounded-xl border border-slate-300 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500/20" />
+                            </div>
+                            <button className="w-full h-12 bg-slate-900 text-white rounded-xl font-bold mt-4 shadow-lg shadow-slate-900/20">Secure Login</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 6. NORMAL USER PORTAL (APPLICATIONS) */}
+            <section className="space-y-4 max-w-6xl mx-auto">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 border-b pb-4">6. Member Portal (Application Tracking)</h2>
+                <div className="bg-slate-50 rounded-3xl overflow-hidden border border-slate-200">
+                    <div className="flex h-[700px]">
+                        {/* Thin Sidebar */}
+                        <div className="w-[100px] bg-white border-r border-slate-200 flex flex-col items-center py-8 gap-8 shrink-0">
+                            <div className="flex flex-col items-center gap-1">
+                                <div className="h-10 w-10 bg-slate-900 rounded-xl mb-4"></div>
+                            </div>
+                            <div className="h-12 w-12 bg-emerald-50 text-emerald-700 rounded-xl flex items-center justify-center"><Activity size={24} /></div>
+                            <div className="h-12 w-12 text-slate-400 rounded-xl flex items-center justify-center hover:bg-slate-50"><CreditCard size={24} /></div>
+                        </div>
+                        {/* Main portal grid */}
+                        <div className="flex-1 p-10 flex flex-col gap-8 overflow-y-auto">
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <h1 className="text-3xl font-black text-slate-900 tracking-tight">My Applications</h1>
+                                    <p className="text-slate-500 font-medium">Track your requested certifications and services.</p>
+                                </div>
+                                <button className="px-6 py-3 bg-emerald-700 text-white rounded-xl font-bold flex gap-2"><UserPlus size={18}/> New Application</button>
+                            </div>
+
+                            <div className="grid grid-cols-[2fr_1fr] gap-8">
+                                {/* Details Card */}
+                                <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm h-max col-span-2">
+                                    <div className="flex items-start justify-between border-b border-slate-100 pb-6 mb-6">
+                                        <div className="space-y-1">
+                                            <span className="px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest rounded-full border border-amber-200">Pending Review</span>
+                                            <h3 className="text-2xl font-bold text-slate-900 mt-2">Hajj Certification 2026</h3>
+                                            <p className="text-sm font-medium text-slate-500">Ref: APP-0982-HJJ</p>
+                                        </div>
+                                        <div className="text-right space-y-1">
+                                            <p className="text-sm font-bold text-slate-900">KES 15,000</p>
+                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-md">Fully Paid</span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest">Application Timeline Tracker</h4>
+                                        <div className="relative pl-6 space-y-8 before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-emerald-500 before:via-slate-200 before:to-slate-200">
+                                            <div className="relative flex items-center justify-between z-10">
+                                                <div className="absolute left-[-26px] top-1 h-5 w-5 rounded-full bg-emerald-500 border-4 border-emerald-100 shrink-0 shadow-sm"></div>
+                                                <div className="flex flex-col ml-6">
+                                                    <span className="text-sm font-bold text-slate-900">Application Submitted</span>
+                                                    <span className="text-xs text-slate-500">October 24, 2025</span>
+                                                </div>
+                                            </div>
+                                            <div className="relative flex items-center justify-between z-10">
+                                                <div className="absolute left-[-26px] top-1 h-5 w-5 rounded-full bg-emerald-500 border-4 border-emerald-100 shrink-0 shadow-sm"></div>
+                                                <div className="flex flex-col ml-6">
+                                                    <span className="text-sm font-bold text-slate-900">Payment Verified</span>
+                                                    <span className="text-xs text-slate-500">October 25, 2025</span>
+                                                </div>
+                                            </div>
+                                            <div className="relative flex items-center justify-between opacity-50 z-10">
+                                                <div className="absolute left-[-26px] top-1 h-5 w-5 rounded-full bg-slate-200 border-4 border-white shrink-0 shadow-sm"></div>
+                                                <div className="flex flex-col ml-6">
+                                                    <span className="text-sm font-bold text-slate-900">HQ Final Review</span>
+                                                    <span className="text-xs text-slate-500">Pending Process</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 7. NEWS & MULTIMEDIA (BLOG GRID) */}
+            <section className="space-y-4 max-w-7xl mx-auto pb-32">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 border-b pb-4">7. Public News & Media Gallery</h2>
+                <div className="bg-white p-10 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {/* Featured Post Card */}
+                        <div className="col-span-1 md:col-span-2 group cursor-pointer">
+                            <div className="w-full h-[400px] bg-slate-200 rounded-2xl mb-6 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                                <div className="absolute bottom-8 left-8 right-8 space-y-3">
+                                    <span className="px-3 py-1 bg-emerald-600 text-white text-xs font-bold uppercase tracking-widest rounded-md">National Assembly</span>
+                                    <h3 className="text-3xl font-black text-white leading-tight">SUPKEM Initiates Nationwide Grassroots Verification Exercise for 2026.</h3>
+                                    <div className="flex items-center gap-4 text-emerald-100 text-sm font-medium">
+                                        <span>October 25, 2025</span>
+                                        <div className="w-1 h-1 rounded-full bg-emerald-100"></div>
+                                        <span>4 min read</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* Smaller Standard Cards */}
+                        <div className="flex flex-col gap-8">
+                            <div className="group cursor-pointer space-y-4 rounded-xl border border-slate-100 p-4 transition-colors hover:bg-slate-50">
+                                <div className="w-full h-32 bg-slate-200 rounded-xl overflow-hidden"></div>
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">Hajj Press Release</span>
+                                    <h4 className="text-base font-bold text-slate-900 leading-snug">New Payment Portal Launched for Mombasa Residents</h4>
+                                    <p className="text-sm font-medium text-slate-500">October 24, 2025</p>
+                                </div>
+                            </div>
+                            <div className="group cursor-pointer space-y-4 rounded-xl border border-slate-100 p-4 transition-colors hover:bg-slate-50">
+                                <div className="w-full h-32 bg-slate-200 rounded-xl overflow-hidden"></div>
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-indigo-600">Leadership Update</span>
+                                    <h4 className="text-base font-bold text-slate-900 leading-snug">Meeting with Regional Imams concludes in Nairobi</h4>
+                                    <p className="text-sm font-medium text-slate-500">October 22, 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     );
 }
