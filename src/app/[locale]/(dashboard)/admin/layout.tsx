@@ -6,6 +6,7 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
 import { KnockNotifications } from "@/components/KnockNotifications";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { DashboardSearch } from "@/components/DashboardSearch";
 
 import { useTranslations } from "next-intl";
 
@@ -48,7 +49,8 @@ export default function AdminLayout({
             </div>
           </header>
 
-          <header className="hidden lg:flex items-center justify-end px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+          <header className="hidden lg:flex items-center justify-between px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+            <DashboardSearch />
             <div className="flex items-center gap-4">
               <LanguageToggle />
               <KnockNotifications />
