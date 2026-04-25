@@ -1,0 +1,29 @@
+{
+  "title": "Terms of Service",
+  "subtitle": "The fundamental framework governing your interactions, applications, and permissions within the SUPKEM digital registry.",
+  "badge": "Legal Framework",
+  "lastUpdated": "Last Updated: October 2025",
+  "section1": {
+    "title": "1. Agreement to Terms",
+    "content": "By accessing or using the Supreme Council of Kenya Muslims (SUPKEM) platform, you agree to be bound by these Terms of Service. If you disagree with any part of the terms, you must not access the platform or its related services."
+  },
+  "section2": {
+    "title": "2. Platform Registration & Accounts",
+    "content": "To access operational pipelines like Hajj Certifications or Organizational alignment, citizens must:",
+    "bullet1": "Provide accurate, current, and complete structural information during the registration process.",
+    "bullet2": "Maintain the security of password credentials and verified transactional authentications.",
+    "bullet3": "Accept full systemic responsibility for all activities that occur under your digital account."
+  },
+  "section3": {
+    "title": "3. Service Usage & Financial Protocols",
+    "content": "All certifications and applications initiated through the portal require verifiable financial processing. Payments are non-refundable unless a catastrophic systemic failure is proven on our end. Any attempt to bypass, reverse, or falsify payment confirmation vectors will result in immediate and permanent account suspension."
+  },
+  "section4": {
+    "title": "4. Content & Intellectual Property",
+    "content": "All visual interfaces, design architectures, software logic, and textual content published on this platform remain the strict intellectual property of the Supreme Council of Kenya Muslims. Unauthorized digital reproduction is strictly forbidden."
+  },
+  "contact": {
+    "title": "Legal Inquiries",
+    "content": "For questions regarding this framework or specialized legal requests, reach out to our administrative protocol desk at:"
+  }
+}

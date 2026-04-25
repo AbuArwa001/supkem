@@ -12,6 +12,7 @@ import NewsPage from './NewsPage.json';
 import PrivacyPolicy from './PrivacyPolicy.json';
 import ServicesPage from './ServicesPage';
 import StrategicFocus from './StrategicFocus';
+import TermsOfService from './TermsOfService.json';
 
 export default {
   "About": About,
@@ -28,4 +29,5 @@ export default {
   "PrivacyPolicy": PrivacyPolicy,
   "ServicesPage": ServicesPage,
   "StrategicFocus": StrategicFocus,
+  "TermsOfService": TermsOfService,
 };
