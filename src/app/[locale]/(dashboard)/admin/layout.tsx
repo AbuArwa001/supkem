@@ -7,6 +7,7 @@ import { Menu } from "lucide-react";
 import { KnockNotifications } from "@/components/KnockNotifications";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { DashboardSearch } from "@/components/DashboardSearch";
+import { UserNavDropdown } from "@/components/UserNavDropdown";
 
 import { useTranslations } from "next-intl";
 
@@ -38,7 +39,6 @@ export default function AdminLayout({
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <LanguageToggle />
               <KnockNotifications />
               <button
                 onClick={() => setIsSidebarOpen(true)}
@@ -51,9 +51,14 @@ export default function AdminLayout({
 
           <header className="hidden lg:flex items-center justify-between px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
             <DashboardSearch />
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-6">
               <LanguageToggle />
-              <KnockNotifications />
+              <div className="flex items-center gap-4">
+                <div className="relative pt-1">
+                  <KnockNotifications />
+                </div>
+                <UserNavDropdown />
+              </div>
             </div>
           </header>
 
