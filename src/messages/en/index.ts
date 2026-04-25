@@ -9,6 +9,7 @@ import Home from './Home.json';
 import Index from './Index.json';
 import Navbar from './Navbar.json';
 import NewsPage from './NewsPage.json';
+import PrivacyPolicy from './PrivacyPolicy.json';
 import ServicesPage from './ServicesPage';
 import StrategicFocus from './StrategicFocus';
 
@@ -24,6 +25,7 @@ export default {
   "Index": Index,
   "Navbar": Navbar,
   "NewsPage": NewsPage,
+  "PrivacyPolicy": PrivacyPolicy,
   "ServicesPage": ServicesPage,
   "StrategicFocus": StrategicFocus,
 };

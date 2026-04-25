@@ -1,0 +1,30 @@
+{
+  "title": "Privacy Policy",
+  "subtitle": "How we collect, use, and protect your personal information within the SUPKEM digital ecosystem.",
+  "badge": "Legal & Compliance",
+  "lastUpdated": "Last Updated: October 2025",
+  "section1": {
+    "title": "1. Information We Collect",
+    "content": "We collect information you provide directly to us when organizing applications, processing portal payments, or interacting with the National Membership Assembly. This includes names, addresses, email addresses, phone numbers, and any other data relevant to rendering services. We also collect transactional records regarding financial pipelines and portal usage metrics."
+  },
+  "section2": {
+    "title": "2. How We Use Your Information",
+    "content": "The Supreme Council of Kenya Muslims (SUPKEM) utilizes this data securely to:",
+    "bullet1": "Process certification requests, Hajj directives, and membership validation.",
+    "bullet2": "Verify payment pipelines interactively (via M-PESA STK pushes).",
+    "bullet3": "Ensure structural compliance with constitutional mandates and Council guidelines.",
+    "bullet4": "Distribute systemic notifications and immediate operational communications."
+  },
+  "section3": {
+    "title": "3. Deep-Level Data Security",
+    "content": "We implement highly robust administrative, technical, and physical security parameters to protect your personal registry from unauthorized access. Your data is strictly guarded and never monetized or sold to third parties. We only share information with trusted operational partners (such as direct payment gateways) absolutely necessary for the execution of platform services."
+  },
+  "section4": {
+    "title": "4. Your Data Sovereignty Rights",
+    "content": "As a verified platform citizen operating under the Data Protection Act, you hold the inherent right to access, rectify, or request complete deletion of your personal data stored within the portal grids. You may exercise these rights automatically via your portal dashboard settings or by reaching our central administrative officers."
+  },
+  "contact": {
+    "title": "Contacting the Compliance Desk",
+    "content": "If you have inquiries regarding this Privacy Policy algorithm or how your data is administered through our pipelines, contact our agents:"
+  }
+}
