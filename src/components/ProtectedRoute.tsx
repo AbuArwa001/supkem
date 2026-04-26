@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { Link, useRouter } from "@/i18n/routing";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ interface ProtectedRouteProps {
 const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
-
+  const tc = useTranslations("Dashboard.common");
   useEffect(() => {
     if (!loading) {
       if (!isAuthenticated) {
@@ -140,7 +141,7 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
                   transition={{ delay: 0.2 }}
                   className="text-primary font-bold font-outfit uppercase tracking-[0.4em] text-xs"
                 >
-                  Loading...
+                  {tc("loading")}
                 </motion.p>
               </div>
             </div>
