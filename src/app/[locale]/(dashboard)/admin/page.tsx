@@ -19,7 +19,7 @@ import { useTranslations } from "next-intl";
 
 /**
  * Admin Dashboard - Main Overview Page.
- * Adheres to 200-line readability constraint.
+ *
  */
 export default function AdminOverview() {
   const t = useTranslations("Dashboard.admin.overview");
