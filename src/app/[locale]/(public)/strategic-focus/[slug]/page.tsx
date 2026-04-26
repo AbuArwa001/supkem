@@ -1,13 +1,14 @@
 import { use } from "react";
 import { notFound } from "next/navigation";
-import { STRATEGIC_PILLARS } from "./_data/strategicPillarsData";
+import { getStrategicPillars } from "./_data/strategicPillarsData";
 import StrategicFocusHero from "./_components/StrategicFocusHero";
 import StrategicFocusContent from "./_components/StrategicFocusContent";
 
-export default function StrategicFocusPage({ params }: { params: Promise<{ slug: string }> }) {
-    const { slug } = use(params);
+export default function StrategicFocusPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
+    const { slug, locale } = use(params);
 
-    const content = STRATEGIC_PILLARS[slug as keyof typeof STRATEGIC_PILLARS];
+    const pillars = getStrategicPillars(locale);
+    const content = pillars[slug as keyof typeof pillars];
 
     if (!content) {
         notFound();

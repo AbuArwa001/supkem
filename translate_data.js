@@ -1,4 +1,9 @@
-export interface StrategicStrategy {
+const fs = require('fs');
+const path = require('path');
+
+const targetPath = path.join(__dirname, 'src/app/[locale]/(public)/strategic-focus/[slug]/_data/strategicPillarsData.ts');
+
+const tsContext = `export interface StrategicStrategy {
     name: string;
     interventions: string[];
 }
@@ -743,3 +748,7 @@ export const STRATEGIC_PILLARS_AR: Record<string, StrategicPillar> = {
 export const getStrategicPillars = (locale: string) => {
     return locale === 'ar' ? STRATEGIC_PILLARS_AR : STRATEGIC_PILLARS_EN;
 };
+`;
+
+fs.writeFileSync(targetPath, tsContext);
+console.log('Successfully updated _data/strategicPillarsData.ts');
