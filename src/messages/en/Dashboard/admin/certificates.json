@@ -1,0 +1,12 @@
+{
+  "heading": "Certification Registry",
+  "desc": "Tracking all {count} active and archived digital certificates.",
+  "search": "Search by organization...",
+  "issueNew": "Issue New",
+  "otherCerts": "OTHER CERTIFICATIONS",
+  "activeCert": "ACTIVE CERTIFICATE",
+  "digitalCert": "Digital Certificate",
+  "serialNumber": "SERIAL NUMBER",
+  "issuedDate": "ISSUED DATE",
+  "viewRegistryDetails": "View Registry Details"
+}

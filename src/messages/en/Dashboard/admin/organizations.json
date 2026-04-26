@@ -10,5 +10,15 @@
   },
   "viewRegistry": "View Registry",
   "apps": "Apps",
-  "certs": "Certs"
+  "certs": "Certs",
+  "types": {
+    "educational": "Educational",
+    "cbo": "CBO",
+    "mosque": "Mosque",
+    "ngo": "NGO",
+    "default": "Entity"
+  },
+  "location": {
+    "nairobi": "Nairobi, Kenya"
+  }
 }

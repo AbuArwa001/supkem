@@ -59,10 +59,12 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
                             </span>
                         </div>
                         <div className="flex items-center gap-2 mt-2">
-                            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">{org.type}</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-secondary">
+                                {t(`types.${org.type.toLowerCase()}`)}
+                            </span>
                             <span className="text-foreground/20">•</span>
                             <p className="text-xs font-bold text-foreground/40 flex items-center gap-1">
-                                <MapPin size={10} /> Nairobi, Kenya
+                                <MapPin size={10} /> {t("location.nairobi")}
                             </p>
                         </div>
                     </div>
