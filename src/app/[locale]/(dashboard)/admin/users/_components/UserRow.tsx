@@ -58,7 +58,7 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
           </div>
         </div>
       </TableCell>
-      <TableCell className="text-start">
+      <TableCell className="text-start hidden md:table-cell">
         <Badge
           variant="outline"
           className="rounded-xl border-rose-100 bg-rose-50/50 text-rose-600 font-black text-[9px] px-3 py-1 uppercase tracking-widest flex items-center w-fit gap-2"
@@ -67,13 +67,13 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
           {user.role?.role_name || user.role_name || t("member")}
         </Badge>
       </TableCell>
-      <TableCell className="text-start">
+      <TableCell className="text-start hidden lg:table-cell">
         <div className="flex items-center text-slate-600 font-black text-[10px] uppercase tracking-wider gap-2">
           <MapPin className="h-3 w-3 text-slate-300" />
           {user.location || "N/A"}
         </div>
       </TableCell>
-      <TableCell className="text-start">
+      <TableCell className="text-start hidden sm:table-cell">
         <Badge
           variant={user.is_active ? "default" : "secondary"}
           className={`rounded-full px-3 py-1 text-[9px] font-black uppercase tracking-tighter ${user.is_active ? "bg-emerald-500 hover:bg-emerald-600 text-white" : "bg-slate-100 text-slate-400"}`}

@@ -77,13 +77,13 @@ export const UsersTable = ({
                 <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 px-8 text-start">
                   {t("memberDetails")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden md:table-cell">
                   {t("systemRole")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden lg:table-cell">
                   {t("location")}
                 </TableHead>
-                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start">
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden sm:table-cell">
                   {t("status")}
                 </TableHead>
                 <TableHead className="text-end px-8 font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
