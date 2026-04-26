@@ -23,20 +23,20 @@ export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: Ser
                 </p>
             </div>
 
-            <div className="flex items-center gap-4">
-                <div className="relative group">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto">
+                <div className="relative group w-full sm:w-auto">
                     <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 group-focus-within:text-primary transition-colors" />
                     <input
                         value={searchTerm}
                         onChange={(e) => onSearchChange(e.target.value)}
                         placeholder={t("search")}
-                        className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
+                        className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-full sm:w-64 shadow-sm"
                     />
                 </div>
 
                 <button
                     onClick={onAddService}
-                    className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center gap-2"
+                    className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center justify-center gap-2 shrink-0 whitespace-nowrap w-full sm:w-auto"
                 >
                     <Plus size={20} /> {t("addService")}
                 </button>
