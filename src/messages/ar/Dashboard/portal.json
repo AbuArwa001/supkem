@@ -22,7 +22,8 @@
     "portalUser": "مستخدم البوابة",
     "signOut": "خروج آمن",
     "portalHeading": "بوابة سوبكيم",
-    "portalSubheading": "البوابة الرقمية لمستخدمي سوبكيم"
+    "portalSubheading": "البوابة الرقمية لمستخدمي سوبكيم",
+    "member": "عضو"
   },
   "sections": {
     "certificates": {

@@ -22,7 +22,8 @@
     "portalUser": "Portal User",
     "signOut": "Secure Sign Out",
     "portalHeading": "SUPKEM Portal",
-    "portalSubheading": "SUPKEM Digital User Portal"
+    "portalSubheading": "SUPKEM Digital User Portal",
+    "member": "Member"
   },
   "sections": {
     "certificates": {
