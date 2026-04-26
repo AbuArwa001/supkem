@@ -39,6 +39,7 @@ export default function AdminLayout({
               </span>
             </div>
             <div className="flex items-center gap-4">
+              <LanguageToggle />
               <KnockNotifications />
               <button
                 onClick={() => setIsSidebarOpen(true)}
