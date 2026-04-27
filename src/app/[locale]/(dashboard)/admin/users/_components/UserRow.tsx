@@ -9,6 +9,7 @@ import {
   Edit2,
   Trash2,
   Info,
+  Calendar,
 } from "lucide-react";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ interface User {
   role_name?: string;
   location?: string;
   is_active: boolean;
+  created_at?: string;
 }
 
 interface UserRowProps {
@@ -71,6 +73,12 @@ export const UserRow = ({ user, onView, onEdit, onDelete }: UserRowProps) => {
         <div className="flex items-center text-slate-600 font-black text-[10px] uppercase tracking-wider gap-2">
           <MapPin className="h-3 w-3 text-slate-300" />
           {user.location || "N/A"}
+        </div>
+      </TableCell>
+      <TableCell className="text-start hidden lg:table-cell">
+        <div className="flex items-center text-slate-600 font-black text-[10px] uppercase tracking-wider gap-2">
+          <Calendar className="h-3 w-3 text-slate-300" />
+          {user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
         </div>
       </TableCell>
       <TableCell className="text-start hidden sm:table-cell">

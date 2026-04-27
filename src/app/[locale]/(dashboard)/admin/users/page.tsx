@@ -51,6 +51,9 @@ export default function UsersPage() {
     isDetailOpen,
     setIsDetailOpen,
     handleOpenDetail,
+    sortField,
+    sortOrder,
+    handleSortChange,
   } = useUsersLogic();
 
   if (!isAdmin) {
@@ -92,6 +95,9 @@ export default function UsersPage() {
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
           searchQuery={searchQuery}
+          sortField={sortField}
+          sortOrder={sortOrder}
+          onSortChange={handleSortChange}
         />
       </motion.div>
 

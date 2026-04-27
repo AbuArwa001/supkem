@@ -19,18 +19,31 @@ export const useUsersLogic = () => {
 
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortField, setSortField] = useState("created_at");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
+  const ordering = sortOrder === "desc" ? `-${sortField}` : sortField;
   const {
     data: userData,
     error,
     isLoading,
     mutate,
     isValidating
-  } = useSWR(isAdmin ? `/users/users/?search=${searchQuery}&page=${page}` : null, userService.fetcher);
+  } = useSWR(isAdmin ? `/users/users/?search=${searchQuery}&page=${page}&ordering=${ordering}` : null, userService.fetcher);
+
+  const handleSortChange = (field: string) => {
+    if (sortField === field) {
+      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortOrder("asc");
+    }
+    setPage(1);
+  };
 
   const isArray = Array.isArray(userData);
   const users = isArray ? userData : (userData?.results || []);
@@ -83,5 +96,8 @@ export const useUsersLogic = () => {
     isDetailOpen,
     setIsDetailOpen,
     handleOpenDetail,
+    sortField,
+    sortOrder,
+    handleSortChange,
   };
 };

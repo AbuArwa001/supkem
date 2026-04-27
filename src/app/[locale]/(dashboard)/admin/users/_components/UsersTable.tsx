@@ -1,6 +1,6 @@
 "use client";
 
-import { Users as UsersIcon } from "lucide-react";
+import { Users as UsersIcon, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -23,6 +23,7 @@ interface User {
   role_name?: string;
   location?: string;
   is_active: boolean;
+  created_at?: string;
 }
 
 interface UsersTableProps {
@@ -38,6 +39,9 @@ interface UsersTableProps {
   onEdit: (user: User) => void;
   onDelete: (user: User) => void;
   searchQuery: string;
+  sortField?: string;
+  sortOrder?: "asc" | "desc";
+  onSortChange?: (field: string) => void;
 }
 
 export const UsersTable = ({
@@ -53,8 +57,27 @@ export const UsersTable = ({
   onEdit,
   onDelete,
   searchQuery,
+  sortField,
+  sortOrder,
+  onSortChange,
 }: UsersTableProps) => {
   const t = useTranslations("Dashboard.admin.users.table");
+
+  const renderSortIcon = (field: string) => {
+    if (!sortField || !sortOrder || sortField !== field) {
+      return <ArrowUpDown className="h-3 w-3 inline-block ml-1 opacity-50 group-hover:opacity-100 transition-opacity" />;
+    }
+    return sortOrder === "asc" ? (
+      <ArrowUp className="h-3 w-3 inline-block ml-1 text-primary" />
+    ) : (
+      <ArrowDown className="h-3 w-3 inline-block ml-1 text-primary" />
+    );
+  };
+
+  const getSortProps = (field: string) => ({
+    onClick: () => onSortChange?.(field),
+    className: "group cursor-pointer hover:text-slate-800 transition-colors flex items-center w-max select-none"
+  });
 
   return (
     <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden">
@@ -75,16 +98,29 @@ export const UsersTable = ({
             <TableHeader>
               <TableRow className="hover:bg-transparent border-slate-50/50 h-16">
                 <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 px-8 text-start">
-                  {t("memberDetails")}
+                  <div {...getSortProps("full_name")}>
+                    {t("memberDetails")} {renderSortIcon("full_name")}
+                  </div>
                 </TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden md:table-cell">
-                  {t("systemRole")}
+                  <div {...getSortProps("role__role_name")}>
+                    {t("systemRole")} {renderSortIcon("role__role_name")}
+                  </div>
                 </TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden lg:table-cell">
-                  {t("location")}
+                  <div {...getSortProps("location")}>
+                    {t("location")} {renderSortIcon("location")}
+                  </div>
+                </TableHead>
+                <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden lg:table-cell">
+                  <div {...getSortProps("created_at")}>
+                    DATE JOINED {renderSortIcon("created_at")}
+                  </div>
                 </TableHead>
                 <TableHead className="font-black text-[10px] uppercase tracking-[0.2em] text-slate-400 text-start hidden sm:table-cell">
-                  {t("status")}
+                  <div {...getSortProps("is_active")}>
+                    {t("status")} {renderSortIcon("is_active")}
+                  </div>
                 </TableHead>
                 <TableHead className="text-end px-8 font-black text-[10px] uppercase tracking-[0.2em] text-slate-400">
                   {t("actions")}
@@ -95,7 +131,7 @@ export const UsersTable = ({
               {isLoading ? (
                 [1, 2, 3].map((i) => (
                   <TableRow key={i} className="border-slate-50 h-24">
-                    <TableCell colSpan={5} className="px-8">
+                    <TableCell colSpan={6} className="px-8">
                       <Skeleton className="h-12 w-full rounded-2xl" />
                     </TableCell>
                   </TableRow>
@@ -112,7 +148,7 @@ export const UsersTable = ({
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={5} className="h-64 text-center">
+                  <TableCell colSpan={6} className="h-64 text-center">
                     <div className="flex flex-col items-center justify-center space-y-6">
                       <div className="bg-slate-50 p-10 rounded-2xl">
                         <UsersIcon className="h-16 w-16 text-slate-200" />
