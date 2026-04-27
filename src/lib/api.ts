@@ -28,7 +28,8 @@ api.interceptors.response.use(
             originalRequest._retry = true;
             try {
                 const refreshToken = Cookies.get('refresh_token');
-                const response = await axios.post('https://supkem-drf.onrender.com/api/v1/token/refresh/', {
+                // const response = await axios.post('https://supkem-drf.onrender.com/api/v1/token/refresh/', {
+                const response = await axios.post(`${API_BASE_URL}/api/v1/token/refresh/`, {
                     refresh: refreshToken,
                 });
                 const { access } = response.data;
@@ -40,7 +41,10 @@ api.interceptors.response.use(
                 Cookies.remove('access_token');
                 Cookies.remove('refresh_token');
                 if (typeof window !== 'undefined') {
-                    window.location.href = '/login';
+                    const currentLocale = window.location.pathname.split('/')[1];
+                    const supportedLocales = ['en', 'ar'];
+                    const localePrefix = supportedLocales.includes(currentLocale) ? `/${currentLocale}` : '';
+                    window.location.href = `${localePrefix}/login`;
                 }
             }
         }
