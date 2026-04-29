@@ -2,10 +2,21 @@
 
 import { motion } from "framer-motion";
 import { Link } from "@/i18n/routing";
-import { User, Mail, Phone, Lock, ArrowRight, Loader2, AlertCircle } from "lucide-react";
+import { User, Mail, Phone, Lock, ArrowRight, Loader2, AlertCircle, MapPin, ChevronDown } from "lucide-react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { RegisterFormData, FieldErrors } from "./types";
 import { useTranslations } from "next-intl";
+
+const KENYA_COUNTIES = [
+  "Mombasa", "Kwale", "Kilifi", "Tana River", "Lamu", "Taita-Taveta",
+  "Garissa", "Wajir", "Mandera", "Marsabit", "Isiolo", "Meru",
+  "Tharaka-Nithi", "Embu", "Kitui", "Machakos", "Makueni", "Nyandarua",
+  "Nyeri", "Kirinyaga", "Murang'a", "Kiambu", "Turkana", "West Pokot",
+  "Samburu", "Trans-Nzoia", "Uasin Gishu", "Elgeyo-Marakwet", "Nandi", "Baringo",
+  "Laikipia", "Nakuru", "Narok", "Kajiado", "Kericho", "Bomet",
+  "Kakamega", "Vihiga", "Bungoma", "Busia", "Siaya", "Kisumu",
+  "Homa Bay", "Migori", "Kisii", "Nyamira", "Nairobi"
+];
 
 interface RegisterFormProps {
   formData: RegisterFormData;
@@ -93,6 +104,25 @@ export function RegisterForm({ formData, setFormData, onSubmit, loading, error, 
               placeholder="+254 7XX XXX XXX" />
           </div>
           {fieldErrors.phone_number && <p className="text-xs text-red-500 font-medium ml-1 flex items-center gap-1 mt-1">{fieldErrors.phone_number}</p>}
+        </div>
+
+        {/* Location (County) */}
+        <div className="space-y-2">
+          <label className="text-xs font-bold text-primary/60 uppercase tracking-widest ml-1">Location / Region</label>
+          <div className="relative group">
+            <MapPin className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${fieldErrors.location ? 'text-red-400' : 'text-primary/30 group-focus-within:text-primary'}`} size={20} />
+            <select required value={formData.location}
+              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              className={`w-full bg-primary/[0.02] border rounded-2xl py-4 pl-12 pr-10 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none appearance-none cursor-pointer font-medium text-slate-700 ${fieldErrors.location ? 'border-red-300' : 'border-border'} ${!formData.location && 'text-slate-400'}`}
+            >
+              <option value="" disabled>Select your region</option>
+              {KENYA_COUNTIES.map(county => (
+                <option key={county} value={county} className="text-slate-700 font-medium">{county}</option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-primary/30 pointer-events-none" size={20} />
+          </div>
+          {fieldErrors.location && <p className="text-xs text-red-500 font-medium ml-1 flex items-center gap-1 mt-1">{fieldErrors.location}</p>}
         </div>
 
         {/* Password */}
