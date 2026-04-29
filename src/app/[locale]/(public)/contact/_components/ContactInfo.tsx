@@ -8,9 +8,9 @@ export function ContactInfo() {
     const t = useTranslations("ContactPage.info");
 
     const CONTACT_DETAILS = [
-        { icon: MapPin, title: t("headquarters"), detail: "Islamia House, Njugu Lane, Nairobi, Kenya" },
-        { icon: Phone, title: t("phone"), detail: t("phoneNumber") },
-        { icon: Mail, title: t("email"), detail: "info@supkem.org" },
+        { icon: MapPin, title: t("headquarters"), detail: "Islamia House, Njugu Lane, Nairobi, Kenya", isLtr: true },
+        { icon: Phone, title: t("phone"), detail: t("phoneNumber"), isLtr: true },
+        { icon: Mail, title: t("email"), detail: "info@supkem.org", isLtr: true },
         { icon: Clock, title: t("hours"), detail: t("hoursDetail") },
     ];
 
@@ -36,7 +36,9 @@ export function ContactInfo() {
                         </div>
                         <div className="pt-2">
                             <h4 className="text-lg font-black font-outfit text-primary tracking-tight">{item.title}</h4>
-                            <p className="text-lg text-foreground/50 font-medium mt-1">{item.detail}</p>
+                            <p className="text-lg text-foreground/50 font-medium mt-1">
+                                {item.isLtr ? <bdi dir="ltr">{item.detail}</bdi> : item.detail}
+                            </p>
                         </div>
                     </div>
                 ))}
