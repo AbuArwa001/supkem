@@ -39,7 +39,7 @@ export function NewsPaperHeader({
 
         <button
           onClick={onCreateClick}
-          className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex items-center justify-center gap-2 transition-all active:scale-95 shrink-0 whitespace-nowrap w-full sm:w-auto"
+          className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex rtl:flex-row-reverse items-center justify-center gap-2 transition-all active:scale-95 shrink-0 whitespace-nowrap w-full sm:w-auto"
         >
           <Plus size={20} /> Add News Paper
         </button>

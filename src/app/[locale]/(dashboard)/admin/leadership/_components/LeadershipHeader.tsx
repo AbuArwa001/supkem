@@ -41,7 +41,7 @@ export function LeadershipHeader({
         </div>
         <button
           onClick={onCreateClick}
-          className="px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex items-center gap-2 shrink-0 premium-gradient shadow-primary/20"
+          className="px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex rtl:flex-row-reverse items-center gap-2 shrink-0 premium-gradient shadow-primary/20"
         >
           <Plus size={20} />
           <span>{t("addLeader")}</span>
