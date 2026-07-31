@@ -52,5 +52,28 @@
     "councilName": "Supreme Council of Kenya Muslims (SUPKEM)",
     "download": "Download PDF",
     "issue": "Issue"
+  },
+  "articlesPage": {
+    "badge": "SUPKEM Press & Official Archives",
+    "title1": "News & Media",
+    "title2": "Articles Hub",
+    "subtitle": "Explore verified press releases, community bulletins, strategic updates, and official statements from the Supreme Council of Kenya Muslims.",
+    "backToNews": "Back to News Hub",
+    "searchPlaceholder": "Search articles by title, keywords, or topics...",
+    "allCategories": "All Categories",
+    "totalArticles": "Published Articles",
+    "countiesCovered": "47 Counties Covered",
+    "pressReleases": "Verified Press Bulletins",
+    "featuredBadge": "FEATURED STORY",
+    "readTime": "min read",
+    "readStory": "Read Full Story",
+    "noResultsTitle": "No articles match your search",
+    "noResultsDesc": "Try adjusting your search terms or selecting a different category filter.",
+    "resetFilters": "Reset Search & Filters",
+    "showingCount": "Showing {count} of {total} articles",
+    "loadMore": "Load More Articles",
+    "pressCtaTitle": "Looking for Media Kits or Official Press Statements?",
+    "pressCtaDesc": "Contact the SUPKEM Communications Office for official commentary, press releases, or media inquiries.",
+    "contactMedia": "Contact Communications Secretariat"
   }
 }

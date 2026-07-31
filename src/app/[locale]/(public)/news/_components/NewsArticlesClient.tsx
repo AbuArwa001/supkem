@@ -6,7 +6,6 @@ import { Link } from "@/i18n/routing";
 import {
     Search,
     Calendar,
-    User,
     ArrowRight,
     ArrowLeft,
     Sparkles,
@@ -48,8 +47,7 @@ const cleanContent = (content: string) => {
 const calculateReadTime = (content: string) => {
     const text = cleanContent(content);
     const words = text.split(/\s+/).length;
-    const minutes = Math.max(1, Math.ceil(words / 180));
-    return minutes;
+    return Math.max(1, Math.ceil(words / 180));
 };
 
 // Categorization helper based on keywords
@@ -59,23 +57,49 @@ const getCategory = (item: NewsItem) => {
     const combined = titleLower + " " + contentLower;
 
     if (combined.includes("hajj") || combined.includes("umrah") || combined.includes("ramadan") || combined.includes("eid")) {
-        return { label: "Hajj & Faith", color: "bg-amber-500/10 text-amber-600 border-amber-500/20" };
+        return { label: "Hajj & Faith", color: "bg-amber-500/10 text-amber-400 border-amber-500/20" };
     }
     if (combined.includes("health") || combined.includes("relief") || combined.includes("food") || combined.includes("community") || combined.includes("welfare")) {
-        return { label: "Community & Welfare", color: "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" };
+        return { label: "Community & Welfare", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
     }
     if (combined.includes("education") || combined.includes("school") || combined.includes("scholarship") || combined.includes("youth")) {
-        return { label: "Education", color: "bg-blue-500/10 text-blue-600 border-blue-500/20" };
+        return { label: "Education", color: "bg-blue-500/10 text-blue-400 border-blue-500/20" };
     }
     if (combined.includes("statement") || combined.includes("press") || combined.includes("council") || combined.includes("official")) {
-        return { label: "Press Release", color: "bg-purple-500/10 text-purple-600 border-purple-500/20" };
+        return { label: "Press Release", color: "bg-purple-500/10 text-purple-400 border-purple-500/20" };
     }
-    return { label: "General News", color: "bg-teal-500/10 text-teal-600 border-teal-500/20" };
+    return { label: "General News", color: "bg-teal-500/10 text-teal-400 border-teal-500/20" };
 };
 
 export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps) {
-    const tHero = useTranslations("NewsPage.articlesPage");
-    const tNews = useTranslations("NewsPage.news");
+    let tHero: any;
+    let tNews: any;
+
+    try {
+        tHero = useTranslations("NewsPage.articlesPage");
+    } catch {
+        tHero = null;
+    }
+
+    try {
+        tNews = useTranslations("NewsPage.news");
+    } catch {
+        tNews = null;
+    }
+
+    // Helper for safe translation lookup with graceful fallback
+    const tSafe = (tFunc: any, key: string, fallback: string, values?: any) => {
+        if (!tFunc) return fallback;
+        try {
+            const res = tFunc(key, values);
+            if (!res || res.includes("NewsPage.") || res === key) {
+                return fallback;
+            }
+            return res;
+        } catch {
+            return fallback;
+        }
+    };
 
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("all");
@@ -83,7 +107,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
     const [displayCount, setDisplayCount] = useState(9);
 
     const categories = [
-        { id: "all", label: tHero("allCategories") },
+        { id: "all", label: tSafe(tHero, "allCategories", "All Categories") },
         { id: "Press Release", label: "Press Release" },
         { id: "Community & Welfare", label: "Community & Welfare" },
         { id: "Hajj & Faith", label: "Hajj & Faith" },
@@ -114,10 +138,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
     const gridArticles = featuredArticle ? displayedArticles.slice(1) : displayedArticles;
 
     return (
-        <div className="min-h-screen bg-slate-900 text-slate-100 selection:bg-emerald-500 selection:text-white pb-24">
+        <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white pb-24">
             {/* 1. HERO SECTION */}
-            <div className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 pt-28 pb-20 px-6 border-b border-white/5">
-                {/* Glowing Ambient Background Elements */}
+            <div className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 pt-28 pb-20 px-6 border-b border-white/5">
+                {/* Ambient Glows */}
                 <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 blur-[140px] rounded-full pointer-events-none" />
                 <div className="absolute top-10 right-10 w-96 h-96 bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -128,7 +152,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             href="/news"
                             className="inline-flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-all font-semibold text-xs tracking-wider uppercase bg-white/5 hover:bg-white/10 px-5 py-2.5 rounded-full border border-white/10 backdrop-blur-md shadow-lg"
                         >
-                            <ArrowLeft size={14} className="text-emerald-400" /> {tHero("backToNews")}
+                            <ArrowLeft size={14} className="text-emerald-400" /> {tSafe(tHero, "backToNews", "Back to News Hub")}
                         </Link>
 
                         <div className="hidden sm:flex items-center gap-3 text-xs font-semibold text-slate-400">
@@ -142,18 +166,18 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                     <div className="text-center max-w-4xl mx-auto space-y-6 pt-4">
                         <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase shadow-inner mx-auto">
                             <Sparkles size={14} className="animate-pulse text-amber-400" />
-                            {tHero("badge")}
+                            {tSafe(tHero, "badge", "SUPKEM Press & Official Archives")}
                         </div>
 
                         <h1 className="text-4xl md:text-6xl lg:text-7xl font-black font-outfit text-white tracking-tight leading-[1.1]">
-                            {tHero("title1")}{" "}
+                            {tSafe(tHero, "title1", "News & Media")}{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-amber-300 to-amber-500 italic">
-                                {tHero("title2")}
+                                {tSafe(tHero, "title2", "Articles Hub")}
                             </span>
                         </h1>
 
                         <p className="text-base md:text-xl text-slate-300 leading-relaxed font-normal max-w-3xl mx-auto">
-                            {tHero("subtitle")}
+                            {tSafe(tHero, "subtitle", "Explore verified press releases, community bulletins, strategic updates, and official statements from the Supreme Council of Kenya Muslims.")}
                         </p>
                     </div>
 
@@ -165,7 +189,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             </div>
                             <div>
                                 <div className="text-2xl font-bold font-outfit text-white">{initialNewsItems.length}</div>
-                                <div className="text-xs text-slate-400 font-medium">{tHero("totalArticles")}</div>
+                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "totalArticles", "Published Articles")}</div>
                             </div>
                         </div>
 
@@ -175,7 +199,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             </div>
                             <div>
                                 <div className="text-2xl font-bold font-outfit text-white">47 Counties</div>
-                                <div className="text-xs text-slate-400 font-medium">{tHero("countiesCovered")}</div>
+                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "countiesCovered", "Counties Covered")}</div>
                             </div>
                         </div>
 
@@ -185,7 +209,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             </div>
                             <div>
                                 <div className="text-2xl font-bold font-outfit text-white">100% Verified</div>
-                                <div className="text-xs text-slate-400 font-medium">{tHero("pressReleases")}</div>
+                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "pressReleases", "Verified Press Bulletins")}</div>
                             </div>
                         </div>
                     </div>
@@ -194,7 +218,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
 
             {/* 2. SEARCH & FILTER TOOLBAR */}
             <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20">
-                <div className="p-4 md:p-6 rounded-3xl bg-slate-800/90 border border-slate-700/80 backdrop-blur-2xl shadow-2xl space-y-4">
+                <div className="p-4 md:p-6 rounded-3xl bg-slate-900/90 border border-slate-700/80 backdrop-blur-2xl shadow-2xl space-y-4">
                     <div className="flex flex-col md:flex-row items-center gap-4">
                         {/* Search Bar */}
                         <div className="relative flex-1 w-full">
@@ -203,8 +227,8 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder={tHero("searchPlaceholder")}
-                                className="w-full bg-slate-900/90 border border-slate-700 focus:border-emerald-500 text-white rounded-2xl pl-12 pr-10 py-3.5 text-sm transition-all outline-none placeholder:text-slate-500"
+                                placeholder={tSafe(tHero, "searchPlaceholder", "Search articles by title, keywords, or topics...")}
+                                className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 text-white rounded-2xl pl-12 pr-10 py-3.5 text-sm transition-all outline-none placeholder:text-slate-500"
                             />
                             {searchQuery && (
                                 <button
@@ -217,7 +241,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                         </div>
 
                         {/* View Mode Toggle */}
-                        <div className="flex items-center gap-1 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-700 shrink-0 self-end md:self-auto">
+                        <div className="flex items-center gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-700 shrink-0 self-end md:self-auto">
                             <button
                                 onClick={() => setViewMode("grid")}
                                 className={`p-2.5 rounded-xl transition-all ${
@@ -257,7 +281,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 border ${
                                         isActive
                                             ? "bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-500/20"
-                                            : "bg-slate-900/60 text-slate-300 border-slate-700/60 hover:bg-slate-700 hover:text-white"
+                                            : "bg-slate-950 text-slate-300 border-slate-800 hover:bg-slate-800 hover:text-white"
                                     }`}
                                 >
                                     {cat.label}
@@ -273,7 +297,12 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                 {/* Results Meta Info */}
                 <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
                     <span>
-                        {tHero("showingCount", { count: displayedArticles.length, total: filteredNews.length })}
+                        {tSafe(
+                            tHero,
+                            "showingCount",
+                            `Showing ${displayedArticles.length} of ${filteredNews.length} articles`,
+                            { count: displayedArticles.length, total: filteredNews.length }
+                        )}
                     </span>
                     {(searchQuery || selectedCategory !== "all") && (
                         <button
@@ -283,14 +312,14 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             }}
                             className="text-emerald-400 hover:underline flex items-center gap-1"
                         >
-                            <X size={14} /> {tHero("resetFilters")}
+                            <X size={14} /> {tSafe(tHero, "resetFilters", "Reset Search & Filters")}
                         </button>
                     )}
                 </div>
 
                 {/* FEATURED SPOTLIGHT ARTICLE (When no search filter is active) */}
                 {featuredArticle && (
-                    <div className="group relative rounded-[32px] bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/80 overflow-hidden shadow-2xl hover:border-emerald-500/40 transition-all duration-500">
+                    <div className="group relative rounded-[32px] bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 overflow-hidden shadow-2xl hover:border-emerald-500/40 transition-all duration-500">
                         <Link href={`/news/${featuredArticle.slug}`} className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
                             {/* Featured Image Column */}
                             <div className="lg:col-span-7 relative min-h-[320px] md:min-h-[420px] overflow-hidden bg-slate-950">
@@ -312,11 +341,11 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                         />
                                     );
                                 })()}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-900/90" />
-                                
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-950/90" />
+
                                 <div className="absolute top-6 left-6 flex items-center gap-2">
                                     <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-1.5">
-                                        <Sparkles size={12} /> {tHero("featuredBadge")}
+                                        <Sparkles size={12} /> {tSafe(tHero, "featuredBadge", "FEATURED STORY")}
                                     </span>
                                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-md ${getCategory(featuredArticle).color}`}>
                                         {getCategory(featuredArticle).label}
@@ -339,7 +368,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                         <span>•</span>
                                         <span className="flex items-center gap-1.5">
                                             <Clock size={14} className="text-emerald-400" />
-                                            {calculateReadTime(featuredArticle.content)} {tHero("readTime")}
+                                            {calculateReadTime(featuredArticle.content)} {tSafe(tHero, "readTime", "min read")}
                                         </span>
                                     </div>
 
@@ -352,7 +381,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     </p>
                                 </div>
 
-                                <div className="pt-4 border-t border-slate-700/60 flex items-center justify-between">
+                                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
                                             SP
@@ -364,7 +393,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     </div>
 
                                     <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
-                                        {tHero("readStory")} <ArrowRight size={16} />
+                                        {tSafe(tHero, "readStory", "Read Full Story")} <ArrowRight size={16} />
                                     </span>
                                 </div>
                             </div>
@@ -391,9 +420,9 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     <Link
                                         key={item.id}
                                         href={`/news/${item.slug}`}
-                                        className="group p-6 rounded-3xl bg-slate-800/80 border border-slate-700/80 hover:border-emerald-500/40 hover:bg-slate-800 transition-all flex flex-col md:flex-row gap-6 shadow-lg"
+                                        className="group p-6 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col md:flex-row gap-6 shadow-lg"
                                     >
-                                        <div className="w-full md:w-64 h-48 rounded-2xl bg-slate-900 overflow-hidden relative shrink-0">
+                                        <div className="w-full md:w-64 h-48 rounded-2xl bg-slate-950 overflow-hidden relative shrink-0">
                                             <Image
                                                 src={imageSource}
                                                 alt={item.title}
@@ -415,7 +444,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                     <span>•</span>
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock size={13} className="text-emerald-400" />
-                                                        {readTime} {tHero("readTime")}
+                                                        {readTime} {tSafe(tHero, "readTime", "min read")}
                                                     </span>
                                                 </div>
 
@@ -428,10 +457,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                 </p>
                                             </div>
 
-                                            <div className="flex items-center justify-between pt-2 border-t border-slate-700/50">
+                                            <div className="flex items-center justify-between pt-2 border-t border-slate-800">
                                                 <span className="text-xs text-slate-400 font-medium">SUPKEM Press Secretariat</span>
                                                 <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                                                    {tNews("details")} <ChevronRight size={14} />
+                                                    {tSafe(tNews, "details", "Details")} <ChevronRight size={14} />
                                                 </span>
                                             </div>
                                         </div>
@@ -442,17 +471,17 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             return (
                                 <div
                                     key={item.id}
-                                    className="group rounded-3xl bg-slate-800/80 border border-slate-700/80 overflow-hidden hover:border-emerald-500/40 hover:bg-slate-800 transition-all flex flex-col justify-between shadow-xl"
+                                    className="group rounded-3xl bg-slate-900/90 border border-slate-800 overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between shadow-xl"
                                 >
                                     <Link href={`/news/${item.slug}`} className="flex flex-col h-full">
-                                        <div className="aspect-[16/10] bg-slate-900 relative overflow-hidden shrink-0">
+                                        <div className="aspect-[16/10] bg-slate-950 relative overflow-hidden shrink-0">
                                             <Image
                                                 src={imageSource}
                                                 alt={item.title}
                                                 fill
                                                 className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
                                             />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                                             <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-md ${category.color}`}>
                                                 {category.label}
                                             </span>
@@ -468,7 +497,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                     <span>•</span>
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock size={13} className="text-emerald-400" />
-                                                        {readTime} {tHero("readTime")}
+                                                        {readTime} {tSafe(tHero, "readTime", "min read")}
                                                     </span>
                                                 </div>
 
@@ -481,10 +510,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                 </p>
                                             </div>
 
-                                            <div className="pt-4 border-t border-slate-700/60 flex items-center justify-between text-xs font-bold">
+                                            <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-bold">
                                                 <span className="text-slate-400 font-medium">SUPKEM Press</span>
                                                 <span className="text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                                                    {tNews("details")} <ArrowRight size={14} />
+                                                    {tSafe(tNews, "details", "Details")} <ArrowRight size={14} />
                                                 </span>
                                             </div>
                                         </div>
@@ -496,12 +525,12 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                 ) : (
                     /* EMPTY SEARCH STATE */
                     <div className="py-20 text-center space-y-6 max-w-md mx-auto">
-                        <div className="w-20 h-20 bg-slate-800 rounded-3xl border border-slate-700 flex items-center justify-center mx-auto text-emerald-400 shadow-xl">
+                        <div className="w-20 h-20 bg-slate-900 rounded-3xl border border-slate-800 flex items-center justify-center mx-auto text-emerald-400 shadow-xl">
                             <BookOpen size={36} />
                         </div>
                         <div className="space-y-2">
-                            <h3 className="text-2xl font-bold font-outfit text-white">{tHero("noResultsTitle")}</h3>
-                            <p className="text-slate-400 text-sm">{tHero("noResultsDesc")}</p>
+                            <h3 className="text-2xl font-bold font-outfit text-white">{tSafe(tHero, "noResultsTitle", "No articles match your search")}</h3>
+                            <p className="text-slate-400 text-sm">{tSafe(tHero, "noResultsDesc", "Try adjusting your search terms or selecting a different category filter.")}</p>
                         </div>
                         <button
                             onClick={() => {
@@ -510,7 +539,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             }}
                             className="px-6 py-3 rounded-xl bg-emerald-500 text-white font-bold text-xs uppercase tracking-wider hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20"
                         >
-                            {tHero("resetFilters")}
+                            {tSafe(tHero, "resetFilters", "Reset Search & Filters")}
                         </button>
                     </div>
                 )}
@@ -520,9 +549,9 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                     <div className="flex justify-center pt-8">
                         <button
                             onClick={() => setDisplayCount((prev) => prev + 6)}
-                            className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-2xl font-bold uppercase tracking-wider text-xs flex items-center gap-3 transition-all hover:scale-105 shadow-xl"
+                            className="px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white border border-slate-800 rounded-2xl font-bold uppercase tracking-wider text-xs flex items-center gap-3 transition-all hover:scale-105 shadow-xl"
                         >
-                            {tHero("loadMore")} <ChevronRight size={16} />
+                            {tSafe(tHero, "loadMore", "Load More Articles")} <ChevronRight size={16} />
                         </button>
                     </div>
                 )}
@@ -536,10 +565,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                 <FileText size={16} /> Press & Media Relations
                             </div>
                             <h3 className="text-2xl md:text-3xl font-bold font-outfit text-white">
-                                {tHero("pressCtaTitle")}
+                                {tSafe(tHero, "pressCtaTitle", "Looking for Media Kits or Official Press Statements?")}
                             </h3>
                             <p className="text-slate-300 text-sm leading-relaxed">
-                                {tHero("pressCtaDesc")}
+                                {tSafe(tHero, "pressCtaDesc", "Contact the SUPKEM Communications Office for official commentary, press releases, or media inquiries.")}
                             </p>
                         </div>
 
@@ -547,7 +576,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             href="/contact"
                             className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black uppercase tracking-widest text-xs rounded-2xl transition-all hover:scale-105 shadow-lg shadow-emerald-500/20 shrink-0"
                         >
-                            {tHero("contactMedia")}
+                            {tSafe(tHero, "contactMedia", "Contact Communications Secretariat")}
                         </Link>
                     </div>
                 </div>
