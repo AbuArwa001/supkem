@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export default async function NewsPapersPage({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
-    const newsPapers = await getNewsPapers();
+    const newsPapers = await getNewsPapers(locale);
     const t = await getTranslations({ locale, namespace: "NewsPage.hero" });
 
     return (

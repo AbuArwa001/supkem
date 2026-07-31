@@ -31,13 +31,13 @@ export function HistorySection() {
           </div>
           <div className="grid grid-cols-2 gap-8 py-6">
             <div className="p-8 bg-white rounded-3xl shadow-sm border border-border/50">
-              <p className="text-4xl font-black text-primary font-outfit mb-1">1973</p>
+              <p className="text-4xl font-black text-primary font-outfit mb-1">{t("establishedVal")}</p>
               <p className="text-sm font-bold text-foreground/40 uppercase tracking-widest">
                 {t("established")}
               </p>
             </div>
             <div className="p-8 bg-white rounded-3xl shadow-sm border border-border/50">
-              <p className="text-4xl font-black text-secondary font-outfit mb-1">47</p>
+              <p className="text-4xl font-black text-secondary font-outfit mb-1">{t("countiesVal")}</p>
               <p className="text-sm font-bold text-foreground/40 uppercase tracking-widest">
                 {t("counties")}
               </p>

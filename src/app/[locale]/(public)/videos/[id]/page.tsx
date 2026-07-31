@@ -5,18 +5,18 @@ import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import ShareButton from "@/components/news/ShareButton";
 
-async function getVideo(id: string) {
+async function getVideo(id: string, locale: string) {
     try {
-        const res = await api.get(`/videos/${id}/`);
+        const res = await api.get(`/videos/${id}/`, { headers: { "Accept-Language": locale } });
         return res.data;
     } catch {
         return null;
     }
 }
 
-export default async function VideoBriefingPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    const video = await getVideo(id);
+export default async function VideoBriefingPage({ params }: { params: Promise<{ id: string, locale: string }> }) {
+    const { id, locale } = await params;
+    const video = await getVideo(id, locale);
 
     if (!video || !video.is_published) {
         notFound();

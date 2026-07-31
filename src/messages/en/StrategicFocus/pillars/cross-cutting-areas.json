@@ -1,0 +1,46 @@
+{
+  "title": "Cross Cutting Areas",
+  "subtitle": "Ensuring effective delivery",
+  "description": "Underpinning all operations through rigorous research, monitoring, evaluation, reporting, learning, and strategic communication.",
+  "sections": [
+    {
+      "title": "Research, Monitoring, Evaluation, Reporting and Learning (MERL)",
+      "icon": "FileText",
+      "content": "Enhancing capacity to inform programming and track results.",
+      "strategies": [
+        {
+          "name": "Evidence-Based Approaches & Learning",
+          "interventions": [
+            "Institute or collaborate in research opportunities.",
+            "Conduct research to inform program design and advocacy interventions.",
+            "Use M&E data to improve programme implementation strategies.",
+            "Documentation of learnings and sharing of good practices for scaling."
+          ]
+        },
+        {
+          "name": "Results-Based Management",
+          "interventions": [
+            "Develop and implement an MERL plan.",
+            "Effective monitoring on implementation of ongoing programmes.",
+            "Evaluation of programme performance (effectiveness, impact, sustainability)."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Communication",
+      "icon": "Globe",
+      "content": "Enhancing SUPKEM's strategic positioning and influence.",
+      "strategies": [
+        {
+          "name": "Effective Stakeholder Communication",
+          "interventions": [
+            "Develop and implement a communication policy.",
+            "Develop and implement a communication strategy for various stakeholders.",
+            "Use of social media platforms to communicate achievements and activities."
+          ]
+        }
+      ]
+    }
+  ]
+}

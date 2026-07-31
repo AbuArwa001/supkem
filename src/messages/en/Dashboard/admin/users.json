@@ -1,0 +1,51 @@
+{
+  "heading": "Team Management",
+  "desc": "Administrate operational staff and system access privileges.",
+  "addUser": "ADD USER",
+  "searchPlaceholder": "Search team members by name or email...",
+  "table": {
+    "title": "Team Directory",
+    "verifiedMembers": "{totalCount} Verified Members",
+    "memberDetails": "Member Details",
+    "systemRole": "System Role",
+    "location": "Location",
+    "status": "Status",
+    "actions": "Actions",
+    "noResults": "No results found for \"{searchQuery}\""
+  },
+  "row": {
+    "member": "MEMBER",
+    "active": "Active",
+    "disabled": "Disabled",
+    "viewDetails": "View Details",
+    "editAccount": "Edit Account",
+    "removeAccess": "Remove Access"
+  },
+  "details": {
+    "title": "User Details",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "locationBranch": "Location / Branch",
+    "memberSince": "Member Since",
+    "userId": "User ID",
+    "accountStatus": "Account Status",
+    "verifiedActive": "Verified Active",
+    "suspendedDisabled": "Suspended / Disabled",
+    "systemName": "SUPKEM TEAM MANAGEMENT SYSTEM"
+  },
+  "dialogs": {
+    "newAccount": "New Account",
+    "registerDesc": "Register team member",
+    "editAccount": "Edit Account",
+    "modifyDesc": "Modify team member profile"
+  },
+  "restricted": {
+    "title": "Access Restricted",
+    "desc": "You do not have the required administrative clearance to manage the team directory."
+  },
+  "pagination": {
+    "page": "Registry Page {page}",
+    "prev": "PREV",
+    "next": "NEXT"
+  }
+}

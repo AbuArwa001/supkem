@@ -9,9 +9,13 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { NewsGallery } from "../_components/NewsGallery";
 
-async function getArticle(slug: string) {
+async function getArticle(slug: string, locale: string) {
     try {
-        const res = await api.get(`/news/news/${slug}/`);
+        const res = await api.get(`/news/news/${slug}/`, {
+            headers: {
+                "Accept-Language": locale
+            }
+        });
         return res.data;
     } catch {
         return null;
@@ -20,7 +24,7 @@ async function getArticle(slug: string) {
 
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
     const { slug, locale } = await params;
-    const article = await getArticle(slug);
+    const article = await getArticle(slug, locale);
     const t = await getTranslations({ locale, namespace: "NewsPage.article" });
 
     if (!article || !article.is_published) {

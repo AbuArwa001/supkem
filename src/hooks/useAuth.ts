@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import api from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export const useAuth = () => {
     const [user, setUser] = useState<any>(null);

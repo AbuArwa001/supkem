@@ -16,6 +16,7 @@ import {
 
 // Internal components
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 // Types
 import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
@@ -29,6 +30,8 @@ export default function ApplicationCard({
   application,
   index,
 }: ApplicationCardProps) {
+  const t = useTranslations("Dashboard.admin.applications");
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -62,17 +65,17 @@ export default function ApplicationCard({
               ) : (
                 <Clock size={10} />
               )}
-              {application.status}
+              {t(`filters.${application.status.toUpperCase()}`) || application.status}
             </span>
           </div>
           <p className="text-sm font-semibold text-foreground/40 flex items-center gap-2">
             <span className="text-secondary font-bold underline underline-offset-4 decoration-2 decoration-secondary/30">
-              {application.organization_name || "Individual Application"}
+              {application.organization_name || t("type")}
             </span>
-            • Submitted on{" "}
+            • {t("submittedOn")}{" "}
             {application.submitted_at
               ? new Date(application.submitted_at).toLocaleDateString()
-              : "Pending"}
+              : t("filters.PENDING")}
           </p>
         </div>
       </div>
@@ -80,15 +83,15 @@ export default function ApplicationCard({
       <div className="flex items-center gap-4 w-full md:w-auto md:border-l border-border/50 md:pl-8">
         <div className="hidden lg:block text-right pr-4">
           <p className="text-[10px] font-bold text-foreground/40 uppercase tracking-widest leading-none mb-1">
-            Last Action
+            {t("lastAction")}
           </p>
-          <p className="text-sm font-bold text-primary">Admin Review</p>
+          <p className="text-sm font-bold text-primary">{t("adminReview")}</p>
         </div>
         <Link
           href={`/admin/applications/${application.id}`}
           className="flex-1 md:flex-none px-6 py-3 bg-primary/[0.03] text-primary rounded-2xl font-bold text-sm hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
         >
-          Review Details <ChevronRight size={16} />
+          {t("reviewDetails")} <ChevronRight size={16} />
         </Link>
         <button className="p-3 bg-white border border-border rounded-xl text-foreground/40 hover:text-primary hover:border-primary/20 transition-all">
           <MoreVertical size={18} />

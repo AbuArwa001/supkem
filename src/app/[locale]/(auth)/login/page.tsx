@@ -5,8 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Mail, Lock, Loader2, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { Link } from "@/i18n/routing";
-import { useRouter } from "next/navigation";
+import { Link, useRouter } from "@/i18n/routing";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useTranslations } from "next-intl";
 
@@ -42,8 +41,8 @@ export default function LoginPage() {
   };
 
   const stats = [
-    { label: t("counties"), val: "47" },
-    { label: t("organizations"), val: "10k+" },
+    { label: t("counties"), val: t("countiesVal") },
+    { label: t("organizations"), val: t("organizationsVal") },
     { label: t("impact"), val: t("impactVal") },
   ];
 

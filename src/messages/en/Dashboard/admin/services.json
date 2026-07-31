@@ -1,0 +1,42 @@
+{
+  "heading": "Services CMS",
+  "desc": "Manage and configure organizational services.",
+  "search": "Search services...",
+  "addService": "Add Service",
+  "table": {
+    "details": "Service Details",
+    "category": "Category",
+    "fee": "Fee",
+    "status": "Status",
+    "actions": "Actions",
+    "noDesc": "No description provided.",
+    "active": "Active",
+    "inactive": "Inactive",
+    "noServices": "No services found."
+  },
+  "modal": {
+    "edit": "Edit Service",
+    "new": "New Service",
+    "name": "Service Name",
+    "namePlaceholder": "Enter service name...",
+    "desc": "Description",
+    "generateAI": "Generate with AI",
+    "descPlaceholder": "Describe the service details...",
+    "feeLabel": "Fee (KES)",
+    "statusLabel": "Initial Status",
+    "activeService": "Active Service",
+    "cancel": "Cancel",
+    "saving": "Saving...",
+    "update": "Update Service",
+    "create": "Create Service"
+  },
+  "aiModal": {
+    "title": "AI Content Assistant",
+    "subtitle": "Tell me what this service is about, and I'll write a professional description for you.",
+    "promptLabel": "Describe the service briefly...",
+    "promptPlaceholder": "e.g. A halal certification for restaurants including site inspection and audit...",
+    "cancel": "Cancel",
+    "generating": "Generating...",
+    "generateNow": "Generate Now"
+  }
+}

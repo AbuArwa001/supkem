@@ -8,6 +8,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { Certificate } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
+import { useTranslations } from "next-intl";
 
 export default function CertificateCard({
   cert,
@@ -16,6 +17,8 @@ export default function CertificateCard({
   cert: Certificate;
   index: number;
 }) {
+  const t = useTranslations("Dashboard.admin.certificates");
+
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -43,12 +46,12 @@ export default function CertificateCard({
       <div className="space-y-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary mb-1">
-            Active Certificate
+            {t("activeCert")}
           </p>
           <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer tracking-tight leading-tight">
             {cert.application_detail?.service_name ||
               cert.service_name ||
-              "Digital Certificate"}
+              t("digitalCert")}
           </h4>
           <p className="text-xs font-bold text-foreground/40 mt-1 uppercase tracking-widest">
             {cert.organization_name}
@@ -58,7 +61,7 @@ export default function CertificateCard({
         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border/50">
           <div className="space-y-1">
             <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">
-              Issued Date
+              {t("issuedDate")}
             </p>
             <p className="text-xs font-bold text-primary flex items-center gap-1">
               <Calendar size={12} />{" "}
@@ -67,7 +70,7 @@ export default function CertificateCard({
           </div>
           <div className="space-y-1">
             <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">
-              Serial Number
+              {t("serialNumber")}
             </p>
             <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter">
               <Award size={12} /> {cert.serial_number}
@@ -79,7 +82,7 @@ export default function CertificateCard({
           href={`/admin/certificates/${cert.id}`}
           className="w-full py-4 bg-primary/[0.03] text-primary rounded-2xl font-bold text-sm hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group-hover:shadow-lg"
         >
-          View Registry Details <ChevronRight size={16} />
+          {t("viewRegistryDetails")} <ChevronRight size={16} />
         </Link>
       </div>
     </motion.div>

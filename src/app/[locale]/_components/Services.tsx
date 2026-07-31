@@ -51,7 +51,7 @@ export const Services = () => {
                   </p>
                 </div>
               </div>
-              <div className="absolute top-8 right-8 text-white/5 group-hover:text-primary/5 transition-colors">
+              <div className="absolute top-8 ltr:right-8 rtl:left-8 text-white/5 group-hover:text-primary/5 transition-colors">
                 <s.icon size={120} strokeWidth={1} />
               </div>
             </motion.div>

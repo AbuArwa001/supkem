@@ -4,6 +4,7 @@ export interface RegisterFormData {
   last_name: string;
   email: string;
   phone_number: string;
+  location: string;
   password: string;
   confirm_password?: string;
 }

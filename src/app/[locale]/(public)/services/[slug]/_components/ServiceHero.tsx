@@ -14,14 +14,14 @@ interface ServiceHeroProps {
 }
 
 export function ServiceHero({ service, IconComponent }: ServiceHeroProps) {
-    const t = useTranslations(`ServicesPage.grid.${service.tKey}`);
+    const t = useTranslations("ServicesPage.grid");
     const th = useTranslations("ServicesPage.hero");
 
     return (
         <section className="relative h-[55vh] flex items-center justify-center overflow-hidden">
             <Image
                 src={service.heroImage}
-                alt={t("title")}
+                alt={t(`${service.tKey}.title`)}
                 fill
                 className="object-cover"
                 priority
@@ -47,13 +47,13 @@ export function ServiceHero({ service, IconComponent }: ServiceHeroProps) {
                 >
                     <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs font-bold uppercase tracking-widest backdrop-blur-md">
                         <IconComponent size={14} className="text-secondary" />
-                        {t("category")}
+                        {t(`${service.tKey}.category`)}
                     </div>
                     <h1 className="text-5xl lg:text-7xl font-black font-outfit text-white leading-[1.1] tracking-tight drop-shadow-lg">
-                        {t("title")}
+                        {t(`${service.tKey}.title`)}
                     </h1>
                     <p className="text-xl lg:text-3xl text-white/80 font-medium leading-relaxed drop-shadow-md">
-                        {t("subtitle")}
+                        {t(`${service.tKey}.subtitle`)}
                     </p>
                 </motion.div>
             </div>

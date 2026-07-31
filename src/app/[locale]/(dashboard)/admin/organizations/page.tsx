@@ -36,7 +36,7 @@ export default function AdminOrganizations() {
 
             <div className={cn(
                 "grid gap-6",
-                viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+                viewMode === "grid" ? "grid-cols-[repeat(auto-fill,minmax(340px,1fr))]" : "grid-cols-1"
             )}>
                 {filteredOrgs.map((org, i) => (
                     <OrganizationCard

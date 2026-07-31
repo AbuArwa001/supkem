@@ -3,7 +3,13 @@
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "SUPKEM | Supreme Council of Kenya Muslims",
+  description: "Supreme Council of Kenya Muslims",
 };
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return children;
 }

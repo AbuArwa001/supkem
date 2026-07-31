@@ -1,0 +1,17 @@
+{
+  "heading": "Applications Board",
+  "desc": "Review and process submissions from across the country.",
+  "search": "Search ID or Org...",
+  "filters": {
+    "ALL": "ALL",
+    "PENDING": "PENDING",
+    "APPROVED": "APPROVED",
+    "REJECTED": "REJECTED"
+  },
+  "reviewDetails": "Review Details",
+  "lastAction": "LAST ACTION",
+  "adminReview": "Admin Review",
+  "submittedOn": "Submitted on",
+  "noApplications": "No applications found",
+  "noApplicationsDesc": "Try adjusting your filters or search terms."
+}

@@ -30,9 +30,9 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                     <thead className="bg-primary/[0.02] border-b border-border">
                         <tr className="text-xs font-bold text-foreground/40 uppercase tracking-widest">
                             <th className="px-8 py-5 text-start">{t("details")}</th>
-                            <th className="px-8 py-5 text-start">{t("category")}</th>
-                            <th className="px-8 py-5 text-start">{t("fee")}</th>
-                            <th className="px-8 py-5 text-start">{t("status")}</th>
+                            <th className="px-8 py-5 text-start hidden md:table-cell">{t("category")}</th>
+                            <th className="px-8 py-5 text-start hidden sm:table-cell">{t("fee")}</th>
+                            <th className="px-8 py-5 text-start hidden lg:table-cell">{t("status")}</th>
                             <th className="px-8 py-5 text-end">{t("actions")}</th>
                         </tr>
                     </thead>
@@ -43,18 +43,18 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                                     <p className="font-bold text-primary group-hover:underline cursor-pointer">{service.name}</p>
                                     <p className="text-xs text-foreground/40 line-clamp-1 mt-1">{service.description || t("noDesc")}</p>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-8 py-6 hidden md:table-cell">
                                     <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-black uppercase tracking-widest">
                                         {service.category}
                                     </span>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-8 py-6 hidden sm:table-cell">
                                     <p className="font-bold text-primary flex items-center gap-1">
                                         <span className="text-xs text-foreground/30 font-medium tracking-tight uppercase">KES</span>
                                         {Number(service.fee).toLocaleString()}
                                     </p>
                                 </td>
-                                <td className="px-8 py-6">
+                                <td className="px-8 py-6 hidden lg:table-cell">
                                     <span className={cn(
                                         "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold",
                                         service.is_active ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"

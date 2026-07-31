@@ -50,7 +50,7 @@ export const UserHeader = ({
 
         <Button
           onClick={onAddClick}
-          className="rounded-2xl font-black bg-rose-600 hover:bg-rose-700 h-12 px-6 md:px-8 shadow-xl shadow-rose-600/20 transition-all active:scale-95 flex items-center gap-3 text-white uppercase tracking-widest text-xs"
+          className="rounded-2xl font-black bg-rose-600 hover:bg-rose-700 h-12 px-6 md:px-8 shadow-xl shadow-rose-600/20 transition-all active:scale-95 flex rtl:flex-row-reverse items-center gap-3 text-white uppercase tracking-widest text-xs"
         >
           <Plus className="h-5 w-5" /> {t("addUser")}
         </Button>
@@ -58,4 +58,5 @@ export const UserHeader = ({
     </header>
   );
 };
+
 

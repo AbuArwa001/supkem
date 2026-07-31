@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function checkFile() {
-    const url = 'https://supkem-drf.onrender.com/media/video_briefings/A_ENT_NET.mp4';
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/media/video_briefings/A_ENT_NET.mp4`;
     try {
         console.log(`Checking URL: ${url}`);
         const res = await axios.head(url);

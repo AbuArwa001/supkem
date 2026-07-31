@@ -14,18 +14,7 @@ export interface Certificate {
     pilgrim_details?: any;
     education_details?: any;
     travel_visa_details?: any;
-    husband_name?: string;
-    husband_id_passport?: string;
-    husband_age?: number;
-    husband_marital_status?: string;
-    wife_name?: string;
-    wife_id_passport?: string;
-    wife_age?: number;
-    wife_marital_status?: string;
-    marriage_entry_no?: string;
-    date_of_marriage?: string;
-    place_of_marriage?: string;
-    officiated_by?: string;
+    marriage_details?: any;
   };
 }
 

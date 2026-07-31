@@ -9,7 +9,7 @@ interface ServiceArticleProps {
 }
 
 export function ServiceArticle({ service }: ServiceArticleProps) {
-    const t = useTranslations(`ServicesPage.grid.${service.tKey}`);
+    const t = useTranslations("ServicesPage.grid");
     const td = useTranslations("ServicesPage.detail");
 
     return (
@@ -24,14 +24,14 @@ export function ServiceArticle({ service }: ServiceArticleProps) {
                     {td("overview")}
                 </h2>
                 <p className="text-lg text-slate-600 leading-relaxed mb-10">
-                    {t("desc")}
+                    {t(`${service.tKey}.desc`)}
                 </p>
                 <div className="w-20 h-1 bg-secondary/20 rounded-full mb-10" />
                 <h3 className="text-2xl font-bold font-outfit text-slate-800 mb-6">
                     {td("details")}
                 </h3>
                 <p className="text-lg text-slate-600 leading-relaxed">
-                    {t("details")}
+                    {t(`${service.tKey}.details`)}
                 </p>
             </div>
         </motion.div>

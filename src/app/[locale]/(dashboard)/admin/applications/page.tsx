@@ -9,6 +9,7 @@ import { Search } from "lucide-react";
 import { useApplicationsLogic } from "@/app/[locale]/(dashboard)/admin/applications/_hooks/useApplicationsLogic";
 import ApplicationCard from "@/app/[locale]/(dashboard)/admin/applications/_components/ApplicationCard";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const FILTER_OPTIONS = ["all", "pending", "approved", "rejected"];
 
@@ -16,15 +17,17 @@ export default function AdminApplications() {
   const { filteredApps, filter, setFilter, searchTerm, setSearchTerm } =
     useApplicationsLogic();
 
+  const t = useTranslations("Dashboard.admin.applications");
+
   return (
     <div className="space-y-10">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div className="space-y-1">
           <h1 className="text-4xl font-bold font-outfit text-primary">
-            Applications Board
+            {t("heading")}
           </h1>
           <p className="text-foreground/60 font-medium">
-            Review and process submissions from across the country.
+            {t("desc")}
           </p>
         </div>
 
@@ -37,7 +40,7 @@ export default function AdminApplications() {
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search ID or Org..."
+              placeholder={t("search")}
               className="pl-12 pr-4 py-3 bg-primary/[0.02] border border-transparent focus:border-primary/20 focus:bg-white rounded-2xl text-sm transition-all outline-none w-64"
             />
           </div>
@@ -53,7 +56,7 @@ export default function AdminApplications() {
                     : "text-foreground/40 hover:bg-primary/5 hover:text-primary",
                 )}
               >
-                {filterOption}
+                {t(`filters.${filterOption.toUpperCase()}`)}
               </button>
             ))}
           </div>
@@ -71,10 +74,10 @@ export default function AdminApplications() {
               <Search size={40} />
             </div>
             <h3 className="text-2xl font-bold font-outfit text-primary/40">
-              No applications found
+              {t("noApplications")}
             </h3>
             <p className="text-foreground/30 font-medium">
-              Try adjusting your filters or search terms.
+              {t("noApplicationsDesc")}
             </p>
           </div>
         )}
