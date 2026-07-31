@@ -57,18 +57,18 @@ const getCategory = (item: NewsItem) => {
     const combined = titleLower + " " + contentLower;
 
     if (combined.includes("hajj") || combined.includes("umrah") || combined.includes("ramadan") || combined.includes("eid")) {
-        return { label: "Hajj & Faith", color: "bg-amber-500/10 text-amber-400 border-amber-500/20" };
+        return { label: "Hajj & Faith", color: "bg-amber-500/20 text-amber-300 border-amber-500/30" };
     }
     if (combined.includes("health") || combined.includes("relief") || combined.includes("food") || combined.includes("community") || combined.includes("welfare")) {
-        return { label: "Community & Welfare", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" };
+        return { label: "Community & Welfare", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30" };
     }
     if (combined.includes("education") || combined.includes("school") || combined.includes("scholarship") || combined.includes("youth")) {
-        return { label: "Education", color: "bg-blue-500/10 text-blue-400 border-blue-500/20" };
+        return { label: "Education", color: "bg-blue-500/20 text-blue-300 border-blue-500/30" };
     }
     if (combined.includes("statement") || combined.includes("press") || combined.includes("council") || combined.includes("official")) {
-        return { label: "Press Release", color: "bg-purple-500/10 text-purple-400 border-purple-500/20" };
+        return { label: "Press Release", color: "bg-purple-500/20 text-purple-300 border-purple-500/30" };
     }
-    return { label: "General News", color: "bg-teal-500/10 text-teal-400 border-teal-500/20" };
+    return { label: "General News", color: "bg-teal-500/20 text-teal-300 border-teal-500/30" };
 };
 
 export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps) {
@@ -139,32 +139,40 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-emerald-500 selection:text-white pb-24">
-            {/* 1. HERO SECTION */}
-            <div className="relative overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 pt-28 pb-20 px-6 border-b border-white/5">
-                {/* Ambient Glows */}
-                <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-emerald-500/10 blur-[140px] rounded-full pointer-events-none" />
-                <div className="absolute top-10 right-10 w-96 h-96 bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
+            {/* 1. DISTINCT HIGH-IMPACT HERO SECTION */}
+            <section className="relative min-h-[70vh] flex flex-col justify-between overflow-hidden pt-28 pb-20 px-6 bg-gradient-to-br from-slate-950 via-emerald-950/40 to-slate-950 border-b border-emerald-500/20 shadow-2xl">
+                {/* Background Hero Banner Image with Overlays */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=2000"
+                        alt="SUPKEM Newsroom"
+                        className="w-full h-full object-cover opacity-20 scale-105 filter blur-[2px]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-slate-950/90" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-950/60 via-transparent to-amber-950/40" />
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-emerald-500/15 blur-[160px] rounded-full pointer-events-none" />
+                </div>
 
-                <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-                    {/* Top Navigation Pill */}
+                <div className="max-w-7xl mx-auto w-full relative z-10 space-y-10">
+                    {/* Top Navigation Bar Pill */}
                     <div className="flex items-center justify-between">
                         <Link
                             href="/news"
-                            className="inline-flex items-center gap-2 text-slate-300 hover:text-emerald-400 transition-all font-semibold text-xs tracking-wider uppercase bg-white/5 hover:bg-white/10 px-5 py-2.5 rounded-full border border-white/10 backdrop-blur-md shadow-lg"
+                            className="inline-flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition-all font-semibold text-xs tracking-wider uppercase bg-slate-900/80 hover:bg-slate-800 px-5 py-2.5 rounded-full border border-slate-700/80 backdrop-blur-md shadow-xl"
                         >
                             <ArrowLeft size={14} className="text-emerald-400" /> {tSafe(tHero, "backToNews", "Back to News Hub")}
                         </Link>
 
-                        <div className="hidden sm:flex items-center gap-3 text-xs font-semibold text-slate-400">
-                            <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                <ShieldCheck size={14} /> Official Media Portal
+                        <div className="flex items-center gap-3 text-xs font-semibold">
+                            <span className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 backdrop-blur-md shadow-md">
+                                <ShieldCheck size={14} className="text-emerald-400" /> SUPKEM Media Secretariat
                             </span>
                         </div>
                     </div>
 
-                    {/* Hero Headline Content */}
-                    <div className="text-center max-w-4xl mx-auto space-y-6 pt-4">
-                        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold tracking-[0.2em] uppercase shadow-inner mx-auto">
+                    {/* Central Floating Glassmorphic Hero Box */}
+                    <div className="max-w-4xl mx-auto text-center space-y-8 p-8 md:p-14 rounded-[40px] bg-slate-900/70 border border-white/10 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.6)]">
+                        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold tracking-[0.2em] uppercase shadow-lg mx-auto backdrop-blur-md">
                             <Sparkles size={14} className="animate-pulse text-amber-400" />
                             {tSafe(tHero, "badge", "SUPKEM Press & Official Archives")}
                         </div>
@@ -176,51 +184,45 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             </span>
                         </h1>
 
-                        <p className="text-base md:text-xl text-slate-300 leading-relaxed font-normal max-w-3xl mx-auto">
+                        <p className="text-base md:text-xl text-slate-300 leading-relaxed font-normal max-w-2xl mx-auto">
                             {tSafe(tHero, "subtitle", "Explore verified press releases, community bulletins, strategic updates, and official statements from the Supreme Council of Kenya Muslims.")}
                         </p>
-                    </div>
 
-                    {/* Stats Highlights Bar */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto pt-6">
-                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl flex items-center gap-4 hover:border-emerald-500/30 transition-all">
-                            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0">
-                                <BookOpen size={22} />
+                        {/* Live Metrics Row Inside Hero */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/10">
+                            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center gap-3">
+                                <BookOpen size={20} className="text-emerald-400" />
+                                <div className="text-left">
+                                    <div className="text-xl font-bold font-outfit text-white">{initialNewsItems.length}</div>
+                                    <div className="text-[11px] text-slate-400 font-medium">{tSafe(tHero, "totalArticles", "Published Articles")}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-2xl font-bold font-outfit text-white">{initialNewsItems.length}</div>
-                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "totalArticles", "Published Articles")}</div>
-                            </div>
-                        </div>
 
-                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl flex items-center gap-4 hover:border-emerald-500/30 transition-all">
-                            <div className="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
-                                <MapPin size={22} />
+                            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center gap-3">
+                                <MapPin size={20} className="text-amber-400" />
+                                <div className="text-left">
+                                    <div className="text-xl font-bold font-outfit text-white">47 Counties</div>
+                                    <div className="text-[11px] text-slate-400 font-medium">{tSafe(tHero, "countiesCovered", "Counties Covered")}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div className="text-2xl font-bold font-outfit text-white">47 Counties</div>
-                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "countiesCovered", "Counties Covered")}</div>
-                            </div>
-                        </div>
 
-                        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-xl flex items-center gap-4 hover:border-emerald-500/30 transition-all">
-                            <div className="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center shrink-0">
-                                <Newspaper size={22} />
-                            </div>
-                            <div>
-                                <div className="text-2xl font-bold font-outfit text-white">100% Verified</div>
-                                <div className="text-xs text-slate-400 font-medium">{tSafe(tHero, "pressReleases", "Verified Press Bulletins")}</div>
+                            <div className="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center gap-3">
+                                <Newspaper size={20} className="text-purple-400" />
+                                <div className="text-left">
+                                    <div className="text-xl font-bold font-outfit text-white">100% Verified</div>
+                                    <div className="text-[11px] text-slate-400 font-medium">{tSafe(tHero, "pressReleases", "Verified Press Bulletins")}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            {/* 2. SEARCH & FILTER TOOLBAR */}
-            <div className="max-w-7xl mx-auto px-6 -mt-8 relative z-20">
-                <div className="p-4 md:p-6 rounded-3xl bg-slate-900/90 border border-slate-700/80 backdrop-blur-2xl shadow-2xl space-y-4">
+            {/* 2. SEARCH & FILTER TOOLBAR (FLOATING OVER THE HERO BOUNDARY) */}
+            <div className="max-w-7xl mx-auto px-6 -mt-10 relative z-30">
+                <div className="p-5 md:p-6 rounded-3xl bg-slate-900 border border-slate-800 backdrop-blur-2xl shadow-[0_15px_35px_rgba(0,0,0,0.5)] space-y-4">
                     <div className="flex flex-col md:flex-row items-center gap-4">
-                        {/* Search Bar */}
+                        {/* Search Input */}
                         <div className="relative flex-1 w-full">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
@@ -228,7 +230,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder={tSafe(tHero, "searchPlaceholder", "Search articles by title, keywords, or topics...")}
-                                className="w-full bg-slate-950 border border-slate-700 focus:border-emerald-500 text-white rounded-2xl pl-12 pr-10 py-3.5 text-sm transition-all outline-none placeholder:text-slate-500"
+                                className="w-full bg-slate-950 border border-slate-700/80 focus:border-emerald-500 text-white rounded-2xl pl-12 pr-10 py-3.5 text-sm transition-all outline-none placeholder:text-slate-500 shadow-inner"
                             />
                             {searchQuery && (
                                 <button
@@ -240,13 +242,13 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             )}
                         </div>
 
-                        {/* View Mode Toggle */}
-                        <div className="flex items-center gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-700 shrink-0 self-end md:self-auto">
+                        {/* View Switcher */}
+                        <div className="flex items-center gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 shrink-0 self-end md:self-auto">
                             <button
                                 onClick={() => setViewMode("grid")}
                                 className={`p-2.5 rounded-xl transition-all ${
                                     viewMode === "grid"
-                                        ? "bg-emerald-500 text-white shadow-lg"
+                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
                                         : "text-slate-400 hover:text-white"
                                 }`}
                                 title="Grid View"
@@ -257,7 +259,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                 onClick={() => setViewMode("list")}
                                 className={`p-2.5 rounded-xl transition-all ${
                                     viewMode === "list"
-                                        ? "bg-emerald-500 text-white shadow-lg"
+                                        ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20"
                                         : "text-slate-400 hover:text-white"
                                 }`}
                                 title="List View"
@@ -267,7 +269,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                         </div>
                     </div>
 
-                    {/* Category Filter Pills */}
+                    {/* Filter Categories */}
                     <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 scrollbar-none">
                         <span className="text-xs font-semibold text-slate-400 flex items-center gap-1.5 pr-2 shrink-0">
                             <Filter size={14} className="text-emerald-400" /> Filter:
@@ -294,7 +296,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
 
             {/* 3. MAIN CONTENT CONTAINER */}
             <div className="max-w-7xl mx-auto px-6 pt-12 space-y-12">
-                {/* Results Meta Info */}
+                {/* Results Meta Header */}
                 <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
                     <span>
                         {tSafe(
@@ -319,7 +321,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
 
                 {/* FEATURED SPOTLIGHT ARTICLE (When no search filter is active) */}
                 {featuredArticle && (
-                    <div className="group relative rounded-[32px] bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 overflow-hidden shadow-2xl hover:border-emerald-500/40 transition-all duration-500">
+                    <div className="group relative rounded-[32px] bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl hover:border-emerald-500/40 transition-all duration-500">
                         <Link href={`/news/${featuredArticle.slug}`} className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
                             {/* Featured Image Column */}
                             <div className="lg:col-span-7 relative min-h-[320px] md:min-h-[420px] overflow-hidden bg-slate-950">
@@ -420,7 +422,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     <Link
                                         key={item.id}
                                         href={`/news/${item.slug}`}
-                                        className="group p-6 rounded-3xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col md:flex-row gap-6 shadow-lg"
+                                        className="group p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col md:flex-row gap-6 shadow-lg"
                                     >
                                         <div className="w-full md:w-64 h-48 rounded-2xl bg-slate-950 overflow-hidden relative shrink-0">
                                             <Image
@@ -471,7 +473,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             return (
                                 <div
                                     key={item.id}
-                                    className="group rounded-3xl bg-slate-900/90 border border-slate-800 overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between shadow-xl"
+                                    className="group rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between shadow-xl"
                                 >
                                     <Link href={`/news/${item.slug}`} className="flex flex-col h-full">
                                         <div className="aspect-[16/10] bg-slate-950 relative overflow-hidden shrink-0">
