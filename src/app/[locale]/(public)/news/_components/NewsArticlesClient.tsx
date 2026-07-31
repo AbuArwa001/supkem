@@ -24,6 +24,8 @@ import {
 import { API_BASE_URL } from "@/lib/api";
 import { NewsItem } from "@/app/[locale]/(public)/news/_services/newsService";
 import { useTranslations } from "next-intl";
+import { SocialShareButtons } from "@/components/SocialShareButtons";
+import { SocialFollowLinks } from "@/components/SocialFollowLinks";
 
 interface NewsArticlesClientProps {
     initialNewsItems: NewsItem[];
@@ -154,8 +156,8 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                 </div>
 
                 <div className="max-w-7xl mx-auto w-full relative z-10 space-y-10">
-                    {/* Top Navigation Bar Pill */}
-                    <div className="flex items-center justify-between">
+                    {/* Top Navigation Bar Pill & Social Follow Bar */}
+                    <div className="flex flex-wrap items-center justify-between gap-4">
                         <Link
                             href="/news"
                             className="inline-flex items-center gap-2 text-slate-200 hover:text-emerald-400 transition-all font-semibold text-xs tracking-wider uppercase bg-slate-900/80 hover:bg-slate-800 px-5 py-2.5 rounded-full border border-slate-700/80 backdrop-blur-md shadow-xl"
@@ -163,10 +165,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                             <ArrowLeft size={14} className="text-emerald-400" /> {tSafe(tHero, "backToNews", "Back to News Hub")}
                         </Link>
 
-                        <div className="flex items-center gap-3 text-xs font-semibold">
-                            <span className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 backdrop-blur-md shadow-md">
-                                <ShieldCheck size={14} className="text-emerald-400" /> SUPKEM Media Secretariat
-                            </span>
+                        {/* Official Social Media Follow Links */}
+                        <div className="flex items-center gap-3">
+                            <span className="hidden lg:inline-block text-xs font-bold text-slate-400 uppercase tracking-wider">Follow Us:</span>
+                            <SocialFollowLinks variant="icons" />
                         </div>
                     </div>
 
@@ -322,28 +324,30 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                 {/* FEATURED SPOTLIGHT ARTICLE (When no search filter is active) */}
                 {featuredArticle && (
                     <div className="group relative rounded-[32px] bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl hover:border-emerald-500/40 transition-all duration-500">
-                        <Link href={`/news/${featuredArticle.slug}`} className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
                             {/* Featured Image Column */}
                             <div className="lg:col-span-7 relative min-h-[320px] md:min-h-[420px] overflow-hidden bg-slate-950">
-                                {(() => {
-                                    const extractedImg = extractFirstImage(featuredArticle.content);
-                                    const imageSource = featuredArticle.featured_image
-                                        ? (featuredArticle.featured_image.startsWith('http')
-                                            ? featuredArticle.featured_image
-                                            : `${API_BASE_URL}${featuredArticle.featured_image.startsWith('/') ? '' : '/'}${featuredArticle.featured_image}`)
-                                        : (extractedImg || "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=1200");
+                                <Link href={`/news/${featuredArticle.slug}`}>
+                                    {(() => {
+                                        const extractedImg = extractFirstImage(featuredArticle.content);
+                                        const imageSource = featuredArticle.featured_image
+                                            ? (featuredArticle.featured_image.startsWith('http')
+                                                ? featuredArticle.featured_image
+                                                : `${API_BASE_URL}${featuredArticle.featured_image.startsWith('/') ? '' : '/'}${featuredArticle.featured_image}`)
+                                            : (extractedImg || "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=1200");
 
-                                    return (
-                                        <Image
-                                            src={imageSource}
-                                            alt={featuredArticle.title}
-                                            fill
-                                            priority
-                                            className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                        />
-                                    );
-                                })()}
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-950/90" />
+                                        return (
+                                            <Image
+                                                src={imageSource}
+                                                alt={featuredArticle.title}
+                                                fill
+                                                priority
+                                                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                                            />
+                                        );
+                                    })()}
+                                </Link>
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-slate-950/90 pointer-events-none" />
 
                                 <div className="absolute top-6 left-6 flex items-center gap-2">
                                     <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-white font-black text-[10px] uppercase tracking-widest shadow-lg flex items-center gap-1.5">
@@ -374,32 +378,45 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                         </span>
                                     </div>
 
-                                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-outfit text-white leading-tight group-hover:text-emerald-300 transition-colors">
-                                        {featuredArticle.title}
-                                    </h2>
+                                    <Link href={`/news/${featuredArticle.slug}`}>
+                                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold font-outfit text-white leading-tight group-hover:text-emerald-300 transition-colors">
+                                            {featuredArticle.title}
+                                        </h2>
+                                    </Link>
 
                                     <p className="text-slate-300 text-sm md:text-base leading-relaxed line-clamp-4 font-normal">
                                         {cleanContent(featuredArticle.content)}
                                     </p>
                                 </div>
 
-                                <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
-                                            SP
-                                        </div>
-                                        <div>
-                                            <div className="text-xs font-bold text-white">SUPKEM Press</div>
-                                            <div className="text-[10px] text-slate-400">Official Bulletin</div>
-                                        </div>
-                                    </div>
+                                {/* Social Sharing Buttons for Featured Story */}
+                                <div className="space-y-4 pt-4 border-t border-slate-800">
+                                    <SocialShareButtons
+                                        title={featuredArticle.title}
+                                        url={typeof window !== "undefined" ? `${window.location.origin}/news/${featuredArticle.slug}` : undefined}
+                                    />
 
-                                    <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all">
-                                        {tSafe(tHero, "readStory", "Read Full Story")} <ArrowRight size={16} />
-                                    </span>
+                                    <div className="flex items-center justify-between pt-2">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                                                SP
+                                            </div>
+                                            <div>
+                                                <div className="text-xs font-bold text-white">SUPKEM Press</div>
+                                                <div className="text-[10px] text-slate-400">Official Bulletin</div>
+                                            </div>
+                                        </div>
+
+                                        <Link
+                                            href={`/news/${featuredArticle.slug}`}
+                                            className="text-xs font-bold text-emerald-400 uppercase tracking-widest flex items-center gap-2 group-hover:gap-3 transition-all"
+                                        >
+                                            {tSafe(tHero, "readStory", "Read Full Story")} <ArrowRight size={16} />
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
-                        </Link>
+                        </div>
                     </div>
                 )}
 
@@ -419,12 +436,11 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
 
                             if (viewMode === "list") {
                                 return (
-                                    <Link
+                                    <div
                                         key={item.id}
-                                        href={`/news/${item.slug}`}
                                         className="group p-6 rounded-3xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all flex flex-col md:flex-row gap-6 shadow-lg"
                                     >
-                                        <div className="w-full md:w-64 h-48 rounded-2xl bg-slate-950 overflow-hidden relative shrink-0">
+                                        <Link href={`/news/${item.slug}`} className="w-full md:w-64 h-48 rounded-2xl bg-slate-950 overflow-hidden relative shrink-0">
                                             <Image
                                                 src={imageSource}
                                                 alt={item.title}
@@ -434,7 +450,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                             <span className={`absolute top-3 left-3 px-3 py-1 rounded-full text-[10px] font-bold uppercase border backdrop-blur-md ${category.color}`}>
                                                 {category.label}
                                             </span>
-                                        </div>
+                                        </Link>
 
                                         <div className="flex-1 flex flex-col justify-between space-y-4">
                                             <div className="space-y-3">
@@ -450,23 +466,31 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                     </span>
                                                 </div>
 
-                                                <h3 className="text-xl font-bold font-outfit text-white group-hover:text-emerald-400 transition-colors">
-                                                    {item.title}
-                                                </h3>
+                                                <Link href={`/news/${item.slug}`}>
+                                                    <h3 className="text-xl font-bold font-outfit text-white group-hover:text-emerald-400 transition-colors">
+                                                        {item.title}
+                                                    </h3>
+                                                </Link>
 
                                                 <p className="text-slate-300 text-sm leading-relaxed line-clamp-2">
                                                     {cleanContent(item.content)}
                                                 </p>
                                             </div>
 
-                                            <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-                                                <span className="text-xs text-slate-400 font-medium">SUPKEM Press Secretariat</span>
-                                                <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+                                            <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-800">
+                                                <SocialShareButtons
+                                                    title={item.title}
+                                                    url={typeof window !== "undefined" ? `${window.location.origin}/news/${item.slug}` : undefined}
+                                                />
+                                                <Link
+                                                    href={`/news/${item.slug}`}
+                                                    className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 hover:gap-2.5 transition-all"
+                                                >
                                                     {tSafe(tNews, "details", "Details")} <ChevronRight size={14} />
-                                                </span>
+                                                </Link>
                                             </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 );
                             }
 
@@ -475,8 +499,8 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                     key={item.id}
                                     className="group rounded-3xl bg-slate-900 border border-slate-800 overflow-hidden hover:border-emerald-500/40 transition-all flex flex-col justify-between shadow-xl"
                                 >
-                                    <Link href={`/news/${item.slug}`} className="flex flex-col h-full">
-                                        <div className="aspect-[16/10] bg-slate-950 relative overflow-hidden shrink-0">
+                                    <div className="flex flex-col h-full">
+                                        <Link href={`/news/${item.slug}`} className="aspect-[16/10] bg-slate-950 relative overflow-hidden shrink-0">
                                             <Image
                                                 src={imageSource}
                                                 alt={item.title}
@@ -487,7 +511,7 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                             <span className={`absolute top-4 left-4 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border backdrop-blur-md ${category.color}`}>
                                                 {category.label}
                                             </span>
-                                        </div>
+                                        </Link>
 
                                         <div className="p-6 space-y-4 flex flex-col flex-1 justify-between">
                                             <div className="space-y-3">
@@ -503,23 +527,34 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                                                     </span>
                                                 </div>
 
-                                                <h3 className="text-xl font-bold font-outfit text-white group-hover:text-emerald-300 transition-colors leading-snug">
-                                                    {item.title}
-                                                </h3>
+                                                <Link href={`/news/${item.slug}`}>
+                                                    <h3 className="text-xl font-bold font-outfit text-white group-hover:text-emerald-300 transition-colors leading-snug">
+                                                        {item.title}
+                                                    </h3>
+                                                </Link>
 
                                                 <p className="text-slate-300 text-sm leading-relaxed line-clamp-3">
                                                     {cleanContent(item.content)}
                                                 </p>
                                             </div>
 
-                                            <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs font-bold">
-                                                <span className="text-slate-400 font-medium">SUPKEM Press</span>
-                                                <span className="text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
-                                                    {tSafe(tNews, "details", "Details")} <ArrowRight size={14} />
-                                                </span>
+                                            <div className="pt-4 border-t border-slate-800 space-y-3">
+                                                <SocialShareButtons
+                                                    title={item.title}
+                                                    url={typeof window !== "undefined" ? `${window.location.origin}/news/${item.slug}` : undefined}
+                                                />
+                                                <div className="flex items-center justify-between text-xs font-bold pt-1">
+                                                    <span className="text-slate-400 font-medium">SUPKEM Press</span>
+                                                    <Link
+                                                        href={`/news/${item.slug}`}
+                                                        className="text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 group-hover:gap-2.5 transition-all"
+                                                    >
+                                                        {tSafe(tNews, "details", "Details")} <ArrowRight size={14} />
+                                                    </Link>
+                                                </div>
                                             </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 </div>
                             );
                         })}
@@ -558,8 +593,8 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                     </div>
                 )}
 
-                {/* 4. PRESS & COMMUNICATIONS CTA BANNER */}
-                <div className="mt-20 p-8 md:p-12 rounded-[32px] bg-gradient-to-r from-emerald-950/80 via-slate-900 to-amber-950/60 border border-emerald-500/20 backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+                {/* 4. PRESS & COMMUNICATIONS CTA BANNER + SOCIAL CHANNELS */}
+                <div className="mt-20 p-8 md:p-12 rounded-[32px] bg-gradient-to-r from-emerald-950/80 via-slate-900 to-amber-950/60 border border-emerald-500/20 backdrop-blur-2xl shadow-2xl relative overflow-hidden space-y-8">
                     <div className="absolute -right-10 -bottom-10 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div className="space-y-3 text-center md:text-left max-w-2xl">
@@ -580,6 +615,10 @@ export function NewsArticlesClient({ initialNewsItems }: NewsArticlesClientProps
                         >
                             {tSafe(tHero, "contactMedia", "Contact Communications Secretariat")}
                         </Link>
+                    </div>
+
+                    <div className="relative z-10 pt-6 border-t border-slate-800/80">
+                        <SocialFollowLinks variant="pills" />
                     </div>
                 </div>
             </div>
