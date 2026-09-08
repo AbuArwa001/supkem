@@ -23,6 +23,10 @@
     "noNewsDesc": "Check back soon for latest announcements from SUPKEM.",
     "viewAll": "View All News Articles"
   },
+  "socialWall": {
+    "title": "Live Social Media Feed & Aggregator",
+    "subtitle": "Real-time updates, announcements, photos, and video briefings aggregated directly from SUPKEM's official Facebook, X (Twitter), and Instagram accounts."
+  },
   "gallery": {
     "title": "Image Gallery",
     "clickToView": "Click to view",

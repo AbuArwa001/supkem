@@ -11,8 +11,8 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
     const socialChannels = [
         {
             name: "X (Twitter)",
-            handle: "@SUPKEM_Official",
-            url: "https://x.com/SUPKEM_Official",
+            handle: "@SUPKEM1",
+            url: "https://x.com/SUPKEM1",
             color: "bg-slate-900 border-slate-700 hover:border-white text-white",
             icon: (
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -22,8 +22,8 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
         },
         {
             name: "Facebook",
-            handle: "SUPKEM Official",
-            url: "https://facebook.com/SUPKEM.Official",
+            handle: "Supreme Council of Kenya Muslims",
+            url: "https://www.facebook.com/p/Supreme-Council-of-Kenya-Muslims-100079747610399/",
             color: "bg-blue-600/20 border-blue-500/30 hover:bg-blue-600 text-blue-300 hover:text-white",
             icon: (
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -33,8 +33,8 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
         },
         {
             name: "Instagram",
-            handle: "@supkem_official",
-            url: "https://instagram.com/supkem_official",
+            handle: "@supkem_kenya",
+            url: "https://www.instagram.com/supkem_kenya/",
             color: "bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-amber-500/20 border-pink-500/30 text-pink-300 hover:from-purple-600 hover:to-pink-600 hover:text-white",
             icon: (
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -44,8 +44,8 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
         },
         {
             name: "TikTok",
-            handle: "@supkem_official",
-            url: "https://tiktok.com/@supkem_official",
+            handle: "@supkem_kenya",
+            url: "https://www.tiktok.com/@supkem_kenya",
             color: "bg-cyan-500/20 border-cyan-500/30 hover:bg-cyan-600 text-cyan-300 hover:text-white",
             icon: (
                 <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">

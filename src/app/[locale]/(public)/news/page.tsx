@@ -2,6 +2,7 @@ import { FeaturedNews } from "@/app/[locale]/(public)/news/_components/FeaturedN
 import { NewsHero } from "@/app/[locale]/(public)/news/_components/NewsHero";
 import { VideoBriefings } from "@/app/[locale]/(public)/news/_components/VideoBriefings";
 import { NewsPapersSection } from "@/app/[locale]/(public)/news/_components/NewsPapersSection";
+import { NewsSocialWallSection } from "@/app/[locale]/(public)/news/_components/NewsSocialWallSection";
 
 import { getNews, getVideos, getNewsPapers } from "@/app/[locale]/(public)/news/_services/newsService";
 
@@ -20,6 +21,7 @@ export default async function NewsPage() {
             <NewsHero />
             <NewsPapersSection newsPapers={newsPapers} />
             <VideoBriefings videos={videos} />
+            <NewsSocialWallSection />
             <FeaturedNews newsItems={newsItems} />
         </div>
     );

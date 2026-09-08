@@ -73,6 +73,14 @@
     "img3": "Strategic Planning",
     "img4": "Impact Initiatives"
   },
+  "socialWall": {
+    "badge": "Live Community Stream",
+    "title": "SUPKEM Live Social Wall",
+    "subtitle": "Direct live updates, official announcements, photos, and video briefings aggregated from SUPKEM's verified social media channels.",
+    "sync": "Sync Feed",
+    "allFeeds": "All Channels",
+    "followUs": "Follow Official Channels"
+  },
   "cta": {
     "heading": "Start Your",
     "subheading": "Journey",

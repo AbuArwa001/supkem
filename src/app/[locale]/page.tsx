@@ -3,6 +3,7 @@ import { Partners } from "./_components/Partners";
 import { ProgramAreas } from "./_components/ProgramAreas";
 import { Services } from "./_components/Services";
 import { HomeGallery } from "./_components/HomeGallery";
+import { SocialWallSection } from "./_components/SocialWallSection";
 import { CTA } from "./_components/CTA";
 
 /**
@@ -17,6 +18,7 @@ export default function Home() {
       <ProgramAreas />
       <Services />
       <HomeGallery />
+      <SocialWallSection />
       <CTA />
     </main>
   );
