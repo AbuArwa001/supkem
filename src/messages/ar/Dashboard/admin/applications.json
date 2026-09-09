@@ -6,12 +6,14 @@
     "ALL": "الكل",
     "PENDING": "قيد الانتظار",
     "APPROVED": "تمت الموافقة",
-    "REJECTED": "مرفوض"
+    "REJECTED": "مرفوض",
+    "SUBMITTED": "مُقدم"
   },
   "reviewDetails": "مراجعة التفاصيل",
   "lastAction": "الإجراء الأخير",
   "adminReview": "مراجعة إدارية",
   "submittedOn": "تاريخ التقديم",
   "noApplications": "لا توجد طلبات",
-  "noApplicationsDesc": "حاول تعديل الفلاتر أو مصطلحات البحث."
+  "noApplicationsDesc": "حاول تعديل الفلاتر أو مصطلحات البحث.",
+  "type": "طلب عام"
 }

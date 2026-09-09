@@ -6,12 +6,14 @@
     "ALL": "ALL",
     "PENDING": "PENDING",
     "APPROVED": "APPROVED",
-    "REJECTED": "REJECTED"
+    "REJECTED": "REJECTED",
+    "SUBMITTED": "SUBMITTED"
   },
   "reviewDetails": "Review Details",
   "lastAction": "LAST ACTION",
   "adminReview": "Admin Review",
   "submittedOn": "Submitted on",
   "noApplications": "No applications found",
-  "noApplicationsDesc": "Try adjusting your filters or search terms."
+  "noApplicationsDesc": "Try adjusting your filters or search terms.",
+  "type": "General Application"
 }

@@ -21,13 +21,10 @@ export default function AdminApplications() {
   const t = useTranslations("Dashboard.admin.applications");
 
   return (
-    <div className="space-y-10 relative">
-      <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 blur-[100px] -z-10 rounded-full" />
-      <div className="absolute top-40 -left-20 w-72 h-72 bg-secondary/10 blur-[80px] -z-10 rounded-full" />
-      
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 relative z-10">
+    <div className="space-y-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
         <div className="space-y-2">
-          <h1 className="text-4xl lg:text-5xl font-black font-outfit tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-accent drop-shadow-sm">
+          <h1 className="text-4xl lg:text-5xl font-black font-outfit tracking-tight text-primary drop-shadow-sm">
             {t("heading")}
           </h1>
           <p className="text-foreground/60 font-medium text-lg max-w-xl">
@@ -35,8 +32,8 @@ export default function AdminApplications() {
           </p>
         </div>
 
-        <div className="flex items-center gap-4 glass p-2 rounded-[24px] shadow-xl shadow-primary/5 hover:shadow-primary/10 transition-all duration-500">
-          <div className="relative group pl-2">
+        <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 bg-white p-2 rounded-[24px] shadow-xl shadow-primary/5 border border-primary/5">
+          <div className="relative group flex-1 lg:flex-none">
             <Search
               size={18}
               className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 group-focus-within:text-primary transition-colors"
@@ -45,10 +42,10 @@ export default function AdminApplications() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder={t("search")}
-              className="pl-12 pr-4 py-3.5 bg-white/50 backdrop-blur-md border border-transparent focus:border-primary/30 focus:bg-white focus:ring-4 focus:ring-primary/10 rounded-[18px] text-sm transition-all duration-300 outline-none w-64 lg:w-72 font-medium"
+              className="pl-12 pr-4 py-3.5 bg-primary/[0.02] border border-transparent focus:border-primary/20 focus:bg-white rounded-[18px] text-sm transition-all duration-300 outline-none w-full lg:w-72 font-medium"
             />
           </div>
-          <div className="flex items-center gap-1 pr-2">
+          <div className="flex items-center gap-1">
             {FILTER_OPTIONS.map((filterOption) => (
               <button
                 key={filterOption}

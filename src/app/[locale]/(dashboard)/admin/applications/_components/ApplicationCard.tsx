@@ -48,9 +48,9 @@ export default function ApplicationCard({
           <FileText size={28} className="relative z-10" />
         </div>
         <div className="space-y-1">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer">
-              {application.display_id} - {application.service_name}
+              {application.display_id}{application.service_name ? ` - ${application.service_name}` : ""}
             </h4>
             <span
               className={cn(
