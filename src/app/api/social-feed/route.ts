@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "@/components/social/socialData";
+import { OFFICIAL_CHANNELS } from "@/components/social/socialData";
 import { SocialPost } from "@/components/social/types";
 import { fetchSocialSettings } from "@/lib/socialSettingsServer";
 import {
@@ -100,17 +100,7 @@ export async function GET(request: Request) {
       }
     }
 
-    // 3. Fallback to curated baseline posts if live feeds are currently empty
     let allPosts: SocialPost[] = [...liveSocialPosts];
-
-    if (allPosts.length < 3) {
-      // Deduplicate fallback posts
-      INITIAL_SOCIAL_POSTS.forEach((fallback) => {
-        if (!allPosts.some((p) => p.id === fallback.id)) {
-          allPosts.push(fallback);
-        }
-      });
-    }
 
     // Only include posts from channels that exist and are active in settings
     const activeChannelIds = new Set<string>();

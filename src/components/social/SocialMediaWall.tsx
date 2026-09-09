@@ -9,7 +9,7 @@ import {
   SocialWallConfig,
   WidgetProvider,
 } from "./types";
-import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "./socialData";
+import { OFFICIAL_CHANNELS } from "./socialData";
 import { SocialPostCard } from "./SocialPostCard";
 import { SocialMediaLightbox } from "./SocialMediaLightbox";
 import { PlatformIcon } from "./SocialPlatformIcons";
@@ -41,11 +41,10 @@ export function SocialMediaWall({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeLightboxPost, setActiveLightboxPost] = useState<SocialPost | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [posts, setPosts] = useState<SocialPost[]>(INITIAL_SOCIAL_POSTS);
+  const [posts, setPosts] = useState<SocialPost[]>([]);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [dynamicSettings, setDynamicSettings] = useState<SocialMediaSettings | null>(null);
   const [isPending, startTransition] = useTransition();
-
-
 
   // Immediate fetch of social settings on mount for fast resolution
   React.useEffect(() => {
@@ -72,12 +71,19 @@ export function SocialMediaWall({
         if (data?.settings) {
           setDynamicSettings(data.settings);
         }
-        if (Array.isArray(data?.posts) && data.posts.length > 0) {
+        if (Array.isArray(data?.posts)) {
           setPosts(data.posts);
+        } else {
+          setPosts([]);
         }
+      } else {
+        setPosts([]);
       }
     } catch (err) {
       console.error("Failed to load dynamic social feed:", err);
+      setPosts([]);
+    } finally {
+      setIsInitialLoading(false);
     }
   }, []);
 
@@ -210,6 +216,11 @@ export function SocialMediaWall({
   const primaryCtaChannel = useMemo(() => {
     return activeHeaderChannels[0] || null;
   }, [activeHeaderChannels]);
+
+  // If initial fetch finished and there are no live posts from the API, do not render the section
+  if (!isInitialLoading && posts.length === 0) {
+    return null;
+  }
 
   return (
     <section className={`relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden ${className}`}>
