@@ -26,6 +26,7 @@ export function useAdminSidebarLogic() {
     { name: t("organizations"), href: "/admin/organizations", icon: Building2 },
     { name: t("applications"), href: "/admin/applications", icon: FileText },
     { name: t("certificates"), href: "/admin/certificates", icon: Award },
+    { name: "Letters", href: "/admin/letters", icon: FileText },
     { name: t("newsCms"), href: "/admin/news", icon: FileText },
     { name: t("newsPapers"), href: "/admin/news-papers", icon: FileText },
     { name: t("leadership"), href: "/admin/leadership", icon: Users },

@@ -15,21 +15,12 @@ import { cn } from "@/lib/utils";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-const LETTER_KEYWORDS = ["hajj", "umrah", "study", "abroad", "visa", "travel"];
-
-function isLetter(cert: any): boolean {
-  const serviceName =
-    cert?.application_detail?.service_name?.toLowerCase() || "";
-  return LETTER_KEYWORDS.some((kw) => serviceName.includes(kw));
-}
-
 export default function LettersPage() {
   const { data, error, isLoading } = useSWR(
-    "/applications/certifications/",
+    "/applications/letters/",
     fetcher,
   );
-  const allCerts = Array.isArray(data) ? data : data?.results || [];
-  const letters = allCerts.filter(isLetter);
+  const letters = Array.isArray(data) ? data : data?.results || [];
 
   // Group letters by service
   const groupedLetters = letters.reduce((acc: any, letter: any) => {

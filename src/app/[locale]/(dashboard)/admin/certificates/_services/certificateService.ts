@@ -12,6 +12,16 @@ export const certificateService = {
     }
   },
 
+  fetchLetters: async (): Promise<Certificate[]> => {
+    try {
+      const res = await api.get("/applications/letters/");
+      return res.data.results || res.data;
+    } catch (err) {
+      console.error("Failed to fetch letters", err);
+      return [];
+    }
+  },
+
   fetchEligibleApplications: async (): Promise<EligibleApplication[]> => {
     try {
       const res = await api.get("/applications/applications/approved_no_cert/");
