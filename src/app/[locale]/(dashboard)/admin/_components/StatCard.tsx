@@ -10,7 +10,7 @@ interface StatCardProps {
   label: string;
   value: string | number;
   trend?: string;
-  color: string;
+  color?: string;
   delay: number;
 }
 
@@ -23,53 +23,102 @@ export const StatCard = ({
   delay,
 }: StatCardProps) => {
   const t = useTranslations("Dashboard.admin.metrics");
-  const tc = useTranslations("Dashboard.common");
 
-  // Map API labels to translation keys
-  const getLabel = (label: string) => {
-    switch (label) {
+  const getLabel = (lbl: string) => {
+    switch (lbl) {
       case "Organizations":
         return t("organizations");
       case "Total Users":
         return t("users");
       case "Applications":
         return t("applications");
+      case "Certificates":
+        return t("certificates");
       default:
-        return label;
+        return lbl;
     }
   };
+
+  const getGradientTheme = (lbl: string) => {
+    switch (lbl) {
+      case "Organizations":
+        return {
+          iconBg: "bg-gradient-to-br from-emerald-600 to-teal-800 text-white shadow-emerald-600/30",
+          glowBg: "bg-emerald-500/5 group-hover:bg-emerald-500/10",
+          borderAccent: "hover:border-emerald-500/40",
+        };
+      case "Total Users":
+        return {
+          iconBg: "bg-gradient-to-br from-indigo-600 to-blue-800 text-white shadow-indigo-600/30",
+          glowBg: "bg-indigo-500/5 group-hover:bg-indigo-500/10",
+          borderAccent: "hover:border-indigo-500/40",
+        };
+      case "Applications":
+        return {
+          iconBg: "bg-gradient-to-br from-amber-500 to-amber-700 text-white shadow-amber-500/30",
+          glowBg: "bg-amber-500/5 group-hover:bg-amber-500/10",
+          borderAccent: "hover:border-amber-500/40",
+        };
+      case "Certificates":
+        return {
+          iconBg: "bg-gradient-to-br from-teal-600 to-emerald-700 text-white shadow-teal-600/30",
+          glowBg: "bg-teal-500/5 group-hover:bg-teal-500/10",
+          borderAccent: "hover:border-teal-500/40",
+        };
+      default:
+        return {
+          iconBg: color || "bg-gradient-to-br from-slate-700 to-slate-900 text-white shadow-slate-900/30",
+          glowBg: "bg-slate-500/5 group-hover:bg-slate-500/10",
+          borderAccent: "hover:border-slate-400/40",
+        };
+    }
+  };
+
+  const theme = getGradientTheme(label);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.5, ease: "easeOut" }}
-      className="p-8 rounded-[16px] bg-white border border-slate-300/50 border-l-4 border-l-indigo-500 shadow-md hover:shadow-2xl hover:shadow-indigo-500/10 transition-all group relative overflow-hidden"
+      transition={{ delay, duration: 0.45, ease: "easeOut" }}
+      className={cn(
+        "p-7 md:p-8 rounded-[2.25rem] bg-white border border-slate-200/80 shadow-sm hover:shadow-2xl hover:shadow-emerald-900/5 transition-all duration-300 hover:-translate-y-1.5 group relative overflow-hidden",
+        theme.borderAccent
+      )}
     >
+      {/* Decorative ambient ambient glow */}
+      <div
+        className={cn(
+          "absolute -right-10 -bottom-10 w-40 h-40 rounded-full blur-2xl transition-all duration-500 pointer-events-none",
+          theme.glowBg
+        )}
+      />
+
       <div className="flex items-start justify-between relative z-10">
-        <div>
-          <p className="text-[11px] font-black text-slate-500 uppercase tracking-[0.2em] mb-3">
+        <div className="space-y-2">
+          <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">
             {getLabel(label)}
           </p>
-          <div className="flex items-end gap-3 mt-1">
-            <h3 className="text-4xl font-black font-outfit text-slate-900 tracking-tight">
+          <div className="flex items-end gap-3">
+            <h3 className="text-4xl md:text-5xl font-black font-outfit text-slate-900 tracking-tight leading-none">
               {value}
             </h3>
           </div>
         </div>
+
         <div
           className={cn(
-            "inline-flex p-4 rounded-2xl group-hover:scale-110 transition-transform shadow-inner",
-            color,
+            "p-4 rounded-2xl group-hover:scale-110 transition-transform shadow-lg shrink-0",
+            theme.iconBg
           )}
         >
-          <Icon size={24} className="text-white" />
+          <Icon size={24} />
         </div>
       </div>
 
       {trend && (
-        <div className="mt-6 flex items-center gap-2 relative z-10">
-          <span className="text-xs font-bold text-emerald-600 flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+        <div className="mt-6 flex items-center gap-2 relative z-10 pt-2 border-t border-slate-100">
+          <span className="text-xs font-black text-emerald-700 flex items-center gap-1 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 shadow-xs">
             <TrendingUp size={12} /> {trend}
           </span>
           <span className="text-xs font-semibold text-slate-400">
@@ -77,10 +126,6 @@ export const StatCard = ({
           </span>
         </div>
       )}
-
-      {/* Decorative Background Elements */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 -translate-y-16 translate-x-16 rounded-full group-hover:bg-slate-100/50 transition-colors duration-500" />
-      <div className="absolute bottom-0 right-10 w-16 h-16 bg-slate-50 translate-y-8 rounded-full group-hover:bg-slate-100/50 transition-colors duration-500 delay-75" />
     </motion.div>
   );
 };

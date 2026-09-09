@@ -42,7 +42,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
             {/* Modal Header */}
             <div className="p-8 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/50">
               <div className="space-y-1">
-                <div className="flex items-center gap-2 text-indigo-600">
+                <div className="flex items-center gap-2 text-emerald-700">
                   <BarChart3 size={20} />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">
                     {t("systems")}
@@ -55,7 +55,7 @@ export const ReportModal = ({ isOpen, onClose, data }: ReportModalProps) => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={handleDownload}
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200"
+                  className="px-6 py-3 bg-emerald-700 text-white rounded-2xl font-bold flex items-center gap-2 hover:bg-emerald-800 transition-all shadow-lg shadow-emerald-700/20 cursor-pointer"
                 >
                   <FileDown size={18} /> {t("export")}
                 </button>

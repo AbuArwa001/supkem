@@ -105,8 +105,8 @@ export const getDefaultMetaApiSettings = (): MetaApiSettings => ({
 
 export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
   enabled: true,
-  apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-  channelId: "UCNbBcq2UNZahLtzrnyabhow",
+  apiKey: "[ENCRYPTION_KEY]",
+  channelId: "UC-iBf9m-x_31p1P8n1J2L6g",
   searchQuery: "SUPKEM Kenya",
   maxResults: 6,
 });
