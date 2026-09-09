@@ -27,23 +27,23 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="p-8 bg-white border border-border/50 rounded-[16px] shadow-sm space-y-6"
+        className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
       >
-        <div className="flex items-center gap-4 border-b border-border/50 pb-6">
-          <div className="w-12 h-12 bg-primary/5 text-primary rounded-2xl flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
+          <div className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500">
             <FileText size={24} />
           </div>
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
               Requested Service
             </p>
-            <h3 className="text-xl font-bold text-slate-800">
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors">
               {application.service_name}
             </h3>
           </div>
         </div>
 
-        <div className="space-y-4 pt-2 text-sm text-slate-600 font-medium">
+        <div className="space-y-1 pt-6">
           <DetailItem label="Submission Date" value={new Date(application.submitted_at).toLocaleDateString()} />
           <DetailItem label="Last Updated" value={new Date(application.updated_at).toLocaleDateString()} />
           <DetailItem label="Application ID" value={application.id} isMono />
@@ -65,23 +65,23 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="p-8 bg-white border border-border/50 rounded-[16px] shadow-sm space-y-6"
+        className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
       >
-        <div className="flex items-center gap-4 border-b border-border/50 pb-6">
-          <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
+          <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-110 transition-transform duration-500">
             <Building2 size={24} />
           </div>
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
               Entity Details
             </p>
-            <h3 className="text-xl font-bold text-slate-800">
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
               {application.organization_name || "Personal/Individual Application"}
             </h3>
           </div>
         </div>
 
-        <div className="space-y-4 pt-2 text-sm text-slate-600 font-medium">
+        <div className="space-y-1 pt-6">
           <DetailItem label="Applicant Name" value={application.user_name} />
         </div>
       </motion.div>
@@ -90,9 +90,9 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
 };
 
 const DetailItem = ({ label, value, isMono = false }: { label: string; value: string; isMono?: boolean }) => (
-  <div className="flex justify-between items-center py-2 border-b border-dashed border-border/50">
-    <span className="text-slate-400">{label}</span>
-    <span className={isMono ? "text-slate-800 font-mono text-xs" : "text-slate-800 font-bold"}>
+  <div className="flex justify-between items-center py-4 border-b border-slate-50 last:border-0">
+    <span className="text-slate-500 font-medium text-sm">{label}</span>
+    <span className={isMono ? "text-slate-900 font-mono text-xs font-semibold bg-slate-100 px-2 py-1 rounded" : "text-slate-900 font-bold text-sm"}>
       {value}
     </span>
   </div>
