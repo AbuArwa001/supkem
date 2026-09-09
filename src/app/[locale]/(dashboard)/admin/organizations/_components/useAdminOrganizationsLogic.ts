@@ -35,6 +35,13 @@ export function useAdminOrganizationsLogic() {
         return matchesSearch && matchesStatus;
     });
 
+    const statusCounts = organizations.reduce((acc, org) => {
+        const status = org.accreditation_status || "Pending";
+        acc[status] = (acc[status] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+    statusCounts["All"] = organizations.length;
+
     return {
         organizations,
         filteredOrgs,
@@ -44,6 +51,7 @@ export function useAdminOrganizationsLogic() {
         setViewMode,
         statusFilter,
         setStatusFilter,
-        isLoading
+        isLoading,
+        statusCounts
     };
 }
