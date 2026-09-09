@@ -160,6 +160,21 @@ export async function GET(request: Request) {
       });
     }
 
+    // Exclude posts from channels that have been disabled by administrators
+    const disabledChannelIds = new Set<string>();
+    if (Array.isArray(currentSettings.channels)) {
+      currentSettings.channels.forEach((ch) => {
+        if (ch.enabled === false) {
+          disabledChannelIds.add(ch.id.toLowerCase());
+        }
+      });
+    }
+    if (currentSettings.youtubeApi && currentSettings.youtubeApi.enabled === false) {
+      disabledChannelIds.add("youtube");
+    }
+
+    allPosts = allPosts.filter((p) => !disabledChannelIds.has(p.platform.toLowerCase()));
+
     // Filter by platform
     if (platform && platform !== "all") {
       allPosts = allPosts.filter((p) => p.platform === platform);

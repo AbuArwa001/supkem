@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   try {
     // 1. Check local file persistence (instant, resilient across dev/prod)
     const persisted = readPersistedSocialSettings();
-    if (persisted && persisted.updatedAt) {
+    if (persisted && (persisted.updatedAt || persisted.channels)) {
       return NextResponse.json({
         success: true,
         source: "persisted",
