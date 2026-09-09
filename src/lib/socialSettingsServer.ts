@@ -1,15 +1,29 @@
-import fs from "fs";
-import path from "path";
 import { SocialMediaSettings, getDefaultSocialSettings } from "./socialSettings";
 
-const SETTINGS_FILE = path.join(process.cwd(), "src/data/social-settings.json");
+const SERVER_API_URL = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
-export function readPersistedSocialSettings(): SocialMediaSettings {
+/**
+ * Premium Next.js Data Cache fetch for Social Settings.
+ * This function fetches the settings directly from the DRF backend, caching the response globally.
+ * It uses the 'social-settings' tag, which can be instantly revalidated when settings are updated.
+ */
+export async function fetchSocialSettings(): Promise<SocialMediaSettings> {
   try {
-    if (fs.existsSync(SETTINGS_FILE)) {
-      const content = fs.readFileSync(SETTINGS_FILE, "utf-8");
-      if (content.trim()) {
-        const parsed = JSON.parse(content);
+    const res = await fetch(
+      `${SERVER_API_URL}/api/v1/configurations/system-parameters/SOCIAL_MEDIA_SETTINGS/`,
+      {
+        headers: {
+          Accept: "application/json",
+        },
+        next: { tags: ["social-settings"] },
+        cache: "force-cache", // Ensures it stays cached until explicitly revalidated
+      }
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+      if (data?.value) {
+        const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
         const defaults = getDefaultSocialSettings();
         return {
           ...defaults,
@@ -38,19 +52,9 @@ export function readPersistedSocialSettings(): SocialMediaSettings {
       }
     }
   } catch (err) {
-    console.error("Failed to read social settings file:", err);
+    console.error("Failed to fetch social settings from DRF backend:", err);
   }
-  return getDefaultSocialSettings();
-}
 
-export function writePersistedSocialSettings(settings: SocialMediaSettings): void {
-  try {
-    const dir = path.dirname(SETTINGS_FILE);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Failed to persist social settings file:", err);
-  }
+  // If DRF is completely down or returns 404, we safely fall back to the defaults
+  return getDefaultSocialSettings();
 }

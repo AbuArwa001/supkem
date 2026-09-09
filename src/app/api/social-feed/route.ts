@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "@/components/social/socialData";
 import { SocialPost } from "@/components/social/types";
-import { readPersistedSocialSettings } from "@/lib/socialSettingsServer";
+import { fetchSocialSettings } from "@/lib/socialSettingsServer";
 import {
   fetchFacebookPageFeed,
   fetchInstagramBusinessMedia,
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "25", 10);
     const search = searchParams.get("search")?.toLowerCase();
 
-    const currentSettings = readPersistedSocialSettings();
+    const currentSettings = await fetchSocialSettings();
 
     // Dynamically build active channel map from settings
     const dynamicChannels: Record<string, any> = { ...OFFICIAL_CHANNELS };
