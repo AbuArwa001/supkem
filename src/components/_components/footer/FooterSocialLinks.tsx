@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube, Link as LinkIcon } from "lucide-react";
 
 interface SocialChannel {
   id: string;
@@ -86,7 +86,7 @@ export const FooterSocialLinks = () => {
           </svg>
         );
       default:
-        return null;
+        return <LinkIcon className="w-5 h-5" />;
     }
   };
 

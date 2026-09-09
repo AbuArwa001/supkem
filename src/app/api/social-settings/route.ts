@@ -24,40 +24,43 @@ export async function GET(request: Request) {
       });
     }
 
-    // 2. Try to fetch from backend SystemParameter ONLY if Authorization is available
-    const authHeader = request.headers.get("authorization");
-    if (authHeader) {
-      try {
-        const res = await fetch(
-          `${SERVER_API_URL}/api/v1/configurations/system-parameters/SOCIAL_MEDIA_SETTINGS/`,
-          {
-            headers: {
-              Accept: "application/json",
-              Authorization: authHeader,
-            },
-            next: { revalidate: 30 },
-          }
-        );
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data?.value) {
-            const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
-            const merged = {
-              ...getDefaultSocialSettings(),
-              ...parsed,
-            };
-            writePersistedSocialSettings(merged);
-            return NextResponse.json({
-              success: true,
-              source: "database",
-              settings: merged,
-            });
-          }
-        }
-      } catch {
-        // Backend request fallback
+    // 2. Try to fetch from backend SystemParameter
+    try {
+      const headers: Record<string, string> = {
+        Accept: "application/json",
+      };
+      
+      const authHeader = request.headers.get("authorization");
+      if (authHeader) {
+        headers["Authorization"] = authHeader;
       }
+
+      const res = await fetch(
+        `${SERVER_API_URL}/api/v1/configurations/system-parameters/SOCIAL_MEDIA_SETTINGS/`,
+        {
+          headers,
+          next: { revalidate: 30 },
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.value) {
+          const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
+          const merged = {
+            ...getDefaultSocialSettings(),
+            ...parsed,
+          };
+          writePersistedSocialSettings(merged);
+          return NextResponse.json({
+            success: true,
+            source: "database",
+            settings: merged,
+          });
+        }
+      }
+    } catch {
+      // Backend request fallback
     }
 
     // 3. Fall back to environment defaults

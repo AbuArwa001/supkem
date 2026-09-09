@@ -6,6 +6,8 @@ interface PlatformIconProps {
   className?: string;
 }
 
+import { Link as LinkIcon } from "lucide-react";
+
 export function PlatformIcon({ platform, className = "w-4 h-4" }: PlatformIconProps) {
   switch (platform) {
     case "x":
@@ -39,7 +41,7 @@ export function PlatformIcon({ platform, className = "w-4 h-4" }: PlatformIconPr
         </svg>
       );
     default:
-      return null;
+      return <LinkIcon className={className} aria-label={platform} />;
   }
 }
 

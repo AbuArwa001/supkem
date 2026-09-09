@@ -248,7 +248,7 @@ export function SocialMediaWall({
 
     if (!dynamicSettings?.channels) return defaultList;
 
-    return defaultList
+    const processedList = defaultList
       .filter((item) => {
         const ch = dynamicSettings.channels.find((c) => c.id === item.id);
         if (ch && ch.enabled === false) return false;
@@ -267,6 +267,18 @@ export function SocialMediaWall({
         const ch = dynamicSettings.channels.find((c) => c.id === item.id);
         return ch?.url ? { ...item, url: ch.url } : item;
       });
+
+    const defaultIds = defaultList.map(d => d.id);
+    const customChannels = dynamicSettings.channels
+      .filter((ch) => !defaultIds.includes(ch.id) && ch.enabled !== false)
+      .map((ch) => ({
+        id: ch.id,
+        name: ch.name,
+        url: ch.url,
+        hoverClass: ch.bgClass || "hover:bg-slate-800 hover:text-white text-slate-700",
+      }));
+
+    return [...processedList, ...customChannels];
   }, [dynamicSettings]);
 
   const primaryCtaChannel = useMemo(() => {
