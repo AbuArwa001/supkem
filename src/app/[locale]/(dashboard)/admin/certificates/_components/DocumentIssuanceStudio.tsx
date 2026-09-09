@@ -154,7 +154,7 @@ export default function DocumentIssuanceStudio({
                       <option value="">{isLoadingApplications ? "Loading..." : "Choose an application..."}</option>
                       {eligibleApplications.map((app) => (
                         <option key={app.id} value={app.id}>
-                          {app.organization_name} - {app.service_name}
+                          {app.organization_name || app.user_name || "N/A"} - {app.service_name}
                         </option>
                       ))}
                     </select>
@@ -275,7 +275,7 @@ export default function DocumentIssuanceStudio({
                        <CertificateCanvas
                          certificate={{
                            service_name: selectedApp?.service_name || "Official Certification",
-                           organization_name: selectedApp?.organization_name || "Organization Name",
+                           organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
                            serial_number: "PREVIEW-12345",
                          } as any}
                          certificateRef={{ current: null }}
@@ -290,7 +290,7 @@ export default function DocumentIssuanceStudio({
                        <LetterCanvas
                          letter={{
                            service_name: selectedApp?.service_name || "Official Letter",
-                           organization_name: selectedApp?.organization_name || "Organization Name",
+                           organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
                            serial_number: "PREVIEW-LTR-123",
                          } as any}
                          letterRef={{ current: null }}
