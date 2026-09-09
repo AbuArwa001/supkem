@@ -37,16 +37,32 @@ export async function GET(request: Request) {
         const data = await res.json();
         if (data?.value) {
           const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
-          const merged = {
-            ...getDefaultSocialSettings(),
-            ...parsed,
-          };
-          writePersistedSocialSettings(merged);
-          return NextResponse.json({
-            success: true,
-            source: "database",
-            settings: merged,
-          });
+          const persisted = readPersistedSocialSettings();
+          
+          const drfDate = new Date(parsed.updatedAt || 0).getTime();
+          const localDate = new Date(persisted.updatedAt || 0).getTime();
+
+          // Only overwrite local state with DRF state if DRF state is equal or newer
+          if (drfDate >= localDate || !persisted.updatedAt) {
+            const merged = {
+              ...getDefaultSocialSettings(),
+              ...parsed,
+            };
+            writePersistedSocialSettings(merged);
+            return NextResponse.json({
+              success: true,
+              source: "database",
+              settings: merged,
+            });
+          } else {
+             // Local file is newer! (Likely a previous DRF sync failed)
+             // Let's return the local file to avoid reverting UI state
+             return NextResponse.json({
+                success: true,
+                source: "persisted (newer than db)",
+                settings: persisted,
+             });
+          }
         }
       }
     } catch {
@@ -135,10 +151,14 @@ export async function POST(request: Request) {
             body: JSON.stringify({ value: JSON.stringify(updatedSettings) }),
           }
         );
+        console.log("DRF PATCH status:", patchRes.status);
+        if (!patchRes.ok) {
+           console.log("DRF PATCH failed:", await patchRes.text());
+        }
 
         // If not existing, try creating via POST
         if (!patchRes.ok && patchRes.status === 404) {
-          await fetch(
+          const postRes = await fetch(
             `${SERVER_API_URL}/api/v1/configurations/system-parameters/`,
             {
               method: "POST",
@@ -146,8 +166,13 @@ export async function POST(request: Request) {
               body: JSON.stringify(payload),
             }
           );
+          console.log("DRF POST status:", postRes.status);
+          if (!postRes.ok) {
+            console.log("DRF POST failed:", await postRes.text());
+          }
         }
-      } catch {
+      } catch (err) {
+        console.error("DRF sync error:", err);
         // Backend persistence is non-blocking
       }
     }
