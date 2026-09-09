@@ -21,24 +21,24 @@ export default function ActionSidebar({
 }: ActionSidebarProps) {
   return (
     <div className="space-y-8">
-      <div className="p-8 rounded-[20px] bg-primary text-white shadow-2xl shadow-primary/20 space-y-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
+      <div className="p-8 md:p-10 rounded-[32px] bg-slate-900 text-white shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-slate-800 space-y-8 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
         <div className="space-y-4 relative z-10">
-          <p className="text-xs font-bold text-white/50 uppercase tracking-widest">
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
             Current Status
           </p>
           <div className="flex items-center gap-3">
             <span
               className={cn(
-                "w-4 h-4 rounded-full animate-pulse",
+                "w-4 h-4 rounded-full animate-pulse shadow-lg",
                 app.status === "Approved"
-                  ? "bg-green-400"
+                  ? "bg-emerald-400 shadow-emerald-400/50"
                   : app.status === "Rejected"
-                    ? "bg-red-400"
-                    : "bg-amber-400",
+                    ? "bg-rose-400 shadow-rose-400/50"
+                    : "bg-amber-400 shadow-amber-400/50",
               )}
             />
-            <h3 className="text-3xl font-bold font-outfit">{app.status}</h3>
+            <h3 className="text-3xl font-black font-outfit">{app.status}</h3>
           </div>
         </div>
 
@@ -53,14 +53,14 @@ export default function ActionSidebar({
           <button
             onClick={() => handleAction("Approved")}
             disabled={submitting}
-            className="w-full py-5 bg-white text-primary rounded-[24px] font-bold text-lg hover:bg-secondary hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10"
+            className="w-full py-5 bg-white text-slate-900 rounded-[24px] font-bold text-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 hover:shadow-emerald-500/20"
           >
             <ThumbsUp size={20} /> Approve Entry
           </button>
           <button
             onClick={() => handleAction("Rejected")}
             disabled={submitting}
-            className="w-full py-5 bg-primary-foreground/10 text-white border border-white/20 rounded-[24px] font-bold text-lg hover:bg-red-600 hover:border-red-600 transition-all flex items-center justify-center gap-2"
+            className="w-full py-5 bg-slate-800 text-white border border-slate-700 rounded-[24px] font-bold text-lg hover:bg-rose-600 hover:border-rose-600 hover:shadow-lg hover:shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
           >
             <ThumbsDown size={20} /> Reject Submission
           </button>
@@ -69,11 +69,11 @@ export default function ActionSidebar({
 
       <TimelineStatus app={app} />
 
-      <div className="pt-4 border-t border-border">
+      <div className="pt-4 border-t border-slate-100">
         <button
           onClick={handleDelete}
           disabled={submitting}
-          className="w-full py-4 bg-red-50 text-red-500 border border-red-100 rounded-[20px] font-bold text-base hover:bg-red-500 hover:text-white transition-all flex items-center justify-center gap-2"
+          className="w-full py-5 bg-white border border-rose-100 text-rose-500 rounded-[24px] font-bold text-base hover:bg-rose-500 hover:text-white hover:border-rose-500 hover:shadow-xl hover:shadow-rose-500/20 transition-all flex items-center justify-center gap-2"
         >
           <Trash2 size={20} /> Delete Application
         </button>

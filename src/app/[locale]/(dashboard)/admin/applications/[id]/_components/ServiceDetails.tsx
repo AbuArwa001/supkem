@@ -18,7 +18,7 @@ export default function ServiceDetails({ app }: { app: ApplicationDetail }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8"
+      className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-8"
     >
       <ServiceHeader app={app} />
 
@@ -28,11 +28,11 @@ export default function ServiceDetails({ app }: { app: ApplicationDetail }) {
       <TravelVisaDetails details={app.travel_visa_details} />
       <EmploymentDetails details={app.employment_details} />
 
-      <div className="space-y-4 pt-6 border-t border-border mt-8">
-        <p className="text-xs font-bold text-foreground/40 uppercase tracking-widest">
+      <div className="space-y-4 pt-6 border-t border-slate-100 mt-8">
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           Applicant Comments
         </p>
-        <div className="p-6 rounded-3xl bg-amber-50/50 border border-amber-100 text-foreground/80 leading-relaxed font-medium italic">
+        <div className="p-6 rounded-[24px] bg-slate-50 border border-slate-100 text-slate-700 leading-relaxed font-medium italic shadow-inner">
           "{app.comments || "No comments provided by the applicant."}"
         </div>
       </div>

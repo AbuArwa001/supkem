@@ -3,36 +3,36 @@ import Image from "next/image";
 export default function ServiceHeader({ app }: { app: any }) {
   return (
     <>
-      <div className="flex items-center gap-4 text-primary">
-        <div className="w-12 h-12 bg-secondary/10 text-secondary rounded-2xl flex items-center justify-center shrink-0">
-          <Image src="/logo.svg" alt="Logo" width={24} height={24} />
+      <div className="flex items-center gap-4 text-slate-900">
+        <div className="w-14 h-14 bg-slate-50 border border-slate-100 rounded-2xl flex items-center justify-center shrink-0">
+          <Image src="/logo.svg" alt="Logo" width={26} height={26} />
         </div>
-        <h3 className="text-2xl font-bold font-outfit">Service Details</h3>
+        <h3 className="text-2xl font-black font-outfit">Service Details</h3>
       </div>
 
-      <div className="p-8 rounded-[16px] bg-primary/[0.02] border border-primary/10 flex items-center justify-between">
+      <div className="p-8 rounded-[24px] bg-slate-50 border border-slate-100 flex items-center justify-between shadow-inner">
         <div>
-          <h4 className="text-2xl font-bold text-primary font-outfit mb-2 flex items-center gap-3">
+          <h4 className="text-2xl font-black text-slate-900 font-outfit mb-2 flex flex-wrap items-center gap-3">
             {app.service_name}
             {(!app.payment || app.payment.status !== "Completed") ? (
-              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-amber-100 text-amber-700 rounded-full border border-amber-200">
+              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-amber-50 text-amber-700 rounded-full border border-amber-200 shadow-sm">
                 Payment Pending
               </span>
             ) : (
-              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-green-100 text-green-700 rounded-full border border-green-200">
+              <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200 shadow-sm">
                 Paid: KES {app.payment.amount || Number(app.service_fee || 0).toLocaleString()}
               </span>
             )}
           </h4>
-          <p className="text-sm font-bold text-secondary uppercase tracking-widest">
+          <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
             Ref: SER-00{app.service}
           </p>
         </div>
         <div className="text-right">
-          <p className="text-3xl font-bold text-primary">
+          <p className="text-3xl font-black text-slate-900 font-outfit">
             KES {Number(app.service_fee || 0).toLocaleString()}
           </p>
-          <p className="text-xs font-bold text-foreground/40 tracking-widest uppercase mt-1">
+          <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mt-1">
             Standard Processing Fee
           </p>
         </div>
