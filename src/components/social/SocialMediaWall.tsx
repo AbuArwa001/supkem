@@ -161,20 +161,27 @@ export function SocialMediaWall({
       },
     ];
 
-    if (!dynamicSettings?.channels) return base;
+    if (!dynamicSettings) return base;
 
     return base.filter((p) => {
       if (p.id === "all") return true;
-      if (
-        p.id === "youtube" &&
-        dynamicSettings?.youtubeApi &&
-        dynamicSettings.youtubeApi.enabled === false
-      ) {
-        const ytCh = dynamicSettings.channels.find((c) => c.id === "youtube");
-        if (ytCh && ytCh.enabled === false) return false;
+      if (p.id === "youtube") {
+        if (dynamicSettings.youtubeApi?.enabled) return true;
+        const ch = dynamicSettings.channels?.find((c) => c.id === "youtube");
+        return Boolean(ch && ch.enabled !== false);
       }
-      const ch = dynamicSettings.channels.find((c) => c.id === p.id);
-      return ch ? ch.enabled : false;
+      if (p.id === "x") {
+        if (dynamicSettings.twitterApi?.enabled) return true;
+        const ch = dynamicSettings.channels?.find((c) => c.id === "x");
+        return Boolean(ch && ch.enabled !== false);
+      }
+      if (p.id === "facebook" || p.id === "instagram") {
+        if (dynamicSettings.metaApi?.enabled) return true;
+        const ch = dynamicSettings.channels?.find((c) => c.id === p.id);
+        return Boolean(ch && ch.enabled !== false);
+      }
+      const ch = dynamicSettings.channels?.find((c) => c.id === p.id);
+      return Boolean(ch && ch.enabled !== false);
     });
   }, [dynamicSettings]);
 

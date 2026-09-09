@@ -102,23 +102,29 @@ export async function GET(request: Request) {
 
     let allPosts: SocialPost[] = [...liveSocialPosts];
 
-    // Only include posts from channels that exist and are active in settings
-    const activeChannelIds = new Set<string>();
+    // Active platforms include both enabled channels and enabled direct API integrations
+    const activePlatforms = new Set<string>();
     if (Array.isArray(currentSettings.channels)) {
       currentSettings.channels.forEach((ch) => {
         if (ch.enabled !== false) {
-          activeChannelIds.add(ch.id.toLowerCase());
+          activePlatforms.add(ch.id.toLowerCase());
         }
       });
     }
-    if (currentSettings.youtubeApi && currentSettings.youtubeApi.enabled === false) {
-      activeChannelIds.delete("youtube");
+
+    // Direct API integrations explicitly activate their platforms
+    if (currentSettings.youtubeApi?.enabled) {
+      activePlatforms.add("youtube");
     }
-    if (currentSettings.twitterApi && currentSettings.twitterApi.enabled === false) {
-      activeChannelIds.delete("x");
+    if (currentSettings.metaApi?.enabled) {
+      activePlatforms.add("facebook");
+      activePlatforms.add("instagram");
+    }
+    if (currentSettings.twitterApi?.enabled) {
+      activePlatforms.add("x");
     }
 
-    allPosts = allPosts.filter((p) => activeChannelIds.has(p.platform.toLowerCase()));
+    allPosts = allPosts.filter((p) => activePlatforms.has(p.platform.toLowerCase()));
 
     // Filter by platform
     if (platform && platform !== "all") {
