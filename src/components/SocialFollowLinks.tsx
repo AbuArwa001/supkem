@@ -8,6 +8,19 @@ export interface SocialFollowLinksProps {
 }
 
 export function SocialFollowLinks({ className = "", variant = "pills" }: SocialFollowLinksProps) {
+    const [dynamicChannels, setDynamicChannels] = React.useState<any[] | null>(null);
+
+    React.useEffect(() => {
+        fetch("/api/social-settings")
+            .then((res) => (res.ok ? res.json() : null))
+            .then((data) => {
+                if (data?.settings?.channels) {
+                    setDynamicChannels(data.settings.channels);
+                }
+            })
+            .catch(() => {});
+    }, []);
+
     const socialChannels = [
         {
             name: "X (Twitter)",
@@ -66,10 +79,31 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
         },
     ];
 
+    const activeChannels = React.useMemo(() => {
+        if (!dynamicChannels) return socialChannels;
+        return socialChannels
+            .filter((item) => {
+                const found = dynamicChannels.find(
+                    (dc) =>
+                        dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
+                        item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
+                );
+                return found ? found.enabled : true;
+            })
+            .map((item) => {
+                const found = dynamicChannels.find(
+                    (dc) =>
+                        dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
+                        item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
+                );
+                return found?.url ? { ...item, url: found.url } : item;
+            });
+    }, [dynamicChannels, socialChannels]);
+
     if (variant === "icons") {
         return (
             <div className={`flex items-center gap-2 ${className}`}>
-                {socialChannels.map((item) => (
+                {activeChannels.map((item) => (
                     <a
                         key={item.name}
                         href={item.url}
@@ -91,7 +125,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
                 Follow SUPKEM Official Channels:
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
-                {socialChannels.map((item) => (
+                {activeChannels.map((item) => (
                     <a
                         key={item.name}
                         href={item.url}

@@ -10,7 +10,8 @@ import {
   ChevronRight,
   Database,
   Users,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Share2
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
@@ -46,6 +47,15 @@ export default function SettingsHub() {
       color: "text-blue-600",
       bg: "bg-blue-50",
       link: "/admin/settings/profile"
+    },
+    {
+      title: "Social Feeds & Aggregator",
+      description: "Configure Tagembed live wall, aggregator widget ID, and manage official social media handles.",
+      icon: Share2,
+      color: "text-emerald-600",
+      bg: "bg-emerald-50",
+      link: "/admin/settings/social",
+      isAdminOnly: true
     },
     {
       title: "System Parameters",

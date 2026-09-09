@@ -14,6 +14,7 @@ import { SocialPostCard } from "./SocialPostCard";
 import { SocialMediaLightbox } from "./SocialMediaLightbox";
 import { ThirdPartyWidgetEmbed } from "./ThirdPartyWidgetEmbed";
 import { PlatformIcon } from "./SocialPlatformIcons";
+import { SocialMediaSettings } from "@/lib/socialSettings";
 import {
   Sparkles,
   RefreshCw,
@@ -42,23 +43,36 @@ export function SocialMediaWall({
   const [activeLightboxPost, setActiveLightboxPost] = useState<SocialPost | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [posts, setPosts] = useState<SocialPost[]>(INITIAL_SOCIAL_POSTS);
+  const [dynamicSettings, setDynamicSettings] = useState<SocialMediaSettings | null>(null);
   const [isPending, startTransition] = useTransition();
 
   // Determine active third party widget configuration
   const activeConfig: SocialWallConfig = useMemo(() => {
+    // Check if live wall is globally disabled by admin in dynamic settings
+    if (dynamicSettings && dynamicSettings.isEnabled === false) {
+      return {
+        provider: "native",
+        feedId: "",
+        iframeUrl: "",
+      };
+    }
+
     const rawProvider = (
       config?.provider ||
+      dynamicSettings?.provider ||
       process.env.NEXT_PUBLIC_SOCIAL_WALL_PROVIDER ||
       ""
     ).trim();
     const rawId = (
       config?.feedId ||
+      dynamicSettings?.widgetId ||
       process.env.NEXT_PUBLIC_SOCIAL_WALL_ID ||
       process.env.NEXT_PUBLIC_CURATOR_FEED_ID ||
       ""
     ).trim();
     const rawUrl = (
       config?.iframeUrl ||
+      dynamicSettings?.widgetUrl ||
       process.env.NEXT_PUBLIC_SOCIAL_WALL_URL ||
       ""
     ).trim();
@@ -75,7 +89,7 @@ export function SocialMediaWall({
       feedId,
       iframeUrl: rawUrl,
     };
-  }, [config]);
+  }, [config, dynamicSettings]);
 
   const hasExternalWidget = Boolean(activeConfig.feedId || activeConfig.iframeUrl);
   const [viewMode, setViewMode] = useState<"grid" | "widget">(
@@ -92,6 +106,9 @@ export function SocialMediaWall({
       const res = await fetch(`/api/social-feed?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
+        if (data?.settings) {
+          setDynamicSettings(data.settings);
+        }
         if (Array.isArray(data?.posts) && data.posts.length > 0) {
           setPosts(data.posts);
         }
@@ -105,6 +122,13 @@ export function SocialMediaWall({
   React.useEffect(() => {
     fetchDynamicPosts(selectedPlatform, searchQuery);
   }, [fetchDynamicPosts, selectedPlatform]);
+
+  // Sync default view mode once dynamic settings are loaded
+  React.useEffect(() => {
+    if (dynamicSettings?.defaultView) {
+      setViewMode(dynamicSettings.defaultView === "grid" ? "grid" : (hasExternalWidget ? "widget" : "grid"));
+    }
+  }, [dynamicSettings?.defaultView, hasExternalWidget]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -129,29 +153,39 @@ export function SocialMediaWall({
     setIsRefreshing(false);
   };
 
-  const platformsList: { id: SocialPlatform; label: string; icon?: React.ReactNode }[] = [
-    { id: "all", label: "All Feeds" },
-    {
-      id: "x",
-      label: "X (Twitter)",
-      icon: <PlatformIcon platform="x" className="w-3.5 h-3.5" />,
-    },
-    {
-      id: "facebook",
-      label: "Facebook",
-      icon: <PlatformIcon platform="facebook" className="w-3.5 h-3.5" />,
-    },
-    {
-      id: "instagram",
-      label: "Instagram",
-      icon: <PlatformIcon platform="instagram" className="w-3.5 h-3.5" />,
-    },
-    {
-      id: "tiktok",
-      label: "TikTok",
-      icon: <PlatformIcon platform="tiktok" className="w-3.5 h-3.5" />,
-    },
-  ];
+  const platformsList = useMemo(() => {
+    const base: { id: SocialPlatform; label: string; icon?: React.ReactNode }[] = [
+      { id: "all", label: "All Feeds" },
+      {
+        id: "x",
+        label: "X (Twitter)",
+        icon: <PlatformIcon platform="x" className="w-3.5 h-3.5" />,
+      },
+      {
+        id: "facebook",
+        label: "Facebook",
+        icon: <PlatformIcon platform="facebook" className="w-3.5 h-3.5" />,
+      },
+      {
+        id: "instagram",
+        label: "Instagram",
+        icon: <PlatformIcon platform="instagram" className="w-3.5 h-3.5" />,
+      },
+      {
+        id: "tiktok",
+        label: "TikTok",
+        icon: <PlatformIcon platform="tiktok" className="w-3.5 h-3.5" />,
+      },
+    ];
+
+    if (!dynamicSettings?.channels) return base;
+
+    return base.filter((p) => {
+      if (p.id === "all") return true;
+      const ch = dynamicSettings.channels.find((c) => c.id === p.id);
+      return ch ? ch.enabled : true;
+    });
+  }, [dynamicSettings]);
 
   return (
     <section className={`relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden ${className}`}>

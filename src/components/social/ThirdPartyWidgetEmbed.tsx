@@ -106,15 +106,20 @@ export function ThirdPartyWidgetEmbed({ config, className = "" }: ThirdPartyWidg
     provider === "wallsio" ||
     provider === "iframe"
   ) {
-    const src =
-      iframeUrl ||
-      (provider === "tagembed"
-        ? `https://widget.tagembed.com/${feedId}`
-        : provider === "taggbox"
-        ? `https://widget.taggbox.com/${feedId}`
-        : provider === "wallsio"
-        ? `https://my.walls.io/${feedId}?show_header=0`
-        : `https://widget.tagembed.com/${feedId}`);
+    let src = iframeUrl;
+    if (!src) {
+      if (feedId?.startsWith("http://") || feedId?.startsWith("https://")) {
+        src = feedId;
+      } else if (provider === "tagembed") {
+        src = `https://widget.tagembed.com/${feedId}`;
+      } else if (provider === "taggbox") {
+        src = `https://widget.taggbox.com/${feedId}`;
+      } else if (provider === "wallsio") {
+        src = `https://my.walls.io/${feedId}?show_header=0`;
+      } else {
+        src = `https://widget.tagembed.com/${feedId}`;
+      }
+    }
 
     return (
       <div className={`w-full rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl bg-white relative ${className}`}>

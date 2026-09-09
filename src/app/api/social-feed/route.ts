@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "@/components/social/socialData";
 import { SocialPost } from "@/components/social/types";
+import { getRuntimeSocialSettings } from "@/lib/socialSettings";
 
 const SERVER_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
@@ -11,6 +12,25 @@ export async function GET(request: Request) {
     const platform = searchParams.get("platform");
     const limit = parseInt(searchParams.get("limit") || "25", 10);
     const search = searchParams.get("search")?.toLowerCase();
+
+    const currentSettings = getRuntimeSocialSettings();
+
+    // Dynamically build active channel map from settings
+    const dynamicChannels: Record<string, any> = { ...OFFICIAL_CHANNELS };
+    currentSettings.channels.forEach((ch) => {
+      if (ch.enabled) {
+        dynamicChannels[ch.id] = {
+          name: ch.name,
+          handle: ch.handle,
+          url: ch.url,
+          color: ch.color || "#000000",
+          bgClass: ch.bgClass || "bg-slate-900 text-white",
+          badgeClass: ch.badgeClass || "bg-slate-900 text-white border-slate-700",
+        };
+      } else {
+        delete dynamicChannels[ch.id];
+      }
+    });
 
     const dynamicPosts: SocialPost[] = [];
 
@@ -29,14 +49,14 @@ export async function GET(request: Request) {
           .filter((item: any) => item.is_published !== false)
           .slice(0, 5)
           .forEach((item: any, index: number) => {
-            // Assign dynamically to official channels
-            const assignedPlatform: "x" | "facebook" =
-              index % 2 === 0 ? "x" : "facebook";
-            const channel = OFFICIAL_CHANNELS[assignedPlatform];
+            // Assign dynamically to active official channels
+            const activeKeys = Object.keys(dynamicChannels);
+            const assignedKey = activeKeys.length > 0 ? activeKeys[index % activeKeys.length] : "x";
+            const channel = dynamicChannels[assignedKey] || OFFICIAL_CHANNELS.x;
 
             dynamicPosts.push({
               id: `dynamic-news-${item.id || index}`,
-              platform: assignedPlatform,
+              platform: (assignedKey as any) || "x",
               author: {
                 name: channel?.name || "SUPKEM Official",
                 handle: channel?.handle || "@SUPKEM1",
@@ -95,7 +115,8 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       success: true,
-      channels: OFFICIAL_CHANNELS,
+      channels: dynamicChannels,
+      settings: currentSettings,
       total: allPosts.length,
       posts: allPosts,
       syncedAt: new Date().toISOString(),
