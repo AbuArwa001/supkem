@@ -13,9 +13,11 @@ import { useTranslations } from "next-intl";
 export default function CertificateCard({
   cert,
   index,
+  type = "certificate",
 }: {
   cert: Certificate;
   index: number;
+  type?: "certificate" | "letter";
 }) {
   const t = useTranslations("Dashboard.admin.certificates");
 
@@ -79,7 +81,7 @@ export default function CertificateCard({
         </div>
 
         <Link
-          href={`/admin/certificates/${cert.id}`}
+          href={`/admin/${type}s/${cert.id}`}
           className="w-full py-4 bg-primary/[0.03] text-primary rounded-2xl font-bold text-sm hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group-hover:shadow-lg"
         >
           {t("viewRegistryDetails")} <ChevronRight size={16} />

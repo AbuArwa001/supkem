@@ -16,9 +16,7 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
-import SupportLetterTemplate from "@/components/SupportLetterTemplate";
-import StudyAbroadLetterTemplate from "@/components/StudyAbroadLetterTemplate";
-import TravelVisaAdvisoryTemplate from "@/components/TravelVisaAdvisoryTemplate";
+import { LetterCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
 
 export default function LetterDetail() {
   const params = useParams();
@@ -124,52 +122,16 @@ export default function LetterDetail() {
     letter.application_detail?.service_name?.toLowerCase() || "";
 
   const renderTemplate = () => {
-    if (
-      serviceName.includes("hajj") ||
-      serviceName.includes("umrah")
-    ) {
-      return letter.application_detail?.pilgrim_details ? (
-        <SupportLetterTemplate certificate={letter} />
-      ) : (
-        <div className="py-20 text-slate-400 font-medium text-center">
-          <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
-          <p>Pilgrim details missing. Please contact support.</p>
-        </div>
-      );
-    }
-
-    if (
-      serviceName.includes("study") ||
-      serviceName.includes("abroad")
-    ) {
-      return letter.application_detail?.education_details ? (
-        <StudyAbroadLetterTemplate certificate={letter} />
-      ) : (
-        <div className="py-20 text-slate-400 font-medium text-center">
-          <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
-          <p>Educational details missing. Please contact support.</p>
-        </div>
-      );
-    }
-
-    if (
-      serviceName.includes("visa") ||
-      serviceName.includes("travel")
-    ) {
-      return letter.application_detail?.travel_visa_details ? (
-        <TravelVisaAdvisoryTemplate certificate={letter} />
-      ) : (
-        <div className="py-20 text-slate-400 font-medium text-center">
-          <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
-          <p>Travel details missing. Please contact support.</p>
-        </div>
-      );
-    }
-
     return (
-      <div className="py-20 text-slate-400 font-medium text-center">
-        <AlertCircle className="mx-auto mb-4 opacity-20" size={48} />
-        <p>Unknown letter type. Please contact support.</p>
+      <div className="w-full flex justify-center scale-90 sm:scale-100 origin-top">
+        <LetterCanvas
+          letter={letter}
+          letterRef={letterRef}
+          issueDate={new Date(letter.issued_at)}
+          language={letter.language || "en"}
+          customText={letter.language === "ar" ? letter.custom_text_ar : letter.custom_text_en}
+          signatureBase64={letter.digital_signature}
+        />
       </div>
     );
   };
@@ -228,57 +190,9 @@ export default function LetterDetail() {
         </div>
       </div>
 
-      {/* Letter Canvas */}
-      <motion.div
-        ref={letterRef}
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative bg-white border border-border/80 shadow-2xl rounded-[20px] overflow-hidden p-8 md:p-16 lg:p-24 flex flex-col items-center text-center max-w-4xl mx-auto print:shadow-none print:border-none print:rounded-none print:m-0 print:p-8 certificate-canvas"
-      >
-        <style jsx global>{`
-          @media print {
-            body * {
-              visibility: hidden;
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
-            .certificate-canvas,
-            .certificate-canvas * {
-              visibility: visible !important;
-            }
-            .certificate-canvas {
-              position: absolute !important;
-              left: 0 !important;
-              top: 0 !important;
-              width: 100% !important;
-              max-width: none !important;
-              margin: 0 !important;
-              padding: 2rem !important;
-              border: none !important;
-              box-shadow: none !important;
-              border-radius: 0 !important;
-              background-color: white !important;
-            }
-            html, body {
-              height: auto !important;
-              overflow: visible !important;
-              margin: 0 !important;
-              padding: 0 !important;
-            }
-            .no-print, header, nav, aside, button {
-              display: none !important;
-              visibility: hidden !important;
-            }
-            * {
-              -webkit-print-color-adjust: exact !important;
-              print-color-adjust: exact !important;
-            }
-          }
-        `}</style>
-        <div className="relative z-10 w-full flex flex-col items-center">
+      <div className="flex justify-center w-full overflow-x-auto pb-8">
           {renderTemplate()}
-        </div>
-      </motion.div>
+      </div>
 
       {/* Application Reference */}
       {letter.application && (

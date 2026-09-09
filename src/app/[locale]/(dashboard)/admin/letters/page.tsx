@@ -76,7 +76,7 @@ export default function AdminLetters() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {serviceCerts.map((cert, index) => (
-                <CertificateCard key={cert.id} cert={cert} index={index} />
+                <CertificateCard key={cert.id} cert={cert} index={index} type="letter" />
               ))}
             </div>
           </div>

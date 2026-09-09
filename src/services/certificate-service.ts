@@ -7,6 +7,10 @@ export interface Certificate {
   expires_at: string | null;
   service_name?: string;
   organization_name?: string;
+  language?: "en" | "ar";
+  custom_text_en?: string;
+  custom_text_ar?: string;
+  digital_signature?: string;
   application: string | number;
   application_detail?: {
     service_name: string;
@@ -29,6 +33,10 @@ export const CertificateService = {
      */
     async getCertificate(id: string): Promise<Certificate> {
         const response = await api.get<Certificate>(`/applications/certifications/${id}/`);
+        return response.data;
+    },
+    async getLetter(id: string): Promise<Certificate> {
+        const response = await api.get<Certificate>(`/applications/letters/${id}/`);
         return response.data;
     },
 };
