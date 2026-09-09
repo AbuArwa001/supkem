@@ -1,6 +1,6 @@
 // React/Next.js core
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
 import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
 import { usePaymentPolling } from "./usePaymentPolling";

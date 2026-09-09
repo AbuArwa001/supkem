@@ -2,7 +2,8 @@
 
 // React/Next.js core
 import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 
 // Internal — hook, step components

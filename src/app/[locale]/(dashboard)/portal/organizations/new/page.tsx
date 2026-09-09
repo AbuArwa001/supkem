@@ -37,7 +37,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import api from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 export default function RegisterOrganization() {
   const [loading, setLoading] = useState(false);

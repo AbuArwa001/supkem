@@ -1,6 +1,7 @@
 // React/Next.js core
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 // Internal — services
 import { portalApplicationService } from "@/app/[locale]/(dashboard)/portal/applications/[id]/_services/portalApplicationService";

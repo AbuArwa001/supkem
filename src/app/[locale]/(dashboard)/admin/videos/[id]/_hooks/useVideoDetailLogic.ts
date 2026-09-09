@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { videoService } from "../../_services/videoService";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
 

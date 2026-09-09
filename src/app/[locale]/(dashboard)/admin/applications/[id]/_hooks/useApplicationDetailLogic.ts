@@ -1,6 +1,6 @@
 // React/Next.js core
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 // Internal — services & types
 import { applicationService } from "@/app/[locale]/(dashboard)/admin/applications/_services/applicationService";

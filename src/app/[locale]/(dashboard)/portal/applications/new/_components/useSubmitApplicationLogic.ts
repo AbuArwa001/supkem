@@ -1,6 +1,6 @@
 // React/Next.js core
 import { useState, useEffect, FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 // Internal — hooks, services, data, types
 import { useFormSteps } from "@/app/[locale]/(dashboard)/portal/applications/new/_hooks/useFormSteps";
