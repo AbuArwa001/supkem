@@ -84,67 +84,19 @@ export async function GET(request: Request) {
       }
     }
 
-    // 3. Tagembed Real Posts Ingestion (if widgetId is configured)
-    const activeWidgetId = currentSettings.widgetId || process.env.NEXT_PUBLIC_SOCIAL_WALL_ID;
-    if (activeWidgetId) {
+    // 3. Direct Twitter (X) API Ingestion
+    const twConfig = currentSettings.twitterApi;
+    if (twConfig?.enabled && twConfig?.bearerToken) {
       try {
-        const tagembedRes = await fetch("https://api.tagembed.com/embed/posts", {
-          headers: {
-            "X-Api-CONTEXT-Type": "website",
-            "X-Api-CONTEXT-Id": activeWidgetId,
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-          },
-          next: { revalidate: 300 },
-        });
-
-        if (tagembedRes.ok) {
-          const tagJson = await tagembedRes.json();
-          const posts = tagJson?.body?.Posts;
-          if (Array.isArray(posts) && posts.length > 0) {
-            posts.forEach((tp: any) => {
-              // Map networkId: 1 = x, 2 = instagram, 3 = facebook, 7 = youtube, 30 = tiktok
-              let pPlatform: SocialPost["platform"] = "facebook";
-              if (tp.networkId === 1) pPlatform = "x";
-              else if (tp.networkId === 2) pPlatform = "instagram";
-              else if (tp.networkId === 3) pPlatform = "facebook";
-              else if (tp.networkId === 30) pPlatform = "tiktok";
-
-              const images: string[] = [];
-              if (tp.media?.image?.large) images.push(tp.media.image.large);
-              else if (tp.media?.image?.original) images.push(tp.media.image.original);
-
-              const createdIso = tp.createdAt
-                ? new Date(tp.createdAt * 1000).toISOString()
-                : new Date().toISOString();
-
-              const postText = tp.content?.text || tp.content?.title || "";
-
-              liveSocialPosts.push({
-                id: `tagembed-${tp.id}`,
-                platform: pPlatform,
-                author: {
-                  name: tp.author?.name || "SUPKEM Official",
-                  handle: tp.author?.username ? `@${tp.author.username}` : "@SUPKEM1",
-                  avatar: tp.author?.picture || "/logo.png",
-                  profileUrl: tp.link || dynamicChannels[pPlatform]?.url || "https://facebook.com",
-                  isVerified: true,
-                },
-                content: postText || "Official post from SUPKEM social channels.",
-                publishedAt: createdIso,
-                relativeTime: formatRelativeTime(createdIso),
-                mediaType: images.length > 1 ? "gallery" : images.length === 1 ? "image" : "text",
-                images: images.length > 0 ? images : undefined,
-                likes: tp.count?.like ?? 0,
-                shares: 0,
-                comments: tp.count?.comment ?? 0,
-                postUrl: tp.link || dynamicChannels[pPlatform]?.url || "https://facebook.com",
-                tags: ["SUPKEM", "Community"],
-              });
-            });
-          }
-        }
-      } catch {
-        // Tagembed fallback non-blocking
+        const { fetchTwitterFeed } = await import("@/lib/twitterApi");
+        const twPosts = await fetchTwitterFeed(
+          twConfig.bearerToken,
+          twConfig.username || "SUPKEM1",
+          twConfig.maxResults || 6
+        );
+        liveSocialPosts.push(...twPosts);
+      } catch (twErr) {
+        console.warn("Twitter ingestion notice:", twErr);
       }
     }
 
@@ -171,6 +123,9 @@ export async function GET(request: Request) {
     }
     if (currentSettings.youtubeApi && currentSettings.youtubeApi.enabled === false) {
       disabledChannelIds.add("youtube");
+    }
+    if (currentSettings.twitterApi && currentSettings.twitterApi.enabled === false) {
+      disabledChannelIds.add("x");
     }
 
     allPosts = allPosts.filter((p) => !disabledChannelIds.has(p.platform.toLowerCase()));

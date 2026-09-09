@@ -12,7 +12,6 @@ import {
 import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "./socialData";
 import { SocialPostCard } from "./SocialPostCard";
 import { SocialMediaLightbox } from "./SocialMediaLightbox";
-import { ThirdPartyWidgetEmbed } from "./ThirdPartyWidgetEmbed";
 import { PlatformIcon } from "./SocialPlatformIcons";
 import { SocialMediaSettings } from "@/lib/socialSettings";
 import {
@@ -46,56 +45,7 @@ export function SocialMediaWall({
   const [dynamicSettings, setDynamicSettings] = useState<SocialMediaSettings | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  // Determine active third party widget configuration
-  const activeConfig: SocialWallConfig = useMemo(() => {
-    // Check if live wall is globally disabled by admin in dynamic settings
-    if (dynamicSettings && dynamicSettings.isEnabled === false) {
-      return {
-        provider: "native",
-        feedId: "",
-        iframeUrl: "",
-      };
-    }
 
-    const rawProvider = (
-      config?.provider ||
-      dynamicSettings?.provider ||
-      process.env.NEXT_PUBLIC_SOCIAL_WALL_PROVIDER ||
-      ""
-    ).trim();
-    const rawId = (
-      config?.feedId ||
-      dynamicSettings?.widgetId ||
-      process.env.NEXT_PUBLIC_SOCIAL_WALL_ID ||
-      process.env.NEXT_PUBLIC_CURATOR_FEED_ID ||
-      ""
-    ).trim();
-    const rawUrl = (
-      config?.iframeUrl ||
-      dynamicSettings?.widgetUrl ||
-      process.env.NEXT_PUBLIC_SOCIAL_WALL_URL ||
-      ""
-    ).trim();
-
-    // Auto-detect if provider string is actually a UUID / Widget ID (e.g. 9748413f-9892-4546-8390-722f65d9851a)
-    const isIdInProvider = /^[0-9a-fA-F-]{16,}$/.test(rawProvider);
-    const feedId = rawId || (isIdInProvider ? rawProvider : "");
-    const provider: WidgetProvider = isIdInProvider
-      ? "tagembed"
-      : ((rawProvider as WidgetProvider) || (feedId ? "tagembed" : "native"));
-
-    return {
-      provider,
-      feedId,
-      iframeUrl: rawUrl,
-    };
-  }, [config, dynamicSettings]);
-
-  // Master switch check: widget is only active if explicitly enabled
-  const isWallGloballyEnabled = dynamicSettings ? dynamicSettings.isEnabled !== false : true;
-  const hasExternalWidget = isWallGloballyEnabled && Boolean(activeConfig.feedId || activeConfig.iframeUrl);
-
-  const [viewMode, setViewMode] = useState<"grid" | "widget">("grid");
 
   // Immediate fetch of social settings on mount for fast resolution
   React.useEffect(() => {
@@ -104,11 +54,6 @@ export function SocialMediaWall({
       .then((data) => {
         if (data?.settings) {
           setDynamicSettings(data.settings);
-          if (data.settings.isEnabled === false) {
-            setViewMode("grid");
-          } else if (data.settings.defaultView === "widget") {
-            setViewMode("widget");
-          }
         }
       })
       .catch(() => {});
@@ -141,16 +86,7 @@ export function SocialMediaWall({
     fetchDynamicPosts(selectedPlatform, searchQuery);
   }, [fetchDynamicPosts, selectedPlatform]);
 
-  // Sync default view mode once dynamic settings are loaded
-  React.useEffect(() => {
-    if (dynamicSettings) {
-      if (dynamicSettings.isEnabled === false || !hasExternalWidget) {
-        setViewMode("grid");
-      } else if (dynamicSettings.defaultView) {
-        setViewMode(dynamicSettings.defaultView === "grid" ? "grid" : "widget");
-      }
-    }
-  }, [dynamicSettings, hasExternalWidget]);
+
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -319,28 +255,6 @@ export function SocialMediaWall({
 
           {/* Action Hub (Follow & Refresh) */}
           <div className="flex flex-wrap items-center gap-3">
-            {hasExternalWidget && (
-              <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200 text-xs font-bold">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`px-3 py-1.5 rounded-xl transition-all ${viewMode === "grid"
-                      ? "bg-white text-slate-900 shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                    }`}
-                >
-                  Dynamic Wall
-                </button>
-                <button
-                  onClick={() => setViewMode("widget")}
-                  className={`px-3 py-1.5 rounded-xl transition-all ${viewMode === "widget"
-                      ? "bg-white text-slate-900 shadow-sm"
-                      : "text-slate-600 hover:text-slate-900"
-                    }`}
-                >
-                  Live Widget
-                </button>
-              </div>
-            )}
 
             <button
               onClick={handleRefreshFeed}
@@ -375,11 +289,7 @@ export function SocialMediaWall({
           </div>
         </div>
 
-        {/* View Mode: Aggregator Widget */}
-        {viewMode === "widget" && hasExternalWidget ? (
-          <ThirdPartyWidgetEmbed config={activeConfig} />
-        ) : (
-          <>
+
             {/* Filter Tabs & Search Bar */}
             {showFilters && (
               <div className="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -474,8 +384,6 @@ export function SocialMediaWall({
                 </button>
               </div>
             )}
-          </>
-        )}
 
         {/* Bottom Banner / Community Invite */}
         <div className="p-8 rounded-3xl bg-gradient-to-r from-emerald-900 via-teal-900 to-emerald-950 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">

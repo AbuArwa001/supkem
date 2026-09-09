@@ -1,6 +1,3 @@
-export { type WidgetProvider } from "@/components/social/types";
-import { WidgetProvider } from "@/components/social/types";
-
 export interface SocialChannelConfig {
   id: string; // "x" | "facebook" | "instagram" | "tiktok" | "youtube" | custom
   name: string;
@@ -30,15 +27,19 @@ export interface YouTubeApiSettings {
   lastSyncedAt?: string;
 }
 
+export interface TwitterApiSettings {
+  enabled: boolean;
+  bearerToken: string;
+  username: string;
+  maxResults?: number;
+  lastSyncedAt?: string;
+}
+
 export interface SocialMediaSettings {
-  provider: WidgetProvider;
-  widgetId: string;
-  widgetUrl: string;
-  isEnabled: boolean; // Master toggle for the live social aggregator widget
-  defaultView: "widget" | "grid";
   channels: SocialChannelConfig[];
   metaApi?: MetaApiSettings;
   youtubeApi?: YouTubeApiSettings;
+  twitterApi?: TwitterApiSettings;
   updatedAt: string;
 }
 
@@ -121,15 +122,18 @@ export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
   maxResults: 6,
 });
 
+export const getDefaultTwitterApiSettings = (): TwitterApiSettings => ({
+  enabled: process.env.TWITTER_API_ENABLED === "true" || false,
+  bearerToken: (process.env.TWITTER_BEARER_TOKEN || "").trim(),
+  username: (process.env.TWITTER_USERNAME || "SUPKEM1").trim(),
+  maxResults: 6,
+});
+
 export const getDefaultSocialSettings = (): SocialMediaSettings => ({
-  provider: ((process.env.NEXT_PUBLIC_SOCIAL_WALL_PROVIDER || "tagembed").trim() as WidgetProvider) || "tagembed",
-  widgetId: (process.env.NEXT_PUBLIC_SOCIAL_WALL_ID || "").trim(),
-  widgetUrl: (process.env.NEXT_PUBLIC_SOCIAL_WALL_URL || "").trim(),
-  isEnabled: true,
-  defaultView: "widget",
   channels: DEFAULT_SOCIAL_CHANNELS,
   metaApi: getDefaultMetaApiSettings(),
   youtubeApi: getDefaultYouTubeApiSettings(),
+  twitterApi: getDefaultTwitterApiSettings(),
   updatedAt: new Date().toISOString(),
 });
 

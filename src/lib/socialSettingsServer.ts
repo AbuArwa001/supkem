@@ -28,6 +28,12 @@ export function readPersistedSocialSettings(): SocialMediaSettings {
             channelId: (parsed.youtubeApi?.channelId || defaults.youtubeApi?.channelId || "").trim(),
             searchQuery: (parsed.youtubeApi?.searchQuery || defaults.youtubeApi?.searchQuery || "SUPKEM Kenya").trim(),
           },
+          twitterApi: {
+            ...defaults.twitterApi,
+            ...(parsed.twitterApi || {}),
+            bearerToken: (parsed.twitterApi?.bearerToken || defaults.twitterApi?.bearerToken || "").trim(),
+            username: (parsed.twitterApi?.username || defaults.twitterApi?.username || "SUPKEM1").trim(),
+          },
         };
       }
     }

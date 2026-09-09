@@ -32,7 +32,6 @@ import {
   SocialMediaSettings,
   SocialChannelConfig,
   getDefaultSocialSettings,
-  WidgetProvider,
 } from "@/lib/socialSettings";
 import Cookies from "js-cookie";
 
@@ -52,8 +51,9 @@ export default function SocialSettingsPage() {
   const [togglingChannelId, setTogglingChannelId] = useState<string | null>(null);
   const [isTogglingYt, setIsTogglingYt] = useState(false);
   const [isTogglingMeta, setIsTogglingMeta] = useState(false);
-  const [showPreview, setShowPreview] = useState(false);
-  const [showGuide, setShowGuide] = useState(false);
+  // Twitter API state
+  const [showTwitterToken, setShowTwitterToken] = useState(false);
+  const [isTogglingTwitter, setIsTogglingTwitter] = useState(false);
 
   // Meta Direct API state
   const [showMetaToken, setShowMetaToken] = useState(false);
@@ -238,16 +238,32 @@ export default function SocialSettingsPage() {
     }
   };
 
-  // Instant 1-click toggle for Live Widget
-  const handleToggleWidget = async (enabled: boolean) => {
-    const updated = { ...settings, isEnabled: enabled };
+  // Instant 1-click toggle for Twitter API
+  const handleToggleTwitterApi = async (enabled: boolean) => {
+    setIsTogglingTwitter(true);
+    const updated = {
+      ...settings,
+      twitterApi: {
+        ...(settings.twitterApi || {
+          enabled: false,
+          bearerToken: "",
+          username: "SUPKEM1",
+          maxResults: 6,
+        }),
+        enabled,
+      },
+    };
     setSettings(updated);
-    await persistSettings(
-      updated,
-      enabled
-        ? "✅ Live Tagembed Widget is now ON and visible to all website visitors!"
-        : "⏸️ Live Tagembed Widget is now OFF. Website visitors will see the curated dynamic card grid."
-    );
+    try {
+      await persistSettings(
+        updated,
+        enabled
+          ? "✅ Twitter (X) API Ingestion is now ACTIVE!"
+          : "⏸️ Twitter (X) API Ingestion is now DISABLED."
+      );
+    } finally {
+      setIsTogglingTwitter(false);
+    }
   };
 
   // Instant 1-click toggle for YouTube Video Stream
@@ -390,30 +406,7 @@ export default function SocialSettingsPage() {
     );
   };
 
-  // Computed preview source
-  const previewSrc = settings.widgetUrl
-    ? settings.widgetUrl
-    : settings.widgetId
-    ? `https://widget.tagembed.com/${settings.widgetId}`
-    : "";
 
-  const previewSrcDoc =
-    settings.provider === "tagembed" && settings.widgetId && !settings.widgetUrl
-      ? `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    html, body { margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100%; overflow: auto; font-family: sans-serif; }
-  </style>
-</head>
-<body>
-  <div class="tagembed-widget" style="width:100%;height:100%;min-height:500px;overflow:auto;" data-widget-id="${settings.widgetId}" data-website="1"></div>
-  <script src="https://widget.tagembed.com/embed.min.js" type="text/javascript" async></script>
-</body>
-</html>`
-      : undefined;
 
   if (!isAdmin && !isLoading) {
     return (
@@ -523,226 +516,132 @@ export default function SocialSettingsPage() {
       ) : (
         <div className="grid grid-cols-1 gap-8">
           {/* ═══════════════════════════════════════════════════════════════════════ */}
-          {/* CARD 1: TAGEMBED & SOCIAL WALL ENGINE                                   */}
+          {/* CARD 1: DIRECT TWITTER (X) API                                        */}
           {/* ═══════════════════════════════════════════════════════════════════════ */}
           <Card className="rounded-3xl border border-slate-200/90 shadow-sm bg-white overflow-hidden">
-            <CardHeader className="bg-gradient-to-r from-emerald-50/50 to-transparent pb-6 border-b border-slate-100">
+            <CardHeader className="bg-gradient-to-r from-slate-100/70 to-transparent pb-6 border-b border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <Radio className="w-5 h-5 text-emerald-600" />
+                    <div className="w-6 h-6 rounded-full bg-slate-900 text-white flex items-center justify-center text-[12px] font-bold shadow-sm ring-2 ring-white">
+                      𝕏
+                    </div>
                     <CardTitle className="text-xl font-bold font-outfit text-slate-900">
-                      Live Social Wall Integration
+                      Direct Twitter (X) API
                     </CardTitle>
+                    <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200 text-[10px] py-0 font-semibold">
+                      v2 API
+                    </Badge>
                   </div>
                   <CardDescription className="text-sm text-slate-500">
-                    Control the live external social media aggregator on the Home and News pages.
+                    Fetch official posts directly from SUPKEM's verified Twitter/X account via the official X API v2.
                   </CardDescription>
                 </div>
 
-                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs font-bold text-slate-800">
-                      Live Widget Status
-                    </span>
-                    <span
-                      className={`text-[10px] font-semibold flex items-center gap-1 ${
-                        settings.isEnabled ? "text-emerald-600" : "text-slate-400"
-                      }`}
-                    >
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="flex flex-col items-end">
+                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        Direct Ingestion
+                        {isTogglingTwitter && (
+                          <RefreshCw size={11} className="animate-spin text-slate-600" />
+                        )}
+                      </span>
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          settings.isEnabled
-                            ? "bg-emerald-500 animate-pulse"
-                            : "bg-slate-300"
+                        className={`text-[10px] font-semibold flex items-center gap-1 ${
+                          settings.twitterApi?.enabled ? "text-emerald-600" : "text-slate-400"
                         }`}
-                      />
-                      {settings.isEnabled ? "ON (Visible on Site)" : "OFF (Disabled)"}
-                    </span>
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            settings.twitterApi?.enabled
+                              ? "bg-emerald-500 animate-pulse"
+                              : "bg-slate-300"
+                          }`}
+                        />
+                        {settings.twitterApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                      </span>
+                    </div>
+                    <Switch
+                      checked={settings.twitterApi?.enabled ?? false}
+                      onCheckedChange={handleToggleTwitterApi}
+                      disabled={isTogglingTwitter || isSaving}
+                    />
                   </div>
-                  <Switch
-                    checked={settings.isEnabled}
-                    onCheckedChange={handleToggleWidget}
-                  />
                 </div>
               </div>
             </CardHeader>
 
             <CardContent className="p-6 sm:p-8 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Provider Selector */}
+                {/* Username */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Aggregator Engine Provider
+                    X (Twitter) Username
                   </label>
-                  <select
-                    value={settings.provider}
+                  <Input
+                    placeholder="e.g. SUPKEM1"
+                    value={settings.twitterApi?.username || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
                         ...prev,
-                        provider: e.target.value as WidgetProvider,
+                        twitterApi: {
+                          ...(prev.twitterApi || {
+                            enabled: false,
+                            bearerToken: "",
+                            username: "SUPKEM1",
+                            maxResults: 6,
+                          }),
+                          username: e.target.value.replace(/^@/, "").trim(),
+                        },
                       }))
                     }
-                    className="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                  >
-                    <option value="tagembed">Tagembed (Recommended)</option>
-                    <option value="wallsio">Walls.io</option>
-                    <option value="taggbox">Taggbox</option>
-                    <option value="curator">Curator.io</option>
-                    <option value="iframe">Custom Iframe Embed</option>
-                    <option value="native">Native Blended Feed Only (No Widget)</option>
-                  </select>
+                    className="h-11 rounded-xl text-sm font-mono"
+                  />
                   <p className="text-xs text-slate-400">
-                    Select your active aggregator provider or choose Native to only display SUPKEM news blends.
+                    Without the @ symbol. Default is <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">SUPKEM1</code>.
                   </p>
                 </div>
 
-                {/* Default Public View Mode */}
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Default User View Mode
-                  </label>
-                  <select
-                    value={settings.defaultView}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        defaultView: e.target.value as "widget" | "grid",
-                      }))
-                    }
-                    className="w-full h-11 px-4 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                  >
-                    <option value="widget">Live Aggregator Widget</option>
-                    <option value="grid">Dynamic Curated Grid</option>
-                  </select>
-                  <p className="text-xs text-slate-400">
-                    Visitors can always toggle between modes using the buttons on the wall header.
-                  </p>
-                </div>
-
-                {/* Widget ID Input */}
-                <div className="space-y-2">
+                {/* API Bearer Token */}
+                <div className="space-y-2 md:col-span-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Tagembed Widget ID
+                      X API v2 Bearer Token
                     </label>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type={showTwitterToken ? "text" : "password"}
+                      placeholder="AAAAAAAAAAAAAAAAAAAAA..."
+                      value={settings.twitterApi?.bearerToken || ""}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          twitterApi: {
+                            ...(prev.twitterApi || {
+                              enabled: false,
+                              username: "SUPKEM1",
+                              maxResults: 6,
+                            }),
+                            bearerToken: e.target.value.trim(),
+                          },
+                        }))
+                      }
+                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                    />
                     <button
                       type="button"
-                      onClick={() => setShowGuide(!showGuide)}
-                      className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold inline-flex items-center gap-1"
+                      onClick={() => setShowTwitterToken(!showTwitterToken)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
-                      <HelpCircle size={13} /> Where do I find this?
+                      {showTwitterToken ? "Hide" : "Show"}
                     </button>
                   </div>
-                  <Input
-                    placeholder="e.g. 2144784 or 9748413f-9892-4546-8390-722f65d9851a"
-                    value={settings.widgetId}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        widgetId: e.target.value.trim(),
-                      }))
-                    }
-                    className="h-11 rounded-xl text-sm font-mono"
-                  />
                   <p className="text-xs text-slate-400">
-                    Copy the ID from your Tagembed embed snippet (<code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">data-widget-id</code>).
+                    Generated from your X Developer Portal project.
                   </p>
                 </div>
-
-                {/* Direct Embed URL (Optional override) */}
-                <div className="space-y-2">
-                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Custom Embed URL (Optional Override)
-                  </label>
-                  <Input
-                    placeholder="e.g. https://widget.tagembed.com/2144784"
-                    value={settings.widgetUrl}
-                    onChange={(e) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        widgetUrl: e.target.value.trim(),
-                      }))
-                    }
-                    className="h-11 rounded-xl text-sm font-mono"
-                  />
-                  <p className="text-xs text-slate-400">
-                    Optional direct URL to override standard widget URL formatting.
-                  </p>
-                </div>
-              </div>
-
-              {/* Tagembed Quick Guide Accordion */}
-              {showGuide && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="p-5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 text-xs text-slate-700 space-y-3"
-                >
-                  <div className="font-bold text-sm text-emerald-900 flex items-center gap-2">
-                    <HelpCircle size={16} className="text-emerald-600" />
-                    How to Get Your Tagembed Widget ID:
-                  </div>
-                  <ol className="list-decimal pl-5 space-y-1.5 leading-relaxed text-slate-600">
-                    <li>Log in to your <strong>Tagembed Dashboard</strong>.</li>
-                    <li>Click <strong>Content Gallery</strong> → <strong>Add feed</strong> to connect your official Twitter/X, Facebook, or Instagram.</li>
-                    <li>Click the blue <strong>Publish</strong> or <strong>Customize & Publish</strong> button.</li>
-                    <li>Click <strong>Embed Widget</strong> → choose <strong>Other</strong> or <strong>HTML</strong>.</li>
-                    <li>
-                      Look at the code snippet: <code className="bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-emerald-800">data-widget-id=&quot;XXXXXX&quot;</code>.
-                    </li>
-                    <li>Copy that value into the <strong>Tagembed Widget ID</strong> field above and click <strong>Save Changes</strong>!</li>
-                  </ol>
-                </motion.div>
-              )}
-
-              {/* Live Preview Toggle & Box */}
-              <div className="pt-4 border-t border-slate-100 flex flex-col gap-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-bold text-slate-800 flex items-center gap-2">
-                    <Eye size={16} className="text-slate-500" /> Live Widget Preview
-                  </span>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowPreview(!showPreview)}
-                    className="text-xs font-semibold text-slate-600 gap-1.5"
-                  >
-                    {showPreview ? <EyeOff size={14} /> : <Eye size={14} />}
-                    {showPreview ? "Hide Preview" : "Show Preview"}
-                  </Button>
-                </div>
-
-                {showPreview && (
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 p-2 space-y-2">
-                    {!settings.isEnabled && (
-                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2 text-xs text-amber-800 font-medium">
-                        <AlertCircle size={16} className="text-amber-600 flex-shrink-0" />
-                        <span>
-                          <strong>Widget is currently OFF:</strong> Website visitors will see the curated dynamic card grid instead of this live widget. Toggle the <strong>Live Widget Status</strong> switch above to ON to display this widget publicly.
-                        </span>
-                      </div>
-                    )}
-                    {previewSrc || previewSrcDoc ? (
-                      <iframe
-                        src={previewSrcDoc ? undefined : previewSrc}
-                        srcDoc={previewSrcDoc}
-                        className="w-full h-[520px] rounded-xl border-0 bg-white"
-                        title="Live Tagembed Preview"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      />
-                    ) : (
-                      <div className="py-16 text-center text-slate-400 space-y-2">
-                        <AlertCircle className="w-8 h-8 mx-auto text-slate-300" />
-                        <p className="text-sm font-medium">No Widget ID or URL configured yet.</p>
-                        <p className="text-xs">Enter your Tagembed Widget ID above to preview it here.</p>
-                      </div>
-                    )}
-                  </div>
-                )}
               </div>
             </CardContent>
           </Card>

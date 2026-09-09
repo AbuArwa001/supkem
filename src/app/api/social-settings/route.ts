@@ -14,17 +14,7 @@ const SERVER_API_URL =
 
 export async function GET(request: Request) {
   try {
-    // 1. Check local file persistence (instant, resilient across dev/prod)
-    const persisted = readPersistedSocialSettings();
-    if (persisted && (persisted.updatedAt || persisted.channels)) {
-      return NextResponse.json({
-        success: true,
-        source: "persisted",
-        settings: persisted,
-      });
-    }
-
-    // 2. Try to fetch from backend SystemParameter
+    // 1. Try to fetch from backend SystemParameter
     try {
       const headers: Record<string, string> = {
         Accept: "application/json",
@@ -63,6 +53,16 @@ export async function GET(request: Request) {
       // Backend request fallback
     }
 
+    // 2. Check local file persistence (fallback, resilient across dev/prod)
+    const persisted = readPersistedSocialSettings();
+    if (persisted && (persisted.updatedAt || persisted.channels)) {
+      return NextResponse.json({
+        success: true,
+        source: "persisted",
+        settings: persisted,
+      });
+    }
+
     // 3. Fall back to environment defaults
     const defaults = getDefaultSocialSettings();
     return NextResponse.json({
@@ -88,14 +88,10 @@ export async function POST(request: Request) {
     const currentSettings = readPersistedSocialSettings();
 
     const updatedSettings: SocialMediaSettings = {
-      provider: body.provider || currentSettings.provider,
-      widgetId: typeof body.widgetId === "string" ? body.widgetId.trim() : currentSettings.widgetId,
-      widgetUrl: typeof body.widgetUrl === "string" ? body.widgetUrl.trim() : currentSettings.widgetUrl,
-      isEnabled: typeof body.isEnabled === "boolean" ? body.isEnabled : currentSettings.isEnabled,
-      defaultView: body.defaultView === "grid" ? "grid" : (body.defaultView === "widget" ? "widget" : currentSettings.defaultView),
       channels: Array.isArray(body.channels) ? body.channels : currentSettings.channels,
       metaApi: body.metaApi || currentSettings.metaApi,
       youtubeApi: body.youtubeApi || currentSettings.youtubeApi,
+      twitterApi: body.twitterApi || currentSettings.twitterApi,
       updatedAt: new Date().toISOString(),
     };
 
@@ -123,8 +119,8 @@ export async function POST(request: Request) {
 
         const payload = {
           key: "SOCIAL_MEDIA_SETTINGS",
-          name: "Social Media & Tagembed Settings",
-          description: "Configuration for Tagembed live wall, aggregator provider, and official handles.",
+          name: "Social Media Settings",
+          description: "Configuration for official social media handles and API integrations.",
           category: "general",
           data_type: "json",
           value: JSON.stringify(updatedSettings),
