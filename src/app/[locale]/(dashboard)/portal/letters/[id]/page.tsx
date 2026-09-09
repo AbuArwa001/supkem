@@ -34,7 +34,7 @@ export default function LetterDetail() {
       try {
         if (params.id) {
           const res = await api.get(
-            `/applications/certifications/${params.id}/`,
+            `/applications/letters/${params.id}/`,
           );
           setLetter(res.data);
         }
