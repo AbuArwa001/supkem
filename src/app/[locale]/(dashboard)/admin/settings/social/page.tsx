@@ -49,6 +49,9 @@ export default function SocialSettingsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [togglingChannelId, setTogglingChannelId] = useState<string | null>(null);
+  const [isTogglingYt, setIsTogglingYt] = useState(false);
+  const [isTogglingMeta, setIsTogglingMeta] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
 
@@ -195,11 +198,11 @@ export default function SocialSettingsPage() {
     }
   };
 
-  // Instant 1-click toggle for Live Widget
-  const handleToggleWidget = async (enabled: boolean) => {
-    const updated = { ...settings, isEnabled: enabled };
-    setSettings(updated);
-
+  // Central settings persistence helper with instant feedback
+  const persistSettings = async (
+    updated: SocialMediaSettings,
+    successMessage?: string
+  ): Promise<boolean> => {
     const token = Cookies.get("access_token");
     const headers: Record<string, string> = { "Content-Type": "application/json" };
     if (token) headers["Authorization"] = `Bearer ${token}`;
@@ -215,29 +218,126 @@ export default function SocialSettingsPage() {
         const data = await res.json();
         setSettings(data.settings);
         setInitialSettings(data.settings);
-        setStatusMessage({
-          type: "success",
-          text: enabled
-            ? "✅ Live Tagembed Widget is now ON and visible to all website visitors!"
-            : "⏸️ Live Tagembed Widget is now OFF. Website visitors will see the curated dynamic card grid.",
-        });
+        if (successMessage) {
+          setStatusMessage({
+            type: "success",
+            text: successMessage,
+          });
+        }
+        return true;
+      } else {
+        const errData = await res.json().catch(() => null);
+        throw new Error(errData?.error || "Failed to persist social settings");
       }
     } catch (err: any) {
       setStatusMessage({
         type: "error",
-        text: "Failed to update widget status: " + (err?.message || "Unknown error"),
+        text: err?.message || "Failed to update settings. Please try again.",
       });
+      return false;
     }
   };
 
-  // Channel manipulation
-  const toggleChannel = (id: string) => {
-    setSettings((prev) => ({
-      ...prev,
-      channels: prev.channels.map((ch) =>
-        ch.id === id ? { ...ch, enabled: !ch.enabled } : ch
-      ),
-    }));
+  // Instant 1-click toggle for Live Widget
+  const handleToggleWidget = async (enabled: boolean) => {
+    const updated = { ...settings, isEnabled: enabled };
+    setSettings(updated);
+    await persistSettings(
+      updated,
+      enabled
+        ? "✅ Live Tagembed Widget is now ON and visible to all website visitors!"
+        : "⏸️ Live Tagembed Widget is now OFF. Website visitors will see the curated dynamic card grid."
+    );
+  };
+
+  // Instant 1-click toggle for YouTube Video Stream
+  const handleToggleYoutubeApi = async (enabled: boolean) => {
+    setIsTogglingYt(true);
+    const updated = {
+      ...settings,
+      youtubeApi: {
+        ...(settings.youtubeApi || {
+          apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+          channelId: "UCNbBcq2UNZahLtzrnyabhow",
+          searchQuery: "SUPKEM Kenya",
+          maxResults: 6,
+        }),
+        enabled,
+      },
+    };
+    setSettings(updated);
+    try {
+      await persistSettings(
+        updated,
+        enabled
+          ? "✅ YouTube Video Stream is now ACTIVE and streaming official videos to the social wall!"
+          : "⏸️ YouTube Video Stream is now DISABLED. Official video streaming is paused."
+      );
+    } finally {
+      setIsTogglingYt(false);
+    }
+  };
+
+  // Instant 1-click toggle for Direct Meta API
+  const handleToggleMetaApi = async (enabled: boolean) => {
+    setIsTogglingMeta(true);
+    const updated = {
+      ...settings,
+      metaApi: {
+        ...(settings.metaApi || {
+          facebookPageId: "100079747610399",
+          facebookAccessToken: "",
+          instagramBusinessId: "",
+          cacheDurationMinutes: 30,
+        }),
+        enabled,
+      },
+    };
+    setSettings(updated);
+    try {
+      await persistSettings(
+        updated,
+        enabled
+          ? "✅ Direct Meta API is now ACTIVE for Facebook & Instagram!"
+          : "⏸️ Direct Meta API is now DISABLED."
+      );
+    } finally {
+      setIsTogglingMeta(false);
+    }
+  };
+
+  // Channel manipulation with instant auto-save
+  const toggleChannel = async (id: string) => {
+    const target = settings.channels.find((ch) => ch.id === id);
+    if (!target) return;
+    const nextEnabled = !target.enabled;
+
+    setTogglingChannelId(id);
+    const updatedChannels = settings.channels.map((ch) =>
+      ch.id === id ? { ...ch, enabled: nextEnabled } : ch
+    );
+    const updated = { ...settings, channels: updatedChannels };
+    setSettings(updated);
+
+    try {
+      const ok = await persistSettings(
+        updated,
+        nextEnabled
+          ? `✅ ${target.name} channel enabled! Now active across the website, footer, and social wall.`
+          : `⏸️ ${target.name} channel disabled! Hidden from the website, footer, and social wall.`
+      );
+      if (!ok) {
+        // Rollback on failure
+        setSettings((prev) => ({
+          ...prev,
+          channels: prev.channels.map((ch) =>
+            ch.id === id ? { ...ch, enabled: target.enabled } : ch
+          ),
+        }));
+      }
+    } finally {
+      setTogglingChannelId(null);
+    }
   };
 
   const updateChannel = (id: string, updates: Partial<SocialChannelConfig>) => {
@@ -249,14 +349,17 @@ export default function SocialSettingsPage() {
     }));
   };
 
-  const deleteChannel = (id: string) => {
-    setSettings((prev) => ({
-      ...prev,
-      channels: prev.channels.filter((ch) => ch.id !== id),
-    }));
+  const deleteChannel = async (id: string) => {
+    const target = settings.channels.find((ch) => ch.id === id);
+    if (!confirm(`Are you sure you want to remove "${target?.name || id}"?`)) return;
+
+    const updatedChannels = settings.channels.filter((ch) => ch.id !== id);
+    const updated = { ...settings, channels: updatedChannels };
+    setSettings(updated);
+    await persistSettings(updated, `🗑️ ${target?.name || id} channel has been removed.`);
   };
 
-  const addCustomChannel = () => {
+  const addCustomChannel = async () => {
     if (!newChannelName.trim() || !newChannelUrl.trim()) return;
 
     const id = newChannelName.toLowerCase().replace(/[^a-z0-9]/g, "-");
@@ -271,15 +374,20 @@ export default function SocialSettingsPage() {
       badgeClass: "bg-emerald-500/15 text-emerald-600 border-emerald-500/30",
     };
 
-    setSettings((prev) => ({
-      ...prev,
-      channels: [...prev.channels, newChan],
-    }));
-
+    const updated = {
+      ...settings,
+      channels: [...settings.channels, newChan],
+    };
+    setSettings(updated);
     setNewChannelName("");
     setNewChannelHandle("");
     setNewChannelUrl("");
     setIsAddingChannel(false);
+
+    await persistSettings(
+      updated,
+      `✅ New channel "${newChan.name}" added and activated successfully!`
+    );
   };
 
   // Computed preview source
@@ -667,43 +775,36 @@ export default function SocialSettingsPage() {
                   </CardDescription>
                 </div>
 
-                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs font-bold text-slate-800">
-                      Direct Ingestion
-                    </span>
-                    <span
-                      className={`text-[10px] font-semibold flex items-center gap-1 ${
-                        settings.metaApi?.enabled ? "text-blue-600" : "text-slate-400"
-                      }`}
-                    >
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="flex flex-col items-end">
+                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        Direct Ingestion
+                        {isTogglingMeta && (
+                          <RefreshCw size={11} className="animate-spin text-blue-600" />
+                        )}
+                      </span>
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          settings.metaApi?.enabled
-                            ? "bg-blue-500 animate-pulse"
-                            : "bg-slate-300"
+                        className={`text-[10px] font-semibold flex items-center gap-1 ${
+                          settings.metaApi?.enabled ? "text-blue-600" : "text-slate-400"
                         }`}
-                      />
-                      {settings.metaApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
-                    </span>
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            settings.metaApi?.enabled
+                              ? "bg-blue-500 animate-pulse"
+                              : "bg-slate-300"
+                          }`}
+                        />
+                        {settings.metaApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                      </span>
+                    </div>
+                    <Switch
+                      checked={settings.metaApi?.enabled ?? false}
+                      onCheckedChange={handleToggleMetaApi}
+                      disabled={isTogglingMeta || isSaving}
+                    />
                   </div>
-                  <Switch
-                    checked={settings.metaApi?.enabled ?? false}
-                    onCheckedChange={(checked) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        metaApi: {
-                          ...(prev.metaApi || {
-                            facebookPageId: "100079747610399",
-                            facebookAccessToken: "",
-                            instagramBusinessId: "",
-                            cacheDurationMinutes: 30,
-                          }),
-                          enabled: checked,
-                        },
-                      }))
-                    }
-                  />
                 </div>
               </div>
             </CardHeader>
@@ -950,43 +1051,46 @@ export default function SocialSettingsPage() {
                   </CardDescription>
                 </div>
 
-                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs font-bold text-slate-800">
-                      Video Stream
-                    </span>
-                    <span
-                      className={`text-[10px] font-semibold flex items-center gap-1 ${
-                        settings.youtubeApi?.enabled ? "text-red-600" : "text-slate-400"
-                      }`}
-                    >
+                <div className="flex items-center gap-3">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="bg-red-600 hover:bg-red-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm hidden sm:inline-flex"
+                  >
+                    <Save size={13} /> Save YouTube Settings
+                  </Button>
+
+                  <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                    <div className="flex flex-col items-end">
+                      <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        Video Stream
+                        {isTogglingYt && (
+                          <RefreshCw size={11} className="animate-spin text-red-600" />
+                        )}
+                      </span>
                       <span
-                        className={`w-1.5 h-1.5 rounded-full ${
-                          settings.youtubeApi?.enabled
-                            ? "bg-red-500 animate-pulse"
-                            : "bg-slate-300"
+                        className={`text-[10px] font-semibold flex items-center gap-1 ${
+                          settings.youtubeApi?.enabled ? "text-red-600" : "text-slate-400"
                         }`}
-                      />
-                      {settings.youtubeApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
-                    </span>
+                      >
+                        <span
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            settings.youtubeApi?.enabled
+                              ? "bg-red-500 animate-pulse"
+                              : "bg-slate-300"
+                          }`}
+                        />
+                        {settings.youtubeApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                      </span>
+                    </div>
+                    <Switch
+                      checked={settings.youtubeApi?.enabled ?? true}
+                      onCheckedChange={handleToggleYoutubeApi}
+                      disabled={isTogglingYt || isSaving}
+                    />
                   </div>
-                  <Switch
-                    checked={settings.youtubeApi?.enabled ?? true}
-                    onCheckedChange={(checked) =>
-                      setSettings((prev) => ({
-                        ...prev,
-                        youtubeApi: {
-                          ...(prev.youtubeApi || {
-                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-                            channelId: "UCNbBcq2UNZahLtzrnyabhow",
-                            searchQuery: "SUPKEM Kenya",
-                            maxResults: 6,
-                          }),
-                          enabled: checked,
-                        },
-                      }))
-                    }
-                  />
                 </div>
               </div>
             </CardHeader>
@@ -1168,14 +1272,25 @@ export default function SocialSettingsPage() {
                   </CardDescription>
                 </div>
 
-                <Button
-                  type="button"
-                  size="sm"
-                  onClick={() => setIsAddingChannel(!isAddingChannel)}
-                  className="bg-blue-600 hover:bg-blue-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm"
-                >
-                  <Plus size={15} /> Add Custom Channel
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm hidden sm:inline-flex"
+                  >
+                    <Save size={13} /> Save Channels
+                  </Button>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setIsAddingChannel(!isAddingChannel)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm"
+                  >
+                    <Plus size={15} /> Add Custom Channel
+                  </Button>
+                </div>
               </div>
             </CardHeader>
 
@@ -1247,13 +1362,18 @@ export default function SocialSettingsPage() {
                         <Switch
                           checked={channel.enabled}
                           onCheckedChange={() => toggleChannel(channel.id)}
+                          disabled={togglingChannelId === channel.id || isSaving}
                         />
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="font-bold text-sm text-slate-800">
                               {channel.name}
                             </span>
-                            {channel.enabled ? (
+                            {togglingChannelId === channel.id ? (
+                              <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] py-0 flex items-center gap-1">
+                                <RefreshCw size={10} className="animate-spin" /> Saving...
+                              </Badge>
+                            ) : channel.enabled ? (
                               <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] py-0">
                                 Active
                               </Badge>
@@ -1332,6 +1452,52 @@ export default function SocialSettingsPage() {
           </Card>
         </div>
       )}
+
+      {/* Floating Sticky Save Bar (appears whenever there are unsaved text or settings changes) */}
+      <AnimatePresence>
+        {hasUnsavedChanges && (
+          <motion.div
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 60, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            className="fixed bottom-6 inset-x-0 z-50 flex justify-center px-4 pointer-events-none"
+          >
+            <div className="bg-slate-900/95 backdrop-blur-md text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700/80 flex items-center gap-4 pointer-events-auto max-w-xl w-full justify-between">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+                <span className="text-xs font-semibold text-slate-200">
+                  You have unsaved changes in settings
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleReset}
+                  disabled={isSaving}
+                  className="text-xs text-slate-300 hover:text-white hover:bg-slate-800 h-8"
+                >
+                  Discard
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold gap-1.5 shadow-lg shadow-emerald-600/30 h-8"
+                >
+                  {isSaving ? (
+                    <RefreshCw size={13} className="animate-spin" />
+                  ) : (
+                    <Save size={13} />
+                  )}
+                  Save Changes
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

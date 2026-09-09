@@ -23,6 +23,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
 
     const socialChannels = [
         {
+            id: "x",
             name: "X (Twitter)",
             handle: "@SUPKEM1",
             url: "https://x.com/SUPKEM1",
@@ -34,6 +35,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
             ),
         },
         {
+            id: "facebook",
             name: "Facebook",
             handle: "Supreme Council of Kenya Muslims",
             url: "https://www.facebook.com/p/Supreme-Council-of-Kenya-Muslims-100079747610399/",
@@ -45,6 +47,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
             ),
         },
         {
+            id: "instagram",
             name: "Instagram",
             handle: "@supkem_kenya",
             url: "https://www.instagram.com/supkem_kenya/",
@@ -56,6 +59,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
             ),
         },
         {
+            id: "tiktok",
             name: "TikTok",
             handle: "@supkem_kenya",
             url: "https://www.tiktok.com/@supkem_kenya",
@@ -67,6 +71,7 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
             ),
         },
         {
+            id: "youtube",
             name: "YouTube",
             handle: "SUPKEM Kenya",
             url: "https://youtube.com/@SUPKEM",
@@ -85,14 +90,16 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
             .filter((item) => {
                 const found = dynamicChannels.find(
                     (dc) =>
+                        dc.id === item.id ||
                         dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
                         item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
                 );
-                return found ? found.enabled : true;
+                return found ? found.enabled !== false : true;
             })
             .map((item) => {
                 const found = dynamicChannels.find(
                     (dc) =>
+                        dc.id === item.id ||
                         dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
                         item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
                 );

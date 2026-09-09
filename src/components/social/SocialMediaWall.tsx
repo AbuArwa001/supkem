@@ -155,6 +155,20 @@ export function SocialMediaWall({
   // Filter posts
   const filteredPosts = useMemo(() => {
     return posts.filter((post) => {
+      // Exclude posts from channels that have been disabled in settings
+      if (dynamicSettings?.channels) {
+        const ch = dynamicSettings.channels.find((c) => c.id === post.platform);
+        if (ch && ch.enabled === false) return false;
+      }
+      // Exclude YouTube video stream posts if YouTube API is turned off
+      if (
+        post.platform === "youtube" &&
+        dynamicSettings?.youtubeApi &&
+        dynamicSettings.youtubeApi.enabled === false
+      ) {
+        return false;
+      }
+
       const matchesPlatform =
         selectedPlatform === "all" || post.platform === selectedPlatform;
       const query = searchQuery.trim().toLowerCase();
@@ -166,7 +180,7 @@ export function SocialMediaWall({
 
       return matchesPlatform && matchesSearch;
     });
-  }, [posts, selectedPlatform, searchQuery]);
+  }, [posts, selectedPlatform, searchQuery, dynamicSettings]);
 
   // Dynamic feed refresh
   const handleRefreshFeed = async () => {
@@ -209,10 +223,55 @@ export function SocialMediaWall({
 
     return base.filter((p) => {
       if (p.id === "all") return true;
+      if (
+        p.id === "youtube" &&
+        dynamicSettings?.youtubeApi &&
+        dynamicSettings.youtubeApi.enabled === false
+      ) {
+        const ytCh = dynamicSettings.channels.find((c) => c.id === "youtube");
+        if (ytCh && ytCh.enabled === false) return false;
+      }
       const ch = dynamicSettings.channels.find((c) => c.id === p.id);
       return ch ? ch.enabled : true;
     });
   }, [dynamicSettings]);
+
+  // Dynamically visible header direct follow channels
+  const activeHeaderChannels = useMemo(() => {
+    const defaultList = [
+      { id: "x", name: "X", url: OFFICIAL_CHANNELS.x.url, hoverClass: "hover:bg-slate-900 hover:text-white text-slate-700" },
+      { id: "facebook", name: "Facebook", url: OFFICIAL_CHANNELS.facebook.url, hoverClass: "text-[#1877F2] hover:bg-[#1877F2] hover:text-white" },
+      { id: "instagram", name: "Instagram", url: OFFICIAL_CHANNELS.instagram.url, hoverClass: "text-[#E1306C] hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-600 hover:text-white" },
+      { id: "youtube", name: "YouTube", url: OFFICIAL_CHANNELS.youtube.url, hoverClass: "text-red-600 hover:bg-red-600 hover:text-white" },
+      { id: "tiktok", name: "TikTok", url: OFFICIAL_CHANNELS.tiktok.url, hoverClass: "text-slate-900 hover:bg-black hover:text-white" },
+    ];
+
+    if (!dynamicSettings?.channels) return defaultList;
+
+    return defaultList
+      .filter((item) => {
+        const ch = dynamicSettings.channels.find((c) => c.id === item.id);
+        if (ch && ch.enabled === false) return false;
+        if (
+          item.id === "youtube" &&
+          dynamicSettings.youtubeApi &&
+          dynamicSettings.youtubeApi.enabled === false &&
+          ch &&
+          ch.enabled === false
+        ) {
+          return false;
+        }
+        return ch ? ch.enabled !== false : true;
+      })
+      .map((item) => {
+        const ch = dynamicSettings.channels.find((c) => c.id === item.id);
+        return ch?.url ? { ...item, url: ch.url } : item;
+      });
+  }, [dynamicSettings]);
+
+  const primaryCtaChannel = useMemo(() => {
+    return activeHeaderChannels[0] || null;
+  }, [activeHeaderChannels]);
 
   return (
     <section className={`relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 via-white to-slate-50 overflow-hidden ${className}`}>
@@ -285,53 +344,22 @@ export function SocialMediaWall({
             </button>
 
             {/* Official Channel Direct Links */}
-            <div className="flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-slate-200 shadow-sm">
-              <a
-                href={OFFICIAL_CHANNELS.x.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-xl text-slate-700 hover:bg-slate-900 hover:text-white transition-colors"
-                title="Follow on X"
-              >
-                <PlatformIcon platform="x" className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={OFFICIAL_CHANNELS.facebook.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-xl text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-colors"
-                title="Follow on Facebook"
-              >
-                <PlatformIcon platform="facebook" className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={OFFICIAL_CHANNELS.instagram.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-xl text-[#E1306C] hover:bg-gradient-to-tr hover:from-amber-500 hover:via-pink-500 hover:to-purple-600 hover:text-white transition-colors"
-                title="Follow on Instagram"
-              >
-                <PlatformIcon platform="instagram" className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={OFFICIAL_CHANNELS.youtube.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-xl text-red-600 hover:bg-red-600 hover:text-white transition-colors"
-                title="Follow on YouTube"
-              >
-                <PlatformIcon platform="youtube" className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={OFFICIAL_CHANNELS.tiktok.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 rounded-xl text-slate-900 hover:bg-black hover:text-white transition-colors"
-                title="Follow on TikTok"
-              >
-                <PlatformIcon platform="tiktok" className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            {activeHeaderChannels.length > 0 && (
+              <div className="flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-slate-200 shadow-sm">
+                {activeHeaderChannels.map((item) => (
+                  <a
+                    key={item.id}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-2 rounded-xl transition-all hover:scale-110 ${item.hoverClass}`}
+                    title={`Follow on ${item.name}`}
+                  >
+                    <PlatformIcon platform={item.id as SocialPlatform} className="w-3.5 h-3.5" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
@@ -449,17 +477,19 @@ export function SocialMediaWall({
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <a
-              href={OFFICIAL_CHANNELS.x.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-5 py-3 rounded-2xl bg-white text-emerald-950 font-bold text-xs hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg flex items-center gap-2"
-            >
-              <span>Follow @SUPKEM1</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
+          {primaryCtaChannel && (
+            <div className="flex items-center gap-3">
+              <a
+                href={primaryCtaChannel.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-5 py-3 rounded-2xl bg-white text-emerald-950 font-bold text-xs hover:bg-emerald-50 transition-all hover:scale-105 shadow-lg flex items-center gap-2"
+              >
+                <span>Follow on {primaryCtaChannel.name}</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          )}
         </div>
       </div>
 
