@@ -27,8 +27,8 @@ export function OrganizationCard({ org, index, viewMode }: OrganizationCardProps
             : "bg-red-50 text-red-600 border-red-200";
 
     const formatCount = (count: number) => {
-        if (!count) return "00";
-        return count > 0 && count < 10 ? `0${count}` : count.toString();
+        if (!count) return "0";
+        return count.toString();
     };
 
     return (
