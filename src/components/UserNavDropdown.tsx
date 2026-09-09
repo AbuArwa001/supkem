@@ -27,19 +27,19 @@ export function UserNavDropdown() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-3 md:border-l md:border-border/10 md:pl-6 cursor-pointer outline-none group hover:opacity-80 transition-opacity">
-        <div className="h-9 w-9 bg-primary/10 text-primary font-bold text-sm rounded-full flex items-center justify-center border border-primary/20 shadow-sm">
+      <DropdownMenuTrigger className="flex items-center gap-3 md:border-l md:border-white/10 md:pl-6 cursor-pointer outline-none group hover:opacity-80 transition-opacity">
+        <div className="h-9 w-9 bg-white/10 text-white font-bold text-sm rounded-full flex items-center justify-center border border-white/20 shadow-sm backdrop-blur-md">
           {initials}
         </div>
         <div className="hidden md:flex flex-col items-start gap-0.5">
-          <span className="text-sm font-semibold text-foreground/80 leading-none">
+          <span className="text-sm font-semibold text-white/90 leading-none">
             {user.full_name || "User"}
           </span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-primary leading-none mt-1">
+          <span className="text-[10px] uppercase font-bold tracking-widest text-secondary leading-none mt-1">
             {user.role?.role_name || "Member"}
           </span>
         </div>
-        <ChevronDown size={14} className="text-foreground/40 hidden md:block group-hover:text-primary transition-colors" />
+        <ChevronDown size={14} className="text-white/40 hidden md:block group-hover:text-white transition-colors" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 mt-2 rounded-xl border border-border/10 shadow-lg">
         <DropdownMenuLabel className="font-normal px-4 py-3">

@@ -28,32 +28,34 @@ export default function PortalLayout({
         />
         <main className="flex-1 overflow-x-hidden min-h-screen">
           {/* Mobile Header */}
-          <header className="lg:hidden flex items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50">
+          <header className="lg:hidden flex items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50 border-b-2 border-secondary/20 shadow-xl shadow-black/10">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center border border-white/10">
-                <img src="/logo.svg" alt="SUPKEM Logo" className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm">
+                <img src="/logo.svg" alt="SUPKEM Logo" className="w-5 h-5 brightness-0 invert" />
               </div>
-              <span className="font-outfit font-black tracking-tight tracking-widest text-xs uppercase">
+              <span className="font-outfit font-black tracking-widest text-xs uppercase text-white/90">
                 {t("portalHeading")}
               </span>
             </div>
             <div className="flex items-center gap-4">
-              <KnockNotifications />
+              <div className="bg-white/10 p-1.5 rounded-full border border-white/10">
+                <KnockNotifications />
+              </div>
               <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="p-2 hover:bg-white/5 rounded-xl transition-colors"
+                className="p-2 hover:bg-white/10 rounded-xl transition-colors border border-transparent hover:border-white/20"
               >
                 <Menu size={24} />
               </button>
             </div>
           </header>
 
-          <header className="hidden lg:flex items-center justify-between px-10 py-6 border-b border-border/10 bg-white/50 backdrop-blur-md sticky top-0 z-40">
+          <header className="hidden lg:flex items-center justify-between px-10 py-5 bg-[#0A1A14] text-white border-b-2 border-secondary/20 shadow-xl shadow-black/5 sticky top-0 z-40 bg-[url('/noise.png')] bg-blend-overlay">
             <DashboardSearch />
             <div className="flex items-center gap-6">
               <LanguageToggle />
-              <div className="flex items-center gap-4">
-                <div className="relative pt-1">
+              <div className="flex items-center gap-5">
+                <div className="relative pt-1 bg-white/10 p-1.5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
                   <KnockNotifications />
                 </div>
                 <UserNavDropdown />
