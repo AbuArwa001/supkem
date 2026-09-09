@@ -33,6 +33,14 @@ export const OFFICIAL_CHANNELS = {
     bgClass: "bg-black text-white hover:bg-neutral-800",
     badgeClass: "bg-cyan-500/15 text-cyan-600 border-cyan-500/30",
   },
+  youtube: {
+    name: "YouTube",
+    handle: "SUPKEM Kenya",
+    url: "https://youtube.com/@SUPKEM",
+    color: "#FF0000",
+    bgClass: "bg-red-600 text-white hover:bg-red-700",
+    badgeClass: "bg-red-500/15 text-red-600 border-red-500/30",
+  },
 };
 
 export const INITIAL_SOCIAL_POSTS: SocialPost[] = [

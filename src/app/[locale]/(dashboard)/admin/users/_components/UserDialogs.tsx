@@ -14,6 +14,8 @@ interface UserDialogsProps {
   onDetailOpenChange: (open: boolean) => void;
   selectedUser: any;
   onSuccess: () => void;
+  onOpenEdit?: (user: any) => void;
+  onToggleActive?: (user: any) => void;
 }
 
 export const UserDialogs = ({
@@ -25,23 +27,25 @@ export const UserDialogs = ({
   onDetailOpenChange,
   selectedUser,
   onSuccess,
+  onOpenEdit,
+  onToggleActive,
 }: UserDialogsProps) => {
   const t = useTranslations("Dashboard.admin.users.dialogs");
 
   return (
     <>
       <Dialog open={isAddOpen} onOpenChange={onAddOpenChange}>
-        <DialogContent className="sm:max-w-[650px] rounded-[2.5rem] border-none shadow-premium p-0 overflow-hidden bg-white">
-          <div className="bg-gradient-to-br from-rose-600 to-rose-700 p-10 text-white text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10" />
-            <DialogTitle className="text-3xl font-black tracking-tight uppercase">
+        <DialogContent className="sm:max-w-[650px] rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden bg-white">
+          <div className="bg-gradient-to-br from-emerald-800 to-teal-900 p-8 md:p-10 text-white text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none" />
+            <DialogTitle className="text-2xl md:text-3xl font-black tracking-tight uppercase font-outfit">
               {t("newAccount")}
             </DialogTitle>
-            <p className="text-rose-100/70 text-[11px] font-black mt-2 uppercase tracking-[0.2em]">
+            <p className="text-emerald-100/80 text-[11px] font-black mt-2 uppercase tracking-[0.2em]">
               {t("registerDesc")}
             </p>
           </div>
-          <div className="p-10">
+          <div className="p-8 md:p-10">
             <UserForm
               onSuccess={() => {
                 onAddOpenChange(false);
@@ -53,17 +57,17 @@ export const UserDialogs = ({
       </Dialog>
 
       <Dialog open={isEditOpen} onOpenChange={onEditOpenChange}>
-        <DialogContent className="sm:max-w-[650px] rounded-[2.5rem] border-none shadow-premium p-0 overflow-hidden bg-white">
-          <div className="bg-gradient-to-br from-slate-800 to-slate-900 p-10 text-white text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10" />
-            <DialogTitle className="text-3xl font-black tracking-tight uppercase">
+        <DialogContent className="sm:max-w-[650px] rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden bg-white">
+          <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-950 p-8 md:p-10 text-white text-center relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-white/10 rounded-full blur-3xl -mt-10 -mr-10 pointer-events-none" />
+            <DialogTitle className="text-2xl md:text-3xl font-black tracking-tight uppercase font-outfit">
               {t("editAccount")}
             </DialogTitle>
             <p className="text-slate-300 text-[11px] font-black mt-2 uppercase tracking-[0.2em]">
               {t("modifyDesc")}
             </p>
           </div>
-          <div className="p-10">
+          <div className="p-8 md:p-10">
             {selectedUser && (
               <UserForm
                 user={selectedUser}
@@ -81,8 +85,9 @@ export const UserDialogs = ({
         isOpen={isDetailOpen}
         onOpenChange={onDetailOpenChange}
         user={selectedUser}
+        onEdit={onOpenEdit}
+        onToggleActive={onToggleActive}
       />
     </>
   );
 };
-

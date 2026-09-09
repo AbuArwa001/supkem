@@ -1,7 +1,12 @@
 import { NextResponse } from "next/server";
 import { INITIAL_SOCIAL_POSTS, OFFICIAL_CHANNELS } from "@/components/social/socialData";
 import { SocialPost } from "@/components/social/types";
-import { getRuntimeSocialSettings } from "@/lib/socialSettings";
+import { readPersistedSocialSettings } from "@/lib/socialSettingsServer";
+import {
+  fetchFacebookPageFeed,
+  fetchInstagramBusinessMedia,
+  formatRelativeTime,
+} from "@/lib/metaGraphApi";
 
 const SERVER_API_URL =
   process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
@@ -13,7 +18,7 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "25", 10);
     const search = searchParams.get("search")?.toLowerCase();
 
-    const currentSettings = getRuntimeSocialSettings();
+    const currentSettings = readPersistedSocialSettings();
 
     // Dynamically build active channel map from settings
     const dynamicChannels: Record<string, any> = { ...OFFICIAL_CHANNELS };
@@ -32,62 +37,128 @@ export async function GET(request: Request) {
       }
     });
 
-    const dynamicPosts: SocialPost[] = [];
+    const liveSocialPosts: SocialPost[] = [];
 
-    // Attempt to dynamically fetch published news and updates from backend to blend as live feed
-    try {
-      const backendRes = await fetch(`${SERVER_API_URL}/api/v1/news/news/`, {
-        headers: { Accept: "application/json" },
-        next: { revalidate: 60 },
-      });
-
-      if (backendRes.ok) {
-        const data = await backendRes.json();
-        const newsItems = Array.isArray(data) ? data : data?.results || [];
-
-        newsItems
-          .filter((item: any) => item.is_published !== false)
-          .slice(0, 5)
-          .forEach((item: any, index: number) => {
-            // Assign dynamically to active official channels
-            const activeKeys = Object.keys(dynamicChannels);
-            const assignedKey = activeKeys.length > 0 ? activeKeys[index % activeKeys.length] : "x";
-            const channel = dynamicChannels[assignedKey] || OFFICIAL_CHANNELS.x;
-
-            dynamicPosts.push({
-              id: `dynamic-news-${item.id || index}`,
-              platform: (assignedKey as any) || "x",
-              author: {
-                name: channel?.name || "SUPKEM Official",
-                handle: channel?.handle || "@SUPKEM1",
-                avatar: "/logo.png",
-                profileUrl: channel?.url || "https://x.com/SUPKEM1",
-                isVerified: true,
-              },
-              content: `📢 OFFICIAL UPDATE: ${item.title}\n\n${(
-                item.content || ""
+    // 1. Direct Meta Graph API Ingestion (Facebook & Instagram)
+    const metaConfig = currentSettings.metaApi;
+    if (metaConfig?.enabled && metaConfig?.facebookAccessToken) {
+      try {
+        const [fbPosts, igPosts] = await Promise.all([
+          metaConfig.facebookPageId
+            ? fetchFacebookPageFeed(
+                metaConfig.facebookPageId,
+                metaConfig.facebookAccessToken,
+                10,
+                metaConfig.cacheDurationMinutes || 30
               )
-                .slice(0, 260)
-                .replace(/<[^>]*>/g, "")}... #SUPKEM #KenyaMuslims #OfficialBulletin`,
-              publishedAt: item.created_at || new Date().toISOString(),
-              relativeTime: "Just now",
-              mediaType: item.featured_image ? "image" : "text",
-              images: item.featured_image ? [item.featured_image] : undefined,
-              likes: 150 + index * 34,
-              shares: 42 + index * 12,
-              comments: 18 + index * 5,
-              postUrl: channel?.url || "https://x.com/SUPKEM1",
-              tags: ["SUPKEM", "KenyaMuslims", "OfficialBulletin"],
-              isPinned: index === 0,
-            });
-          });
+            : Promise.resolve([]),
+          metaConfig.instagramBusinessId
+            ? fetchInstagramBusinessMedia(
+                metaConfig.instagramBusinessId,
+                metaConfig.facebookAccessToken,
+                10,
+                metaConfig.cacheDurationMinutes || 30
+              )
+            : Promise.resolve([]),
+        ]);
+
+        liveSocialPosts.push(...fbPosts, ...igPosts);
+      } catch (metaErr) {
+        console.warn("Meta Graph ingestion notice:", metaErr);
       }
-    } catch {
-      // Backend fetch non-blocking fallback
     }
 
-    // Combine dynamic items with curated social posts
-    let allPosts: SocialPost[] = [...dynamicPosts, ...INITIAL_SOCIAL_POSTS];
+    // 2. Direct YouTube Data API Ingestion
+    const ytConfig = currentSettings.youtubeApi;
+    if (ytConfig?.enabled && ytConfig?.apiKey) {
+      try {
+        const { fetchYouTubeVideos } = await import("@/lib/youtubeApi");
+        const ytPosts = await fetchYouTubeVideos(ytConfig.apiKey, {
+          channelId: ytConfig.channelId,
+          searchQuery: ytConfig.searchQuery || "SUPKEM Kenya",
+          limit: ytConfig.maxResults || 6,
+        });
+        liveSocialPosts.push(...ytPosts);
+      } catch (ytErr) {
+        console.warn("YouTube ingestion notice:", ytErr);
+      }
+    }
+
+    // 3. Tagembed Real Posts Ingestion (if widgetId is configured)
+    const activeWidgetId = currentSettings.widgetId || process.env.NEXT_PUBLIC_SOCIAL_WALL_ID;
+    if (activeWidgetId) {
+      try {
+        const tagembedRes = await fetch("https://api.tagembed.com/embed/posts", {
+          headers: {
+            "X-Api-CONTEXT-Type": "website",
+            "X-Api-CONTEXT-Id": activeWidgetId,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+          },
+          next: { revalidate: 300 },
+        });
+
+        if (tagembedRes.ok) {
+          const tagJson = await tagembedRes.json();
+          const posts = tagJson?.body?.Posts;
+          if (Array.isArray(posts) && posts.length > 0) {
+            posts.forEach((tp: any) => {
+              // Map networkId: 1 = x, 2 = instagram, 3 = facebook, 7 = youtube, 30 = tiktok
+              let pPlatform: SocialPost["platform"] = "facebook";
+              if (tp.networkId === 1) pPlatform = "x";
+              else if (tp.networkId === 2) pPlatform = "instagram";
+              else if (tp.networkId === 3) pPlatform = "facebook";
+              else if (tp.networkId === 30) pPlatform = "tiktok";
+
+              const images: string[] = [];
+              if (tp.media?.image?.large) images.push(tp.media.image.large);
+              else if (tp.media?.image?.original) images.push(tp.media.image.original);
+
+              const createdIso = tp.createdAt
+                ? new Date(tp.createdAt * 1000).toISOString()
+                : new Date().toISOString();
+
+              const postText = tp.content?.text || tp.content?.title || "";
+
+              liveSocialPosts.push({
+                id: `tagembed-${tp.id}`,
+                platform: pPlatform,
+                author: {
+                  name: tp.author?.name || "SUPKEM Official",
+                  handle: tp.author?.username ? `@${tp.author.username}` : "@SUPKEM1",
+                  avatar: tp.author?.picture || "/logo.png",
+                  profileUrl: tp.link || dynamicChannels[pPlatform]?.url || "https://facebook.com",
+                  isVerified: true,
+                },
+                content: postText || "Official post from SUPKEM social channels.",
+                publishedAt: createdIso,
+                relativeTime: formatRelativeTime(createdIso),
+                mediaType: images.length > 1 ? "gallery" : images.length === 1 ? "image" : "text",
+                images: images.length > 0 ? images : undefined,
+                likes: tp.count?.like ?? 0,
+                shares: 0,
+                comments: tp.count?.comment ?? 0,
+                postUrl: tp.link || dynamicChannels[pPlatform]?.url || "https://facebook.com",
+                tags: ["SUPKEM", "Community"],
+              });
+            });
+          }
+        }
+      } catch {
+        // Tagembed fallback non-blocking
+      }
+    }
+
+    // 3. Fallback to curated baseline posts if live feeds are currently empty
+    let allPosts: SocialPost[] = [...liveSocialPosts];
+
+    if (allPosts.length < 3) {
+      // Deduplicate fallback posts
+      INITIAL_SOCIAL_POSTS.forEach((fallback) => {
+        if (!allPosts.some((p) => p.id === fallback.id)) {
+          allPosts.push(fallback);
+        }
+      });
+    }
 
     // Filter by platform
     if (platform && platform !== "all") {
@@ -104,21 +175,27 @@ export async function GET(request: Request) {
       );
     }
 
-    // Deduplicate and sort by date
-    allPosts.sort(
+    // Deduplicate and sort by date descending
+    const seenIds = new Set<string>();
+    const uniquePosts = allPosts.filter((p) => {
+      if (seenIds.has(p.id)) return false;
+      seenIds.add(p.id);
+      return true;
+    });
+
+    uniquePosts.sort(
       (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
     );
 
-    if (limit > 0) {
-      allPosts = allPosts.slice(0, limit);
-    }
+    const finalPosts = limit > 0 ? uniquePosts.slice(0, limit) : uniquePosts;
 
     return NextResponse.json({
       success: true,
       channels: dynamicChannels,
       settings: currentSettings,
-      total: allPosts.length,
-      posts: allPosts,
+      total: finalPosts.length,
+      hasLiveMetaPosts: liveSocialPosts.length > 0,
+      posts: finalPosts,
       syncedAt: new Date().toISOString(),
     });
   } catch (error) {

@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 import { useUsersLogic } from "./_hooks/useUsersLogic";
 import { AccessRestricted } from "./_components/AccessRestricted";
 import { UserHeader } from "./_components/UserHeader";
-import { UserSearch } from "./_components/UserSearch";
+import { UserStats } from "./_components/UserStats";
+import { UserFilters } from "./_components/UserFilters";
 import { UsersTable } from "./_components/UsersTable";
 import { UserDialogs } from "./_components/UserDialogs";
 
@@ -13,19 +14,18 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
     },
   },
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 15 },
   show: { opacity: 1, y: 0 },
 };
 
 /**
- * Team Management Page - Main Container.
- * Adheres to 200-line readability constraint.
+ * Team Management Page - Absolute Premium Enterprise Edition.
  */
 export default function UsersPage() {
   const {
@@ -35,25 +35,44 @@ export default function UsersPage() {
     isLoading,
     isValidating,
     mutate,
+    mutateStats,
+    statsData,
     searchQuery,
     setSearchQuery,
+    quickTab,
+    setQuickTab,
+    roleFilter,
+    setRoleFilter,
+    statusFilter,
+    setStatusFilter,
+    availableRoles,
+    isFiltered,
+    handleResetFilters,
     page,
     setPage,
     hasNext,
     hasPrev,
+    sortField,
+    sortOrder,
+    handleSortChange,
+    selectedUserIds,
+    handleToggleSelectUser,
+    handleSelectAll,
     isAddModalOpen,
     setIsAddModalOpen,
     isEditModalOpen,
     setIsEditModalOpen,
     selectedUser,
-    handleDelete,
-    handleOpenEdit,
     isDetailOpen,
     setIsDetailOpen,
     handleOpenDetail,
-    sortField,
-    sortOrder,
-    handleSortChange,
+    handleOpenEdit,
+    handleDelete,
+    handleToggleActive,
+    handleResendVerification,
+    handleSendPasswordReset,
+    handleBulkAction,
+    handleExportCsv,
   } = useUsersLogic();
 
   if (!isAdmin) {
@@ -65,23 +84,59 @@ export default function UsersPage() {
       variants={containerVariants}
       initial="hidden"
       animate="show"
-      className="space-y-12"
+      className="space-y-8 md:space-y-10"
     >
+      {/* Header */}
       <UserHeader
-        onRefresh={() => mutate()}
+        onRefresh={() => {
+          mutate();
+          mutateStats();
+        }}
         isValidating={isValidating}
         onAddClick={() => setIsAddModalOpen(true)}
+        onExportCsv={handleExportCsv}
       />
 
-      <motion.div variants={itemVariants} className="space-y-8">
-        <UserSearch
-          value={searchQuery}
-          onChange={(val) => {
+      {/* KPI Stat Cards */}
+      <motion.div variants={itemVariants}>
+        <UserStats
+          stats={statsData}
+          totalCount={totalCount}
+          isLoading={isLoading}
+        />
+      </motion.div>
+
+      {/* Filter & Command Center */}
+      <motion.div variants={itemVariants} className="space-y-6">
+        <UserFilters
+          searchQuery={searchQuery}
+          onSearchChange={(val) => {
             setSearchQuery(val);
             setPage(1);
           }}
+          quickTab={quickTab}
+          onQuickTabChange={(tab) => {
+            setQuickTab(tab);
+            setPage(1);
+          }}
+          roleFilter={roleFilter}
+          onRoleFilterChange={(role) => {
+            setRoleFilter(role);
+            setPage(1);
+          }}
+          statusFilter={statusFilter}
+          onStatusFilterChange={(status) => {
+            setStatusFilter(status);
+            setPage(1);
+          }}
+          availableRoles={availableRoles}
+          onResetFilters={handleResetFilters}
+          isFiltered={isFiltered}
+          onExportCsv={handleExportCsv}
+          totalCount={totalCount}
         />
 
+        {/* Data Grid with Bulk Actions */}
         <UsersTable
           users={users}
           totalCount={totalCount}
@@ -94,13 +149,22 @@ export default function UsersPage() {
           onView={handleOpenDetail}
           onEdit={handleOpenEdit}
           onDelete={handleDelete}
+          onToggleActive={handleToggleActive}
+          onResendVerification={handleResendVerification}
+          onSendPasswordReset={handleSendPasswordReset}
           searchQuery={searchQuery}
           sortField={sortField}
           sortOrder={sortOrder}
           onSortChange={handleSortChange}
+          selectedUserIds={selectedUserIds}
+          onToggleSelectUser={handleToggleSelectUser}
+          onSelectAll={handleSelectAll}
+          onBulkAction={handleBulkAction}
+          onExportSelected={handleExportCsv}
         />
       </motion.div>
 
+      {/* Add / Edit / Dossier Dialogs */}
       <UserDialogs
         isAddOpen={isAddModalOpen}
         onAddOpenChange={setIsAddModalOpen}
@@ -109,7 +173,12 @@ export default function UsersPage() {
         isDetailOpen={isDetailOpen}
         onDetailOpenChange={setIsDetailOpen}
         selectedUser={selectedUser}
-        onSuccess={mutate}
+        onSuccess={() => {
+          mutate();
+          mutateStats();
+        }}
+        onOpenEdit={handleOpenEdit}
+        onToggleActive={handleToggleActive}
       />
     </motion.div>
   );

@@ -91,10 +91,28 @@ export function SocialMediaWall({
     };
   }, [config, dynamicSettings]);
 
-  const hasExternalWidget = Boolean(activeConfig.feedId || activeConfig.iframeUrl);
-  const [viewMode, setViewMode] = useState<"grid" | "widget">(
-    hasExternalWidget ? "widget" : "grid"
-  );
+  // Master switch check: widget is only active if explicitly enabled
+  const isWallGloballyEnabled = dynamicSettings ? dynamicSettings.isEnabled !== false : true;
+  const hasExternalWidget = isWallGloballyEnabled && Boolean(activeConfig.feedId || activeConfig.iframeUrl);
+
+  const [viewMode, setViewMode] = useState<"grid" | "widget">("grid");
+
+  // Immediate fetch of social settings on mount for fast resolution
+  React.useEffect(() => {
+    fetch("/api/social-settings")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.settings) {
+          setDynamicSettings(data.settings);
+          if (data.settings.isEnabled === false) {
+            setViewMode("grid");
+          } else if (data.settings.defaultView === "widget") {
+            setViewMode("widget");
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Dynamic live fetch from /api/social-feed
   const fetchDynamicPosts = React.useCallback(async (platform?: string, search?: string) => {
@@ -125,10 +143,14 @@ export function SocialMediaWall({
 
   // Sync default view mode once dynamic settings are loaded
   React.useEffect(() => {
-    if (dynamicSettings?.defaultView) {
-      setViewMode(dynamicSettings.defaultView === "grid" ? "grid" : (hasExternalWidget ? "widget" : "grid"));
+    if (dynamicSettings) {
+      if (dynamicSettings.isEnabled === false || !hasExternalWidget) {
+        setViewMode("grid");
+      } else if (dynamicSettings.defaultView) {
+        setViewMode(dynamicSettings.defaultView === "grid" ? "grid" : "widget");
+      }
     }
-  }, [dynamicSettings?.defaultView, hasExternalWidget]);
+  }, [dynamicSettings, hasExternalWidget]);
 
   // Filter posts
   const filteredPosts = useMemo(() => {
@@ -175,6 +197,11 @@ export function SocialMediaWall({
         id: "tiktok",
         label: "TikTok",
         icon: <PlatformIcon platform="tiktok" className="w-3.5 h-3.5" />,
+      },
+      {
+        id: "youtube",
+        label: "YouTube",
+        icon: <PlatformIcon platform="youtube" className="w-3.5 h-3.5" />,
       },
     ];
 
@@ -286,15 +313,15 @@ export function SocialMediaWall({
               >
                 <PlatformIcon platform="instagram" className="w-3.5 h-3.5" />
               </a>
-              {/* <a
-                // href={OFFICIAL_CHANNELS.youtube.url}
+              <a
+                href={OFFICIAL_CHANNELS.youtube.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl text-red-600 hover:bg-red-600 hover:text-white transition-colors"
                 title="Follow on YouTube"
               >
                 <PlatformIcon platform="youtube" className="w-3.5 h-3.5" />
-              </a> */}
+              </a>
               <a
                 href={OFFICIAL_CHANNELS.tiktok.url}
                 target="_blank"

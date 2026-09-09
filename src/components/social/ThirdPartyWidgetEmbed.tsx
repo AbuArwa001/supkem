@@ -121,6 +121,25 @@ export function ThirdPartyWidgetEmbed({ config, className = "" }: ThirdPartyWidg
       }
     }
 
+    // Tagembed widgets require their official script to authenticate with data-website="1"
+    const tagembedSrcDoc =
+      provider === "tagembed" && feedId && !iframeUrl
+        ? `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100%; overflow: auto; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="tagembed-widget" style="width:100%;height:100%;min-height:750px;overflow:auto;" data-widget-id="${feedId}" data-website="1"></div>
+  <script src="https://widget.tagembed.com/embed.min.js" type="text/javascript" async></script>
+</body>
+</html>`
+        : undefined;
+
     return (
       <div className={`w-full rounded-3xl overflow-hidden border border-slate-200/90 shadow-2xl bg-white relative ${className}`}>
         {isLoading && (
@@ -130,7 +149,8 @@ export function ThirdPartyWidgetEmbed({ config, className = "" }: ThirdPartyWidg
           </div>
         )}
         <iframe
-          src={src}
+          src={tagembedSrcDoc ? undefined : src}
+          srcDoc={tagembedSrcDoc}
           className="w-full min-h-[750px] lg:min-h-[850px] border-0"
           title="SUPKEM Live Social Media Feed"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

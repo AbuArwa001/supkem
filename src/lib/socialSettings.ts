@@ -12,6 +12,24 @@ export interface SocialChannelConfig {
   badgeClass?: string;
 }
 
+export interface MetaApiSettings {
+  enabled: boolean;
+  facebookPageId: string;
+  facebookAccessToken: string;
+  instagramBusinessId: string;
+  cacheDurationMinutes?: number;
+  lastSyncedAt?: string;
+}
+
+export interface YouTubeApiSettings {
+  enabled: boolean;
+  apiKey: string;
+  channelId?: string;
+  searchQuery?: string;
+  maxResults?: number;
+  lastSyncedAt?: string;
+}
+
 export interface SocialMediaSettings {
   provider: WidgetProvider;
   widgetId: string;
@@ -19,6 +37,8 @@ export interface SocialMediaSettings {
   isEnabled: boolean; // Master toggle for the live social aggregator widget
   defaultView: "widget" | "grid";
   channels: SocialChannelConfig[];
+  metaApi?: MetaApiSettings;
+  youtubeApi?: YouTubeApiSettings;
   updatedAt: string;
 }
 
@@ -75,6 +95,22 @@ export const DEFAULT_SOCIAL_CHANNELS: SocialChannelConfig[] = [
   },
 ];
 
+export const getDefaultMetaApiSettings = (): MetaApiSettings => ({
+  enabled: false,
+  facebookPageId: "100079747610399",
+  facebookAccessToken: "",
+  instagramBusinessId: "",
+  cacheDurationMinutes: 30,
+});
+
+export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
+  enabled: true,
+  apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+  channelId: "UCNbBcq2UNZahLtzrnyabhow",
+  searchQuery: "SUPKEM Kenya",
+  maxResults: 6,
+});
+
 export const getDefaultSocialSettings = (): SocialMediaSettings => ({
   provider: ((process.env.NEXT_PUBLIC_SOCIAL_WALL_PROVIDER || "tagembed").trim() as WidgetProvider) || "tagembed",
   widgetId: (process.env.NEXT_PUBLIC_SOCIAL_WALL_ID || "").trim(),
@@ -82,6 +118,8 @@ export const getDefaultSocialSettings = (): SocialMediaSettings => ({
   isEnabled: true,
   defaultView: "widget",
   channels: DEFAULT_SOCIAL_CHANNELS,
+  metaApi: getDefaultMetaApiSettings(),
+  youtubeApi: getDefaultYouTubeApiSettings(),
   updatedAt: new Date().toISOString(),
 });
 

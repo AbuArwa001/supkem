@@ -1,4 +1,4 @@
-export type SocialPlatform = "all" | "x" | "facebook" | "instagram" | "tiktok";
+export type SocialPlatform = "all" | "x" | "facebook" | "instagram" | "tiktok" | "youtube";
 
 export type SocialMediaType = "image" | "gallery" | "video" | "text";
 
@@ -12,7 +12,7 @@ export interface SocialAuthor {
 
 export interface SocialPost {
   id: string;
-  platform: "x" | "facebook" | "instagram" | "tiktok";
+  platform: "x" | "facebook" | "instagram" | "tiktok" | "youtube";
   author: SocialAuthor;
   content: string;
   publishedAt: string;

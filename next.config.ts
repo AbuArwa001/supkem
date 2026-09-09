@@ -36,6 +36,39 @@ const nextConfig: NextConfig = {
         port: '8000',
         pathname: '/media/**',
       },
+      // Social Media CDNs
+      {
+        protocol: 'https',
+        hostname: '**.fbcdn.net',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cdninstagram.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.tagbox.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.tagembed.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.twimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.tiktokcdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.ytimg.com',
+      },
     ],
   },
 };

@@ -34,6 +34,7 @@ import {
   getDefaultSocialSettings,
   WidgetProvider,
 } from "@/lib/socialSettings";
+import Cookies from "js-cookie";
 
 export default function SocialSettingsPage() {
   const { user } = useAuth();
@@ -51,11 +52,79 @@ export default function SocialSettingsPage() {
   const [showPreview, setShowPreview] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
 
+  // Meta Direct API state
+  const [showMetaToken, setShowMetaToken] = useState(false);
+  const [showMetaGuide, setShowMetaGuide] = useState(false);
+  const [isTestingMeta, setIsTestingMeta] = useState(false);
+  const [metaTestResult, setMetaTestResult] = useState<{
+    success: boolean;
+    message: string;
+    page?: any;
+    instagram?: any;
+  } | null>(null);
+
   // New channel form state
   const [isAddingChannel, setIsAddingChannel] = useState(false);
   const [newChannelName, setNewChannelName] = useState("");
   const [newChannelHandle, setNewChannelHandle] = useState("");
   const [newChannelUrl, setNewChannelUrl] = useState("");
+
+  const handleTestMeta = async () => {
+    setIsTestingMeta(true);
+    setMetaTestResult(null);
+    try {
+      const res = await fetch("/api/meta-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          facebookPageId: settings.metaApi?.facebookPageId || "100079747610399",
+          facebookAccessToken: settings.metaApi?.facebookAccessToken || "",
+          instagramBusinessId: settings.metaApi?.instagramBusinessId || "",
+        }),
+      });
+      const data = await res.json();
+      setMetaTestResult(data);
+    } catch (err: any) {
+      setMetaTestResult({
+        success: false,
+        message: "Failed to run Meta diagnostic test: " + (err?.message || "Network error"),
+      });
+    } finally {
+      setIsTestingMeta(false);
+    }
+  };
+  // YouTube Data API state
+  const [showYtApiKey, setShowYtApiKey] = useState(false);
+  const [isTestingYt, setIsTestingYt] = useState(false);
+  const [ytTestResult, setYtTestResult] = useState<{
+    success: boolean;
+    message: string;
+    channel?: any;
+  } | null>(null);
+
+  const handleTestYouTube = async () => {
+    setIsTestingYt(true);
+    setYtTestResult(null);
+    try {
+      const res = await fetch("/api/youtube-test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          apiKey: settings.youtubeApi?.apiKey || "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+          channelId: settings.youtubeApi?.channelId || "UCNbBcq2UNZahLtzrnyabhow",
+        }),
+      });
+      const data = await res.json();
+      setYtTestResult(data);
+    } catch (err: any) {
+      setYtTestResult({
+        success: false,
+        message: "Failed to run YouTube diagnostic test: " + (err?.message || "Network error"),
+      });
+    } finally {
+      setIsTestingYt(false);
+    }
+  };
 
   // Load existing settings on mount
   useEffect(() => {
@@ -86,10 +155,14 @@ export default function SocialSettingsPage() {
     setIsSaving(true);
     setStatusMessage(null);
 
+    const token = Cookies.get("access_token");
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
     try {
       const res = await fetch("/api/social-settings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(settings),
       });
 
@@ -99,7 +172,7 @@ export default function SocialSettingsPage() {
         setInitialSettings(data.settings);
         setStatusMessage({
           type: "success",
-          text: "Social media and Tagembed configurations saved successfully! Changes are live immediately.",
+          text: "Social media and aggregator configurations saved successfully! Changes are live immediately.",
         });
       } else {
         const errData = await res.json();
@@ -119,6 +192,41 @@ export default function SocialSettingsPage() {
     if (confirm("Reset social settings back to defaults?")) {
       const defaults = getDefaultSocialSettings();
       setSettings(defaults);
+    }
+  };
+
+  // Instant 1-click toggle for Live Widget
+  const handleToggleWidget = async (enabled: boolean) => {
+    const updated = { ...settings, isEnabled: enabled };
+    setSettings(updated);
+
+    const token = Cookies.get("access_token");
+    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    if (token) headers["Authorization"] = `Bearer ${token}`;
+
+    try {
+      const res = await fetch("/api/social-settings", {
+        method: "POST",
+        headers,
+        body: JSON.stringify(updated),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setSettings(data.settings);
+        setInitialSettings(data.settings);
+        setStatusMessage({
+          type: "success",
+          text: enabled
+            ? "✅ Live Tagembed Widget is now ON and visible to all website visitors!"
+            : "⏸️ Live Tagembed Widget is now OFF. Website visitors will see the curated dynamic card grid.",
+        });
+      }
+    } catch (err: any) {
+      setStatusMessage({
+        type: "error",
+        text: "Failed to update widget status: " + (err?.message || "Unknown error"),
+      });
     }
   };
 
@@ -180,6 +288,24 @@ export default function SocialSettingsPage() {
     : settings.widgetId
     ? `https://widget.tagembed.com/${settings.widgetId}`
     : "";
+
+  const previewSrcDoc =
+    settings.provider === "tagembed" && settings.widgetId && !settings.widgetUrl
+      ? `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    html, body { margin: 0; padding: 0; width: 100%; height: 100%; min-height: 100%; overflow: auto; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="tagembed-widget" style="width:100%;height:100%;min-height:500px;overflow:auto;" data-widget-id="${settings.widgetId}" data-website="1"></div>
+  <script src="https://widget.tagembed.com/embed.min.js" type="text/javascript" async></script>
+</body>
+</html>`
+      : undefined;
 
   if (!isAdmin && !isLoading) {
     return (
@@ -306,13 +432,29 @@ export default function SocialSettingsPage() {
                   </CardDescription>
                 </div>
 
-                <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-2xl border border-slate-200 shadow-sm">
-                  <span className="text-xs font-bold text-slate-700">Live Wall Active</span>
+                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="flex flex-col items-end">
+                    <span className="text-xs font-bold text-slate-800">
+                      Live Widget Status
+                    </span>
+                    <span
+                      className={`text-[10px] font-semibold flex items-center gap-1 ${
+                        settings.isEnabled ? "text-emerald-600" : "text-slate-400"
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          settings.isEnabled
+                            ? "bg-emerald-500 animate-pulse"
+                            : "bg-slate-300"
+                        }`}
+                      />
+                      {settings.isEnabled ? "ON (Visible on Site)" : "OFF (Disabled)"}
+                    </span>
+                  </div>
                   <Switch
                     checked={settings.isEnabled}
-                    onCheckedChange={(val) =>
-                      setSettings((prev) => ({ ...prev, isEnabled: val }))
-                    }
+                    onCheckedChange={handleToggleWidget}
                   />
                 </div>
               </div>
@@ -466,11 +608,20 @@ export default function SocialSettingsPage() {
                 </div>
 
                 {showPreview && (
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 p-2">
-                    {previewSrc ? (
+                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 p-2 space-y-2">
+                    {!settings.isEnabled && (
+                      <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-center gap-2 text-xs text-amber-800 font-medium">
+                        <AlertCircle size={16} className="text-amber-600 flex-shrink-0" />
+                        <span>
+                          <strong>Widget is currently OFF:</strong> Website visitors will see the curated dynamic card grid instead of this live widget. Toggle the <strong>Live Widget Status</strong> switch above to ON to display this widget publicly.
+                        </span>
+                      </div>
+                    )}
+                    {previewSrc || previewSrcDoc ? (
                       <iframe
-                        src={previewSrc}
-                        className="w-full h-[500px] rounded-xl border-0 bg-white"
+                        src={previewSrcDoc ? undefined : previewSrc}
+                        srcDoc={previewSrcDoc}
+                        className="w-full h-[520px] rounded-xl border-0 bg-white"
                         title="Live Tagembed Preview"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
@@ -489,8 +640,519 @@ export default function SocialSettingsPage() {
           </Card>
 
           {/* ═══════════════════════════════════════════════════════════════════════ */}
-          {/* CARD 2: OFFICIAL SOCIAL CHANNELS & HANDLES                              */}
+          {/* CARD 2: DIRECT META GRAPH API (FACEBOOK & INSTAGRAM)                   */}
           {/* ═══════════════════════════════════════════════════════════════════════ */}
+          <Card className="rounded-3xl border border-slate-200/90 shadow-sm bg-white overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-blue-50/70 via-pink-50/40 to-transparent pb-6 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-1.5 items-center">
+                      <div className="w-6 h-6 rounded-full bg-[#1877F2] text-white flex items-center justify-center text-[10px] font-bold shadow-sm ring-2 ring-white">
+                        f
+                      </div>
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center justify-center text-[10px] font-bold shadow-sm ring-2 ring-white">
+                        IG
+                      </div>
+                    </div>
+                    <CardTitle className="text-xl font-bold font-outfit text-slate-900">
+                      Direct Meta API (Facebook & Instagram)
+                    </CardTitle>
+                    <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] py-0 font-semibold">
+                      No Aggregator Needed
+                    </Badge>
+                  </div>
+                  <CardDescription className="text-sm text-slate-500">
+                    Fetch official posts and high-res media directly from SUPKEM's verified Facebook Page and Instagram Business account via official Meta Graph API.
+                  </CardDescription>
+                </div>
+
+                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="flex flex-col items-end">
+                    <span className="text-xs font-bold text-slate-800">
+                      Direct Ingestion
+                    </span>
+                    <span
+                      className={`text-[10px] font-semibold flex items-center gap-1 ${
+                        settings.metaApi?.enabled ? "text-blue-600" : "text-slate-400"
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          settings.metaApi?.enabled
+                            ? "bg-blue-500 animate-pulse"
+                            : "bg-slate-300"
+                        }`}
+                      />
+                      {settings.metaApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                    </span>
+                  </div>
+                  <Switch
+                    checked={settings.metaApi?.enabled ?? false}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        metaApi: {
+                          ...(prev.metaApi || {
+                            facebookPageId: "100079747610399",
+                            facebookAccessToken: "",
+                            instagramBusinessId: "",
+                            cacheDurationMinutes: 30,
+                          }),
+                          enabled: checked,
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="p-6 sm:p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Facebook Page ID */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Facebook Page ID
+                  </label>
+                  <Input
+                    placeholder="e.g. 100079747610399"
+                    value={settings.metaApi?.facebookPageId || ""}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        metaApi: {
+                          ...(prev.metaApi || {
+                            enabled: false,
+                            facebookAccessToken: "",
+                            instagramBusinessId: "",
+                            cacheDurationMinutes: 30,
+                          }),
+                          facebookPageId: e.target.value.trim(),
+                        },
+                      }))
+                    }
+                    className="h-11 rounded-xl text-sm font-mono"
+                  />
+                  <p className="text-xs text-slate-400">
+                    Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">100079747610399</code> (Supreme Council of Kenya Muslims).
+                  </p>
+                </div>
+
+                {/* Instagram Business Account ID */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Instagram Business Account ID (Optional)
+                  </label>
+                  <Input
+                    placeholder="e.g. 17841405309211844 (or leave blank if linked)"
+                    value={settings.metaApi?.instagramBusinessId || ""}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        metaApi: {
+                          ...(prev.metaApi || {
+                            enabled: false,
+                            facebookPageId: "100079747610399",
+                            facebookAccessToken: "",
+                            cacheDurationMinutes: 30,
+                          }),
+                          instagramBusinessId: e.target.value.trim(),
+                        },
+                      }))
+                    }
+                    className="h-11 rounded-xl text-sm font-mono"
+                  />
+                  <p className="text-xs text-slate-400">
+                    If connected to your Facebook Page, this can also be auto-detected by Meta!
+                  </p>
+                </div>
+
+                {/* Meta Page Access Token */}
+                <div className="space-y-2 md:col-span-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                      Meta Graph Page Access Token
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowMetaGuide(!showMetaGuide)}
+                      className="text-xs text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1"
+                    >
+                      <HelpCircle size={13} /> How to get this permanent token in 3 steps
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type={showMetaToken ? "text" : "password"}
+                      placeholder="EAAG... (Meta Long-Lived Page Access Token)"
+                      value={settings.metaApi?.facebookAccessToken || ""}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          metaApi: {
+                            ...(prev.metaApi || {
+                              enabled: false,
+                              facebookPageId: "100079747610399",
+                              instagramBusinessId: "",
+                              cacheDurationMinutes: 30,
+                            }),
+                            facebookAccessToken: e.target.value.trim(),
+                          },
+                        }))
+                      }
+                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowMetaToken(!showMetaToken)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
+                    >
+                      {showMetaToken ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    This token allows your server to read public posts, photos, and engagement metrics safely without user authentication.
+                  </p>
+                </div>
+              </div>
+
+              {/* Meta Step-by-Step Guide Accordion */}
+              {showMetaGuide && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="p-5 rounded-2xl bg-blue-50/70 border border-blue-200/80 text-xs text-slate-700 space-y-3"
+                >
+                  <div className="font-bold text-sm text-blue-950 flex items-center gap-2">
+                    <HelpCircle size={16} className="text-blue-600" />
+                    How to generate a Permanent Meta Page Access Token (100% Free):
+                  </div>
+                  <ol className="list-decimal pl-5 space-y-2 leading-relaxed text-slate-700">
+                    <li>
+                      Visit <strong>Meta for Developers</strong> at{" "}
+                      <a
+                        href="https://developers.facebook.com/tools/explorer/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 font-bold underline inline-flex items-center gap-0.5"
+                      >
+                        developers.facebook.com/tools/explorer <ExternalLink size={11} />
+                      </a>
+                    </li>
+                    <li>
+                      In the top right, under <strong>Meta App</strong>, choose your app (or click <em>Create App</em> &gt; <em>Other</em> &gt; <em>Business</em>).
+                    </li>
+                    <li>
+                      Under <strong>User or Page</strong>, choose <strong>Get Page Access Token</strong> and select <strong>Supreme Council of Kenya Muslims</strong>.
+                    </li>
+                    <li>
+                      Under <strong>Permissions</strong>, ensure these 3 scopes are added:
+                      <div className="flex flex-wrap gap-1.5 my-1.5">
+                        <code className="bg-white px-1.5 py-0.5 rounded border border-blue-200 text-blue-800 font-bold">pages_read_engagement</code>
+                        <code className="bg-white px-1.5 py-0.5 rounded border border-blue-200 text-blue-800 font-bold">pages_read_user_content</code>
+                        <code className="bg-white px-1.5 py-0.5 rounded border border-blue-200 text-blue-800 font-bold">instagram_basic</code>
+                      </div>
+                    </li>
+                    <li>
+                      Click <strong>Generate Access Token</strong> and grant permissions as Page Admin.
+                    </li>
+                    <li>
+                      <em>(To make it never expire)</em>: Click the small circular <strong>(i)</strong> info icon next to the Access Token &gt; click <strong>Open in Access Token Tool</strong> &gt; click <strong>Extend Access Token</strong>. Paste the resulting permanent token above!
+                    </li>
+                  </ol>
+                </motion.div>
+              )}
+
+              {/* Diagnostic Test Tool */}
+              <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">Connection Diagnostics</h4>
+                  <p className="text-xs text-slate-400">
+                    Verify that your Meta token is valid and can communicate with Facebook &amp; Instagram.
+                  </p>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleTestMeta}
+                  disabled={isTestingMeta || !settings.metaApi?.facebookAccessToken}
+                  className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 text-xs font-bold gap-2"
+                >
+                  <RefreshCw size={13} className={isTestingMeta ? "animate-spin text-blue-600" : "text-slate-500"} />
+                  {isTestingMeta ? "Verifying with Meta..." : "Test Meta Connection"}
+                </Button>
+              </div>
+
+              {/* Test Result Feedback */}
+              {metaTestResult && (
+                <div
+                  className={`p-4 rounded-2xl text-xs space-y-1.5 border ${
+                    metaTestResult.success
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                      : "bg-rose-50 border-rose-200 text-rose-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 font-bold text-sm">
+                    {metaTestResult.success ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-rose-600" />
+                    )}
+                    <span>{metaTestResult.message}</span>
+                  </div>
+
+                  {metaTestResult.page && (
+                    <div className="pt-2 border-t border-emerald-200/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700">
+                      <div>
+                        <strong>Connected Facebook Page:</strong> {metaTestResult.page.name}
+                      </div>
+                      {metaTestResult.page.username && (
+                        <div>
+                          <strong>Username:</strong> @{metaTestResult.page.username}
+                        </div>
+                      )}
+                      {metaTestResult.instagram && (
+                        <div className="sm:col-span-2 text-pink-700 font-semibold">
+                          Connected Instagram: @{metaTestResult.instagram.username} (ID: {metaTestResult.instagram.id})
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* ═══════════════════════════════════════════════════════════════════════ */}
+          {/* CARD 3: YOUTUBE DATA API (OFFICIAL VIDEO BROADCASTS)                    */}
+          {/* ═══════════════════════════════════════════════════════════════════════ */}
+          <Card className="rounded-3xl border border-slate-200/90 shadow-sm bg-white overflow-hidden">
+            <CardHeader className="bg-gradient-to-r from-red-50/70 to-transparent pb-6 border-b border-slate-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-[11px] font-black shadow-sm">
+                      ▶
+                    </div>
+                    <CardTitle className="text-xl font-bold font-outfit text-slate-900">
+                      YouTube Data API (Official Videos)
+                    </CardTitle>
+                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-[10px] py-0 font-semibold">
+                      Google Data API v3
+                    </Badge>
+                  </div>
+                  <CardDescription className="text-sm text-slate-500">
+                    Stream official video briefings and announcements from SUPKEM directly on the social wall with interactive playback.
+                  </CardDescription>
+                </div>
+
+                <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
+                  <div className="flex flex-col items-end">
+                    <span className="text-xs font-bold text-slate-800">
+                      Video Stream
+                    </span>
+                    <span
+                      className={`text-[10px] font-semibold flex items-center gap-1 ${
+                        settings.youtubeApi?.enabled ? "text-red-600" : "text-slate-400"
+                      }`}
+                    >
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          settings.youtubeApi?.enabled
+                            ? "bg-red-500 animate-pulse"
+                            : "bg-slate-300"
+                        }`}
+                      />
+                      {settings.youtubeApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                    </span>
+                  </div>
+                  <Switch
+                    checked={settings.youtubeApi?.enabled ?? true}
+                    onCheckedChange={(checked) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        youtubeApi: {
+                          ...(prev.youtubeApi || {
+                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+                            channelId: "UCNbBcq2UNZahLtzrnyabhow",
+                            searchQuery: "SUPKEM Kenya",
+                            maxResults: 6,
+                          }),
+                          enabled: checked,
+                        },
+                      }))
+                    }
+                  />
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="p-6 sm:p-8 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* YouTube API Key */}
+                <div className="space-y-2 md:col-span-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                      Google Cloud YouTube Data API Key
+                    </label>
+                    <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                      <CheckCircle2 size={13} /> 10,000 free requests/day
+                    </span>
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type={showYtApiKey ? "text" : "password"}
+                      placeholder="AIzaSy..."
+                      value={settings.youtubeApi?.apiKey || ""}
+                      onChange={(e) =>
+                        setSettings((prev) => ({
+                          ...prev,
+                          youtubeApi: {
+                            ...(prev.youtubeApi || {
+                              enabled: true,
+                              channelId: "UCNbBcq2UNZahLtzrnyabhow",
+                              searchQuery: "SUPKEM Kenya",
+                              maxResults: 6,
+                            }),
+                            apiKey: e.target.value.trim(),
+                          },
+                        }))
+                      }
+                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowYtApiKey(!showYtApiKey)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
+                    >
+                      {showYtApiKey ? "Hide" : "Show"}
+                    </button>
+                  </div>
+                  <p className="text-xs text-slate-400">
+                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled.
+                  </p>
+                </div>
+
+                {/* Channel ID */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Official YouTube Channel ID
+                  </label>
+                  <Input
+                    placeholder="e.g. UCNbBcq2UNZahLtzrnyabhow"
+                    value={settings.youtubeApi?.channelId || ""}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        youtubeApi: {
+                          ...(prev.youtubeApi || {
+                            enabled: true,
+                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+                            searchQuery: "SUPKEM Kenya",
+                            maxResults: 6,
+                          }),
+                          channelId: e.target.value.trim(),
+                        },
+                      }))
+                    }
+                    className="h-11 rounded-xl text-sm font-mono"
+                  />
+                  <p className="text-xs text-slate-400">
+                    Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">UCNbBcq2UNZahLtzrnyabhow</code> (SUPKEM official channel).
+                  </p>
+                </div>
+
+                {/* Search Query Fallback */}
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                    Search Query Fallback
+                  </label>
+                  <Input
+                    placeholder="e.g. SUPKEM Kenya"
+                    value={settings.youtubeApi?.searchQuery || ""}
+                    onChange={(e) =>
+                      setSettings((prev) => ({
+                        ...prev,
+                        youtubeApi: {
+                          ...(prev.youtubeApi || {
+                            enabled: true,
+                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+                            channelId: "UCNbBcq2UNZahLtzrnyabhow",
+                            maxResults: 6,
+                          }),
+                          searchQuery: e.target.value,
+                        },
+                      }))
+                    }
+                    className="h-11 rounded-xl text-sm"
+                  />
+                  <p className="text-xs text-slate-400">
+                    Used to fetch national press briefings when channel uploads are quiet.
+                  </p>
+                </div>
+              </div>
+
+              {/* Diagnostic Test Tool */}
+              <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">Connection Diagnostics</h4>
+                  <p className="text-xs text-slate-400">
+                    Verify that your Google API key connects to YouTube and checks channel status.
+                  </p>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleTestYouTube}
+                  disabled={isTestingYt || !settings.youtubeApi?.apiKey}
+                  className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 text-xs font-bold gap-2"
+                >
+                  <RefreshCw size={13} className={isTestingYt ? "animate-spin text-red-600" : "text-slate-500"} />
+                  {isTestingYt ? "Verifying with YouTube..." : "Test YouTube Connection"}
+                </Button>
+              </div>
+
+              {/* Test Result Feedback */}
+              {ytTestResult && (
+                <div
+                  className={`p-4 rounded-2xl text-xs space-y-1.5 border ${
+                    ytTestResult.success
+                      ? "bg-emerald-50 border-emerald-200 text-emerald-900"
+                      : "bg-rose-50 border-rose-200 text-rose-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 font-bold text-sm">
+                    {ytTestResult.success ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                    ) : (
+                      <AlertCircle className="w-4 h-4 text-rose-600" />
+                    )}
+                    <span>{ytTestResult.message}</span>
+                  </div>
+
+                  {ytTestResult.channel && (
+                    <div className="pt-2 border-t border-emerald-200/60 flex items-center justify-between text-slate-700">
+                      <div>
+                        <strong>Connected Channel:</strong> {ytTestResult.channel.title} (ID: {ytTestResult.channel.id})
+                      </div>
+                      {ytTestResult.channel.videoCount !== undefined && (
+                        <div className="text-slate-600 font-semibold">
+                          {ytTestResult.channel.videoCount} Videos Indexed
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           <Card className="rounded-3xl border border-slate-200/90 shadow-sm bg-white overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-blue-50/50 to-transparent pb-6 border-b border-slate-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
