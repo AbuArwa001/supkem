@@ -5,11 +5,14 @@ import { ShieldCheck } from "lucide-react";
 import { Certificate } from "@/services/certificate-service";
 
 interface CertificateCanvasProps {
-  certificate: Certificate;
+  certificate: any;
   certificateRef: React.RefObject<HTMLDivElement | null>;
   issueDate: Date | null;
   expiryDate: Date | null;
   isValid: boolean;
+  language?: "en" | "ar";
+  customText?: string;
+  signatureBase64?: string;
 }
 
 /**
@@ -21,7 +24,12 @@ export function CertificateCanvas({
   issueDate,
   expiryDate,
   isValid,
+  language = "en",
+  customText,
+  signatureBase64,
 }: CertificateCanvasProps) {
+  const isArabic = language === "ar";
+
   return (
     <motion.div
       ref={certificateRef}
@@ -127,14 +135,14 @@ export function CertificateCanvas({
         />
 
         <div
-          className="tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full"
+          className={`tracking-widest uppercase text-xs font-black mb-12 flex items-center gap-4 w-full ${isArabic ? "font-arabic flex-row-reverse" : ""}`}
           style={{ color: "#16543d" }}
         >
           <div
             className="h-px flex-1"
             style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
           />
-          <span>Supreme Council of Kenya Muslims</span>
+          <span>{isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}</span>
           <div
             className="h-px flex-1"
             style={{ backgroundColor: "rgba(22, 84, 61, 0.1)" }}
@@ -142,27 +150,38 @@ export function CertificateCanvas({
         </div>
 
         <h2
-          className="text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8"
+          className={`text-4xl md:text-5xl lg:text-6xl font-black font-outfit tracking-tight leading-tight mb-8 ${isArabic ? "font-arabic" : ""}`}
           style={{ color: "#1e293b" }}
         >
-          {certificate.service_name || "Official Certification"}
+          {certificate.service_name || (isArabic ? "شهادة رسمية" : "Official Certification")}
         </h2>
 
-        <p
-          className="text-lg md:text-xl font-medium max-w-2xl mb-12"
-          style={{ color: "#64748b" }}
-        >
-          This record confirms that{" "}
-          <strong
-            className="border-b pb-0.5"
-            style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
+        {customText ? (
+          <p
+            className={`text-lg md:text-xl font-medium max-w-2xl mb-12 whitespace-pre-wrap ${isArabic ? "font-arabic text-right" : ""}`}
+            style={{ color: "#1e293b" }}
+            dir={isArabic ? "rtl" : "ltr"}
           >
-            {certificate.organization_name || "The designated organization"}
-          </strong>{" "}
-          has been officially accredited by SUPKEM.
-        </p>
+            {customText}
+          </p>
+        ) : (
+          <p
+            className={`text-lg md:text-xl font-medium max-w-2xl mb-12 ${isArabic ? "font-arabic text-right" : ""}`}
+            style={{ color: "#64748b" }}
+            dir={isArabic ? "rtl" : "ltr"}
+          >
+            {isArabic ? "تؤكد هذه الوثيقة أن " : "This record confirms that "}
+            <strong
+              className="border-b pb-0.5 mx-1"
+              style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
+            >
+              {certificate.organization_name || (isArabic ? "المنظمة المعينة" : "The designated organization")}
+            </strong>
+            {isArabic ? " معتمدة رسمياً من قبل المجلس الأعلى." : " has been officially accredited by SUPKEM."}
+          </p>
+        )}
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-16">
+        <div className={`grid grid-cols-2 lg:grid-cols-4 gap-4 w-full mb-16 ${isArabic ? "flex-row-reverse" : ""}`} dir={isArabic ? "rtl" : "ltr"}>
           <CertificateInfoCard
             label="Serial Number"
             value={certificate.serial_number}
@@ -180,26 +199,30 @@ export function CertificateCanvas({
         </div>
 
         <div
-          className="flex items-center justify-between w-full border-t pt-8 mt-auto"
+          className={`flex items-center justify-between w-full border-t pt-8 mt-auto ${isArabic ? "flex-row-reverse" : ""}`}
           style={{ borderColor: "rgba(226, 232, 240, 0.6)" }}
         >
-          <div className="text-left">
+          <div className={isArabic ? "text-right" : "text-left"}>
             <div
-              className="w-40 h-10 border-b flex items-end"
+              className={`w-48 h-20 border-b flex items-end justify-center relative overflow-hidden ${isArabic ? "ml-auto" : ""}`}
               style={{ borderColor: "#1e293b" }}
             >
-              <span
-                className="font-serif text-2xl italic px-2 -mb-2"
-                style={{ color: "#475569" }}
-              >
-                Registry Officer
-              </span>
+              {signatureBase64 ? (
+                <img src={signatureBase64} alt="Signature" className="h-full object-contain pb-1 mix-blend-multiply" />
+              ) : (
+                <span
+                  className={`font-serif text-2xl italic px-2 -mb-2 ${isArabic ? "font-arabic" : ""}`}
+                  style={{ color: "#475569" }}
+                >
+                  {isArabic ? "مسؤول السجل" : "Registry Officer"}
+                </span>
+              )}
             </div>
             <p
-              className="text-[10px] font-bold uppercase tracking-widest mt-4"
+              className={`text-[10px] font-bold uppercase tracking-widest mt-4 ${isArabic ? "font-arabic" : ""}`}
               style={{ color: "#94a3b8" }}
             >
-              SUPKEM HQ Seal
+              {isArabic ? "ختم المقر الرئيسي" : "SUPKEM HQ Seal"}
             </p>
           </div>
 

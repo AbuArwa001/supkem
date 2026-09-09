@@ -36,15 +36,12 @@ export function useCertificatesLogic() {
     }
   }, [isModalOpen]);
 
-  const handleIssueCertificate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedAppId) return;
-
+  const handleIssueDocument = async (payload: any) => {
     setIsIssuing(true);
     setMessage(null);
     try {
-      await certificateService.issueCertificate(selectedAppId);
-      setMessage({ type: 'success', text: "Certificate issued successfully!" });
+      await certificateService.issueDocument(payload);
+      setMessage({ type: 'success', text: `${payload.documentType} issued successfully!` });
       loadCertificates();
       setTimeout(() => setIsModalOpen(false), 2000);
     } catch (err: any) {
@@ -81,6 +78,6 @@ export function useCertificatesLogic() {
     selectedAppId,
     setSelectedAppId,
     message,
-    handleIssueCertificate
+    handleIssueCertificate: handleIssueDocument
   };
 }

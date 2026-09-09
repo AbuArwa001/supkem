@@ -22,9 +22,15 @@ export const certificateService = {
     }
   },
 
-  issueCertificate: async (applicationId: string): Promise<void> => {
-    await api.post("/applications/certifications/", {
-      application: applicationId
+  issueDocument: async (payload: any): Promise<void> => {
+    const endpoint = payload.documentType === "Letter" ? "/applications/letters/" : "/applications/certifications/";
+    
+    await api.post(endpoint, {
+      application: payload.applicationId,
+      language: payload.language,
+      custom_text_en: payload.customTextEn,
+      custom_text_ar: payload.customTextAr,
+      digital_signature: payload.digitalSignature,
     });
   }
 };

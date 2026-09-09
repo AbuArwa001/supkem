@@ -7,7 +7,7 @@ import { Award, Search } from "lucide-react";
 
 // Internal components
 import CertificateCard from "@/app/[locale]/(dashboard)/admin/certificates/_components/CertificateCard";
-import IssueCertificateModal from "@/app/[locale]/(dashboard)/admin/certificates/_components/IssueCertificateModal";
+import DocumentIssuanceStudio from "@/app/[locale]/(dashboard)/admin/certificates/_components/DocumentIssuanceStudio";
 import { useCertificatesLogic } from "@/app/[locale]/(dashboard)/admin/certificates/_hooks/useCertificatesLogic";
 import { useTranslations } from "next-intl";
 
@@ -83,7 +83,7 @@ export default function AdminCertificates() {
         ))}
       </div>
 
-      <IssueCertificateModal
+      <DocumentIssuanceStudio
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         eligibleApplications={eligibleApplications}
@@ -92,7 +92,7 @@ export default function AdminCertificates() {
         selectedAppId={selectedAppId}
         setSelectedAppId={setSelectedAppId}
         message={message}
-        handleIssueCertificate={handleIssueCertificate}
+        handleIssueDocument={handleIssueCertificate}
       />
     </div>
   );
