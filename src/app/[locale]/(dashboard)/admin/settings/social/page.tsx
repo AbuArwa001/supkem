@@ -1332,17 +1332,15 @@ export default function SocialSettingsPage() {
                         </div>
                       </div>
 
-                      {/* Right: Delete button for custom channels */}
-                      {!["x", "facebook", "instagram", "tiktok", "youtube"].includes(channel.id) && (
-                        <button
-                          type="button"
-                          onClick={() => deleteChannel(channel.id)}
-                          className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all self-end lg:self-center"
-                          title="Delete Custom Channel"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                      )}
+                      {/* Right: Delete button for any channel */}
+                      <button
+                        type="button"
+                        onClick={() => deleteChannel(channel.id)}
+                        className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all self-end lg:self-center"
+                        title={`Delete ${channel.name} Channel`}
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                   </div>
                 ))}

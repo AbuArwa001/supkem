@@ -91,17 +91,17 @@ export function SocialFollowLinks({ className = "", variant = "pills" }: SocialF
                 const found = dynamicChannels.find(
                     (dc) =>
                         dc.id === item.id ||
-                        dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
-                        item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
+                        dc.name?.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
+                        item.name.toLowerCase().includes(dc.name?.toLowerCase().split(" ")[0])
                 );
-                return found ? found.enabled !== false : true;
+                return found ? found.enabled !== false : false;
             })
             .map((item) => {
                 const found = dynamicChannels.find(
                     (dc) =>
                         dc.id === item.id ||
-                        dc.name.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
-                        item.name.toLowerCase().includes(dc.name.toLowerCase().split(" ")[0])
+                        dc.name?.toLowerCase().includes(item.name.toLowerCase().split(" ")[0]) ||
+                        item.name.toLowerCase().includes(dc.name?.toLowerCase().split(" ")[0])
                 );
                 return found?.url ? { ...item, url: found.url } : item;
             });

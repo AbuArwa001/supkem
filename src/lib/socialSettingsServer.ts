@@ -28,6 +28,7 @@ export async function fetchSocialSettings(): Promise<SocialMediaSettings> {
         return {
           ...defaults,
           ...parsed,
+          channels: Array.isArray(parsed.channels) ? parsed.channels : defaults.channels,
           metaApi: {
             ...defaults.metaApi,
             ...(parsed.metaApi || {}),

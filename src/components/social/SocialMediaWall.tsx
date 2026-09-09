@@ -168,7 +168,7 @@ export function SocialMediaWall({
         if (ytCh && ytCh.enabled === false) return false;
       }
       const ch = dynamicSettings.channels.find((c) => c.id === p.id);
-      return ch ? ch.enabled : true;
+      return ch ? ch.enabled : false;
     });
   }, [dynamicSettings]);
 
@@ -187,17 +187,7 @@ export function SocialMediaWall({
     const processedList = defaultList
       .filter((item) => {
         const ch = dynamicSettings.channels.find((c) => c.id === item.id);
-        if (ch && ch.enabled === false) return false;
-        if (
-          item.id === "youtube" &&
-          dynamicSettings.youtubeApi &&
-          dynamicSettings.youtubeApi.enabled === false &&
-          ch &&
-          ch.enabled === false
-        ) {
-          return false;
-        }
-        return ch ? ch.enabled !== false : true;
+        return Boolean(ch && ch.enabled !== false);
       })
       .map((item) => {
         const ch = dynamicSettings.channels.find((c) => c.id === item.id);

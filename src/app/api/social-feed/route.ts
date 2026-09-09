@@ -112,23 +112,23 @@ export async function GET(request: Request) {
       });
     }
 
-    // Exclude posts from channels that have been disabled by administrators
-    const disabledChannelIds = new Set<string>();
+    // Only include posts from channels that exist and are active in settings
+    const activeChannelIds = new Set<string>();
     if (Array.isArray(currentSettings.channels)) {
       currentSettings.channels.forEach((ch) => {
-        if (ch.enabled === false) {
-          disabledChannelIds.add(ch.id.toLowerCase());
+        if (ch.enabled !== false) {
+          activeChannelIds.add(ch.id.toLowerCase());
         }
       });
     }
     if (currentSettings.youtubeApi && currentSettings.youtubeApi.enabled === false) {
-      disabledChannelIds.add("youtube");
+      activeChannelIds.delete("youtube");
     }
     if (currentSettings.twitterApi && currentSettings.twitterApi.enabled === false) {
-      disabledChannelIds.add("x");
+      activeChannelIds.delete("x");
     }
 
-    allPosts = allPosts.filter((p) => !disabledChannelIds.has(p.platform.toLowerCase()));
+    allPosts = allPosts.filter((p) => activeChannelIds.has(p.platform.toLowerCase()));
 
     // Filter by platform
     if (platform && platform !== "all") {
