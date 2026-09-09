@@ -3,8 +3,9 @@
 // React/Next.js core
 
 // External libraries
-import { Search } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 // Internal components
 import { useApplicationsLogic } from "@/app/[locale]/(dashboard)/admin/applications/_hooks/useApplicationsLogic";
@@ -17,6 +18,14 @@ const FILTER_OPTIONS = ["all", "pending", "approved", "rejected"];
 export default function AdminApplications() {
   const { filteredApps, filter, setFilter, searchTerm, setSearchTerm } =
     useApplicationsLogic();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12; // Multiple of 4 for nice rows
+  const totalPages = Math.ceil(filteredApps.length / ITEMS_PER_PAGE);
+  const paginatedApps = filteredApps.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   const t = useTranslations("Dashboard.admin.applications");
 
@@ -71,8 +80,8 @@ export default function AdminApplications() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
-        {filteredApps.map((app, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {paginatedApps.map((app, index) => (
           <ApplicationCard key={app.id} application={app} index={index} />
         ))}
 
@@ -80,7 +89,7 @@ export default function AdminApplications() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="py-24 text-center space-y-6 rounded-[32px] border-2 border-dashed border-primary/20 bg-gradient-to-b from-primary/[0.02] to-transparent glass relative overflow-hidden"
+            className="col-span-full py-24 text-center space-y-6 rounded-[32px] border-2 border-dashed border-primary/20 bg-gradient-to-b from-primary/[0.02] to-transparent glass relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-grid-primary/[0.02] bg-[length:32px_32px]" />
             <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary/40 relative">
@@ -98,6 +107,41 @@ export default function AdminApplications() {
           </motion.div>
         )}
       </div>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 mt-12">
+          <button
+            onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+            disabled={currentPage === 1}
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-slate-200">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={cn(
+                  "w-10 h-10 rounded-lg text-sm font-bold transition-all",
+                  currentPage === page
+                    ? "bg-primary text-white shadow-md shadow-primary/20"
+                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+                )}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+            disabled={currentPage === totalPages}
+            className="w-10 h-10 rounded-xl flex items-center justify-center bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
