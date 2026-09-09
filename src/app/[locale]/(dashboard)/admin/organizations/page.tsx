@@ -87,7 +87,7 @@ export default function AdminOrganizations() {
                     ))}
                 </motion.div>
             )}
-        </div>
+        </motion.div>
     );
 }
 
