@@ -62,9 +62,9 @@ export function useAdminServicesLogic() {
         if (item) {
             setEditingItem(item);
             setFormData({
-                name: item.name,
+                name: item.name || item.name_en || item.name_ar || "",
                 category: item.category,
-                description: item.description,
+                description: item.description || item.description_en || item.description_ar || "",
                 fee: item.fee,
                 is_active: item.is_active
             });
@@ -127,7 +127,7 @@ export function useAdminServicesLogic() {
     };
 
     const filteredServices = services.filter((s) =>
-        s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (s.name || s.name_en || s.name_ar || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
         s.category.toLowerCase().includes(searchTerm.toLowerCase())
     );
 

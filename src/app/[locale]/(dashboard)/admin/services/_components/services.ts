@@ -8,11 +8,25 @@ export async function fetchServicesApi(): Promise<ServiceItem[]> {
 }
 
 export async function createServiceApi(data: ServiceFormData): Promise<void> {
-    await api.post("/services/services/", data);
+    const payload = {
+        ...data,
+        name_en: data.name,
+        name_ar: data.name, // Fallback for Arabic if not provided
+        description_en: data.description,
+        description_ar: data.description, // Fallback for Arabic if not provided
+    };
+    await api.post("/services/services/", payload);
 }
 
 export async function updateServiceApi(id: string, data: ServiceFormData): Promise<void> {
-    await api.patch(`/services/services/${id}/`, data);
+    const payload = {
+        ...data,
+        name_en: data.name,
+        name_ar: data.name,
+        description_en: data.description,
+        description_ar: data.description,
+    };
+    await api.patch(`/services/services/${id}/`, payload);
 }
 
 export async function deleteServiceApi(id: string): Promise<void> {

@@ -40,8 +40,8 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                         {services.map((service) => (
                             <tr key={service.id} className="hover:bg-primary/[0.01] transition-colors group">
                                 <td className="px-8 py-6">
-                                    <p className="font-bold text-primary group-hover:underline cursor-pointer">{service.name}</p>
-                                    <p className="text-xs text-foreground/40 line-clamp-1 mt-1">{service.description || t("noDesc")}</p>
+                                    <p className="font-bold text-primary group-hover:underline cursor-pointer">{service.name || service.name_en || service.name_ar}</p>
+                                    <p className="text-xs text-foreground/40 line-clamp-1 mt-1">{service.description || service.description_en || service.description_ar || t("noDesc")}</p>
                                 </td>
                                 <td className="px-8 py-6 hidden md:table-cell">
                                     <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-black uppercase tracking-widest">
