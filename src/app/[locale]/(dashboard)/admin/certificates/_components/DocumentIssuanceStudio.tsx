@@ -6,8 +6,9 @@ import { Award, FileText, X, Loader2, CheckCircle2, AlertCircle, PenTool, Image 
 import SignatureCanvas from "react-signature-canvas";
 
 import { cn } from "@/lib/utils";
+
 import { EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
-import { CertificateCanvas } from "./CertificateCanvas";
+import { CertificateCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/[id]/_components/CertificateCanvas";
 import { LetterCanvas } from "./LetterCanvas";
 
 export type DocumentType = "Certificate" | "Letter";
