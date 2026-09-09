@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Award, FileText, X, Loader2, CheckCircle2, AlertCircle, PenTool, Image as ImageIcon, Languages, Eye, Eraser } from "lucide-react";
 import SignatureCanvas from "react-signature-canvas";
@@ -39,6 +39,17 @@ export default function DocumentIssuanceStudio({
 }: DocumentIssuanceStudioProps) {
   const [docType, setDocType] = useState<DocumentType>("Certificate");
   const [language, setLanguage] = useState<Language>("en");
+  
+  useEffect(() => {
+    const app = eligibleApplications.find(a => a.id === selectedAppId);
+    if (app) {
+      if (!app.organization_name && app.user_name) {
+        setDocType("Letter");
+      } else {
+        setDocType("Certificate");
+      }
+    }
+  }, [selectedAppId, eligibleApplications]);
   
   // Custom Text State
   const [customTextEn, setCustomTextEn] = useState("");

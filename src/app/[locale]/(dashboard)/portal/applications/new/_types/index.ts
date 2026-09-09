@@ -76,8 +76,12 @@ export interface ApplicationFormData {
 
 export interface Service {
   id: string;
-  name: string;
-  description: string;
+  name?: string;
+  name_en?: string;
+  name_ar?: string;
+  description?: string;
+  description_en?: string;
+  description_ar?: string;
   fee: number;
   category: string;
   target_audience: "Individual" | "Organization";
