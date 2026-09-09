@@ -5,6 +5,10 @@ import { ThumbsUp, ThumbsDown, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import TimelineStatus from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/TimelineStatus";
 import type { ApplicationDetail } from "@/app/[locale]/(dashboard)/admin/applications/_types";
+import { useState } from "react";
+import DocumentIssuanceStudio from "@/app/[locale]/(dashboard)/admin/certificates/_components/DocumentIssuanceStudio";
+import { certificateService } from "@/app/[locale]/(dashboard)/admin/certificates/_services/certificateService";
+import { Award, FileText } from "lucide-react";
 
 interface ActionSidebarProps {
   app: ApplicationDetail;
@@ -19,6 +23,29 @@ export default function ActionSidebar({
   handleAction,
   handleDelete,
 }: ActionSidebarProps) {
+  const [isStudioOpen, setIsStudioOpen] = useState(false);
+  const [isIssuing, setIsIssuing] = useState(false);
+  const [issueMessage, setIssueMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [selectedAppId, setSelectedAppId] = useState<string>(app.id.toString());
+
+  const handleIssueDocument = async (payload: any) => {
+    setIsIssuing(true);
+    setIssueMessage(null);
+    try {
+      await certificateService.issueDocument(payload);
+      setIssueMessage({ type: 'success', text: `${payload.documentType} issued successfully!` });
+      setTimeout(() => {
+        setIsStudioOpen(false);
+        window.location.reload(); // Quick refresh to update the UI with the new document
+      }, 2000);
+    } catch (err: any) {
+      console.error("Failed to issue document", err);
+      setIssueMessage({ type: 'error', text: err.response?.data?.detail || "Failed to issue document. Please try again." });
+    } finally {
+      setIsIssuing(false);
+    }
+  };
+
   return (
     <div className="space-y-8">
       <div className="p-8 md:p-10 rounded-[32px] bg-slate-900 text-white shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-slate-800 space-y-8 relative overflow-hidden">
@@ -50,22 +77,52 @@ export default function ActionSidebar({
         )}
 
         <div className="space-y-4 relative z-10">
-          <button
-            onClick={() => handleAction("Approved")}
-            disabled={submitting}
-            className="w-full py-5 bg-white text-slate-900 rounded-[24px] font-bold text-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 hover:shadow-emerald-500/20"
-          >
-            <ThumbsUp size={20} /> Approve Entry
-          </button>
-          <button
-            onClick={() => handleAction("Rejected")}
-            disabled={submitting}
-            className="w-full py-5 bg-slate-800 text-white border border-slate-700 rounded-[24px] font-bold text-lg hover:bg-rose-600 hover:border-rose-600 hover:shadow-lg hover:shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
-          >
-            <ThumbsDown size={20} /> Reject Submission
-          </button>
+          {app.status === "Approved" ? (
+            <div className="space-y-4">
+              <button
+                onClick={() => setIsStudioOpen(true)}
+                className="w-full py-5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-[24px] font-bold text-lg hover:shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+              >
+                <Award size={20} /> Issue Official Document
+              </button>
+            </div>
+          ) : (
+            <>
+              <button
+                onClick={() => handleAction("Approved")}
+                disabled={submitting}
+                className="w-full py-5 bg-white text-slate-900 rounded-[24px] font-bold text-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 hover:shadow-emerald-500/20"
+              >
+                <ThumbsUp size={20} /> Approve Entry
+              </button>
+              <button
+                onClick={() => handleAction("Rejected")}
+                disabled={submitting}
+                className="w-full py-5 bg-slate-800 text-white border border-slate-700 rounded-[24px] font-bold text-lg hover:bg-rose-600 hover:border-rose-600 hover:shadow-lg hover:shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
+              >
+                <ThumbsDown size={20} /> Reject Submission
+              </button>
+            </>
+          )}
         </div>
       </div>
+
+      <DocumentIssuanceStudio
+        isOpen={isStudioOpen}
+        onClose={() => setIsStudioOpen(false)}
+        eligibleApplications={[{
+          id: app.id.toString(),
+          organization_name: app.organization_name,
+          user_name: (app as any).user_name,
+          service_name: app.service_name
+        }]}
+        isLoadingApplications={false}
+        isIssuing={isIssuing}
+        selectedAppId={selectedAppId}
+        setSelectedAppId={setSelectedAppId}
+        message={issueMessage}
+        handleIssueDocument={handleIssueDocument}
+      />
 
       <TimelineStatus app={app} />
 
