@@ -54,7 +54,7 @@ export default function CertificateCard({
               t("digitalCert")}
           </h4>
           <p className="text-xs font-bold text-foreground/40 mt-1 uppercase tracking-widest">
-            {cert.organization_name}
+            {cert.organization_name || cert.application_detail?.user_name || "N/A"}
           </p>
         </div>
 

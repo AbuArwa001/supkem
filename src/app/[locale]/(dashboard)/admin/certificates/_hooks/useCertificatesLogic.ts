@@ -53,7 +53,7 @@ export function useCertificatesLogic() {
   };
 
   const filteredCerts = certificates.filter((cert) =>
-    cert.organization_name?.toLowerCase().includes(searchTerm.toLowerCase()),
+    (cert.organization_name || cert.application_detail?.user_name || "").toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const groupedCerts = filteredCerts.reduce((acc: Record<string, Certificate[]>, cert) => {
