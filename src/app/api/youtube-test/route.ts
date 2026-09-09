@@ -6,16 +6,19 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { apiKey, channelId } = body || {};
 
-    if (!apiKey?.trim()) {
+    const activeApiKey = (apiKey?.trim() || process.env.YOUTUBE_API_KEY || "").trim();
+    const activeChannelId = (channelId?.trim() || process.env.YOUTUBE_CHANNEL_ID || "").trim();
+
+    if (!activeApiKey) {
       return NextResponse.json(
-        { success: false, message: "YouTube API Key is required." },
+        { success: false, message: "YouTube API Key is required (or configure YOUTUBE_API_KEY in .env.local)." },
         { status: 400 }
       );
     }
 
     const result = await testYouTubeApiKey(
-      apiKey.trim(),
-      channelId?.trim() || "UCNbBcq2UNZahLtzrnyabhow"
+      activeApiKey,
+      activeChannelId || "UCNbBcq2UNZahLtzrnyabhow"
     );
 
     return NextResponse.json(result, { status: result.success ? 200 : 400 });

@@ -96,18 +96,28 @@ export const DEFAULT_SOCIAL_CHANNELS: SocialChannelConfig[] = [
 ];
 
 export const getDefaultMetaApiSettings = (): MetaApiSettings => ({
-  enabled: false,
-  facebookPageId: "100079747610399",
-  facebookAccessToken: "",
-  instagramBusinessId: "",
+  enabled: process.env.META_API_ENABLED === "true" || false,
+  facebookPageId: (process.env.META_FACEBOOK_PAGE_ID || "").trim(),
+  facebookAccessToken: (process.env.META_FACEBOOK_ACCESS_TOKEN || "").trim(),
+  instagramBusinessId: (process.env.META_INSTAGRAM_BUSINESS_ID || "").trim(),
   cacheDurationMinutes: 30,
 });
 
 export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
-  enabled: true,
-  apiKey: "[ENCRYPTION_KEY]",
-  channelId: "UC-iBf9m-x_31p1P8n1J2L6g",
-  searchQuery: "SUPKEM Kenya",
+  enabled:
+    process.env.YOUTUBE_API_ENABLED === "true" ||
+    !!(process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY),
+  apiKey: (
+    process.env.YOUTUBE_API_KEY ||
+    process.env.NEXT_PUBLIC_YOUTUBE_API_KEY ||
+    ""
+  ).trim(),
+  channelId: (
+    process.env.YOUTUBE_CHANNEL_ID ||
+    process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID ||
+    ""
+  ).trim(),
+  searchQuery: (process.env.YOUTUBE_SEARCH_QUERY || "SUPKEM Kenya").trim(),
   maxResults: 6,
 });
 

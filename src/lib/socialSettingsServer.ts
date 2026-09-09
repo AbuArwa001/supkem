@@ -17,10 +17,16 @@ export function readPersistedSocialSettings(): SocialMediaSettings {
           metaApi: {
             ...defaults.metaApi,
             ...(parsed.metaApi || {}),
+            facebookPageId: (parsed.metaApi?.facebookPageId || defaults.metaApi?.facebookPageId || "").trim(),
+            facebookAccessToken: (parsed.metaApi?.facebookAccessToken || defaults.metaApi?.facebookAccessToken || "").trim(),
+            instagramBusinessId: (parsed.metaApi?.instagramBusinessId || defaults.metaApi?.instagramBusinessId || "").trim(),
           },
           youtubeApi: {
             ...defaults.youtubeApi,
             ...(parsed.youtubeApi || {}),
+            apiKey: (parsed.youtubeApi?.apiKey || defaults.youtubeApi?.apiKey || "").trim(),
+            channelId: (parsed.youtubeApi?.channelId || defaults.youtubeApi?.channelId || "").trim(),
+            searchQuery: (parsed.youtubeApi?.searchQuery || defaults.youtubeApi?.searchQuery || "SUPKEM Kenya").trim(),
           },
         };
       }

@@ -80,7 +80,7 @@ export default function SocialSettingsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          facebookPageId: settings.metaApi?.facebookPageId || "100079747610399",
+          facebookPageId: settings.metaApi?.facebookPageId || "",
           facebookAccessToken: settings.metaApi?.facebookAccessToken || "",
           instagramBusinessId: settings.metaApi?.instagramBusinessId || "",
         }),
@@ -113,8 +113,8 @@ export default function SocialSettingsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          apiKey: settings.youtubeApi?.apiKey || "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-          channelId: settings.youtubeApi?.channelId || "UCNbBcq2UNZahLtzrnyabhow",
+          apiKey: settings.youtubeApi?.apiKey || "",
+          channelId: settings.youtubeApi?.channelId || "",
         }),
       });
       const data = await res.json();
@@ -257,8 +257,8 @@ export default function SocialSettingsPage() {
       ...settings,
       youtubeApi: {
         ...(settings.youtubeApi || {
-          apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-          channelId: "UCNbBcq2UNZahLtzrnyabhow",
+          apiKey: "",
+          channelId: "",
           searchQuery: "SUPKEM Kenya",
           maxResults: 6,
         }),
@@ -1110,7 +1110,7 @@ export default function SocialSettingsPage() {
                   <div className="relative">
                     <Input
                       type={showYtApiKey ? "text" : "password"}
-                      placeholder="AIzaSy..."
+                      placeholder="Enter YouTube Data API key (or configure YOUTUBE_API_KEY in .env)"
                       value={settings.youtubeApi?.apiKey || ""}
                       onChange={(e) =>
                         setSettings((prev) => ({
@@ -1118,7 +1118,7 @@ export default function SocialSettingsPage() {
                           youtubeApi: {
                             ...(prev.youtubeApi || {
                               enabled: true,
-                              channelId: "UCNbBcq2UNZahLtzrnyabhow",
+                              channelId: "",
                               searchQuery: "SUPKEM Kenya",
                               maxResults: 6,
                             }),
@@ -1137,7 +1137,7 @@ export default function SocialSettingsPage() {
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled.
+                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled. Can also be set securely in <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">.env.local</code>.
                   </p>
                 </div>
 
@@ -1155,7 +1155,7 @@ export default function SocialSettingsPage() {
                         youtubeApi: {
                           ...(prev.youtubeApi || {
                             enabled: true,
-                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
+                            apiKey: "",
                             searchQuery: "SUPKEM Kenya",
                             maxResults: 6,
                           }),
@@ -1166,7 +1166,7 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm font-mono"
                   />
                   <p className="text-xs text-slate-400">
-                    Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">UCNbBcq2UNZahLtzrnyabhow</code> (SUPKEM official channel).
+                    Your official YouTube Channel ID (or configure via <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">YOUTUBE_CHANNEL_ID</code> in environment).
                   </p>
                 </div>
 
@@ -1184,8 +1184,8 @@ export default function SocialSettingsPage() {
                         youtubeApi: {
                           ...(prev.youtubeApi || {
                             enabled: true,
-                            apiKey: "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-                            channelId: "UCNbBcq2UNZahLtzrnyabhow",
+                            apiKey: "",
+                            channelId: "",
                             maxResults: 6,
                           }),
                           searchQuery: e.target.value,

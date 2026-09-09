@@ -6,20 +6,24 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { facebookPageId, facebookAccessToken, instagramBusinessId } = body || {};
 
-    if (!facebookAccessToken?.trim()) {
+    const activeToken = (facebookAccessToken?.trim() || process.env.META_FACEBOOK_ACCESS_TOKEN || "").trim();
+    const activePageId = (facebookPageId?.trim() || process.env.META_FACEBOOK_PAGE_ID || "").trim();
+    const activeIgId = (instagramBusinessId?.trim() || process.env.META_INSTAGRAM_BUSINESS_ID || "").trim();
+
+    if (!activeToken) {
       return NextResponse.json(
         {
           success: false,
-          message: "Meta Page Access Token is required to test the connection.",
+          message: "Meta Page Access Token is required to test the connection (or configure META_FACEBOOK_ACCESS_TOKEN in .env.local).",
         },
         { status: 400 }
       );
     }
 
     const result = await testMetaCredentials(
-      facebookPageId || "",
-      facebookAccessToken || "",
-      instagramBusinessId || ""
+      activePageId,
+      activeToken,
+      activeIgId
     );
 
     return NextResponse.json(result, { status: result.success ? 200 : 400 });
