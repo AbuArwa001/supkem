@@ -97,35 +97,25 @@ export const DEFAULT_SOCIAL_CHANNELS: SocialChannelConfig[] = [
 ];
 
 export const getDefaultMetaApiSettings = (): MetaApiSettings => ({
-  enabled: process.env.META_API_ENABLED === "true" || false,
-  facebookPageId: (process.env.META_FACEBOOK_PAGE_ID || "").trim(),
-  facebookAccessToken: (process.env.META_FACEBOOK_ACCESS_TOKEN || "").trim(),
-  instagramBusinessId: (process.env.META_INSTAGRAM_BUSINESS_ID || "").trim(),
+  enabled: false,
+  facebookPageId: "",
+  facebookAccessToken: "",
+  instagramBusinessId: "",
   cacheDurationMinutes: 30,
 });
 
 export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
-  enabled:
-    process.env.YOUTUBE_API_ENABLED === "true" ||
-    !!(process.env.YOUTUBE_API_KEY || process.env.NEXT_PUBLIC_YOUTUBE_API_KEY),
-  apiKey: (
-    process.env.YOUTUBE_API_KEY ||
-    process.env.NEXT_PUBLIC_YOUTUBE_API_KEY ||
-    ""
-  ).trim(),
-  channelId: (
-    process.env.YOUTUBE_CHANNEL_ID ||
-    process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID ||
-    ""
-  ).trim(),
-  searchQuery: (process.env.YOUTUBE_SEARCH_QUERY || "SUPKEM Kenya").trim(),
+  enabled: false,
+  apiKey: "",
+  channelId: "",
+  searchQuery: "SUPKEM Kenya",
   maxResults: 6,
 });
 
 export const getDefaultTwitterApiSettings = (): TwitterApiSettings => ({
-  enabled: process.env.TWITTER_API_ENABLED === "true" || false,
-  bearerToken: (process.env.TWITTER_BEARER_TOKEN || "").trim(),
-  username: (process.env.TWITTER_USERNAME || "SUPKEM1").trim(),
+  enabled: false,
+  bearerToken: "",
+  username: "SUPKEM1",
   maxResults: 6,
 });
 

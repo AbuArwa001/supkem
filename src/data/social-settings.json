@@ -18,8 +18,8 @@
   },
   "youtubeApi": {
     "enabled": true,
-    "apiKey": "AIzaSyDLRhLJqaSubJyYvsGlevWk6N7q7i8Mrb0",
-    "channelId": "UCAvnT8OyMUIfvHxSpTdeWPw",
+    "apiKey": "",
+    "channelId": "",
     "searchQuery": "SUPKEM Kenya",
     "maxResults": 6
   },

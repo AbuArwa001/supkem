@@ -1009,7 +1009,7 @@ export default function SocialSettingsPage() {
                   <div className="relative">
                     <Input
                       type={showYtApiKey ? "text" : "password"}
-                      placeholder="Enter YouTube Data API key (or configure YOUTUBE_API_KEY in .env)"
+                      placeholder="Enter YouTube Data API key"
                       value={settings.youtubeApi?.apiKey || ""}
                       onChange={(e) =>
                         setSettings((prev) => ({
@@ -1036,7 +1036,7 @@ export default function SocialSettingsPage() {
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled. Can also be set securely in <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">.env.local</code>.
+                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled.
                   </p>
                 </div>
 
@@ -1065,7 +1065,7 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm font-mono"
                   />
                   <p className="text-xs text-slate-400">
-                    Your official YouTube Channel ID (or configure via <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">YOUTUBE_CHANNEL_ID</code> in environment).
+                    Your official YouTube Channel ID.
                   </p>
                 </div>
 
