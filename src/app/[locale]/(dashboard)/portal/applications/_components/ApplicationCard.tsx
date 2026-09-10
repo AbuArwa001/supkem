@@ -28,7 +28,7 @@ export function ApplicationCard({
       <div className="flex-1 space-y-2">
         <div className="flex items-center gap-3">
           <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors">
-            {application.service_name || "Halal Certification"}
+            {application.service_name || "Application"}
           </h3>
           <span
             className={cn(

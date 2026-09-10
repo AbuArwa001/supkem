@@ -56,7 +56,7 @@ export function ApplicationsList({
               No Applications Found
             </h3>
             <p className="text-slate-500 font-medium text-sm max-w-sm">
-              You haven't submitted any Halal certification applications yet.
+              You haven't submitted any applications yet.
             </p>
           </div>
         </div>
