@@ -11,7 +11,8 @@ import {
   Database,
   Users,
   Settings as SettingsIcon,
-  Share2
+  Share2,
+  Plug,
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
@@ -90,6 +91,15 @@ export default function SettingsHub() {
       icon: Database,
       color: "text-slate-600",
       bg: "bg-slate-50",
+      isAdminOnly: true
+    },
+    {
+      title: "Integrations",
+      description: "Configure API credentials for Knock notifications, M-Pesa payments, Resend email, and OpenAI translation.",
+      link: "/admin/settings/integrations",
+      icon: Plug,
+      color: "text-violet-600",
+      bg: "bg-violet-50",
       isAdminOnly: true
     },
   ];
