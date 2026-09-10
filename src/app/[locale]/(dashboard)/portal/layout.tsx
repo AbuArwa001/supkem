@@ -39,7 +39,7 @@ export default function PortalLayout({
             </div>
             <div className="flex items-center gap-4">
               <div className="bg-white/10 p-1.5 rounded-full border border-white/10">
-                <KnockNotifications />
+                <KnockNotifications basePath="/portal/applications" />
               </div>
               <button
                 onClick={() => setIsSidebarOpen(true)}
@@ -56,7 +56,7 @@ export default function PortalLayout({
               <LanguageToggle />
               <div className="flex items-center gap-5">
                 <div className="relative pt-1 bg-white/10 p-1.5 rounded-full border border-white/10 hover:bg-white/20 transition-colors">
-                  <KnockNotifications />
+                  <KnockNotifications basePath="/portal/applications" />
                 </div>
                 <UserNavDropdown />
               </div>
