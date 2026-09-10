@@ -1,12 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Building2 } from "lucide-react";
+import { FileText, Building2, Award, Mail, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface DetailsGridProps {
   application: {
     id: string;
     service_name: string;
+    service_category?: string;
     organization_name?: string;
     user_name: string;
     submitted_at: string;
@@ -16,6 +18,8 @@ interface DetailsGridProps {
       amount: string;
       receipt_number?: string;
     };
+    certification?: { id: string; serial_number: string } | null;
+    letter?: { id: string; serial_number: string } | null;
     marriage_details?: any;
     pilgrim_details?: any;
     education_details?: any;
@@ -24,74 +28,122 @@ interface DetailsGridProps {
   };
 }
 
+/** Determine what kind of document this application produces */
+function getDocumentType(application: DetailsGridProps["application"]) {
+  if (application.letter) return { label: "Letter Issued", icon: Mail, color: "bg-blue-500" };
+  if (application.certification) return { label: "Certificate Issued", icon: Award, color: "bg-emerald-500" };
+  // Derive from service name if not yet issued
+  const svc = application.service_name?.toLowerCase() || "";
+  const letterServices = ["study", "hajj", "umrah", "travel", "visa", "employment", "marriage"];
+  const isLetter = letterServices.some((k) => svc.includes(k));
+  return isLetter
+    ? { label: "Will Produce a Letter", icon: Mail, color: "bg-blue-400" }
+    : { label: "Will Produce a Certificate", icon: ShieldCheck, color: "bg-emerald-400" };
+}
+
 export const DetailsGrid = ({ application }: DetailsGridProps) => {
-  const hasSpecificDetails = application.marriage_details || application.pilgrim_details || application.education_details || application.travel_visa_details || application.employment_details;
+  const hasSpecificDetails =
+    application.marriage_details ||
+    application.pilgrim_details ||
+    application.education_details ||
+    application.travel_visa_details ||
+    application.employment_details;
+
+  const docType = getDocumentType(application);
+  const DocIcon = docType.icon;
 
   return (
-    <div className="grid md:grid-cols-2 gap-6">
-      {/* Service Details */}
+    <div className="space-y-6">
+      {/* Document Type Banner */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+        className="flex flex-wrap items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm"
       >
-        <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
-          <div className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500">
-            <FileText size={24} />
-          </div>
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-              Requested Service
-            </p>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors">
-              {application.service_name}
-            </h3>
-          </div>
+        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0", docType.color)}>
+          <DocIcon size={20} />
         </div>
-
-        <div className="space-y-1 pt-6">
-          <DetailItem label="Submission Date" value={new Date(application.submitted_at).toLocaleDateString()} />
-          <DetailItem label="Last Updated" value={new Date(application.updated_at).toLocaleDateString()} />
-          <DetailItem label="Application ID" value={application.id} isMono />
-          <DetailItem 
-            label="Payment Status" 
-            value={application.payment ? application.payment.status : "Pending/Unpaid"} 
-          />
-          {application.payment?.amount && (
-            <DetailItem label="Amount" value={`KES ${application.payment.amount}`} />
-          )}
-          {application.payment?.receipt_number && (
-            <DetailItem label="Receipt No." value={application.payment.receipt_number} isMono />
-          )}
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Document Type</p>
+          <p className="font-black text-slate-800">{docType.label}</p>
         </div>
+        {application.service_category && (
+          <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
+            {application.service_category}
+          </span>
+        )}
+        {(application.letter?.serial_number || application.certification?.serial_number) && (
+          <span className="font-mono text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-200 shrink-0">
+            {application.letter?.serial_number || application.certification?.serial_number}
+          </span>
+        )}
       </motion.div>
 
-      {/* Entity Details */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-        className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
-      >
-        <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
-          <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-110 transition-transform duration-500">
-            <Building2 size={24} />
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* Service Details */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+        >
+          <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
+            <div className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <FileText size={24} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Requested Service
+              </p>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors">
+                {application.service_name}
+              </h3>
+            </div>
           </div>
-          <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-              Entity Details
-            </p>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
-              {application.organization_name || "Personal/Individual Application"}
-            </h3>
-          </div>
-        </div>
 
-        <div className="space-y-1 pt-6">
-          <DetailItem label="Applicant Name" value={application.user_name} />
-        </div>
-      </motion.div>
+          <div className="space-y-1 pt-6">
+            <DetailItem label="Submission Date" value={new Date(application.submitted_at).toLocaleDateString()} />
+            <DetailItem label="Last Updated" value={new Date(application.updated_at).toLocaleDateString()} />
+            <DetailItem label="Application ID" value={application.id} isMono />
+            <DetailItem
+              label="Payment Status"
+              value={application.payment ? application.payment.status : "Pending/Unpaid"}
+            />
+            {application.payment?.amount && (
+              <DetailItem label="Amount" value={`KES ${application.payment.amount}`} />
+            )}
+            {application.payment?.receipt_number && (
+              <DetailItem label="Receipt No." value={application.payment.receipt_number} isMono />
+            )}
+          </div>
+        </motion.div>
+
+        {/* Entity Details */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+        >
+          <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
+            <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-110 transition-transform duration-500">
+              <Building2 size={24} />
+            </div>
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Entity Details
+              </p>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+                {application.organization_name || "Personal/Individual Application"}
+              </h3>
+            </div>
+          </div>
+
+          <div className="space-y-1 pt-6">
+            <DetailItem label="Applicant Name" value={application.user_name} />
+          </div>
+        </motion.div>
+      </div>
 
       {/* Specific Details */}
       {hasSpecificDetails && (
@@ -99,7 +151,7 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="md:col-span-2 p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
         >
           <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
             <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform duration-500">
@@ -110,7 +162,7 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
                 Application Content
               </p>
               <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
-                Specific Details
+                {application.service_name} — Details
               </h3>
             </div>
           </div>

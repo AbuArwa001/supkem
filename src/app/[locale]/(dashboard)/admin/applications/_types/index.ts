@@ -12,10 +12,13 @@ export interface Application {
 
 /** Full application shape used on the admin detail page */
 export interface ApplicationDetail extends Application {
-  created_at: string;
+  created_at?: string;
+  submitted_at?: string;
   updated_at?: string;
   comments?: string;
+  user_name?: string;
   certification?: { id: string; serial_number: string };
+  letter?: { id: string; serial_number: string } | null;
   marriage_details?: MarriageDetails | null;
   pilgrim_details?: PilgrimDetails | null;
   education_details?: EducationDetails | null;

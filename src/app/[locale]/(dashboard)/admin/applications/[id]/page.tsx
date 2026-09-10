@@ -45,7 +45,7 @@ export default function ApplicationDetail() {
           </h1>
           <p className="text-slate-500 font-medium text-lg">
             Submitted by <strong className="text-slate-900">{app.organization_name || "Applicant"}</strong> on{" "}
-            {new Date(app.created_at).toLocaleDateString()}
+            {app.submitted_at ? new Date(app.submitted_at).toLocaleDateString() : "N/A"}
           </p>
         </div>
       </div>
