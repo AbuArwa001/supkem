@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
 
 interface PollProps {
@@ -9,12 +9,15 @@ interface PollProps {
 }
 
 export function usePaymentPolling({ appId, status, onSuccess, onError }: PollProps) {
+  const attemptsRef = useRef(0);
+
   useEffect(() => {
     if (status !== "waiting") return;
-    let attempts = 0;
-    const MAX = 40;
-    const interval = setInterval(async () => {
-      attempts++;
+    attemptsRef.current = 0;
+    const MAX = 60; // 2 minutes at 2s intervals
+
+    const poll = async () => {
+      attemptsRef.current++;
       try {
         const data = await applicationSubmitService.getApplication(appId);
         const payStatus = (data as any).payment?.status;
@@ -24,12 +27,16 @@ export function usePaymentPolling({ appId, status, onSuccess, onError }: PollPro
         } else if (payStatus === "Failed") {
           clearInterval(interval);
           onError("M-Pesa payment was declined. Check your PIN and balance.");
-        } else if (attempts >= MAX) {
+        } else if (attemptsRef.current >= MAX) {
           clearInterval(interval);
-          onError("Payment confirmation timed out. Please refresh.");
+          onError("Payment confirmation timed out. If money was deducted, please contact support with your reference number.");
         }
       } catch { /* silent poll */ }
-    }, 3000);
+    };
+
+    // Poll immediately, then every 2 seconds
+    poll();
+    const interval = setInterval(poll, 2000);
     return () => clearInterval(interval);
   }, [status, appId, onSuccess, onError]);
 }

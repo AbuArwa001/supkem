@@ -1,79 +1,180 @@
+"use client";
+
 import { Link } from "@/i18n/routing";
-import { FileText, Building2, Calendar, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  FileText, Building2, Calendar, ChevronRight,
+  CheckCircle2, Clock, ShieldAlert, HelpCircle,
+  CreditCard, Award, Mail,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Application } from "./types";
 
 interface ApplicationCardProps {
   application: Application;
+  view: "grid" | "list";
   getStatusStyles: (status: string) => string;
   getStatusIcon: (status: string) => any;
+  index: number;
 }
 
-export function ApplicationCard({ 
-  application, 
-  getStatusStyles, 
-  getStatusIcon 
-}: ApplicationCardProps) {
-  const StatusIcon = getStatusIcon(application.status);
+function getDocBadge(app: Application) {
+  const svc = (app.service_name || "").toLowerCase();
+  const isLetter = ["study", "hajj", "umrah", "travel", "visa", "employment", "marriage"].some(k => svc.includes(k));
+  return isLetter
+    ? { label: "Letter", icon: Mail, cls: "bg-blue-50 text-blue-600 border-blue-100" }
+    : { label: "Certificate", icon: Award, cls: "bg-emerald-50 text-emerald-600 border-emerald-100" };
+}
 
+function PaymentBadge({ app }: { app: Application }) {
+  const paid = app.payment?.status === "Completed";
   return (
-    <Link
-      href={`/portal/applications/${application.id}`}
-      className="flex flex-col md:flex-row items-start md:items-center gap-6 p-6 md:p-8 hover:bg-slate-50/50 transition-colors group relative"
-    >
-      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-primary shrink-0 shadow-inner border border-primary/10 group-hover:bg-primary group-hover:text-white transition-all">
-        <FileText size={28} />
-      </div>
+    <span className={cn(
+      "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+      paid ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-700 border-amber-200"
+    )}>
+      <CreditCard size={10} />
+      {paid ? "Paid" : "Pending Payment"}
+    </span>
+  );
+}
 
-      <div className="flex-1 space-y-2">
-        <div className="flex items-center gap-3">
-          <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors">
-            {application.service_name || "Application"}
-          </h3>
-          <span
-            className={cn(
-              "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
-              (!application.payment || application.payment.status !== "Completed")
-                ? "bg-amber-100 text-amber-700 border-amber-200"
-                : getStatusStyles(application.status),
-            )}
-          >
-            {(!application.payment || application.payment.status !== "Completed") ? (
-              <>Pending Payment</>
-            ) : (
-              <><StatusIcon size={14} />{application.status}</>
-            )}
-          </span>
-        </div>
+export function ApplicationCard({ application, view, getStatusStyles, getStatusIcon, index }: ApplicationCardProps) {
+  const StatusIcon = getStatusIcon(application.status);
+  const docBadge = getDocBadge(application);
+  const DocIcon = docBadge.icon;
 
-        <div className="flex flex-wrap items-center gap-4 text-sm font-medium text-slate-500">
-          <div className="flex items-center gap-1.5">
-            <Building2 size={16} className="text-slate-400" />
-            {application.organization_name || "Personal/Individual"}
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Calendar size={16} className="text-slate-400" />
-            Submitted{" "}
-            {application.submitted_at
-              ? new Date(application.submitted_at).toLocaleDateString()
-              : "N/A"}
-          </div>
-          {application.id && (
-            <div className="flex items-center gap-1.5 font-mono text-xs bg-slate-100 px-2 py-0.5 rounded text-slate-600">
-              Ref: #{String(application.id).substring(0, 8).toUpperCase()}
+  if (view === "grid") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.04, type: "spring", stiffness: 300, damping: 28 }}
+      >
+        <Link
+          href={`/portal/applications/${application.id}`}
+          className="group relative flex flex-col h-full bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_24px_rgb(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgb(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+        >
+          {/* Top accent bar */}
+          <div className="h-1.5 w-full bg-gradient-to-r from-primary via-emerald-500 to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+          <div className="p-6 flex flex-col gap-4 flex-1">
+            {/* Header */}
+            <div className="flex items-start justify-between">
+              <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300 shrink-0">
+                <FileText size={22} />
+              </div>
+              <span className={cn(
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                getStatusStyles(application.status)
+              )}>
+                <StatusIcon size={10} />
+                {application.status}
+              </span>
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="shrink-0 md:ml-auto w-full md:w-auto flex justify-end">
-        <div className="w-10 h-10 rounded-full bg-white border border-border/80 flex items-center justify-center text-slate-400 group-hover:border-primary/30 group-hover:text-primary group-hover:bg-primary/5 transition-all shadow-sm">
-          <ChevronRight
-            size={20}
-            className="group-hover:translate-x-0.5 transition-transform"
-          />
+            {/* Service name */}
+            <div className="flex-1">
+              <h3 className="text-lg font-black text-slate-900 group-hover:text-primary transition-colors leading-snug">
+                {application.service_name || "Application"}
+              </h3>
+              <div className="flex items-center gap-2 mt-2">
+                <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-widest border", docBadge.cls)}>
+                  <DocIcon size={9} />
+                  {docBadge.label}
+                </span>
+                <PaymentBadge app={application} />
+              </div>
+            </div>
+
+            {/* Footer meta */}
+            <div className="border-t border-slate-50 pt-4 space-y-2">
+              <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                <Building2 size={13} />
+                {application.organization_name || "Personal/Individual"}
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
+                  <Calendar size={13} />
+                  {application.submitted_at
+                    ? new Date(application.submitted_at).toLocaleDateString()
+                    : "—"}
+                </div>
+                <span className="font-mono text-[10px] text-slate-300 bg-slate-50 px-2 py-0.5 rounded-lg border border-slate-100">
+                  #{String(application.id).substring(0, 8).toUpperCase()}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="px-6 pb-6">
+            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 group-hover:bg-primary/5 border border-slate-100 group-hover:border-primary/20 text-slate-500 group-hover:text-primary font-bold text-sm transition-all">
+              View Details <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+        </Link>
+      </motion.div>
+    );
+  }
+
+  // LIST VIEW
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04, type: "spring", stiffness: 300, damping: 28 }}
+    >
+      <Link
+        href={`/portal/applications/${application.id}`}
+        className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 md:p-6 bg-white rounded-[20px] border border-slate-100 shadow-[0_2px_12px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_32px_rgb(0,0,0,0.08)] hover:border-primary/20 transition-all duration-300"
+      >
+        {/* Icon */}
+        <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300 shrink-0">
+          <FileText size={22} />
         </div>
-      </div>
-    </Link>
+
+        {/* Main info */}
+        <div className="flex-1 min-w-0 space-y-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-base font-black text-slate-900 group-hover:text-primary transition-colors">
+              {application.service_name || "Application"}
+            </h3>
+            <span className={cn(
+              "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border",
+              getStatusStyles(application.status)
+            )}>
+              <StatusIcon size={10} />
+              {application.status}
+            </span>
+            <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-widest border", docBadge.cls)}>
+              <DocIcon size={9} />
+              {docBadge.label}
+            </span>
+            <PaymentBadge app={application} />
+          </div>
+          <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <Building2 size={12} />
+              {application.organization_name || "Personal/Individual"}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Calendar size={12} />
+              {application.submitted_at
+                ? new Date(application.submitted_at).toLocaleDateString()
+                : "—"}
+            </span>
+            <span className="font-mono text-[10px] bg-slate-50 border border-slate-100 px-2 py-0.5 rounded-lg text-slate-400">
+              #{String(application.id).substring(0, 8).toUpperCase()}
+            </span>
+          </div>
+        </div>
+
+        {/* Arrow */}
+        <div className="shrink-0 w-9 h-9 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 group-hover:bg-primary/10 group-hover:border-primary/20 group-hover:text-primary transition-all ml-auto">
+          <ChevronRight size={18} className="group-hover:translate-x-0.5 transition-transform" />
+        </div>
+      </Link>
+    </motion.div>
   );
 }
