@@ -13,10 +13,12 @@ import { useTranslations } from "next-intl";
 
 interface ApplicationCardProps {
   application: Application;
-  view: "grid" | "list";
+  view?: "grid" | "list";
   getStatusStyles: (status: string) => string;
   getStatusIcon: (status: string) => any;
   index: number;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string | number) => void;
 }
 
 function getDocBadge(app: Application, t: any) {
@@ -40,7 +42,15 @@ function PaymentBadge({ app, t }: { app: Application; t: any }) {
   );
 }
 
-export function ApplicationCard({ application, view, getStatusStyles, getStatusIcon, index }: ApplicationCardProps) {
+export function ApplicationCard({
+  application,
+  view = "grid",
+  getStatusStyles,
+  getStatusIcon,
+  index,
+  isSelected = false,
+  onToggleSelect,
+}: ApplicationCardProps) {
   const t = useTranslations("Dashboard.portal.applicationsPage");
   const StatusIcon = getStatusIcon(application.status);
   const docBadge = getDocBadge(application, t);
@@ -52,22 +62,43 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.04, type: "spring", stiffness: 300, damping: 28 }}
+        className="relative group h-full"
       >
-        <Link
-          href={`/portal/applications/${application.id}`}
-          className="group relative flex flex-col h-full bg-white rounded-[24px] border border-slate-100 shadow-[0_4px_24px_rgb(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgb(0,0,0,0.10)] hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+        <div
+          className={cn(
+            "relative flex flex-col h-full bg-white rounded-[24px] border transition-all duration-300 overflow-hidden",
+            isSelected
+              ? "border-primary ring-2 ring-primary/25 shadow-lg"
+              : "border-slate-100 shadow-[0_4px_24px_rgb(0,0,0,0.05)] hover:shadow-[0_16px_48px_rgb(0,0,0,0.10)] hover:-translate-y-1"
+          )}
         >
           {/* Top accent bar */}
-          <div className="h-1.5 w-full bg-gradient-to-r from-primary via-emerald-500 to-primary/50 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className={cn(
+            "h-1.5 w-full transition-opacity",
+            isSelected
+              ? "bg-primary opacity-100"
+              : "bg-gradient-to-r from-primary via-emerald-500 to-primary/50 opacity-0 group-hover:opacity-100"
+          )} />
 
           <div className="p-6 flex flex-col gap-4 flex-1">
-            {/* Header */}
-            <div className="flex items-start justify-between">
-              <div className="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300 shrink-0">
-                <FileText size={22} />
+            {/* Header with Checkbox and Status */}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                {onToggleSelect && (
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => onToggleSelect(application.id)}
+                    className="w-4 h-4 rounded text-primary focus:ring-primary/20 cursor-pointer accent-emerald-700"
+                    title="Select application"
+                  />
+                )}
+                <div className="w-11 h-11 rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 flex items-center justify-center group-hover:bg-primary group-hover:text-white group-hover:border-primary group-hover:shadow-lg group-hover:shadow-primary/30 transition-all duration-300 shrink-0">
+                  <FileText size={20} />
+                </div>
               </div>
               <span className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border shrink-0",
                 getStatusStyles(application.status)
               )}>
                 <StatusIcon size={10} />
@@ -77,9 +108,11 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
 
             {/* Service name */}
             <div className="flex-1">
-              <h3 className="text-lg font-black text-slate-900 group-hover:text-primary transition-colors leading-snug">
-                {application.service_name || "Application"}
-              </h3>
+              <Link href={`/portal/applications/${application.id}`}>
+                <h3 className="text-lg font-black text-slate-900 group-hover:text-primary transition-colors leading-snug hover:underline">
+                  {application.service_name || "Application"}
+                </h3>
+              </Link>
               <div className="flex items-center gap-2 mt-2">
                 <span className={cn("inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-widest border", docBadge.cls)}>
                   <DocIcon size={9} />
@@ -109,13 +142,16 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
             </div>
           </div>
 
-          {/* CTA */}
-          <div className="px-6 pb-6">
-            <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 group-hover:bg-primary/5 border border-slate-100 group-hover:border-primary/20 text-slate-500 group-hover:text-primary font-bold text-sm transition-all">
+          {/* CTA Link */}
+          <div className="px-6 pb-6 mt-auto">
+            <Link
+              href={`/portal/applications/${application.id}`}
+              className="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 group-hover:bg-primary/10 border border-slate-100 group-hover:border-primary/20 text-slate-700 group-hover:text-primary font-bold text-xs sm:text-sm transition-all"
+            >
               {t("viewDetails")} <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            </Link>
           </div>
-        </Link>
+        </div>
       </motion.div>
     );
   }

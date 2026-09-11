@@ -20,5 +20,13 @@ export const applicationService = {
     },
     deleteApplication: async (id: string | number): Promise<void> => {
         await api.delete(`/applications/applications/${id}/`);
+    },
+    bulkUpdateStatus: async (ids: (string | number)[], status: string): Promise<any> => {
+        const res = await api.post("/applications/applications/bulk_update_status/", { ids, status });
+        return res.data;
+    },
+    bulkDelete: async (ids: (string | number)[]): Promise<any> => {
+        const res = await api.post("/applications/applications/bulk_delete/", { ids });
+        return res.data;
     }
 };

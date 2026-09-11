@@ -11,18 +11,22 @@ interface ApplicationsListProps {
   applications: Application[];
   isLoading: boolean;
   error: any;
-  view: "grid" | "list";
+  view?: "grid" | "list";
   getStatusStyles: (status: string) => string;
   getStatusIcon: (status: string) => any;
+  selectedIds?: (string | number)[];
+  onToggleSelect?: (id: string | number) => void;
 }
 
 export function ApplicationsList({
   applications,
   isLoading,
   error,
-  view,
+  view = "grid",
   getStatusStyles,
   getStatusIcon,
+  selectedIds = [],
+  onToggleSelect,
 }: ApplicationsListProps) {
   const t = useTranslations("Dashboard.portal.applicationsPage");
 
@@ -39,38 +43,24 @@ export function ApplicationsList({
 
   if (isLoading) {
     return (
-      <div className={view === "grid"
-        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-        : "flex flex-col gap-3"
-      }>
-        {[1, 2, 3, 4, 5, 6].map((i) =>
-          view === "grid" ? (
-            <div key={i} className="bg-white rounded-[24px] border border-slate-100 p-6 animate-pulse space-y-4">
-              <div className="flex items-start justify-between">
-                <div className="w-12 h-12 bg-slate-100 rounded-2xl" />
-                <div className="h-5 w-20 bg-slate-100 rounded-full" />
-              </div>
-              <div className="space-y-2">
-                <div className="h-5 w-3/4 bg-slate-100 rounded-lg" />
-                <div className="h-4 w-1/2 bg-slate-50 rounded-lg" />
-              </div>
-              <div className="border-t border-slate-50 pt-4 space-y-2">
-                <div className="h-3 w-2/3 bg-slate-50 rounded" />
-                <div className="h-3 w-1/2 bg-slate-50 rounded" />
-              </div>
-              <div className="h-10 w-full bg-slate-50 rounded-xl" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {[1, 2, 3, 4, 5, 6].map((i) => (
+          <div key={i} className="bg-white rounded-[24px] border border-slate-100 p-6 animate-pulse space-y-4">
+            <div className="flex items-start justify-between">
+              <div className="w-12 h-12 bg-slate-100 rounded-2xl" />
+              <div className="h-5 w-20 bg-slate-100 rounded-full" />
             </div>
-          ) : (
-            <div key={i} className="bg-white rounded-[20px] border border-slate-100 p-5 animate-pulse flex items-center gap-4">
-              <div className="w-12 h-12 bg-slate-100 rounded-2xl shrink-0" />
-              <div className="flex-1 space-y-2">
-                <div className="h-4 w-2/5 bg-slate-100 rounded-lg" />
-                <div className="h-3 w-3/5 bg-slate-50 rounded-lg" />
-              </div>
-              <div className="w-9 h-9 bg-slate-50 rounded-full shrink-0" />
+            <div className="space-y-2">
+              <div className="h-5 w-3/4 bg-slate-100 rounded-lg" />
+              <div className="h-4 w-1/2 bg-slate-50 rounded-lg" />
             </div>
-          )
-        )}
+            <div className="border-t border-slate-50 pt-4 space-y-2">
+              <div className="h-3 w-2/3 bg-slate-50 rounded" />
+              <div className="h-3 w-1/2 bg-slate-50 rounded" />
+            </div>
+            <div className="h-10 w-full bg-slate-50 rounded-xl" />
+          </div>
+        ))}
       </div>
     );
   }
@@ -101,18 +91,17 @@ export function ApplicationsList({
   }
 
   return (
-    <div className={view === "grid"
-      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-      : "flex flex-col gap-3"
-    }>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {applications.map((app, index) => (
         <ApplicationCard
           key={app.id}
           application={app}
-          view={view}
+          view="grid"
           index={index}
           getStatusStyles={getStatusStyles}
           getStatusIcon={getStatusIcon}
+          isSelected={selectedIds.includes(app.id)}
+          onToggleSelect={onToggleSelect}
         />
       ))}
     </div>
