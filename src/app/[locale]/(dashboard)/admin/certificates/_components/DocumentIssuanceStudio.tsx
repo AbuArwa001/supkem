@@ -136,10 +136,10 @@ export default function DocumentIssuanceStudio({
               </button>
             </div>
 
-            <div className="flex flex-1 overflow-hidden">
+            <div className="flex flex-col lg:flex-row flex-1 overflow-y-auto lg:overflow-hidden">
               {/* Sidebar Controls */}
-              <div className="w-1/3 min-w-[350px] border-r border-slate-100 bg-white flex flex-col h-full overflow-y-auto">
-                <form onSubmit={submitForm} className="p-8 space-y-8 flex-1">
+              <div className="w-full lg:w-1/3 min-w-0 lg:min-w-[350px] border-b lg:border-b-0 lg:border-r border-slate-100 bg-white flex flex-col h-auto lg:h-full overflow-y-auto">
+                <form onSubmit={submitForm} className="p-5 sm:p-8 space-y-6 sm:space-y-8 flex-1">
                   
                   {message && (
                     <div className={cn("p-4 rounded-2xl flex items-center gap-3 font-medium text-sm shadow-sm", 
