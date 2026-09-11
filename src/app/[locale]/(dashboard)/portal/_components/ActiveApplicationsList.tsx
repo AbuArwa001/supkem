@@ -15,10 +15,12 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
   const t = useTranslations("Dashboard.portal.activeApps");
   const tc = useTranslations("Dashboard.common");
 
-  const getStatusLabel = (status: string) => {
+  const getStatusLabel = (status?: string) => {
     switch (status) {
       case "Under Review":
         return t("status.underReview");
+      case "Pending":
+        return t("status.pending");
       case "Submitted":
         return t("status.submitted");
       default:
@@ -66,10 +68,10 @@ export default function ActiveApplicationsList({ apps, loading }: ActiveApplicat
 
                 <div className="flex flex-row md:flex-col items-center md:items-end justify-between gap-3">
                   <span className={cn("px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 border shadow-sm",
-                    app?.status === "Under Review" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                    (app?.status === "Under Review" || app?.status === "Pending") ? "bg-amber-50 text-amber-700 border-amber-200" :
                       app?.status === "Submitted" ? "bg-blue-50 text-blue-700 border-blue-200" :
                         "bg-slate-50 text-slate-700 border-slate-200")}>
-                    <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", app?.status === "Under Review" ? "bg-amber-500" : "bg-blue-500")} />
+                    <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", (app?.status === "Under Review" || app?.status === "Pending") ? "bg-amber-500" : "bg-blue-500")} />
                     {getStatusLabel(app?.status)}
                   </span>
                   <p className="text-xs text-slate-400 font-bold">

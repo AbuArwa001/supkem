@@ -51,6 +51,7 @@
     "status": {
       "underReview": "Under Review",
       "submitted": "Submitted",
+      "pending": "Pending",
       "inProgress": "In Progress"
     }
   },

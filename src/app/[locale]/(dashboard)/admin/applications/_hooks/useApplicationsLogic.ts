@@ -20,7 +20,10 @@ export function useApplicationsLogic() {
     }, []);
 
     const filteredApps = applications.filter((app) => {
-        const matchesFilter = filter === "all" || app.status?.toLowerCase() === filter.toLowerCase();
+        const matchesFilter =
+            filter === "all" ||
+            app.status?.toLowerCase() === filter.toLowerCase() ||
+            (filter === "pending" && app.status?.toLowerCase() === "submitted");
 
         const searchLower = searchTerm.toLowerCase();
         const matchesSearch =

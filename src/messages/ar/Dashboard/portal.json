@@ -51,6 +51,7 @@
     "status": {
       "underReview": "تحت المراجعة",
       "submitted": "تم التقديم",
+      "pending": "قيد الانتظار",
       "inProgress": "قيد التنفيذ"
     }
   },
