@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ApplicationHeaderProps {
   id: string;
@@ -9,6 +10,8 @@ interface ApplicationHeaderProps {
 }
 
 export const ApplicationHeader = ({ id, submittedAt, onBack }: ApplicationHeaderProps) => {
+  const t = useTranslations("Dashboard.portal.applicationDetail");
+
   return (
     <div className="flex flex-col md:flex-row md:items-center gap-6">
       <button
@@ -22,7 +25,7 @@ export const ApplicationHeader = ({ id, submittedAt, onBack }: ApplicationHeader
       </button>
       <div>
         <h1 className="text-4xl lg:text-5xl font-black font-outfit text-slate-900 tracking-tight">
-          Application <span className="text-slate-300 font-normal italic">Details</span>
+          {t("title")}
         </h1>
         <p className="text-sm font-medium text-slate-500 flex items-center gap-3 mt-3">
           <span className="bg-slate-900 px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-widest text-white shadow-md">

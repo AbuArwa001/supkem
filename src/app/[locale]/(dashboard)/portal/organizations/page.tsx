@@ -14,10 +14,12 @@ import {
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export default function OrganizationsPage() {
+  const t = useTranslations("Dashboard.portal.organizationsPage");
   const { data, error, isLoading } = useSWR(
     "/organizations/organizations/",
     fetcher,
@@ -31,11 +33,10 @@ export default function OrganizationsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-            My Organizations
+            {t("title")}
           </h2>
           <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
-            Manage and view the organizations associated with your portal
-            account.
+            {t("subtitle")}
           </p>
         </div>
         <Link
@@ -43,7 +44,7 @@ export default function OrganizationsPage() {
           className="inline-flex items-center justify-center gap-2 px-6 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all hover-lift"
         >
           <Plus size={20} />
-          <span>Register New Institution</span>
+          <span>{t("registerNew")}</span>
         </Link>
       </div>
 
@@ -52,7 +53,7 @@ export default function OrganizationsPage() {
         <div className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
           <AlertCircle size={20} />
           <span className="font-semibold text-sm">
-            Failed to load organizations. Please try refreshing the page.
+            {t("loadFailed")}
           </span>
         </div>
       )}
@@ -81,17 +82,16 @@ export default function OrganizationsPage() {
               <Building2 size={40} />
             </div>
             <h3 className="text-xl font-black text-slate-800 font-outfit">
-              No Organizations Found
+              {t("noOrgs")}
             </h3>
             <p className="text-slate-500 font-medium text-sm max-w-sm">
-              You are not currently associated with any registered organizations
-              in the system.
+              {t("noOrgsDesc")}
             </p>
             <Link
               href="/portal/organizations/new"
               className="mt-6 px-10 py-4 bg-primary text-white rounded-[20px] font-bold shadow-xl shadow-primary/10 hover-lift flex items-center gap-2"
             >
-              <Plus size={18} /> Register My First Institution
+              <Plus size={18} /> {t("registerFirst")}
             </Link>
           </div>
         </div>
@@ -131,28 +131,10 @@ export default function OrganizationsPage() {
                           size={14}
                           className="lucide-react lucide-file-text"
                         />
-                        {/* Fallback above to using standard icons available in earlier lucide versions */}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                          <polyline points="14 2 14 8 20 8" />
-                          <line x1="16" x2="8" y1="13" y2="13" />
-                          <line x1="16" x2="8" y1="17" y2="17" />
-                          <line x1="10" x2="8" y1="9" y2="9" />
-                        </svg>
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                          Reg No.
+                          {t("regNo")}
                         </p>
                         <p className="text-sm font-semibold text-slate-700">
                           {org.reg_number}
@@ -168,7 +150,7 @@ export default function OrganizationsPage() {
                       </div>
                       <div>
                         <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                          Location
+                          {t("location")}
                         </p>
                         <p className="text-sm font-semibold text-slate-700">
                           {org.county_council_name}
@@ -198,7 +180,7 @@ export default function OrganizationsPage() {
                 <div className="mt-6 pt-4 border-t border-border/50 flex items-center justify-between text-[11px] font-bold text-slate-400">
                   <div className="flex items-center gap-1.5 uppercase tracking-widest">
                     <Calendar size={12} />
-                    Joined{" "}
+                    {t("joined")}{" "}
                     {new Date(
                       org.created_at || Date.now(),
                     ).toLocaleDateString()}
@@ -213,7 +195,11 @@ export default function OrganizationsPage() {
                           : "bg-red-50 text-red-600 border-red-100",
                     )}
                   >
-                    {org.accreditation_status || "Pending"}
+                    {org.accreditation_status === "Accredited"
+                      ? t("accredited")
+                      : org.accreditation_status === "Pending"
+                        ? t("pending")
+                        : (org.accreditation_status || t("pending"))}
                   </span>
                 </div>
               </div>

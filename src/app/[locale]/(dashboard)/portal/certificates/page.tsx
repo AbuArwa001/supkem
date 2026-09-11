@@ -2,6 +2,7 @@
 
 // External libraries
 import { AlertCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Internal modules
 import { useCertificatesLogic } from "@/app/[locale]/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
@@ -10,6 +11,7 @@ import EmptyCertificates from "@/app/[locale]/(dashboard)/portal/certificates/_c
 import CertificateCard from "@/app/[locale]/(dashboard)/portal/certificates/_components/CertificateCard";
 
 export default function CertificatesPage() {
+  const t = useTranslations("Dashboard.portal.certificatesPage");
   const { certificates, groupedCertificates, isLoading, error } =
     useCertificatesLogic();
 
@@ -18,11 +20,10 @@ export default function CertificatesPage() {
       {/* Header section */}
       <div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-          My Certificates
+          {t("title")}
         </h2>
         <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
-          Access and download your official SUPKEM certificates (e.g., Islamic
-          Marriage Certificate).
+          {t("subtitle")}
         </p>
       </div>
 
@@ -31,7 +32,7 @@ export default function CertificatesPage() {
         <div className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
           <AlertCircle size={20} />
           <span className="font-semibold text-sm">
-            Failed to load certificates. Please try refreshing the page.
+            {t("loadFailed")}
           </span>
         </div>
       )}

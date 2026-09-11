@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { AlertCircle, FileText, Plus } from "lucide-react";
 import { ApplicationCard } from "./ApplicationCard";
 import { Application } from "./types";
+import { useTranslations } from "next-intl";
 
 interface ApplicationsListProps {
   applications: Application[];
@@ -23,12 +24,14 @@ export function ApplicationsList({
   getStatusStyles,
   getStatusIcon,
 }: ApplicationsListProps) {
+  const t = useTranslations("Dashboard.portal.applicationsPage");
+
   if (error) {
     return (
       <div className="p-5 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
         <AlertCircle size={20} />
         <span className="font-semibold text-sm">
-          Failed to load applications. Please try refreshing the page.
+          {t("loadFailed")}
         </span>
       </div>
     );
@@ -82,16 +85,16 @@ export function ApplicationsList({
         <div className="w-24 h-24 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 mb-6">
           <FileText size={44} />
         </div>
-        <h3 className="text-2xl font-black text-slate-800 font-outfit">No Applications Yet</h3>
+        <h3 className="text-2xl font-black text-slate-800 font-outfit">{t("noApps")}</h3>
         <p className="text-slate-500 font-medium text-sm max-w-sm mt-2">
-          You haven't submitted any applications yet. Start by applying for a service.
+          {t("noAppsDesc")}
         </p>
         <Link
           href="/portal/applications/new"
           className="mt-8 flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all"
         >
           <Plus size={18} />
-          Make Your First Application
+          {t("applyFirst")}
         </Link>
       </motion.div>
     );

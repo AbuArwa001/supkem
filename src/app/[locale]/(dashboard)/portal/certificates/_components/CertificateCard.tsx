@@ -3,8 +3,10 @@ import { Award, ShieldCheck, Calendar, Download, ChevronRight } from "lucide-rea
 
 import { cn } from "@/lib/utils";
 import { ICertificate } from "@/app/[locale]/(dashboard)/portal/certificates/_hooks/useCertificatesLogic";
+import { useTranslations } from "next-intl";
 
 export default function CertificateCard({ cert }: { cert: ICertificate }) {
+  const t = useTranslations("Dashboard.portal.certificatesPage");
   const isValid = cert.status === "Valid" || cert.status === "Active";
   const isExpired = cert.status === "Expired";
 
@@ -50,7 +52,7 @@ export default function CertificateCard({ cert }: { cert: ICertificate }) {
 
         <div className="space-y-1 mt-2">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">
-            Certificate Number
+            {t("certNumber")}
           </p>
           <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors font-mono">
             {cert.serial_number || "CERT-PENDING"}
@@ -60,7 +62,7 @@ export default function CertificateCard({ cert }: { cert: ICertificate }) {
         <div className="mt-6 flex flex-col gap-3">
           <div className="flex items-center gap-2 text-sm font-medium text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
             <Calendar size={16} className="text-slate-400 shrink-0" />
-            <span className="flex-1">Issued:</span>
+            <span className="flex-1">{t("issued")}</span>
             <span className="text-slate-800 font-bold">
               {cert.issued_at
                 ? new Date(cert.issued_at).toLocaleDateString()
@@ -70,7 +72,7 @@ export default function CertificateCard({ cert }: { cert: ICertificate }) {
           {(cert.expiry_date || cert.expires_at) && (
             <div className="flex items-center gap-2 text-sm font-medium text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
               <Calendar size={16} className="text-slate-400 shrink-0" />
-              <span className="flex-1">Expires:</span>
+              <span className="flex-1">{t("expires")}</span>
               <span className="text-slate-800 font-bold">
                 {cert.expires_at ? new Date(cert.expires_at).toLocaleDateString() : cert.expiry_date}
               </span>
@@ -82,7 +84,7 @@ export default function CertificateCard({ cert }: { cert: ICertificate }) {
       <div className="p-4 bg-slate-50/50 flex items-center justify-between text-sm font-bold text-slate-500 group-hover:text-primary transition-colors">
         <span className="flex items-center gap-2">
           <Download size={16} />
-          View & Download
+          {t("viewDownload")}
         </span>
         <ChevronRight
           size={18}

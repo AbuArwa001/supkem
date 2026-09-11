@@ -12,10 +12,12 @@ import {
 } from "lucide-react";
 import api from "@/lib/api";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export default function LettersPage() {
+  const t = useTranslations("Dashboard.portal.lettersPage");
   const { data, error, isLoading } = useSWR(
     "/applications/letters/",
     fetcher,
@@ -24,7 +26,7 @@ export default function LettersPage() {
 
   // Group letters by service
   const groupedLetters = letters.reduce((acc: any, letter: any) => {
-    const serviceName = letter.application_detail?.service_name || "Other Letters";
+    const serviceName = letter.application_detail?.service_name || t("otherLetters");
     if (!acc[serviceName]) {
       acc[serviceName] = [];
     }
@@ -37,10 +39,10 @@ export default function LettersPage() {
       {/* Header section */}
       <div>
         <h2 className="text-3xl md:text-5xl font-black tracking-tight text-primary font-outfit leading-tight">
-          My Letters
+          {t("title")}
         </h2>
         <p className="text-slate-500 font-medium mt-2 text-sm max-w-md">
-          Access and download your official support and recommendation letters.
+          {t("subtitle")}
         </p>
       </div>
 
@@ -49,7 +51,7 @@ export default function LettersPage() {
         <div className="p-4 bg-red-50 border border-red-100 rounded-2xl flex items-center gap-3 text-red-600">
           <AlertCircle size={20} />
           <span className="font-semibold text-sm">
-            Failed to load letters. Please try refreshing the page.
+            {t("loadFailed")}
           </span>
         </div>
       )}
@@ -80,17 +82,16 @@ export default function LettersPage() {
                 <Mail size={40} />
               </div>
               <h3 className="text-xl font-black text-slate-800 font-outfit">
-                No Letters Found
+                {t("noLetters")}
               </h3>
               <p className="text-slate-500 font-medium text-sm max-w-sm">
-                You do not have any official letters issued yet. Submit a Hajj,
-                Study Abroad, or Travel Visa application first.
+                {t("noLettersDesc")}
               </p>
               <Link
                 href="/portal/applications/new"
                 className="mt-4 px-6 py-3 bg-primary/10 text-primary rounded-xl font-bold hover:bg-primary/20 transition-colors"
               >
-                New Application
+                {t("newApp")}
               </Link>
             </div>
           </div>
@@ -129,26 +130,26 @@ export default function LettersPage() {
                           )}
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          Issued
+                          {t("issuedBadge")}
                         </div>
                       </div>
 
                       <div className="space-y-1 mt-2">
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-secondary">
-                          Reference Number
+                          {t("refNumber")}
                         </p>
                         <h3 className="text-xl font-black text-slate-800 tracking-tight group-hover:text-primary transition-colors font-mono">
                           {cert.serial_number || "LTR-PENDING"}
                         </h3>
                         <p className="text-sm font-semibold text-slate-500 pt-1">
-                          {cert.application_detail?.service_name || "Official Letter"}
+                          {cert.application_detail?.service_name || t("officialLetter")}
                         </p>
                       </div>
 
                       <div className="mt-6 flex flex-col gap-3">
                         <div className="flex items-center gap-2 text-sm font-medium text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                           <Calendar size={16} className="text-slate-400 shrink-0" />
-                          <span className="flex-1">Issued:</span>
+                          <span className="flex-1">{t("issued")}</span>
                           <span className="text-slate-800 font-bold">
                             {cert.issued_at
                               ? new Date(cert.issued_at).toLocaleDateString()
@@ -161,7 +162,7 @@ export default function LettersPage() {
                     <div className="p-4 bg-slate-50/50 flex items-center justify-between text-sm font-bold text-slate-500 group-hover:text-primary transition-colors">
                       <span className="flex items-center gap-2">
                         <Download size={16} />
-                        View &amp; Download
+                        {t("viewDownload")}
                       </span>
                       <ChevronRight
                         size={18}

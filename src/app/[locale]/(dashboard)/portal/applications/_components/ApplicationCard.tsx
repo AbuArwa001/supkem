@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Application } from "./types";
+import { useTranslations } from "next-intl";
 
 interface ApplicationCardProps {
   application: Application;
@@ -18,15 +19,15 @@ interface ApplicationCardProps {
   index: number;
 }
 
-function getDocBadge(app: Application) {
+function getDocBadge(app: Application, t: any) {
   const svc = (app.service_name || "").toLowerCase();
   const isLetter = ["study", "hajj", "umrah", "travel", "visa", "employment", "marriage"].some(k => svc.includes(k));
   return isLetter
-    ? { label: "Letter", icon: Mail, cls: "bg-blue-50 text-blue-600 border-blue-100" }
-    : { label: "Certificate", icon: Award, cls: "bg-emerald-50 text-emerald-600 border-emerald-100" };
+    ? { label: t("letter"), icon: Mail, cls: "bg-blue-50 text-blue-600 border-blue-100" }
+    : { label: t("certificate"), icon: Award, cls: "bg-emerald-50 text-emerald-600 border-emerald-100" };
 }
 
-function PaymentBadge({ app }: { app: Application }) {
+function PaymentBadge({ app, t }: { app: Application; t: any }) {
   const paid = app.payment?.status === "Completed";
   return (
     <span className={cn(
@@ -34,14 +35,15 @@ function PaymentBadge({ app }: { app: Application }) {
       paid ? "bg-emerald-50 text-emerald-600 border-emerald-100" : "bg-amber-50 text-amber-700 border-amber-200"
     )}>
       <CreditCard size={10} />
-      {paid ? "Paid" : "Pending Payment"}
+      {paid ? t("paid") : t("pendingPayment")}
     </span>
   );
 }
 
 export function ApplicationCard({ application, view, getStatusStyles, getStatusIcon, index }: ApplicationCardProps) {
+  const t = useTranslations("Dashboard.portal.applicationsPage");
   const StatusIcon = getStatusIcon(application.status);
-  const docBadge = getDocBadge(application);
+  const docBadge = getDocBadge(application, t);
   const DocIcon = docBadge.icon;
 
   if (view === "grid") {
@@ -83,7 +85,7 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
                   <DocIcon size={9} />
                   {docBadge.label}
                 </span>
-                <PaymentBadge app={application} />
+                <PaymentBadge app={application} t={t} />
               </div>
             </div>
 
@@ -91,7 +93,7 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
             <div className="border-t border-slate-50 pt-4 space-y-2">
               <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
                 <Building2 size={13} />
-                {application.organization_name || "Personal/Individual"}
+                {application.organization_name || t("personalIndividual")}
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-xs text-slate-400 font-medium">
@@ -110,7 +112,7 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
           {/* CTA */}
           <div className="px-6 pb-6">
             <div className="flex items-center justify-center gap-2 py-3 rounded-xl bg-slate-50 group-hover:bg-primary/5 border border-slate-100 group-hover:border-primary/20 text-slate-500 group-hover:text-primary font-bold text-sm transition-all">
-              View Details <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              {t("viewDetails")} <ChevronRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
             </div>
           </div>
         </Link>
@@ -151,12 +153,12 @@ export function ApplicationCard({ application, view, getStatusStyles, getStatusI
               <DocIcon size={9} />
               {docBadge.label}
             </span>
-            <PaymentBadge app={application} />
+            <PaymentBadge app={application} t={t} />
           </div>
           <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-400">
             <span className="flex items-center gap-1.5">
               <Building2 size={12} />
-              {application.organization_name || "Personal/Individual"}
+              {application.organization_name || t("personalIndividual")}
             </span>
             <span className="flex items-center gap-1.5">
               <Calendar size={12} />

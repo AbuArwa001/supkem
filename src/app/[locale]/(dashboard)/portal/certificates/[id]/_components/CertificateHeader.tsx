@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowLeft, Printer, Download } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CertificateHeaderProps {
   onBack: () => void;
@@ -15,6 +16,8 @@ export function CertificateHeader({
   onDownload,
   isDownloading,
 }: CertificateHeaderProps) {
+  const t = useTranslations("Dashboard.portal.certificatesPage");
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex items-center gap-4">
@@ -29,10 +32,10 @@ export function CertificateHeader({
         </button>
         <div>
           <h1 className="text-3xl font-black font-outfit text-primary tracking-tight">
-            Digital Certificate
+            {t("digitalCertificate")}
           </h1>
           <p className="text-sm font-medium text-slate-500 uppercase tracking-widest mt-1">
-            Official Document View
+            {t("officialDocView")}
           </p>
         </div>
       </div>
@@ -61,7 +64,7 @@ export function CertificateHeader({
             />
           )}
           <span className="hidden sm:inline">
-            {isDownloading ? "Generating..." : "Download PDF"}
+            {isDownloading ? t("generating") : t("downloadPdf")}
           </span>
         </button>
       </div>

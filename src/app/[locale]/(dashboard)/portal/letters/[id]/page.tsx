@@ -17,8 +17,10 @@ import {
 import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import { LetterCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
+import { useTranslations } from "next-intl";
 
 export default function LetterDetail() {
+  const t = useTranslations("Dashboard.portal.lettersPage");
   const params = useParams();
   const router = useRouter();
   const [letter, setLetter] = useState<any>(null);
@@ -89,7 +91,7 @@ export default function LetterDetail() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
         <div className="w-12 h-12 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
-        <p className="text-primary/60 font-medium">Loading Official Letter...</p>
+        <p className="text-primary/60 font-medium">{t("loadingLetter")}</p>
       </div>
     );
   }
@@ -102,17 +104,17 @@ export default function LetterDetail() {
         </div>
         <div className="space-y-2 max-w-md">
           <h2 className="text-2xl font-black font-outfit text-slate-800">
-            Letter Not Found
+            {t("letterNotFound")}
           </h2>
           <p className="text-slate-500 font-medium">
-            {error || "The requested letter could not be found."}
+            {error || t("letterNotFound")}
           </p>
         </div>
         <button
           onClick={() => router.push("/portal/letters")}
           className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary/90 transition-colors"
         >
-          Back to My Letters
+          {t("backToLetters")}
         </button>
       </div>
     );
@@ -123,7 +125,7 @@ export default function LetterDetail() {
 
   const renderTemplate = () => {
     return (
-      <div className="w-full flex justify-center scale-90 sm:scale-100 origin-top">
+      <div className="w-full flex justify-center scale-90 sm:scale-100 origin-top print:scale-100 print:transform-none">
         <LetterCanvas
           letter={letter}
           letterRef={letterRef}
@@ -137,9 +139,9 @@ export default function LetterDetail() {
   };
 
   return (
-    <div className="space-y-8 pb-20 max-w-5xl mx-auto">
+    <div className="space-y-8 pb-20 max-w-5xl mx-auto print:space-y-0 print:pb-0 print:max-w-none">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between no-print">
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
@@ -152,10 +154,10 @@ export default function LetterDetail() {
           </button>
           <div>
             <h1 className="text-3xl font-black font-outfit text-primary tracking-tight">
-              Official Letter
+              {t("officialLetter")}
             </h1>
             <p className="text-sm font-medium text-slate-500 uppercase tracking-widest mt-1">
-              {letter.application_detail?.service_name || "Document View"}
+              {letter.application_detail?.service_name || t("officialLetter")}
             </p>
           </div>
         </div>
@@ -184,26 +186,26 @@ export default function LetterDetail() {
               />
             )}
             <span className="hidden sm:inline">
-              {isDownloading ? "Generating..." : "Download PDF"}
+              {isDownloading ? t("generating") : t("downloadPdf")}
             </span>
           </button>
         </div>
       </div>
 
-      <div className="flex justify-center w-full overflow-x-auto pb-8">
+      <div className="flex justify-center w-full overflow-x-auto pb-8 print:overflow-visible print:pb-0">
           {renderTemplate()}
       </div>
 
       {/* Application Reference */}
       {letter.application && (
-        <div className="max-w-4xl mx-auto flex items-center justify-between p-6 bg-slate-50 rounded-3xl border border-slate-100">
+        <div className="max-w-4xl mx-auto flex items-center justify-between p-6 bg-slate-50 rounded-3xl border border-slate-100 no-print">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <CheckCircle2 size={18} />
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0.5">
-                Reference Application
+                {t("refApp")}
               </p>
               <p className="text-sm font-bold text-slate-800">
                 #{String(letter.application).substring(0, 8).toUpperCase()}
@@ -214,7 +216,7 @@ export default function LetterDetail() {
             href={`/portal/applications/${letter.application}`}
             className="px-6 py-3 bg-white border border-slate-200 text-slate-600 rounded-xl text-xs font-black uppercase tracking-widest hover:border-slate-300 hover:shadow-sm transition-all"
           >
-            View App Details
+            {t("refApp")}
           </Link>
         </div>
       )}

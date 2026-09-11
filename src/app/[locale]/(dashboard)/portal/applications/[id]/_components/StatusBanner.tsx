@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, ShieldAlert, Clock, HelpCircle, Ban, X, AlertTriangle, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface StatusBannerProps {
   status: string;
@@ -24,6 +25,7 @@ export const StatusBanner = ({
   onWithdrawClick,
   isWithdrawing = false,
 }: StatusBannerProps) => {
+  const t = useTranslations("Dashboard.portal.applicationDetail");
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [reason, setReason] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -115,19 +117,19 @@ export const StatusBanner = ({
 
         <div className="relative z-10 space-y-3 text-center md:text-left">
           <p className="text-slate-400 text-xs font-black uppercase tracking-[0.3em]">
-            Current Status
+            {t("currentStatus")}
           </p>
           <h2 className="text-4xl md:text-6xl font-black font-outfit tracking-tight text-white">
-            {isPaymentPending ? "Pending Payment" : status}
+            {isPaymentPending ? t("completePayment") : status}
           </h2>
           {status === "Approved" && certification && (
             <p className={cn(config.textColor, "font-medium text-lg")}>
-              Certificate ID: {certification.serial_number}
+              {t("certificateId")}: {certification.serial_number}
             </p>
           )}
           {status === "Withdrawn" && (
             <p className="text-slate-400 font-medium text-sm">
-              This application was withdrawn and is no longer being processed.
+              {t("withdrawnNotice")}
             </p>
           )}
         </div>
@@ -138,7 +140,7 @@ export const StatusBanner = ({
               onClick={onPayClick}
               className="px-6 py-3.5 bg-white text-slate-900 rounded-2xl font-black tracking-tight hover:bg-slate-100 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] hover:-translate-y-0.5 transition-all duration-300 text-sm"
             >
-              Complete Payment
+              {t("completePayment")}
             </button>
           )}
 
@@ -147,7 +149,7 @@ export const StatusBanner = ({
               onClick={() => setShowWithdrawModal(true)}
               className="px-5 py-3.5 rounded-2xl font-bold text-xs uppercase tracking-wider text-rose-300 bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 hover:text-rose-200 transition-all duration-300"
             >
-              Withdraw Application
+              {t("withdrawApp")}
             </button>
           )}
 
@@ -179,10 +181,10 @@ export const StatusBanner = ({
                   </div>
                   <div>
                     <h3 className="text-xl font-black font-outfit text-slate-900">
-                      Withdraw Application
+                      {t("withdrawConfirmTitle")}
                     </h3>
                     <p className="text-xs text-slate-400 font-medium">
-                      This action cannot be undone.
+                      {t("withdrawConfirmDesc")}
                     </p>
                   </div>
                 </div>
@@ -196,17 +198,17 @@ export const StatusBanner = ({
               </div>
 
               <p className="text-sm text-slate-600 leading-relaxed mb-6">
-                Are you sure you want to withdraw this application? Processing will be halted immediately.
+                {t("withdrawPrompt")}
               </p>
 
               <div className="space-y-2 mb-6">
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider">
-                  Reason for withdrawal (Optional)
+                  {t("withdrawReasonLabel")}
                 </label>
                 <textarea
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  placeholder="Tell us why you are withdrawing (e.g., plans changed, duplicate application)..."
+                  placeholder={t("withdrawReasonPlaceholder")}
                   rows={3}
                   className="w-full p-4 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-800 focus:outline-none focus:border-rose-400 focus:bg-white transition-all resize-none"
                 />
@@ -224,7 +226,7 @@ export const StatusBanner = ({
                   disabled={isWithdrawing}
                   className="px-6 py-3 rounded-xl font-bold text-sm text-slate-600 hover:bg-slate-100 transition-colors"
                 >
-                  Keep Application
+                  {t("keepApp")}
                 </button>
                 <button
                   onClick={handleConfirmWithdraw}
@@ -232,7 +234,7 @@ export const StatusBanner = ({
                   className="px-6 py-3 rounded-xl font-bold text-sm text-white bg-rose-600 hover:bg-rose-700 shadow-lg shadow-rose-600/20 transition-all flex items-center gap-2 disabled:opacity-50"
                 >
                   {isWithdrawing && <Loader2 size={16} className="animate-spin" />}
-                  Confirm Withdrawal
+                  {t("confirmWithdraw")}
                 </button>
               </div>
             </motion.div>

@@ -30,36 +30,72 @@ export function LetterCanvas({
     >
       <style jsx global>{`
         @media print {
+          header,
+          nav,
+          aside,
+          button,
+          .no-print,
+          .print\:hidden {
+            display: none !important;
+            visibility: hidden !important;
+          }
+
+          html,
+          body {
+            background: #ffffff !important;
+            color: #000000 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+          }
+
+          main,
+          section,
+          div {
+            overflow: visible !important;
+            min-height: auto !important;
+          }
+
+          .scale-90,
+          .origin-top,
+          [style*="transform"] {
+            transform: none !important;
+          }
+
           body * {
             visibility: hidden;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
           }
+
           .letter-canvas,
           .letter-canvas * {
             visibility: visible !important;
           }
+
           .letter-canvas {
             position: absolute !important;
             left: 0 !important;
             top: 0 !important;
             width: 100% !important;
-            max-width: none !important;
+            max-width: 100% !important;
             margin: 0 !important;
-            padding: 40px !important;
+            padding: 15mm 20mm !important;
             border: none !important;
             box-shadow: none !important;
-            background-color: white !important;
-            min-height: 100vh !important;
-          }
-          html, body {
+            border-radius: 0 !important;
+            background-color: #ffffff !important;
+            min-height: auto !important;
             height: auto !important;
-            overflow: visible !important;
-            margin: 0 !important;
-            padding: 0 !important;
+            transform: none !important;
           }
-          .no-print {
-            display: none !important;
+
+          @page {
+            size: A4 portrait;
+            margin: 0;
           }
         }
       `}</style>

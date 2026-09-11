@@ -15,8 +15,10 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
+import { useTranslations } from "next-intl";
 
 export default function PortalProfileSettings() {
+  const t = useTranslations("Dashboard.portal.profilePage");
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -46,10 +48,10 @@ export default function PortalProfileSettings() {
     setSuccess("");
     try {
       await api.patch("/users/users/me/", formData);
-      setSuccess("Profile updated successfully!");
+      setSuccess(t("success"));
     } catch (err: any) {
       console.error("Update failed", err);
-      setError(err.response?.data?.detail || "Failed to update profile.");
+      setError(err.response?.data?.detail || t("failed"));
     } finally {
       setLoading(false);
     }
@@ -60,10 +62,10 @@ export default function PortalProfileSettings() {
       <div className="flex items-center gap-4 mb-8">
         <div className="space-y-1">
           <h1 className="text-4xl font-bold font-outfit text-primary">
-            My Profile
+            {t("title")}
           </h1>
           <p className="text-foreground/60 font-medium tracking-tight">
-            Manage your personal information and contact details.
+            {t("subtitle")}
           </p>
         </div>
       </div>
@@ -81,7 +83,7 @@ export default function PortalProfileSettings() {
                 <UserCircle size={28} />
               </div>
               <h3 className="text-2xl font-bold font-outfit">
-                Personal Information
+                {t("personalInfo")}
               </h3>
             </div>
 
@@ -100,7 +102,7 @@ export default function PortalProfileSettings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  First Name
+                  {t("firstName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -113,13 +115,13 @@ export default function PortalProfileSettings() {
                       setFormData({ ...formData, first_name: e.target.value })
                     }
                     className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                    placeholder="First Name"
+                    placeholder={t("firstName")}
                   />
                 </div>
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Middle Name
+                  {t("middleName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -132,13 +134,13 @@ export default function PortalProfileSettings() {
                       setFormData({ ...formData, middle_name: e.target.value })
                     }
                     className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                    placeholder="Middle Name"
+                    placeholder={t("middleName")}
                   />
                 </div>
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Last Name / Surname
+                  {t("lastName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -151,13 +153,13 @@ export default function PortalProfileSettings() {
                       setFormData({ ...formData, last_name: e.target.value })
                     }
                     className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
-                    placeholder="Last Name"
+                    placeholder={t("lastName")}
                   />
                 </div>
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Email Address
+                  {t("email")}
                 </label>
                 <div className="relative group">
                   <Mail
@@ -173,7 +175,7 @@ export default function PortalProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Phone Number
+                  {t("phone")}
                 </label>
                 <div className="relative group">
                   <Phone
@@ -203,7 +205,7 @@ export default function PortalProfileSettings() {
                 ) : (
                   <Save size={18} />
                 )}
-                Update Profile
+                {loading ? t("saving") : t("saveChanges")}
               </button>
             </div>
           </motion.div>
@@ -213,15 +215,14 @@ export default function PortalProfileSettings() {
           <div className="p-10 rounded-[20px] premium-gradient text-white shadow-2xl shadow-primary/20 space-y-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
             <h3 className="text-2xl font-bold font-outfit relative z-10">
-              Account Status
+              {t("accountStatus")}
             </h3>
             <p className="text-sm font-medium text-white/70 relative z-10 leading-relaxed">
-              You are currently signed in as a{" "}
+              {t("signedInAs")}{" "}
               <span className="text-secondary font-black">
-                {user?.role?.role_name || "Portal User"}
+                {user?.role?.role_name || t("portalUser")}
               </span>
-              . Keep your contact information up to date to receive important
-              updates.
+              . {t("statusDesc")}
             </p>
           </div>
         </div>

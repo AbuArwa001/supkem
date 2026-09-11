@@ -3,6 +3,7 @@
 import { Link } from "@/i18n/routing";
 import { LayoutGrid, List, Plus, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface ApplicationsHeaderProps {
   view: "grid" | "list";
@@ -11,6 +12,8 @@ interface ApplicationsHeaderProps {
 }
 
 export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHeaderProps) {
+  const t = useTranslations("Dashboard.portal.applicationsPage");
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
       <div className="flex items-center gap-5">
@@ -20,7 +23,7 @@ export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHe
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 font-outfit leading-tight">
-              My Applications
+              {t("title")}
             </h1>
             {total > 0 && (
               <span className="px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-black border border-primary/20">
@@ -29,7 +32,7 @@ export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHe
             )}
           </div>
           <p className="text-slate-500 font-medium mt-1 text-sm">
-            Track and manage all your service applications
+            {t("subtitle")}
           </p>
         </div>
       </div>
@@ -45,7 +48,7 @@ export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHe
                 ? "bg-white text-primary shadow-sm border border-slate-200"
                 : "text-slate-400 hover:text-slate-600"
             )}
-            title="Grid view"
+            title={t("gridView")}
           >
             <LayoutGrid size={18} />
           </button>
@@ -57,7 +60,7 @@ export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHe
                 ? "bg-white text-primary shadow-sm border border-slate-200"
                 : "text-slate-400 hover:text-slate-600"
             )}
-            title="List view"
+            title={t("listView")}
           >
             <List size={18} />
           </button>
@@ -69,7 +72,7 @@ export function ApplicationsHeader({ view, onViewChange, total }: ApplicationsHe
           className="flex items-center gap-2 px-5 py-3 bg-primary text-white rounded-xl shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-primary/40 hover:-translate-y-0.5 transition-all font-bold text-sm"
         >
           <Plus size={18} />
-          New Application
+          {t("newApp")}
         </Link>
       </div>
     </div>
