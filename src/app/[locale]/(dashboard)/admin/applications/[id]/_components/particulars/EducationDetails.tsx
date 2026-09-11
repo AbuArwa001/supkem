@@ -11,18 +11,18 @@ export default function EducationDetails({ details }: { details?: EducationDetai
           <GraduationCap className="text-emerald-500" size={20} /> Education
           Details
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-slate-50/50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-100">
           <div className="space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Student Name
             </p>
-            <p className="font-bold text-slate-800">{details.full_name}</p>
+            <p className="font-bold text-slate-800 break-words">{details.full_name}</p>
           </div>
           <div className="space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Passport No.
             </p>
-            <p className="font-bold text-slate-800">
+            <p className="font-bold text-slate-800 break-words">
               {details.passport_number}
             </p>
           </div>
@@ -30,7 +30,7 @@ export default function EducationDetails({ details }: { details?: EducationDetai
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Institution
             </p>
-            <p className="font-bold text-slate-800">
+            <p className="font-bold text-slate-800 break-words">
               {details.institution_name}
             </p>
           </div>
@@ -38,13 +38,13 @@ export default function EducationDetails({ details }: { details?: EducationDetai
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Country
             </p>
-            <p className="font-bold text-slate-800">{details.country}</p>
+            <p className="font-bold text-slate-800 break-words">{details.country}</p>
           </div>
-          <div className="md:col-span-2 space-y-1">
+          <div className="sm:col-span-2 space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Course of Study
             </p>
-            <p className="font-bold text-slate-800">
+            <p className="font-bold text-slate-800 break-words">
               {details.course_of_study}
             </p>
           </div>

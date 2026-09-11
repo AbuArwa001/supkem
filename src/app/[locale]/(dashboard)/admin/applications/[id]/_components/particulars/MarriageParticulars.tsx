@@ -6,9 +6,9 @@ import type { MarriageDetails } from "@/app/[locale]/(dashboard)/portal/applicat
 
 /** Reusable read-only display row for the admin particulars view */
 const DetailRow = ({ label, value }: { label: string; value: string }) => (
-  <div className="space-y-2">
-    <p className="text-sm font-bold text-slate-400">{label}</p>
-    <p className="font-bold text-slate-800">{value}</p>
+  <div className="space-y-1 sm:space-y-2">
+    <p className="text-xs sm:text-sm font-bold text-slate-400">{label}</p>
+    <p className="font-bold text-slate-800 break-words">{value}</p>
   </div>
 );
 
@@ -36,7 +36,7 @@ export default function MarriageParticulars({ details }: { details?: MarriageDet
         <Heart className="text-rose-500" size={20} /> Marriage Particulars
       </h4>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 bg-slate-50/50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-100">
         <PartyColumn title="Husband (Groom)" color="text-blue-600" details={details as unknown as Record<string, unknown>} />
         <PartyColumn title="Wife (Bride)" color="text-rose-600" details={{
           wife_name: details.wife_name, wife_id_passport: details.wife_id_passport,
@@ -46,7 +46,7 @@ export default function MarriageParticulars({ details }: { details?: MarriageDet
         }} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-amber-50/30 p-8 rounded-3xl border border-amber-100/50">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 bg-amber-50/30 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-amber-100/50">
         <div className="space-y-3">
           <p className="text-[10px] font-black uppercase tracking-widest text-amber-600">Financials &amp; Waliyy</p>
           <p className="text-sm font-medium"><span className="text-slate-400">Waliyy:</span> <strong>{details.wife_waliyy_name}</strong> ({details.wife_waliyy_relationship})</p>

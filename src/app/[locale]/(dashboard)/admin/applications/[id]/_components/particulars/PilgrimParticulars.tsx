@@ -34,7 +34,7 @@ export default function PilgrimParticulars({ details }: { details?: PilgrimDetai
         <Plane className="text-blue-500" size={20} /> Pilgrim Particulars
       </h4>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 bg-slate-50/50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-100">
         <InfoItem label="Full Name" value={details.full_name} />
         <InfoItem label="Passport Number" value={details.passport_number} />
         <InfoItem label="Nationality" value={details.nationality} />
@@ -43,7 +43,7 @@ export default function PilgrimParticulars({ details }: { details?: PilgrimDetai
         <InfoItem label="Trip Type" value={details.trip_type} />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-blue-50/30 p-8 rounded-3xl border border-blue-100/50">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-8 bg-blue-50/30 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-blue-100/50">
         <TravelInfoCard icon={CalendarCheck} iconColor="text-blue-500" label="Expected Travel"
           value={new Date(details.expected_travel_date).toLocaleDateString(undefined, { dateStyle: "full" })} />
         <TravelInfoCard icon={Briefcase} iconColor="text-indigo-500" label="Travel Agent"

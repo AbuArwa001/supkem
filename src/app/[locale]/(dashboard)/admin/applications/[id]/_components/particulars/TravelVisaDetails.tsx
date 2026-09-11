@@ -10,18 +10,18 @@ export default function TravelVisaDetails({ details }: { details?: TravelVisaDet
         <h4 className="text-xl font-bold text-primary flex items-center gap-2">
           <Globe className="text-indigo-500" size={20} /> Travel & Visa Details
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50/50 p-8 rounded-3xl border border-slate-100">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 bg-slate-50/50 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl border border-slate-100">
           <div className="space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Traveler Name
             </p>
-            <p className="font-bold text-slate-800">{details.full_name}</p>
+            <p className="font-bold text-slate-800 break-words">{details.full_name}</p>
           </div>
           <div className="space-y-1">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Passport No.
             </p>
-            <p className="font-bold text-slate-800">
+            <p className="font-bold text-slate-800 break-words">
               {details.passport_number}
             </p>
           </div>
@@ -29,7 +29,7 @@ export default function TravelVisaDetails({ details }: { details?: TravelVisaDet
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Destination
             </p>
-            <p className="font-bold text-slate-800">
+            <p className="font-bold text-slate-800 break-words">
               {details.destination_country}
             </p>
           </div>
@@ -37,7 +37,7 @@ export default function TravelVisaDetails({ details }: { details?: TravelVisaDet
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
               Purpose
             </p>
-            <p className="font-bold text-slate-800">{details.trip_purpose}</p>
+            <p className="font-bold text-slate-800 break-words">{details.trip_purpose}</p>
           </div>
         </div>
       </div>

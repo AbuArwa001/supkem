@@ -48,7 +48,7 @@ export default function ActionSidebar({
 
   return (
     <div className="space-y-8">
-      <div className="p-8 md:p-10 rounded-[32px] bg-slate-900 text-white shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-slate-800 space-y-8 relative overflow-hidden">
+      <div className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-[32px] bg-slate-900 text-white shadow-[0_20px_50px_rgb(0,0,0,0.15)] border border-slate-800 space-y-6 sm:space-y-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-48 h-48 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
         <div className="space-y-4 relative z-10">
           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
@@ -65,7 +65,7 @@ export default function ActionSidebar({
                     : "bg-amber-400 shadow-amber-400/50",
               )}
             />
-            <h3 className="text-3xl font-black font-outfit">{app.status}</h3>
+            <h3 className="text-2xl sm:text-3xl font-black font-outfit">{app.status}</h3>
           </div>
         </div>
 
@@ -81,7 +81,7 @@ export default function ActionSidebar({
             <div className="space-y-4">
               <button
                 onClick={() => setIsStudioOpen(true)}
-                className="w-full py-5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-[24px] font-bold text-lg hover:shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 sm:py-5 bg-gradient-to-r from-emerald-500 to-teal-500 text-white rounded-2xl sm:rounded-[24px] font-bold text-base sm:text-lg hover:shadow-lg hover:shadow-emerald-500/20 transition-all flex items-center justify-center gap-2"
               >
                 <Award size={20} /> Issue Official Document
               </button>
@@ -91,14 +91,14 @@ export default function ActionSidebar({
               <button
                 onClick={() => handleAction("Approved")}
                 disabled={submitting}
-                className="w-full py-5 bg-white text-slate-900 rounded-[24px] font-bold text-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 hover:shadow-emerald-500/20"
+                className="w-full py-4 sm:py-5 bg-white text-slate-900 rounded-2xl sm:rounded-[24px] font-bold text-base sm:text-lg hover:bg-emerald-500 hover:text-white transition-all flex items-center justify-center gap-2 shadow-xl shadow-black/10 hover:shadow-emerald-500/20"
               >
                 <ThumbsUp size={20} /> Approve Entry
               </button>
               <button
                 onClick={() => handleAction("Rejected")}
                 disabled={submitting}
-                className="w-full py-5 bg-slate-800 text-white border border-slate-700 rounded-[24px] font-bold text-lg hover:bg-rose-600 hover:border-rose-600 hover:shadow-lg hover:shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 sm:py-5 bg-slate-800 text-white border border-slate-700 rounded-2xl sm:rounded-[24px] font-bold text-base sm:text-lg hover:bg-rose-600 hover:border-rose-600 hover:shadow-lg hover:shadow-rose-600/20 transition-all flex items-center justify-center gap-2"
               >
                 <ThumbsDown size={20} /> Reject Submission
               </button>
@@ -130,7 +130,7 @@ export default function ActionSidebar({
         <button
           onClick={handleDelete}
           disabled={submitting}
-          className="w-full py-5 bg-white border border-rose-100 text-rose-500 rounded-[24px] font-bold text-base hover:bg-rose-500 hover:text-white hover:border-rose-500 hover:shadow-xl hover:shadow-rose-500/20 transition-all flex items-center justify-center gap-2"
+          className="w-full py-4 sm:py-5 bg-white border border-rose-100 text-rose-500 rounded-2xl sm:rounded-[24px] font-bold text-sm sm:text-base hover:bg-rose-500 hover:text-white hover:border-rose-500 hover:shadow-xl hover:shadow-rose-500/20 transition-all flex items-center justify-center gap-2"
         >
           <Trash2 size={20} /> Delete Application
         </button>
