@@ -15,6 +15,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import api from "@/lib/api";
 import { LetterCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
 import { useTranslations } from "next-intl";
