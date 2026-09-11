@@ -9,6 +9,8 @@ import { CertificateLoading } from "./_components/CertificateLoading";
 import { CertificateError } from "./_components/CertificateError";
 import { ApplicationReference } from "./_components/ApplicationReference";
 
+import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+
 /**
  * Admin Certificate Detail Page
  * Refactored to follow strict readability constraints.
@@ -46,18 +48,16 @@ export default function AdminCertificateDetail() {
         onDownload={handleDownloadPDF}
       />
 
-      <div className="flex justify-center w-full overflow-x-auto pb-8">
-        <div className="w-full flex justify-center scale-90 sm:scale-100 origin-top">
-          <LetterCanvas
-            letter={certificate}
-            letterRef={certificateRef}
-            issueDate={issueDate}
-            language={certificate.language || "en"}
-            customText={certificate.language === "ar" ? certificate.custom_text_ar : certificate.custom_text_en}
-            signatureBase64={certificate.digital_signature}
-          />
-        </div>
-      </div>
+      <DocumentScaleWrapper baseWidth={794} baseHeight={1123}>
+        <LetterCanvas
+          letter={certificate}
+          letterRef={certificateRef}
+          issueDate={issueDate}
+          language={certificate.language || "en"}
+          customText={certificate.language === "ar" ? certificate.custom_text_ar : certificate.custom_text_en}
+          signatureBase64={certificate.digital_signature}
+        />
+      </DocumentScaleWrapper>
 
       {certificate.application && (
         <ApplicationReference applicationId={certificate.application} />
