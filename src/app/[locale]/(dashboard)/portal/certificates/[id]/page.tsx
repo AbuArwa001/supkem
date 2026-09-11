@@ -7,6 +7,8 @@ import { CertificateReference } from "./_components/CertificateReference";
 import { CertificateLoading } from "./_components/CertificateLoading";
 import { CertificateError } from "./_components/CertificateError";
 
+import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+
 /**
  * Portal Certificate Detail Page
  * Authenticates and displays official digital certificates.
@@ -43,13 +45,15 @@ export default function CertificateDetail() {
         isDownloading={isDownloading}
       />
 
-      <CertificateCanvas
-        ref={certificateRef}
-        certificate={certificate}
-        issueDate={issueDate}
-        expiryDate={expiryDate}
-        isValid={isValid}
-      />
+      <DocumentScaleWrapper isLandscape={true} baseWidth={1000} baseHeight={700}>
+        <CertificateCanvas
+          ref={certificateRef}
+          certificate={certificate}
+          issueDate={issueDate}
+          expiryDate={expiryDate}
+          isValid={isValid}
+        />
+      </DocumentScaleWrapper>
 
       {certificate.application && (
         <CertificateReference applicationId={certificate.application} />
