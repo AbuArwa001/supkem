@@ -279,9 +279,9 @@ export default function DocumentIssuanceStudio({
               </div>
 
               {/* Main Preview Pane */}
-              <div className="flex-1 bg-slate-100 overflow-y-auto p-12 relative flex items-center justify-center">
+              <div className="flex-1 bg-slate-100 overflow-y-auto p-4 sm:p-8 lg:p-12 relative flex items-center justify-center">
                  {selectedAppId ? (
-                   <div className="scale-[0.6] origin-top md:scale-[0.7] lg:scale-90 xl:scale-100 transition-all">
+                   <div className="scale-[0.4] xs:scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-90 xl:scale-100 origin-top transition-all">
                      {docType === "Certificate" ? (
                        <CertificateCanvas
                          certificate={{
