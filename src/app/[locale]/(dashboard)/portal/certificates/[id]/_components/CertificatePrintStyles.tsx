@@ -8,6 +8,11 @@ export function CertificatePrintStyles() {
     // @ts-ignore — jsx attribute is valid for styled-jsx
     <style jsx global>{`
       @media print {
+        @page {
+          size: A4 landscape;
+          margin: 0;
+        }
+
         /* Hide all navigation, sidebars, headers, floating bars, and no-print elements */
         header,
         nav,
@@ -25,23 +30,10 @@ export function CertificatePrintStyles() {
           color: #000000 !important;
           margin: 0 !important;
           padding: 0 !important;
-          width: 100% !important;
-          height: auto !important;
-          min-height: auto !important;
-          overflow: visible !important;
-        }
-
-        main,
-        section,
-        div {
-          overflow: visible !important;
-          min-height: auto !important;
-        }
-
-        .scale-90,
-        .origin-top,
-        [style*="transform"] {
-          transform: none !important;
+          width: 297mm !important;
+          height: 210mm !important;
+          max-height: 210mm !important;
+          overflow: hidden !important;
         }
 
         body * {
@@ -56,25 +48,24 @@ export function CertificatePrintStyles() {
         }
 
         .certificate-canvas {
-          position: absolute !important;
+          position: fixed !important;
           left: 0 !important;
           top: 0 !important;
-          width: 100% !important;
-          max-width: 100% !important;
+          width: 297mm !important;
+          height: 210mm !important;
+          max-height: 210mm !important;
+          box-sizing: border-box !important;
           margin: 0 !important;
-          padding: 12mm 15mm !important;
+          padding: 10mm 14mm !important;
           border: none !important;
           box-shadow: none !important;
           border-radius: 0 !important;
           background-color: #ffffff !important;
-          min-height: auto !important;
-          height: auto !important;
+          overflow: hidden !important;
           transform: none !important;
-        }
-
-        @page {
-          size: A4 landscape;
-          margin: 0;
+          page-break-after: avoid !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
         }
       }
       .certificate-canvas {

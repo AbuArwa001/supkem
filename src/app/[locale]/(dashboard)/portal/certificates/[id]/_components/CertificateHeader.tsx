@@ -19,7 +19,7 @@ export function CertificateHeader({
   const t = useTranslations("Dashboard.portal.certificatesPage");
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between no-print print:hidden">
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}

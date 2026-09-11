@@ -26,18 +26,13 @@ export function LetterCanvas({
       ref={letterRef}
       initial={{ opacity: 0, scale: 0.95, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
-      className="relative bg-white shadow-2xl overflow-hidden p-12 md:p-16 flex flex-col text-left w-[210mm] min-h-[297mm] mx-auto border border-border/80 rounded-none print:shadow-none print:border-none print:m-0 print:p-12 letter-canvas shrink-0"
+      className="relative bg-white shadow-2xl overflow-hidden p-10 md:p-14 flex flex-col text-left w-[210mm] min-h-[297mm] max-h-[297mm] mx-auto border border-border/80 rounded-none print:shadow-none print:border-none print:m-0 print:p-0 letter-canvas shrink-0"
     >
       <style jsx global>{`
         @media print {
-          header,
-          nav,
-          aside,
-          button,
-          .no-print,
-          .print\:hidden {
-            display: none !important;
-            visibility: hidden !important;
+          @page {
+            size: A4 portrait;
+            margin: 0;
           }
 
           html,
@@ -46,23 +41,20 @@ export function LetterCanvas({
             color: #000000 !important;
             margin: 0 !important;
             padding: 0 !important;
-            width: 100% !important;
-            height: auto !important;
-            min-height: auto !important;
-            overflow: visible !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
+            overflow: hidden !important;
           }
 
-          main,
-          section,
-          div {
-            overflow: visible !important;
-            min-height: auto !important;
-          }
-
-          .scale-90,
-          .origin-top,
-          [style*="transform"] {
-            transform: none !important;
+          header,
+          nav,
+          aside,
+          button,
+          .no-print,
+          .print\:hidden {
+            display: none !important;
+            visibility: hidden !important;
           }
 
           body * {
@@ -77,38 +69,37 @@ export function LetterCanvas({
           }
 
           .letter-canvas {
-            position: absolute !important;
+            position: fixed !important;
             left: 0 !important;
             top: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
+            box-sizing: border-box !important;
             margin: 0 !important;
-            padding: 15mm 20mm !important;
+            padding: 16mm 18mm !important;
             border: none !important;
             box-shadow: none !important;
             border-radius: 0 !important;
             background-color: #ffffff !important;
-            min-height: auto !important;
-            height: auto !important;
+            overflow: hidden !important;
             transform: none !important;
-          }
-
-          @page {
-            size: A4 portrait;
-            margin: 0;
+            page-break-after: avoid !important;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
         }
       `}</style>
 
       {/* Header */}
-      <div className={`flex items-start justify-between border-b pb-8 mb-8 ${isArabic ? "flex-row-reverse" : ""}`} style={{ borderColor: "#cbd5e1" }}>
+      <div className={`flex items-start justify-between border-b pb-6 mb-6 ${isArabic ? "flex-row-reverse" : ""}`} style={{ borderColor: "#cbd5e1" }}>
         <div className={`flex flex-col ${isArabic ? "items-end" : "items-start"}`}>
           <Image
             src="/logo.svg"
             alt="SUPKEM Logo"
-            width={70}
-            height={70}
-            className="mb-4"
+            width={64}
+            height={64}
+            className="mb-3"
           />
           <h1 className={`text-xl font-black font-outfit ${isArabic ? "font-arabic" : ""}`} style={{ color: "#16543d" }}>
             {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}
@@ -118,33 +109,33 @@ export function LetterCanvas({
           </p>
         </div>
         
-        <div className={`text-sm font-medium space-y-2 ${isArabic ? "text-left font-arabic" : "text-right"}`} style={{ color: "#64748b" }}>
+        <div className={`text-sm font-medium space-y-1.5 ${isArabic ? "text-left font-arabic" : "text-right"}`} style={{ color: "#64748b" }}>
           <p>{isArabic ? "التاريخ:" : "Date:"} <span className="font-bold text-slate-800">{issueDate?.toLocaleDateString() || "N/A"}</span></p>
           <p>{isArabic ? "الرقم المرجعي:" : "Ref:"} <span className="font-mono text-slate-800">{letter.serial_number || "PENDING"}</span></p>
         </div>
       </div>
 
       {/* Recipient */}
-      <div className={`mb-12 ${isArabic ? "text-right font-arabic" : "text-left"}`}>
-        <p className="text-sm font-bold uppercase tracking-wider mb-2" style={{ color: "#94a3b8" }}>
+      <div className={`mb-8 ${isArabic ? "text-right font-arabic" : "text-left"}`}>
+        <p className="text-xs font-bold uppercase tracking-wider mb-1 text-slate-400" style={{ color: "#94a3b8" }}>
           {isArabic ? "إلى:" : "TO:"}
         </p>
-        <h3 className="text-xl font-bold" style={{ color: "#1e293b" }}>
+        <h3 className="text-lg font-bold" style={{ color: "#1e293b" }}>
           {letter.organization_name || (isArabic ? "الجهة المعنية" : "To Whom It May Concern")}
         </h3>
       </div>
 
       {/* Body */}
       <div 
-        className={`flex-1 text-base leading-loose whitespace-pre-wrap ${isArabic ? "text-right font-arabic" : "text-left"}`} 
+        className={`flex-1 text-base leading-relaxed whitespace-pre-wrap ${isArabic ? "text-right font-arabic" : "text-left"}`} 
         style={{ color: "#334155" }}
         dir={isArabic ? "rtl" : "ltr"}
       >
-        <h2 className={`text-xl font-bold uppercase mb-6 pb-2 inline-block border-b-2 ${isArabic ? "font-arabic" : ""}`} style={{ borderColor: "#16543d", color: "#16543d" }}>
+        <h2 className={`text-lg font-bold uppercase mb-4 pb-2 inline-block border-b-2 ${isArabic ? "font-arabic" : ""}`} style={{ borderColor: "#16543d", color: "#16543d" }}>
           {letter.service_name || (isArabic ? "خطاب رسمي" : "Official Letter")}
         </h2>
         
-        <p className="text-lg">
+        <p className="text-base leading-relaxed">
           {customText || (isArabic ? 
             "هذا الخطاب يؤكد أن الجهة المذكورة أعلاه معترف بها رسمياً ومسجلة لدى المجلس الأعلى لمسلمي كينيا. الرجاء تقديم المساعدة اللازمة." 
             : "This letter serves to confirm that the aforementioned entity is officially recognized and registered by the Supreme Council of Kenya Muslims. Please accord them the necessary assistance.")}
@@ -152,20 +143,20 @@ export function LetterCanvas({
       </div>
 
       {/* Signature */}
-      <div className={`mt-20 pt-12 border-t flex flex-col ${isArabic ? "items-end text-right" : "items-start text-left"}`} style={{ borderColor: "#e2e8f0" }}>
-        <div className="w-48 h-24 mb-4 flex items-end justify-start relative">
+      <div className={`mt-auto pt-8 border-t flex flex-col ${isArabic ? "items-end text-right" : "items-start text-left"}`} style={{ borderColor: "#e2e8f0" }}>
+        <div className="w-44 h-20 mb-3 flex items-end justify-start relative">
             {signatureBase64 ? (
               <img src={signatureBase64} alt="Signature" className="max-h-full max-w-full object-contain mix-blend-multiply" />
             ) : (
-              <span className={`font-serif italic text-2xl ${isArabic ? "font-arabic" : ""}`} style={{ color: "#94a3b8" }}>
+              <span className={`font-serif italic text-xl ${isArabic ? "font-arabic" : ""}`} style={{ color: "#94a3b8" }}>
                 {isArabic ? "[ توقيع غير متوفر ]" : "[ No Signature ]"}
               </span>
             )}
         </div>
-        <p className={`font-bold text-lg ${isArabic ? "font-arabic" : ""}`} style={{ color: "#1e293b" }}>
+        <p className={`font-bold text-base ${isArabic ? "font-arabic" : ""}`} style={{ color: "#1e293b" }}>
           {isArabic ? "الأمين العام" : "Secretary General"}
         </p>
-        <p className={`text-sm font-medium mt-1 ${isArabic ? "font-arabic" : ""}`} style={{ color: "#64748b" }}>
+        <p className={`text-xs font-medium mt-0.5 ${isArabic ? "font-arabic" : ""}`} style={{ color: "#64748b" }}>
           {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}
         </p>
       </div>

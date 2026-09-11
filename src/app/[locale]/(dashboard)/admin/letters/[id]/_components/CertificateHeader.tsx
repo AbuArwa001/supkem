@@ -18,7 +18,7 @@ export function CertificateHeader({
   onDownload,
 }: CertificateHeaderProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between no-print print:hidden">
       <div className="flex items-center gap-4">
         <button
           onClick={onBack}
