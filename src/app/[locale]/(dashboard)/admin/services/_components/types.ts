@@ -17,6 +17,7 @@ export interface ServiceItem {
 export interface ServiceFormData {
     name: string;
     category: string;
+    target_audience?: string;
     description: string;
     fee: string;
     is_active: boolean;

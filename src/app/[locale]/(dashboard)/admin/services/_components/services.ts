@@ -14,6 +14,7 @@ export async function createServiceApi(data: ServiceFormData): Promise<void> {
         description: data.description,
         description_en: data.description,
         category: data.category,
+        target_audience: data.target_audience || "Both",
         fee: data.fee,
         is_active: data.is_active,
     };
@@ -32,6 +33,7 @@ export async function updateServiceApi(id: string, data: ServiceFormData): Promi
         fee: data.fee,
         is_active: data.is_active,
     };
+    if (data.target_audience) payload.target_audience = data.target_audience;
     if ((data as any).name_ar) payload.name_ar = (data as any).name_ar;
     if ((data as any).description_ar) payload.description_ar = (data as any).description_ar;
     await api.patch(`/services/services/${id}/`, payload);

@@ -16,7 +16,18 @@ interface ServiceFormModalProps {
     onOpenAIGeneration: () => void;
 }
 
-const CATEGORIES = ["Accreditation", "Halal", "Kosher"];
+const CATEGORIES = [
+    "Accreditation",
+    "Halal",
+    "Marriage",
+    "Education",
+    "Employment",
+    "Pilgrimage",
+    "Kosher",
+    "Other",
+];
+
+const AUDIENCES = ["Both", "Organization", "Individual"];
 
 export function ServiceFormModal({
     editingItem,
@@ -66,14 +77,41 @@ export function ServiceFormModal({
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("name")}</label>
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("category")}</label>
                             <select
                                 value={formData.category}
                                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all appearance-none"
+                                className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                             >
                                 {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
                             </select>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("targetAudience")}</label>
+                            <select
+                                value={formData.target_audience || "Both"}
+                                onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
+                                className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
+                            >
+                                {AUDIENCES.map(a => <option key={a} value={a}>{a}</option>)}
+                            </select>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1 text-primary">{t("feeLabel")}</label>
+                            <div className="relative">
+                                <DollarSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 ltr:left-4 rtl:right-4" />
+                                <input
+                                    required
+                                    type="number"
+                                    value={formData.fee}
+                                    onChange={(e) => setFormData({ ...formData, fee: e.target.value })}
+                                    placeholder="0.00"
+                                    className="w-full ltr:pl-12 rtl:pr-12 px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -97,41 +135,24 @@ export function ServiceFormModal({
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1 text-primary">{t("feeLabel")}</label>
-                            <div className="relative">
-                                <DollarSign size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 ltr:left-4 rtl:right-4" />
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("statusLabel")}</label>
+                        <div className="flex items-center gap-4 py-2">
+                            <label className="flex items-center gap-2 cursor-pointer group">
                                 <input
-                                    required
-                                    type="number"
-                                    value={formData.fee}
-                                    onChange={(e) => setFormData({ ...formData, fee: e.target.value })}
-                                    placeholder="0.00"
-                                    className="w-full ltr:pl-12 rtl:pr-12 px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
+                                    type="checkbox"
+                                    checked={formData.is_active}
+                                    onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
+                                    className="hidden"
                                 />
-                            </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("statusLabel")}</label>
-                            <div className="flex items-center gap-4 py-4">
-                                <label className="flex items-center gap-2 cursor-pointer group">
-                                    <input
-                                        type="checkbox"
-                                        checked={formData.is_active}
-                                        onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                                        className="hidden"
-                                    />
-                                    <div className={cn(
-                                        "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
-                                        formData.is_active ? "bg-primary border-primary" : "border-border group-hover:border-primary/30"
-                                    )}>
-                                        {formData.is_active && <CheckCircle2 size={14} className="text-white" />}
-                                    </div>
-                                    <span className="font-bold text-primary text-sm">{t("activeService")}</span>
-                                </label>
-                            </div>
+                                <div className={cn(
+                                    "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
+                                    formData.is_active ? "bg-primary border-primary" : "border-border group-hover:border-primary/30"
+                                )}>
+                                    {formData.is_active && <CheckCircle2 size={14} className="text-white" />}
+                                </div>
+                                <span className="font-bold text-primary text-sm">{t("activeService")}</span>
+                            </label>
                         </div>
                     </div>
 

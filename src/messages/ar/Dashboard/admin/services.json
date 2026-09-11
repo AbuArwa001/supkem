@@ -19,6 +19,8 @@
     "new": "خدمة جديدة",
     "name": "اسم الخدمة",
     "namePlaceholder": "أدخل اسم الخدمة...",
+    "category": "الفئة",
+    "targetAudience": "الجمهور المستهدف",
     "desc": "الوصف",
     "generateAI": "توليد بالذكاء الاصطناعي",
     "descPlaceholder": "صف تفاصيل الخدمة...",

@@ -64,6 +64,7 @@ export function useAdminServicesLogic() {
             setFormData({
                 name: item.name || item.name_en || item.name_ar || "",
                 category: item.category,
+                target_audience: item.target_audience || "Both",
                 description: item.description || item.description_en || item.description_ar || "",
                 fee: item.fee,
                 is_active: item.is_active
@@ -73,6 +74,7 @@ export function useAdminServicesLogic() {
             setFormData({
                 name: "",
                 category: "Accreditation",
+                target_audience: "Both",
                 description: "",
                 fee: "",
                 is_active: true
@@ -93,8 +95,13 @@ export function useAdminServicesLogic() {
             }
             setIsModalOpen(false);
             await fetchServices();
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to save service", err);
+            const data = err.response?.data;
+            const errorMsg = data?.detail ||
+                (typeof data === 'object' ? Object.entries(data).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n') : null) ||
+                "Failed to save service. Please check the entered data.";
+            alert(errorMsg);
         } finally {
             setIsSubmitting(false);
         }

@@ -19,6 +19,8 @@
     "new": "New Service",
     "name": "Service Name",
     "namePlaceholder": "Enter service name...",
+    "category": "Category",
+    "targetAudience": "Target Audience",
     "desc": "Description",
     "generateAI": "Generate with AI",
     "descPlaceholder": "Describe the service details...",
