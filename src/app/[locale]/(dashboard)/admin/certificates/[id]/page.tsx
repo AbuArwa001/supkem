@@ -8,6 +8,8 @@ import { CertificateLoading } from "./_components/CertificateLoading";
 import { CertificateError } from "./_components/CertificateError";
 import { ApplicationReference } from "./_components/ApplicationReference";
 
+import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+
 /**
  * Admin Certificate Detail Page
  * Refactored to follow strict readability constraints.
@@ -45,13 +47,15 @@ export default function AdminCertificateDetail() {
         onDownload={handleDownloadPDF}
       />
 
-      <CertificateCanvas
-        certificate={certificate}
-        certificateRef={certificateRef}
-        issueDate={issueDate}
-        expiryDate={expiryDate}
-        isValid={isValid}
-      />
+      <DocumentScaleWrapper isLandscape={true} baseWidth={1000} baseHeight={700}>
+        <CertificateCanvas
+          certificate={certificate}
+          certificateRef={certificateRef}
+          issueDate={issueDate}
+          expiryDate={expiryDate}
+          isValid={isValid}
+        />
+      </DocumentScaleWrapper>
 
       {certificate.application && (
         <ApplicationReference applicationId={certificate.application} />
