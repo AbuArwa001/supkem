@@ -43,8 +43,17 @@ export function PaymentModal({ applicationId, serviceName, serviceFee, onSuccess
   // Poll payment status every 3 seconds while waiting
   useEffect(() => {
     if (status !== "waiting") return;
+    let attempts = 0;
     const interval = setInterval(async () => {
+      attempts++;
       try {
+        if (attempts >= 2 && attempts % 2 === 0) {
+          try {
+            await applicationSubmitService.checkPaymentStatus(applicationId);
+          } catch {
+            // ignore fallback error
+          }
+        }
         const appData = await applicationSubmitService.getApplication(applicationId);
         if (appData.payment?.status === "Completed") {
           setStatus("success");

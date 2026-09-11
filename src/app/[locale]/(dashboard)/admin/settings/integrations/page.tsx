@@ -83,6 +83,7 @@ const INTEGRATIONS: IntegrationDef[] = [
             "MPESA_SHORTCODE",
             "MPESA_PASSKEY",
             "MPESA_ENVIRONMENT",
+            "MPESA_CALLBACK_URL",
         ],
     },
     {
@@ -382,11 +383,13 @@ function IntegrationCard({
                                                     <Input
                                                         value={edits[key] ?? ""}
                                                         onChange={(e) => handleEdit(key, e.target.value)}
-                                                        placeholder={
-                                                            key === "MPESA_ENVIRONMENT"
-                                                                ? "sandbox or production"
-                                                                : "Enter value…"
-                                                        }
+                                                         placeholder={
+                                                             key === "MPESA_ENVIRONMENT"
+                                                                 ? "sandbox or production"
+                                                                 : key === "MPESA_CALLBACK_URL"
+                                                                 ? "e.g. https://supkem-drf.onrender.com/api/v1/applications/applications/mpesa_callback/"
+                                                                 : "Enter value…"
+                                                         }
                                                         className="bg-slate-50 border-slate-200 focus:border-violet-400 focus:ring-violet-100 font-mono text-sm"
                                                     />
                                                 )}

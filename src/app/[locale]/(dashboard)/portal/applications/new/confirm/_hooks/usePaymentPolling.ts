@@ -19,6 +19,13 @@ export function usePaymentPolling({ appId, status, onSuccess, onError }: PollPro
     const poll = async () => {
       attemptsRef.current++;
       try {
+        if (attemptsRef.current >= 2 && attemptsRef.current % 2 === 0) {
+          try {
+            await applicationSubmitService.checkPaymentStatus(appId);
+          } catch {
+            // fallback quietly
+          }
+        }
         const data = await applicationSubmitService.getApplication(appId);
         const payStatus = (data as any).payment?.status;
         if (payStatus === "Completed") {

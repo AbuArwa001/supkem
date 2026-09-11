@@ -24,4 +24,8 @@ export const applicationSubmitService = {
 
   getApplication: (applicationId: string): Promise<{ payment?: { status: string } }> =>
     api.get(`/applications/applications/${applicationId}/`).then((res) => res.data),
+
+  checkPaymentStatus: (applicationId: string): Promise<{ status: string; payment?: { status: string; receipt_number?: string; amount?: string } }> =>
+    api.get(`/applications/applications/${applicationId}/check_payment_status/`).then((res) => res.data),
 };
+
