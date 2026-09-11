@@ -123,9 +123,11 @@ export default function LetterDetail() {
   const serviceName =
     letter.application_detail?.service_name?.toLowerCase() || "";
 
+import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+
   const renderTemplate = () => {
     return (
-      <div className="w-full flex justify-center scale-90 sm:scale-100 origin-top print:scale-100 print:transform-none">
+      <DocumentScaleWrapper baseWidth={794} baseHeight={1123}>
         <LetterCanvas
           letter={letter}
           letterRef={letterRef}
@@ -134,14 +136,14 @@ export default function LetterDetail() {
           customText={letter.language === "ar" ? letter.custom_text_ar : letter.custom_text_en}
           signatureBase64={letter.digital_signature}
         />
-      </div>
+      </DocumentScaleWrapper>
     );
   };
 
   return (
     <div className="space-y-8 pb-20 max-w-5xl mx-auto print:space-y-0 print:pb-0 print:max-w-none">
       {/* Header */}
-      <div className="flex items-center justify-between no-print">
+      <div className="flex items-center justify-between no-print print:hidden">
         <div className="flex items-center gap-4">
           <button
             onClick={() => router.back()}
@@ -153,19 +155,19 @@ export default function LetterDetail() {
             />
           </button>
           <div>
-            <h1 className="text-3xl font-black font-outfit text-primary tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black font-outfit text-primary tracking-tight">
               {t("officialLetter")}
             </h1>
-            <p className="text-sm font-medium text-slate-500 uppercase tracking-widest mt-1">
+            <p className="text-xs sm:text-sm font-medium text-slate-500 uppercase tracking-widest mt-1">
               {letter.application_detail?.service_name || t("officialLetter")}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 no-print">
+        <div className="flex items-center gap-3 no-print print:hidden">
           <button
             onClick={handlePrint}
-            className="p-4 bg-white border border-border/50 rounded-2xl text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-lg transition-all active:scale-95 group"
+            className="p-3 sm:p-4 bg-white border border-border/50 rounded-2xl text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-lg transition-all active:scale-95 group"
           >
             <Printer
               size={20}
@@ -175,7 +177,7 @@ export default function LetterDetail() {
           <button
             onClick={handleDownloadPDF}
             disabled={isDownloading}
-            className="p-4 bg-primary text-white rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 group flex items-center gap-3 font-bold border border-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-3 sm:p-4 bg-primary text-white rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 group flex items-center gap-3 font-bold border border-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isDownloading ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -192,13 +194,13 @@ export default function LetterDetail() {
         </div>
       </div>
 
-      <div className="flex justify-center w-full overflow-x-auto pb-8 print:overflow-visible print:pb-0">
+      <div className="w-full pb-8 print:pb-0">
           {renderTemplate()}
       </div>
 
       {/* Application Reference */}
       {letter.application && (
-        <div className="max-w-4xl mx-auto flex items-center justify-between p-6 bg-slate-50 rounded-3xl border border-slate-100 no-print">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-slate-50 rounded-3xl border border-slate-100 no-print print:hidden">
           <div className="flex items-center gap-4">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
               <CheckCircle2 size={18} />
