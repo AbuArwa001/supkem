@@ -85,17 +85,17 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+          className="p-5 sm:p-8 md:p-10 bg-white border border-slate-100 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
         >
-          <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
-            <div className="w-14 h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500">
-              <FileText size={24} />
+          <div className="flex items-center gap-4 sm:gap-5 border-b border-slate-100 pb-6 sm:pb-8">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <FileText size={22} className="sm:w-6 sm:h-6" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                 Requested Service
               </p>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors break-words">
                 {application.service_name}
               </h3>
             </div>
@@ -123,17 +123,17 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+          className="p-5 sm:p-8 md:p-10 bg-white border border-slate-100 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
         >
-          <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
-            <div className="w-14 h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-110 transition-transform duration-500">
-              <Building2 size={24} />
+          <div className="flex items-center gap-4 sm:gap-5 border-b border-slate-100 pb-6 sm:pb-8">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-slate-50 text-slate-600 rounded-2xl flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-110 transition-transform duration-500">
+              <Building2 size={22} className="sm:w-6 sm:h-6" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                 Entity Details
               </p>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 break-words">
                 {application.organization_name || "Personal/Individual Application"}
               </h3>
             </div>
@@ -151,17 +151,17 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="p-8 md:p-10 bg-white border border-slate-100 rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
+          className="p-5 sm:p-8 md:p-10 bg-white border border-slate-100 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
         >
-          <div className="flex items-center gap-5 border-b border-slate-100 pb-8">
-            <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform duration-500">
-              <FileText size={24} />
+          <div className="flex items-center gap-4 sm:gap-5 border-b border-slate-100 pb-6 sm:pb-8">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform duration-500">
+              <FileText size={22} className="sm:w-6 sm:h-6" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
                 Application Content
               </p>
-              <h3 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 break-words">
                 {application.service_name} — Details
               </h3>
             </div>
@@ -216,9 +216,9 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
 };
 
 const DetailItem = ({ label, value, isMono = false }: { label: string; value: string; isMono?: boolean }) => (
-  <div className="flex justify-between items-center py-4 border-b border-slate-50 last:border-0">
-    <span className="text-slate-500 font-medium text-sm">{label}</span>
-    <span className={isMono ? "text-slate-900 font-mono text-xs font-semibold bg-slate-100 px-2 py-1 rounded" : "text-slate-900 font-bold text-sm"}>
+  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 py-3 sm:py-4 border-b border-slate-100 last:border-0">
+    <span className="text-slate-500 font-medium text-xs sm:text-sm shrink-0">{label}</span>
+    <span className={isMono ? "text-slate-900 font-mono text-xs font-semibold bg-slate-100 px-2 py-1 rounded break-all" : "text-slate-900 font-bold text-xs sm:text-sm break-words"}>
       {value}
     </span>
   </div>
