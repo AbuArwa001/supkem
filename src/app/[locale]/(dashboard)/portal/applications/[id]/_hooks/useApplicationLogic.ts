@@ -41,13 +41,35 @@ export const useApplicationLogic = () => {
     router.push(`/portal/applications/new/confirm?appId=${appId}&service=${encodeURIComponent(serviceName)}&fee=${fee}`);
   };
 
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+
+  const handleWithdraw = async (reason?: string): Promise<{ success: boolean; error?: string }> => {
+    if (!application) return { success: false, error: "No application loaded" };
+    setIsWithdrawing(true);
+    try {
+      const updated = await portalApplicationService.withdraw(application.id, reason);
+      setApplication(updated as PortalApplicationDetail);
+      return { success: true };
+    } catch (err: unknown) {
+      const apiError = err as { response?: { data?: { detail?: string } } };
+      return {
+        success: false,
+        error: apiError.response?.data?.detail ?? "Failed to withdraw application.",
+      };
+    } finally {
+      setIsWithdrawing(false);
+    }
+  };
+
   return {
     application,
     loading,
     error,
+    isWithdrawing,
     handleBack: () => router.back(),
     handleReturnToDashboard: () => router.push("/portal"),
     handlePay,
+    handleWithdraw,
     refreshParams: fetchApplication,
   };
 };

@@ -7,7 +7,8 @@
     "PENDING": "PENDING",
     "APPROVED": "APPROVED",
     "REJECTED": "REJECTED",
-    "SUBMITTED": "SUBMITTED"
+    "SUBMITTED": "SUBMITTED",
+    "WITHDRAWN": "WITHDRAWN"
   },
   "reviewDetails": "Review Details",
   "lastAction": "LAST ACTION",

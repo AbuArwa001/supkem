@@ -20,6 +20,8 @@ export default function ApplicationDetail() {
     handleBack,
     handleReturnToDashboard,
     handlePay,
+    handleWithdraw,
+    isWithdrawing,
     refreshParams
   } = useApplicationLogic();
 
@@ -46,6 +48,8 @@ export default function ApplicationDetail() {
         certification={application.certification}
         isPaymentPending={isPaymentPending}
         onPayClick={handlePay}
+        onWithdrawClick={handleWithdraw}
+        isWithdrawing={isWithdrawing}
       />
 
       <DetailsGrid application={application} />

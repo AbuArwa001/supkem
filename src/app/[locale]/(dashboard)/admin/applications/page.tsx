@@ -13,7 +13,7 @@ import ApplicationCard from "@/app/[locale]/(dashboard)/admin/applications/_comp
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-const FILTER_OPTIONS = ["all", "pending", "approved", "rejected"];
+const FILTER_OPTIONS = ["all", "pending", "approved", "rejected", "withdrawn"];
 
 export default function AdminApplications() {
   const { filteredApps, filter, setFilter, searchTerm, setSearchTerm } =

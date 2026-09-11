@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import useSWR from "swr";
-import { Clock, CheckCircle2, ShieldAlert, HelpCircle } from "lucide-react";
+import { Clock, CheckCircle2, ShieldAlert, HelpCircle, Ban } from "lucide-react";
 import { fetchApplications } from "./services";
 import { Application } from "./types";
 
@@ -18,6 +18,8 @@ export function useApplicationsLogic() {
         return "bg-emerald-50 text-emerald-600 border-emerald-100";
       case "Rejected":
         return "bg-red-50 text-red-600 border-red-100";
+      case "Withdrawn":
+        return "bg-rose-50 text-rose-600 border-rose-100";
       case "Under Review":
         return "bg-amber-50 text-amber-600 border-amber-100";
       default:
@@ -31,6 +33,8 @@ export function useApplicationsLogic() {
         return CheckCircle2;
       case "Rejected":
         return ShieldAlert;
+      case "Withdrawn":
+        return Ban;
       case "Under Review":
         return HelpCircle;
       default:

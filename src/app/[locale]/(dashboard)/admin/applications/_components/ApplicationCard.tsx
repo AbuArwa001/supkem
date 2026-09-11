@@ -60,14 +60,16 @@ export default function ApplicationCard({
                 ? "bg-emerald-50 text-emerald-700 border-emerald-100"
                 : application.status === "Rejected"
                   ? "bg-rose-50 text-rose-700 border-rose-100"
-                  : (application.status === "Pending" || application.status === "Submitted")
-                    ? "bg-amber-50 text-amber-700 border-amber-200"
-                    : "bg-slate-100 text-slate-700 border-slate-200",
+                  : application.status === "Withdrawn"
+                    ? "bg-slate-100 text-slate-600 border-slate-200"
+                    : (application.status === "Pending" || application.status === "Submitted")
+                      ? "bg-amber-50 text-amber-700 border-amber-200"
+                      : "bg-slate-100 text-slate-700 border-slate-200",
             )}
           >
             {application.status === "Approved" ? (
               <CheckCircle2 size={10} />
-            ) : application.status === "Rejected" ? (
+            ) : (application.status === "Rejected" || application.status === "Withdrawn") ? (
               <AlertCircle size={10} />
             ) : (
               <Clock size={10} />
