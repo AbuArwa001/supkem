@@ -44,10 +44,49 @@ function InvoicePageContent() {
 
       <style jsx global>{`
         @media print {
-          body { background: white !important; padding: 0 !important; margin: 0 !important; }
-          body > :not(#invoice-printable), .print\:hidden { display: none !important; }
-          #invoice-printable { position: static !important; width: 100% !important; max-width: none !important; margin: 0 !important; padding: 0 !important; box-shadow: none !important; border: none !important; border-radius: 0 !important; }
-          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          html,
+          body {
+            background: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: auto !important;
+            overflow: visible !important;
+          }
+          body * {
+            visibility: hidden;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          #invoice-printable,
+          #invoice-printable * {
+            visibility: visible !important;
+          }
+          #invoice-printable {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
+            background: #ffffff !important;
+          }
+          header,
+          nav,
+          aside,
+          button,
+          .print\:hidden {
+            display: none !important;
+            visibility: hidden !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 10mm;
+          }
         }
       `}</style>
     </div>
