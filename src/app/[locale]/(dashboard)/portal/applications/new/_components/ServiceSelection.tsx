@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Layout, FilePlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
+import { useLocale } from "next-intl";
 
 interface ServiceCardProps {
   service: Service;
@@ -11,6 +12,11 @@ interface ServiceCardProps {
 }
 
 function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps) {
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const displayName = isAr ? (service.name_ar || service.name || service.name_en) : (service.name || service.name_en || service.name_ar);
+  const displayDesc = isAr ? (service.description_ar || service.description || service.description_en) : (service.description || service.description_en || service.description_ar);
+
   return (
     <label
       className={cn(
@@ -29,8 +35,8 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
         </span>
       </div>
       <div>
-        <p className={cn("font-black text-xl transition-colors", selected ? "text-primary" : "text-slate-700")}>{service.name || service.name_en}</p>
-        <p className="text-slate-400 text-sm mt-2 font-medium line-clamp-2 leading-relaxed">{service.description || service.description_en}</p>
+        <p className={cn("font-black text-xl transition-colors", selected ? "text-primary" : "text-slate-700")}>{displayName}</p>
+        <p className="text-slate-400 text-sm mt-2 font-medium line-clamp-2 leading-relaxed">{displayDesc}</p>
       </div>
       <div className="flex items-center gap-2 mt-2">
         <span className="text-[10px] font-black uppercase tracking-widest text-secondary bg-secondary/10 px-3 py-1 rounded-lg">{service.category}</span>

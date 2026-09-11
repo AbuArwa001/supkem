@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
 import { Service } from "../types";
+import { useLocale } from "next-intl";
 
 interface ApplicationSummaryCardProps {
   service: Service;
 }
 
 export function ApplicationSummaryCard({ service }: ApplicationSummaryCardProps) {
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const serviceName = isAr ? (service.name_ar || service.name) : (service.name || service.name_en);
   const feeLabel =
     service.fee > 0 ? `KES ${Number(service.fee).toLocaleString()}` : "FREE";
 
@@ -23,7 +27,7 @@ export function ApplicationSummaryCard({ service }: ApplicationSummaryCardProps)
         <div className="flex justify-between items-end border-b border-white/10 pb-4">
           <div>
             <p className="text-xs text-white/40 mb-1 font-bold">Service</p>
-            <p className="font-black font-outfit text-lg">{service.name}</p>
+            <p className="font-black font-outfit text-lg">{serviceName}</p>
           </div>
           <div className="text-right">
             <p className="text-xs text-white/40 mb-1 font-bold">Fee</p>

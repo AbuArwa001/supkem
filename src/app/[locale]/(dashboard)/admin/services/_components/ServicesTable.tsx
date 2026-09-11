@@ -3,7 +3,7 @@
 import { Edit2, Trash2, Settings, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceItem } from "./types";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface ServicesTableProps {
     services: ServiceItem[];
@@ -14,6 +14,8 @@ interface ServicesTableProps {
 
 export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesTableProps) {
     const t = useTranslations("Dashboard.admin.services.table");
+    const locale = useLocale();
+    const isAr = locale === "ar";
 
     if (loading) {
         return (
@@ -37,11 +39,19 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-border/50">
-                        {services.map((service) => (
+                        {services.map((service) => {
+                            const displayName = isAr
+                                ? (service.name_ar || service.name_en || service.name)
+                                : (service.name_en || service.name || service.name_ar);
+                            const displayDesc = isAr
+                                ? (service.description_ar || service.description_en || service.description || t("noDesc"))
+                                : (service.description_en || service.description || service.description_ar || t("noDesc"));
+
+                            return (
                             <tr key={service.id} className="hover:bg-primary/[0.01] transition-colors group">
                                 <td className="px-8 py-6">
-                                    <p className="font-bold text-primary group-hover:underline cursor-pointer">{service.name || service.name_en || service.name_ar}</p>
-                                    <p className="text-xs text-foreground/40 line-clamp-1 mt-1">{service.description || service.description_en || service.description_ar || t("noDesc")}</p>
+                                    <p className="font-bold text-primary group-hover:underline cursor-pointer">{displayName}</p>
+                                    <p className="text-xs text-foreground/40 line-clamp-1 mt-1">{displayDesc}</p>
                                 </td>
                                 <td className="px-8 py-6 hidden md:table-cell">
                                     <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-black uppercase tracking-widest">
@@ -80,7 +90,8 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                            );
+                        })}
                         {services.length === 0 && (
                             <tr>
                                 <td colSpan={5} className="px-8 py-20 text-center">

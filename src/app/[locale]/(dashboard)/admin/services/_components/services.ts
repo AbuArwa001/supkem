@@ -8,24 +8,32 @@ export async function fetchServicesApi(): Promise<ServiceItem[]> {
 }
 
 export async function createServiceApi(data: ServiceFormData): Promise<void> {
-    const payload = {
-        ...data,
+    const payload: Record<string, any> = {
+        name: data.name,
         name_en: data.name,
-        name_ar: data.name, // Fallback for Arabic if not provided
+        description: data.description,
         description_en: data.description,
-        description_ar: data.description, // Fallback for Arabic if not provided
+        category: data.category,
+        fee: data.fee,
+        is_active: data.is_active,
     };
+    if ((data as any).name_ar) payload.name_ar = (data as any).name_ar;
+    if ((data as any).description_ar) payload.description_ar = (data as any).description_ar;
     await api.post("/services/services/", payload);
 }
 
 export async function updateServiceApi(id: string, data: ServiceFormData): Promise<void> {
-    const payload = {
-        ...data,
+    const payload: Record<string, any> = {
+        name: data.name,
         name_en: data.name,
-        name_ar: data.name,
+        description: data.description,
         description_en: data.description,
-        description_ar: data.description,
+        category: data.category,
+        fee: data.fee,
+        is_active: data.is_active,
     };
+    if ((data as any).name_ar) payload.name_ar = (data as any).name_ar;
+    if ((data as any).description_ar) payload.description_ar = (data as any).description_ar;
     await api.patch(`/services/services/${id}/`, payload);
 }
 
