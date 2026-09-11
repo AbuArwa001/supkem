@@ -18,7 +18,7 @@ export default function ServiceDetails({ app }: { app: ApplicationDetail }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="p-8 md:p-10 rounded-[32px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-8"
+      className="p-4 sm:p-8 md:p-10 rounded-2xl sm:rounded-[32px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] space-y-6 sm:space-y-8"
     >
       <ServiceHeader app={app} />
 
@@ -32,7 +32,7 @@ export default function ServiceDetails({ app }: { app: ApplicationDetail }) {
         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
           Applicant Comments
         </p>
-        <div className="p-6 rounded-[24px] bg-slate-50 border border-slate-100 text-slate-700 leading-relaxed font-medium italic shadow-inner">
+        <div className="p-4 sm:p-6 rounded-2xl sm:rounded-[24px] bg-slate-50 border border-slate-100 text-slate-700 leading-relaxed font-medium italic shadow-inner break-words">
           "{app.comments || "No comments provided by the applicant."}"
         </div>
       </div>
