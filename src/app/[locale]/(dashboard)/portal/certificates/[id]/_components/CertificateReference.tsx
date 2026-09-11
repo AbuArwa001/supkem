@@ -11,7 +11,7 @@ export function CertificateReference({
   applicationId,
 }: CertificateReferenceProps) {
   return (
-    <div className="max-w-4xl mx-auto flex items-center justify-between p-6 bg-slate-50 rounded-3xl border border-slate-100">
+    <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 bg-slate-50 rounded-3xl border border-slate-100 no-print print:hidden">
       <div className="flex items-center gap-4">
         <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
           <CheckCircle2 size={18} />
