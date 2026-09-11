@@ -24,11 +24,15 @@ import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_type
 interface ApplicationCardProps {
   application: Application;
   index: number;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string | number) => void;
 }
 
 export default function ApplicationCard({
   application,
   index,
+  isSelected = false,
+  onToggleSelect,
 }: ApplicationCardProps) {
   const t = useTranslations("Dashboard.admin.applications");
 
@@ -38,18 +42,31 @@ export default function ApplicationCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03, type: "spring", stiffness: 300, damping: 25 }}
       whileHover={{ y: -2 }}
-      className="group relative p-6 rounded-[24px] bg-white border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] hover:border-slate-200 transition-all duration-300 ease-out flex flex-col justify-between h-full overflow-hidden"
+      className={cn(
+        "group relative p-6 rounded-[24px] bg-white border transition-all duration-300 ease-out flex flex-col justify-between h-full overflow-hidden",
+        isSelected
+          ? "border-primary ring-2 ring-primary/30 shadow-[0_12px_36px_rgb(0,0,0,0.09)]"
+          : "border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)] hover:border-slate-200"
+      )}
     >
       <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 -translate-y-12 translate-x-12 rounded-full group-hover:bg-primary/5 transition-colors" />
 
       <div className="relative z-10 flex flex-col gap-4 flex-1">
         <div className="flex items-start justify-between w-full">
-          <div className="relative w-14 h-14 rounded-[20px] bg-slate-50 border border-slate-100 text-slate-600 flex items-center justify-center shrink-0 group-hover:bg-slate-900 group-hover:border-slate-900 group-hover:text-white group-hover:shadow-lg transition-all duration-300">
-            <FileText size={24} className="relative z-10 transition-transform duration-300 group-hover:scale-110" />
+          <div className="flex items-center gap-3">
+            {onToggleSelect && (
+              <input
+                type="checkbox"
+                checked={isSelected}
+                onChange={() => onToggleSelect(application.id)}
+                className="w-4 h-4 rounded text-primary focus:ring-primary/20 cursor-pointer accent-emerald-700"
+                title="Select application"
+              />
+            )}
+            <div className="relative w-12 h-12 rounded-[18px] bg-slate-50 border border-slate-100 text-slate-600 flex items-center justify-center shrink-0 group-hover:bg-slate-900 group-hover:border-slate-900 group-hover:text-white group-hover:shadow-lg transition-all duration-300">
+              <FileText size={22} className="relative z-10 transition-transform duration-300 group-hover:scale-110" />
+            </div>
           </div>
-          <button className="p-2 bg-transparent text-slate-400 hover:text-slate-900 transition-all duration-300">
-            <MoreVertical size={18} />
-          </button>
         </div>
 
         <div className="space-y-1.5 flex-1">
