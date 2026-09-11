@@ -37,11 +37,15 @@ export async function updateServiceApi(id: string, data: ServiceFormData): Promi
     await api.patch(`/services/services/${id}/`, payload);
 }
 
-export async function deleteServiceApi(id: string): Promise<void> {
-    await api.delete(`/services/services/${id}/`);
+export async function deleteServiceApi(id: string, options?: { deactivate?: boolean; cascade?: boolean }): Promise<any> {
+    const params = new URLSearchParams();
+    if (options?.deactivate) params.append("deactivate", "true");
+    if (options?.cascade) params.append("cascade", "true");
+    const query = params.toString() ? `?${params.toString()}` : "";
+    const res = await api.delete(`/services/services/${id}/${query}`);
+    return res.data;
 }
 
-// Simulating AI generation for now as in original code
 export async function generateAIDescriptionApi(prompt: string, currentData: ServiceFormData): Promise<string> {
     return new Promise((resolve) => {
         setTimeout(() => {

@@ -101,12 +101,31 @@ export function useAdminServicesLogic() {
     };
 
     const handleDelete = async (id: string) => {
-        if (window.confirm("Are you sure you want to delete this service?")) {
-            try {
-                await deleteServiceApi(id);
-                await fetchServices();
-            } catch (err) {
-                console.error("Failed to delete service", err);
+        if (!window.confirm("Are you sure you want to delete this service?")) {
+            return;
+        }
+
+        try {
+            await deleteServiceApi(id);
+            await fetchServices();
+        } catch (err: any) {
+            console.error("Failed to delete service", err);
+            const data = err.response?.data;
+            if (data?.can_deactivate) {
+                const shouldDeactivate = window.confirm(
+                    `${data.detail}\n\nWould you like to deactivate this service instead so it cannot receive new applications?`
+                );
+                if (shouldDeactivate) {
+                    try {
+                        await deleteServiceApi(id, { deactivate: true });
+                        await fetchServices();
+                    } catch (deactErr: any) {
+                        console.error("Failed to deactivate service", deactErr);
+                        alert(deactErr.response?.data?.detail || "Failed to deactivate service.");
+                    }
+                }
+            } else {
+                alert(data?.detail || "Failed to delete service.");
             }
         }
     };
