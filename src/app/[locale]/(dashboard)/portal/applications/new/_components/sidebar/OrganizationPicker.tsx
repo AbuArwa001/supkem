@@ -40,7 +40,11 @@ export function OrganizationPicker({
   }
 
   return (
-    <div className="space-y-3">
+    <div
+      data-error-field="organization"
+      id="field-organization"
+      className="space-y-3"
+    >
       {isIndividualService && (
         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-2">
           Select a recognized Registrar
@@ -55,9 +59,9 @@ export function OrganizationPicker({
         />
       ))}
       {errors.organization && (
-        <p className="text-rose-500 text-[10px] font-bold mt-2 animate-pulse">
+        <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-xs font-bold mt-2">
           {errors.organization}
-        </p>
+        </div>
       )}
     </div>
   );
