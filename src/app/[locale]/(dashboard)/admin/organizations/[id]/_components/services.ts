@@ -42,3 +42,25 @@ export async function suspendPersonnel(orgId: string, userId: string): Promise<v
 export async function updateOrgStatus(orgId: string, status: string): Promise<void> {
     await api.post(`/organizations/organizations/${orgId}/update_status/`, { status });
 }
+
+export async function updateOrganization(
+    orgId: string | number,
+    data: Partial<OrganizationDetail>
+): Promise<OrganizationDetail> {
+    const res = await api.patch(`/organizations/organizations/${orgId}/`, data);
+    return res.data;
+}
+
+export async function fetchRegions(): Promise<any[]> {
+    const res = await api.get("/locations/regions/");
+    return res.data.results || res.data;
+}
+
+export async function fetchCountyCouncils(regionId?: string): Promise<any[]> {
+    const url = regionId
+        ? `/locations/county-councils/?region=${regionId}`
+        : "/locations/county-councils/";
+    const res = await api.get(url);
+    return res.data.results || res.data;
+}
+

@@ -5,11 +5,18 @@ export interface OrganizationDetail {
   accreditation_status: string;
   reg_number: string;
   pin_number: string;
+  county_council?: string;
   county_council_name: string;
+  region_id?: string;
+  region_name?: string;
   gps_location: string;
   website: string;
   phone_number: string;
   email: string;
+  apps_count?: number;
+  certs_count?: number;
+  created_at?: string;
+  updated_at?: string;
   [key: string]: any;
 }
 

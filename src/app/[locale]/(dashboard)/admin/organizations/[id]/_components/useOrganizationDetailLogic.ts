@@ -114,6 +114,8 @@ export function useOrganizationDetailLogic() {
         }
     };
 
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
     const handleUpdateStatus = async (status: string) => {
         setActionLoading('status_update');
         try {
@@ -126,6 +128,10 @@ export function useOrganizationDetailLogic() {
         }
     };
 
+    const handleOrganizationUpdated = (updatedOrg: OrganizationDetail) => {
+        setOrg(prev => (prev ? { ...prev, ...updatedOrg } : updatedOrg));
+    };
+
     return {
         id,
         router,
@@ -134,6 +140,8 @@ export function useOrganizationDetailLogic() {
         loading,
         isModalOpen,
         setIsModalOpen,
+        isEditModalOpen,
+        setIsEditModalOpen,
         searchQuery,
         setSearchQuery,
         searchResults,
@@ -144,6 +152,8 @@ export function useOrganizationDetailLogic() {
         handleAddPersonnel,
         handleRemovePersonnel,
         handleSuspendPersonnel,
-        handleUpdateStatus
+        handleUpdateStatus,
+        handleOrganizationUpdated
     };
 }
+

@@ -10,6 +10,7 @@ import { OrganizationRecords } from "./_components/OrganizationRecords";
 import { OrganizationPersonnel } from "./_components/OrganizationPersonnel";
 import { OrganizationAdministrativeActions } from "./_components/OrganizationAdministrativeActions";
 import { AddPersonnelModal } from "./_components/AddPersonnelModal";
+import { EditOrganizationModal } from "./_components/EditOrganizationModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
 export default function OrganizationDetail() {
@@ -29,6 +30,8 @@ function OrganizationDetailContent() {
         loading,
         isModalOpen,
         setIsModalOpen,
+        isEditModalOpen,
+        setIsEditModalOpen,
         searchQuery,
         setSearchQuery,
         searchResults,
@@ -39,7 +42,8 @@ function OrganizationDetailContent() {
         handleAddPersonnel,
         handleRemovePersonnel,
         handleSuspendPersonnel,
-        handleUpdateStatus
+        handleUpdateStatus,
+        handleOrganizationUpdated
     } = useOrganizationDetailLogic();
 
     if (loading) {
@@ -72,13 +76,25 @@ function OrganizationDetailContent() {
             <OrganizationHeader 
                 name={org.name} 
                 id={org.id} 
+                status={org.accreditation_status}
+                canEdit={true}
+                onEdit={() => setIsEditModalOpen(true)}
                 onBack={() => router.back()} 
             />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 <div className="xl:col-span-2 space-y-8">
-                    <OrganizationCoreInfo org={org} />
-                    <OrganizationRecords />
+                    <OrganizationCoreInfo 
+                        org={org} 
+                        canEdit={true}
+                        onEdit={() => setIsEditModalOpen(true)}
+                    />
+                    <OrganizationRecords 
+                        appsCount={org.apps_count ?? 0}
+                        certsCount={org.certs_count ?? 0}
+                        applicationsHref={`/admin/applications`}
+                        certificatesHref={`/admin/certificates`}
+                    />
                 </div>
 
                 <div className="space-y-6">
@@ -115,6 +131,18 @@ function OrganizationDetailContent() {
                     />
                 )}
             </AnimatePresence>
+
+            <AnimatePresence>
+                {isEditModalOpen && (
+                    <EditOrganizationModal
+                        org={org}
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        onSuccess={handleOrganizationUpdated}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }
+
