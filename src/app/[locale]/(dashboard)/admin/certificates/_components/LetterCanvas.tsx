@@ -1,6 +1,25 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+
+export function interpolateVariables(text: string, context: {
+  userName?: string | null;
+  organizationName?: string | null;
+  serviceName?: string | null;
+  serialNumber?: string | null;
+  date?: string | null;
+}) {
+  if (!text) return "";
+  return text
+    .replace(/\{\{\s*user_name\s*\}\}/gi, context.userName || "Applicant")
+    .replace(/\{\{\s*organization_name\s*\}\}/gi, context.organizationName || context.userName || "Organization")
+    .replace(/\{\{\s*service_name\s*\}\}/gi, context.serviceName || "Service")
+    .replace(/\{\{\s*serial_number\s*\}\}/gi, context.serialNumber || "PENDING")
+    .replace(/\{\{\s*ref_number\s*\}\}/gi, context.serialNumber || "PENDING")
+    .replace(/\{\{\s*date\s*\}\}/gi, context.date || new Date().toLocaleDateString());
+}
 
 export interface LetterCanvasProps {
   letter: any;
@@ -9,6 +28,10 @@ export interface LetterCanvasProps {
   language?: "en" | "ar";
   customText?: string;
   signatureBase64?: string;
+  recipient?: string;
+  subject?: string;
+  signatoryTitle?: string;
+  isMarkdown?: boolean;
 }
 
 export function LetterCanvas({
@@ -18,8 +41,31 @@ export function LetterCanvas({
   language = "en",
   customText,
   signatureBase64,
+  recipient,
+  subject,
+  signatoryTitle,
+  isMarkdown = false,
 }: LetterCanvasProps) {
   const isArabic = language === "ar";
+
+  const resolvedRecipient = recipient || letter.recipient || (letter.organization_name || (isArabic ? "الجهة المعنية" : "To Whom It May Concern"));
+  const resolvedSubject = subject || letter.subject || (letter.service_name || (isArabic ? "خطاب رسمي" : "Official Letter"));
+  const resolvedSignatory = signatoryTitle || letter.signatory_title || (isArabic ? "الأمين العام" : "Secretary General");
+
+  const context = {
+    userName: letter.user_name || letter.application_detail?.user_name,
+    organizationName: letter.organization_name || letter.application_detail?.organization_name,
+    serviceName: letter.service_name || letter.application_detail?.service_name,
+    serialNumber: letter.serial_number,
+    date: issueDate?.toLocaleDateString() || new Date().toLocaleDateString(),
+  };
+
+  const defaultBody = isArabic
+    ? "هذا الخطاب يؤكد أن الجهة المذكورة أعلاه معترف بها رسمياً ومسجلة لدى المجلس الأعلى لمسلمي كينيا. الرجاء تقديم المساعدة اللازمة."
+    : "This letter serves to confirm that the aforementioned entity is officially recognized and registered by the Supreme Council of Kenya Muslims. Please accord them the necessary assistance.";
+
+  const rawText = customText || letter.custom_text_en || letter.custom_text_ar || defaultBody;
+  const processedBody = interpolateVariables(rawText, context);
 
   return (
     <motion.div
@@ -105,7 +151,9 @@ export function LetterCanvas({
             {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}
           </h1>
           <p className="text-xs font-bold uppercase tracking-widest mt-1" style={{ color: "#94a3b8" }}>
-            {isArabic ? "الأمانة العامة" : "General Secretariat"}
+            {resolvedSignatory.toLowerCase().includes("chairman") || resolvedSignatory.includes("رئيس")
+              ? (isArabic ? "مكتب الرئيس الوطني" : "Office of the National Chairman")
+              : (isArabic ? "الأمانة العامة" : "General Secretariat")}
           </p>
         </div>
         
@@ -121,25 +169,31 @@ export function LetterCanvas({
           {isArabic ? "إلى:" : "TO:"}
         </p>
         <h3 className="text-lg font-bold" style={{ color: "#1e293b" }}>
-          {letter.organization_name || (isArabic ? "الجهة المعنية" : "To Whom It May Concern")}
+          {resolvedRecipient}
         </h3>
       </div>
 
       {/* Body */}
       <div 
-        className={`flex-1 text-base leading-relaxed whitespace-pre-wrap ${isArabic ? "text-right font-arabic" : "text-left"}`} 
+        className={`flex-1 text-base leading-relaxed ${isArabic ? "text-right font-arabic" : "text-left"}`} 
         style={{ color: "#334155" }}
         dir={isArabic ? "rtl" : "ltr"}
       >
         <h2 className={`text-lg font-bold uppercase mb-4 pb-2 inline-block border-b-2 ${isArabic ? "font-arabic" : ""}`} style={{ borderColor: "#16543d", color: "#16543d" }}>
-          {letter.service_name || (isArabic ? "خطاب رسمي" : "Official Letter")}
+          {resolvedSubject}
         </h2>
         
-        <p className="text-base leading-relaxed">
-          {customText || (isArabic ? 
-            "هذا الخطاب يؤكد أن الجهة المذكورة أعلاه معترف بها رسمياً ومسجلة لدى المجلس الأعلى لمسلمي كينيا. الرجاء تقديم المساعدة اللازمة." 
-            : "This letter serves to confirm that the aforementioned entity is officially recognized and registered by the Supreme Council of Kenya Muslims. Please accord them the necessary assistance.")}
-        </p>
+        {isMarkdown ? (
+          <div className="prose prose-slate max-w-none text-base leading-relaxed">
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {processedBody}
+            </ReactMarkdown>
+          </div>
+        ) : (
+          <p className="text-base leading-relaxed whitespace-pre-wrap">
+            {processedBody}
+          </p>
+        )}
       </div>
 
       {/* Signature */}
@@ -154,7 +208,7 @@ export function LetterCanvas({
             )}
         </div>
         <p className={`font-bold text-base ${isArabic ? "font-arabic" : ""}`} style={{ color: "#1e293b" }}>
-          {isArabic ? "الأمين العام" : "Secretary General"}
+          {resolvedSignatory}
         </p>
         <p className={`text-xs font-medium mt-0.5 ${isArabic ? "font-arabic" : ""}`} style={{ color: "#64748b" }}>
           {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}

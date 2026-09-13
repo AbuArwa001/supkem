@@ -2,7 +2,11 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Award, FileText, X, Loader2, CheckCircle2, AlertCircle, PenTool, Image as ImageIcon, Languages, Eye, Eraser } from "lucide-react";
+import { 
+  Award, FileText, X, Loader2, CheckCircle2, AlertCircle, 
+  PenTool, Image as ImageIcon, Eye, Eraser, Code2, AlignLeft, 
+  User, Building, Calendar, Hash, Sparkles
+} from "lucide-react";
 import SignatureCanvas from "react-signature-canvas";
 
 import { cn } from "@/lib/utils";
@@ -26,6 +30,25 @@ interface DocumentIssuanceStudioProps {
   handleIssueDocument: (payload: any) => void;
 }
 
+const RECIPIENT_PRESETS = [
+  "To Whom It May Concern",
+  "The Embassy / Consular Section",
+  "The Visa Processing Office",
+  "The Admissions Board",
+];
+
+const SIGNATORY_PRESETS_LETTER = [
+  "Secretary General",
+  "National Chairman",
+  "Director General",
+];
+
+const SIGNATORY_PRESETS_CERT = [
+  "National Chairman",
+  "Secretary General",
+  "Registry Officer",
+];
+
 export default function DocumentIssuanceStudio({
   isOpen,
   onClose,
@@ -40,25 +63,77 @@ export default function DocumentIssuanceStudio({
   const [docType, setDocType] = useState<DocumentType>("Certificate");
   const [language, setLanguage] = useState<Language>("en");
   
-  useEffect(() => {
-    const app = eligibleApplications.find(a => a.id === selectedAppId);
-    if (app) {
-      if (!app.organization_name && app.user_name) {
-        setDocType("Letter");
-      } else {
-        setDocType("Certificate");
-      }
-    }
-  }, [selectedAppId, eligibleApplications]);
-  
+  // Custom Letter Metadata
+  const [recipient, setRecipient] = useState("To Whom It May Concern");
+  const [subject, setSubject] = useState("");
+  const [signatoryTitle, setSignatoryTitle] = useState("Secretary General");
+
+  // Editor mode: Normal Text vs Markdown
+  const [isMarkdown, setIsMarkdown] = useState(false);
+
   // Custom Text State
   const [customTextEn, setCustomTextEn] = useState("");
   const [customTextAr, setCustomTextAr] = useState("");
+
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Signature State
   const [sigType, setSigType] = useState<"draw" | "upload">("draw");
   const sigCanvas = useRef<any>(null);
   const [uploadedSig, setUploadedSig] = useState<string | null>(null);
+
+  // Find currently selected application
+  const selectedApp = eligibleApplications.find(a => a.id === selectedAppId);
+
+  useEffect(() => {
+    if (selectedApp) {
+      // Auto-select document type based on service configuration
+      if (selectedApp.service_document_type === "Letter") {
+        setDocType("Letter");
+      } else if (selectedApp.service_document_type === "Certificate") {
+        setDocType("Certificate");
+      } else if (!selectedApp.organization_name && selectedApp.user_name) {
+        setDocType("Letter");
+      } else {
+        setDocType("Certificate");
+      }
+
+      // Default letter subject if empty
+      if (!subject && selectedApp.service_name) {
+        setSubject(`OFFICIAL RECOMMENDATION - ${selectedApp.service_name.toUpperCase()}`);
+      }
+    }
+  }, [selectedAppId, selectedApp]);
+
+  // Adjust default signatory when document type switches
+  useEffect(() => {
+    if (docType === "Letter") {
+      setSignatoryTitle("Secretary General");
+    } else {
+      setSignatoryTitle("National Chairman");
+    }
+  }, [docType]);
+
+  const insertVariable = (variableKey: string) => {
+    const textToInsert = `{{${variableKey}}}`;
+    if (language === "en") {
+      const el = textareaRef.current;
+      if (el) {
+        const start = el.selectionStart || 0;
+        const end = el.selectionEnd || 0;
+        const newText = customTextEn.substring(0, start) + textToInsert + customTextEn.substring(end);
+        setCustomTextEn(newText);
+        setTimeout(() => {
+          el.focus();
+          el.setSelectionRange(start + textToInsert.length, start + textToInsert.length);
+        }, 50);
+      } else {
+        setCustomTextEn(prev => prev + " " + textToInsert);
+      }
+    } else {
+      setCustomTextAr(prev => prev + " " + textToInsert);
+    }
+  };
 
   const clearSignature = () => {
     if (sigCanvas.current) {
@@ -95,13 +170,14 @@ export default function DocumentIssuanceStudio({
       language: language,
       customTextEn: customTextEn,
       customTextAr: customTextAr,
-      digitalSignature: signatureData
+      digitalSignature: signatureData,
+      recipient: docType === "Letter" ? recipient : undefined,
+      subject: docType === "Letter" ? subject : undefined,
+      signatoryTitle: signatoryTitle,
     };
 
     handleIssueDocument(payload);
   };
-
-  const selectedApp = eligibleApplications.find(app => app.id === selectedAppId);
 
   return (
     <AnimatePresence>
@@ -111,35 +187,35 @@ export default function DocumentIssuanceStudio({
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="bg-white w-full max-w-6xl h-[90vh] rounded-[32px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.2)] border border-slate-100 flex flex-col"
+            className="bg-white w-full max-w-7xl h-[92vh] rounded-[32px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.2)] border border-slate-100 flex flex-col"
           >
             {/* Header */}
-            <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
+            <div className="px-8 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50 shrink-0">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-slate-900 text-white rounded-[20px] flex items-center justify-center shadow-lg">
-                  <Award size={28} />
+                <div className="w-12 h-12 bg-slate-900 text-white rounded-[18px] flex items-center justify-center shadow-lg">
+                  <Award size={24} />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-black font-outfit text-slate-900 tracking-tight">
+                  <h3 className="text-xl font-black font-outfit text-slate-900 tracking-tight">
                     Document Issuance Studio
                   </h3>
-                  <p className="text-sm font-medium text-slate-500">
-                    Draft, sign, and issue absolute premium documents
+                  <p className="text-xs font-medium text-slate-500">
+                    Configure document type, recipient, sender title, and markdown text
                   </p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-12 h-12 flex items-center justify-center bg-white border border-slate-200 hover:border-slate-300 rounded-full hover:bg-slate-50 transition-all text-slate-400 hover:text-slate-600 shadow-sm"
+                className="w-10 h-10 flex items-center justify-center bg-white border border-slate-200 hover:border-slate-300 rounded-full hover:bg-slate-50 transition-all text-slate-400 hover:text-slate-600 shadow-sm"
               >
-                <X size={24} />
+                <X size={20} />
               </button>
             </div>
 
             <div className="flex flex-col lg:flex-row flex-1 overflow-y-auto lg:overflow-hidden">
               {/* Sidebar Controls */}
-              <div className="w-full lg:w-1/3 min-w-0 lg:min-w-[350px] border-b lg:border-b-0 lg:border-r border-slate-100 bg-white flex flex-col h-auto lg:h-full overflow-y-auto">
-                <form onSubmit={submitForm} className="p-5 sm:p-8 space-y-6 sm:space-y-8 flex-1">
+              <div className="w-full lg:w-[420px] shrink-0 border-b lg:border-b-0 lg:border-r border-slate-100 bg-white flex flex-col h-auto lg:h-full overflow-y-auto custom-scrollbar">
+                <form onSubmit={submitForm} className="p-6 space-y-6 flex-1">
                   
                   {message && (
                     <div className={cn("p-4 rounded-2xl flex items-center gap-3 font-medium text-sm shadow-sm", 
@@ -151,7 +227,7 @@ export default function DocumentIssuanceStudio({
                   )}
 
                   {/* App Selection */}
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
                       Select Approved Application
                     </label>
@@ -159,60 +235,251 @@ export default function DocumentIssuanceStudio({
                       required
                       value={selectedAppId}
                       onChange={(e) => setSelectedAppId(e.target.value)}
-                      className="w-full p-4 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-[20px] text-sm font-semibold text-slate-800 appearance-none outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all cursor-pointer"
+                      className="w-full p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-semibold text-slate-800 appearance-none outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all cursor-pointer"
                       disabled={isLoadingApplications || isIssuing || message?.type === "success"}
                     >
                       <option value="">{isLoadingApplications ? "Loading..." : "Choose an application..."}</option>
                       {eligibleApplications.map((app) => (
                         <option key={app.id} value={app.id}>
-                          {app.organization_name || app.user_name || "N/A"} - {app.service_name}
+                          {app.organization_name || app.user_name || "N/A"} - {app.service_name} ({app.service_document_type || "Standard"})
                         </option>
                       ))}
                     </select>
                   </div>
 
                   {/* Doc Type & Language Toggle */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Type</label>
-                      <div className="flex bg-slate-100 p-1.5 rounded-[16px]">
-                        <button type="button" onClick={() => setDocType("Certificate")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all", docType === "Certificate" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Document Type</label>
+                      <div className="flex bg-slate-100 p-1 rounded-xl">
+                        <button 
+                          type="button" 
+                          onClick={() => setDocType("Certificate")} 
+                          className={cn("flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all", docType === "Certificate" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                        >
                           <Award size={14}/> Cert
                         </button>
-                        <button type="button" onClick={() => setDocType("Letter")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all", docType === "Letter" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                        <button 
+                          type="button" 
+                          onClick={() => setDocType("Letter")} 
+                          className={cn("flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all", docType === "Letter" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                        >
                           <FileText size={14}/> Letter
                         </button>
                       </div>
                     </div>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Language</label>
-                      <div className="flex bg-slate-100 p-1.5 rounded-[16px]">
-                        <button type="button" onClick={() => setLanguage("en")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all", language === "en" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                      <div className="flex bg-slate-100 p-1 rounded-xl">
+                        <button 
+                          type="button" 
+                          onClick={() => setLanguage("en")} 
+                          className={cn("flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all", language === "en" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                        >
                           EN
                         </button>
-                        <button type="button" onClick={() => setLanguage("ar")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all font-arabic", language === "ar" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                        <button 
+                          type="button" 
+                          onClick={() => setLanguage("ar")} 
+                          className={cn("flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all font-arabic", language === "ar" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}
+                        >
                           عربي
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  {/* Custom Content Editor */}
-                  <div className="space-y-3">
+                  {/* Letter Customization Fields (Recipient & Subject) */}
+                  {docType === "Letter" && (
+                    <div className="space-y-4 p-4 rounded-2xl bg-blue-50/50 border border-blue-100">
+                      {/* Recipient */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">
+                            Recipient / Addressee
+                          </label>
+                        </div>
+                        <input
+                          type="text"
+                          value={recipient}
+                          onChange={(e) => setRecipient(e.target.value)}
+                          placeholder="e.g. To Whom It May Concern"
+                          className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                        />
+                        {/* Recipient Presets */}
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {RECIPIENT_PRESETS.map((preset) => (
+                            <button
+                              type="button"
+                              key={preset}
+                              onClick={() => setRecipient(preset)}
+                              className={cn(
+                                "text-[10px] font-bold px-2 py-1 rounded-lg border transition-all",
+                                recipient === preset
+                                  ? "bg-primary text-white border-primary"
+                                  : "bg-white text-slate-600 border-slate-200 hover:border-primary/40"
+                              )}
+                            >
+                              {preset}
+                            </button>
+                          ))}
+                          {selectedApp?.user_name && (
+                            <button
+                              type="button"
+                              onClick={() => setRecipient(selectedApp.user_name || "")}
+                              className="text-[10px] font-bold px-2 py-1 rounded-lg border bg-white text-slate-600 border-slate-200 hover:border-primary/40"
+                            >
+                              Applicant: {selectedApp.user_name}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Subject */}
+                      <div className="space-y-2">
+                        <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600">
+                          Letter Subject
+                        </label>
+                        <input
+                          type="text"
+                          value={subject}
+                          onChange={(e) => setSubject(e.target.value)}
+                          placeholder="e.g. RECOMMENDATION FOR STUDY ABROAD"
+                          className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Signatory / Sender Title */}
+                  <div className="space-y-2">
                     <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
-                      {language === "en" ? "Custom Text (English)" : "Custom Text (Arabic)"}
+                      Signatory / Sender Title
                     </label>
+                    <input
+                      type="text"
+                      value={signatoryTitle}
+                      onChange={(e) => setSignatoryTitle(e.target.value)}
+                      placeholder={docType === "Letter" ? "Secretary General" : "National Chairman"}
+                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                    />
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {(docType === "Letter" ? SIGNATORY_PRESETS_LETTER : SIGNATORY_PRESETS_CERT).map((preset) => (
+                        <button
+                          type="button"
+                          key={preset}
+                          onClick={() => setSignatoryTitle(preset)}
+                          className={cn(
+                            "text-[10px] font-bold px-2.5 py-1 rounded-lg border transition-all",
+                            signatoryTitle === preset
+                              ? "bg-slate-900 text-white border-slate-900"
+                              : "bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200"
+                          )}
+                        >
+                          {preset}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Custom Content Editor with Markdown Toggle & Quick Variables */}
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">
+                        {language === "en" ? "Body Content (EN)" : "Body Content (AR)"}
+                      </label>
+                      {/* Markdown / Normal Switch */}
+                      <div className="flex items-center bg-slate-100 p-0.5 rounded-lg">
+                        <button
+                          type="button"
+                          onClick={() => setIsMarkdown(false)}
+                          className={cn(
+                            "px-2 py-1 text-[10px] font-bold rounded-md flex items-center gap-1 transition-all",
+                            !isMarkdown ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-700"
+                          )}
+                        >
+                          <AlignLeft size={11} /> Text
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setIsMarkdown(true)}
+                          className={cn(
+                            "px-2 py-1 text-[10px] font-bold rounded-md flex items-center gap-1 transition-all",
+                            isMarkdown ? "bg-white text-slate-900 shadow-xs" : "text-slate-500 hover:text-slate-700"
+                          )}
+                        >
+                          <Code2 size={11} /> Markdown
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Quick Variable Insertion Pills */}
+                    <div className="space-y-1.5 bg-slate-50 p-2.5 rounded-xl border border-slate-200/80">
+                      <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                        <Sparkles size={11} className="text-secondary" /> Insert Variable:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        <button
+                          type="button"
+                          onClick={() => insertVariable("user_name")}
+                          className="text-[10px] font-bold bg-white hover:bg-primary hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                        >
+                          <User size={10} /> Applicant Name
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertVariable("organization_name")}
+                          className="text-[10px] font-bold bg-white hover:bg-primary hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                        >
+                          <Building size={10} /> Organization
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertVariable("service_name")}
+                          className="text-[10px] font-bold bg-white hover:bg-primary hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                        >
+                          <Award size={10} /> Service Name
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertVariable("ref_number")}
+                          className="text-[10px] font-bold bg-white hover:bg-primary hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                        >
+                          <Hash size={10} /> Ref No
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => insertVariable("date")}
+                          className="text-[10px] font-bold bg-white hover:bg-primary hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md flex items-center gap-1 transition-colors"
+                        >
+                          <Calendar size={10} /> Date
+                        </button>
+                      </div>
+                    </div>
+
                     <textarea
+                      ref={textareaRef}
                       value={language === "en" ? customTextEn : customTextAr}
                       onChange={(e) => language === "en" ? setCustomTextEn(e.target.value) : setCustomTextAr(e.target.value)}
-                      placeholder={language === "en" ? "Optional: Add personalized text to the document body..." : "أضف نصاً مخصصاً هنا..."}
+                      placeholder={
+                        isMarkdown
+                          ? "Write using Markdown (e.g. **bold**, *italics*, - list items, or use {{user_name}} placeholders)..."
+                          : language === "en"
+                          ? "Enter custom body text (you can insert {{user_name}} tags)..."
+                          : "أضف نصاً مخصصاً هنا..."
+                      }
                       className={cn(
-                        "w-full p-4 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-[20px] text-sm text-slate-800 outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all min-h-[120px] resize-none",
+                        "w-full p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-2xl text-xs sm:text-sm text-slate-800 outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all min-h-[140px] resize-y font-mono",
                         language === "ar" && "text-right font-arabic"
                       )}
                       dir={language === "ar" ? "rtl" : "ltr"}
                     />
+                    {isMarkdown && (
+                      <p className="text-[10px] text-slate-400 font-medium">
+                        💡 Markdown enabled: supports <code className="bg-slate-100 px-1 py-0.5 rounded">**bold**</code>, <code className="bg-slate-100 px-1 py-0.5 rounded">*italic*</code>, <code className="bg-slate-100 px-1 py-0.5 rounded">- list</code>, and headers.
+                      </p>
+                    )}
                   </div>
 
                   {/* Signature Section */}
@@ -226,37 +493,37 @@ export default function DocumentIssuanceStudio({
                       </button>
                     </div>
                     
-                    <div className="flex bg-slate-100 p-1.5 rounded-[16px] mb-2">
-                      <button type="button" onClick={() => setSigType("draw")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all", sigType === "draw" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
-                        <PenTool size={14}/> Draw
+                    <div className="flex bg-slate-100 p-1 rounded-xl mb-2">
+                      <button type="button" onClick={() => setSigType("draw")} className={cn("flex-1 py-1.5 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all", sigType === "draw" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                        <PenTool size={13}/> Draw
                       </button>
-                      <button type="button" onClick={() => setSigType("upload")} className={cn("flex-1 py-2 text-xs font-bold rounded-[12px] flex items-center justify-center gap-2 transition-all", sigType === "upload" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
-                        <ImageIcon size={14}/> Upload
+                      <button type="button" onClick={() => setSigType("upload")} className={cn("flex-1 py-1.5 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all", sigType === "upload" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700")}>
+                        <ImageIcon size={13}/> Upload
                       </button>
                     </div>
 
-                    <div className="w-full bg-slate-50 border border-slate-200 rounded-[20px] overflow-hidden relative group">
+                    <div className="w-full bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden relative group">
                       {sigType === "draw" ? (
-                        <div className="h-[150px] w-full">
+                        <div className="h-[130px] w-full">
                           <SignatureCanvas 
                             ref={sigCanvas}
                             penColor="#1e293b"
                             canvasProps={{ className: "w-full h-full cursor-crosshair" }}
                           />
-                          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
-                            <span className="font-serif italic text-4xl text-slate-300">Sign Here</span>
+                          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-25">
+                            <span className="font-serif italic text-3xl text-slate-300">Sign Here</span>
                           </div>
                         </div>
                       ) : (
-                        <div className="h-[150px] w-full flex flex-col items-center justify-center p-4 border-2 border-dashed border-slate-300 rounded-[20px] bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer relative">
+                        <div className="h-[130px] w-full flex flex-col items-center justify-center p-3 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer relative">
                           <input type="file" accept="image/*" onChange={handleFileUpload} className="absolute inset-0 opacity-0 cursor-pointer z-10" />
                           {uploadedSig ? (
                             <img src={uploadedSig} alt="Signature" className="h-full object-contain mix-blend-multiply" />
                           ) : (
                             <>
-                              <ImageIcon size={32} className="text-slate-400 mb-2" />
+                              <ImageIcon size={28} className="text-slate-400 mb-1.5" />
                               <p className="text-xs font-bold text-slate-500">Click to upload signature</p>
-                              <p className="text-[10px] text-slate-400">PNG or JPG, clear background preferred</p>
+                              <p className="text-[10px] text-slate-400">PNG or JPG, transparent preferred</p>
                             </>
                           )}
                         </div>
@@ -267,13 +534,13 @@ export default function DocumentIssuanceStudio({
                 </form>
 
                 {/* Footer Actions */}
-                <div className="p-8 border-t border-slate-100 bg-slate-50 mt-auto shrink-0 space-y-4">
+                <div className="p-6 border-t border-slate-100 bg-slate-50 mt-auto shrink-0 space-y-3">
                   <button
                     onClick={submitForm}
                     disabled={!selectedAppId || isIssuing || message?.type === "success"}
-                    className="w-full py-5 bg-slate-900 text-white rounded-[24px] font-black text-lg hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10 hover:shadow-emerald-600/20 disabled:opacity-50 disabled:hover:bg-slate-900 disabled:hover:shadow-none hover:-translate-y-1"
+                    className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-base hover:bg-emerald-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-slate-900/10 hover:shadow-emerald-600/20 disabled:opacity-50 disabled:hover:bg-slate-900 disabled:hover:shadow-none hover:-translate-y-0.5"
                   >
-                    {isIssuing ? <><Loader2 size={24} className="animate-spin" /> Issuing...</> : <><Award size={24} /> Issue {docType}</>}
+                    {isIssuing ? <><Loader2 size={20} className="animate-spin" /> Issuing...</> : <><Award size={20} /> Issue {docType}</>}
                   </button>
                 </div>
               </div>
@@ -287,7 +554,9 @@ export default function DocumentIssuanceStudio({
                          certificate={{
                            service_name: selectedApp?.service_name || "Official Certification",
                            organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
+                           user_name: selectedApp?.user_name,
                            serial_number: "PREVIEW-12345",
+                           signatory_title: signatoryTitle,
                          } as any}
                          certificateRef={{ current: null }}
                          issueDate={new Date()}
@@ -295,6 +564,8 @@ export default function DocumentIssuanceStudio({
                          isValid={true}
                          language={language}
                          customText={language === "en" ? customTextEn : customTextAr}
+                         signatoryTitle={signatoryTitle}
+                         isMarkdown={isMarkdown}
                          signatureBase64={sigType === "upload" ? uploadedSig || undefined : (sigCanvas.current?.isEmpty() ? undefined : sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png"))}
                        />
                      ) : (
@@ -302,12 +573,20 @@ export default function DocumentIssuanceStudio({
                          letter={{
                            service_name: selectedApp?.service_name || "Official Letter",
                            organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
+                           user_name: selectedApp?.user_name,
                            serial_number: "PREVIEW-LTR-123",
+                           recipient: recipient,
+                           subject: subject,
+                           signatory_title: signatoryTitle,
                          } as any}
                          letterRef={{ current: null }}
                          issueDate={new Date()}
                          language={language}
                          customText={language === "en" ? customTextEn : customTextAr}
+                         recipient={recipient}
+                         subject={subject}
+                         signatoryTitle={signatoryTitle}
+                         isMarkdown={isMarkdown}
                          signatureBase64={sigType === "upload" ? uploadedSig || undefined : (sigCanvas.current?.isEmpty() ? undefined : sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png"))}
                        />
                      )}
@@ -316,7 +595,7 @@ export default function DocumentIssuanceStudio({
                    <div className="w-full max-w-4xl opacity-50 flex flex-col items-center justify-center py-20 text-slate-400">
                       <Eye size={48} className="mb-4 text-slate-300" />
                       <h3 className="text-xl font-bold">Live Preview Area</h3>
-                      <p className="text-sm font-medium mt-2">Select an application to see the document preview.</p>
+                      <p className="text-sm font-medium mt-2">Select an application to see the real-time document preview.</p>
                    </div>
                  )}
               </div>

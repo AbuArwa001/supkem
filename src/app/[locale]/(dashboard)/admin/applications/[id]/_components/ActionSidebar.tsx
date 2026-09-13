@@ -114,7 +114,8 @@ export default function ActionSidebar({
           id: app.id.toString(),
           organization_name: app.organization_name,
           user_name: (app as any).user_name,
-          service_name: app.service_name
+          service_name: app.service_name,
+          service_document_type: (app as any).service_document_type
         }]}
         isLoadingApplications={false}
         isIssuing={isIssuing}

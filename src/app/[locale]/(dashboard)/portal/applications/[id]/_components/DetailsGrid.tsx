@@ -9,6 +9,7 @@ interface DetailsGridProps {
     id: string;
     service_name: string;
     service_category?: string;
+    service_document_type?: string;
     organization_name?: string;
     user_name: string;
     submitted_at: string;
@@ -32,7 +33,18 @@ interface DetailsGridProps {
 function getDocumentType(application: DetailsGridProps["application"]) {
   if (application.letter) return { label: "Letter Issued", icon: Mail, color: "bg-blue-500" };
   if (application.certification) return { label: "Certificate Issued", icon: Award, color: "bg-emerald-500" };
-  // Derive from service name if not yet issued
+  
+  if (application.service_document_type === "Letter") {
+    return { label: "Will Produce an Official Letter", icon: Mail, color: "bg-blue-400" };
+  }
+  if (application.service_document_type === "Certificate") {
+    return { label: "Will Produce an Official Certificate", icon: ShieldCheck, color: "bg-emerald-400" };
+  }
+  if (application.service_document_type === "None") {
+    return { label: "No Document Required", icon: FileText, color: "bg-slate-400" };
+  }
+
+  // Fallback heuristic if not explicitly configured
   const svc = application.service_name?.toLowerCase() || "";
   const letterServices = ["study", "hajj", "umrah", "travel", "visa", "employment", "marriage"];
   const isLetter = letterServices.some((k) => svc.includes(k));

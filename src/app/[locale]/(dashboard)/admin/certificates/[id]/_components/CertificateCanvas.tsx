@@ -2,7 +2,9 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ShieldCheck } from "lucide-react";
-import { Certificate } from "@/services/certificate-service";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { interpolateVariables } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
 
 interface CertificateCanvasProps {
   certificate: any;
@@ -13,6 +15,8 @@ interface CertificateCanvasProps {
   language?: "en" | "ar";
   customText?: string;
   signatureBase64?: string;
+  signatoryTitle?: string;
+  isMarkdown?: boolean;
 }
 
 /**
@@ -27,6 +31,8 @@ export function CertificateCanvas({
   language = "en",
   customText,
   signatureBase64,
+  signatoryTitle,
+  isMarkdown = false,
 }: CertificateCanvasProps) {
   const isArabic = language === "ar";
 
@@ -175,13 +181,36 @@ export function CertificateCanvas({
         </h2>
 
         {customText ? (
-          <p
-            className={`text-lg md:text-xl font-medium max-w-2xl mb-12 whitespace-pre-wrap ${isArabic ? "font-arabic text-right" : ""}`}
-            style={{ color: "#1e293b" }}
-            dir={isArabic ? "rtl" : "ltr"}
-          >
-            {customText}
-          </p>
+          isMarkdown ? (
+            <div
+              className={`text-lg md:text-xl font-medium max-w-2xl mb-12 prose prose-slate ${isArabic ? "font-arabic text-right" : "text-center"}`}
+              dir={isArabic ? "rtl" : "ltr"}
+            >
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {interpolateVariables(customText, {
+                  userName: certificate.user_name || certificate.application_detail?.user_name,
+                  organizationName: certificate.organization_name || certificate.application_detail?.organization_name,
+                  serviceName: certificate.service_name || certificate.application_detail?.service_name,
+                  serialNumber: certificate.serial_number,
+                  date: issueDate?.toLocaleDateString() || new Date().toLocaleDateString(),
+                })}
+              </ReactMarkdown>
+            </div>
+          ) : (
+            <p
+              className={`text-lg md:text-xl font-medium max-w-2xl mb-12 whitespace-pre-wrap ${isArabic ? "font-arabic text-right" : ""}`}
+              style={{ color: "#1e293b" }}
+              dir={isArabic ? "rtl" : "ltr"}
+            >
+              {interpolateVariables(customText, {
+                userName: certificate.user_name || certificate.application_detail?.user_name,
+                organizationName: certificate.organization_name || certificate.application_detail?.organization_name,
+                serviceName: certificate.service_name || certificate.application_detail?.service_name,
+                serialNumber: certificate.serial_number,
+                date: issueDate?.toLocaleDateString() || new Date().toLocaleDateString(),
+              })}
+            </p>
+          )
         ) : (
           <p
             className={`text-lg md:text-xl font-medium max-w-2xl mb-12 ${isArabic ? "font-arabic text-right" : ""}`}
@@ -193,7 +222,7 @@ export function CertificateCanvas({
               className="border-b pb-0.5 mx-1"
               style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
             >
-              {certificate.organization_name || (isArabic ? "المنظمة المعينة" : "The designated organization")}
+              {certificate.organization_name || certificate.user_name || (isArabic ? "الجهة المعنية" : "The designated entity")}
             </strong>
             {isArabic ? " معتمدة رسمياً من قبل المجلس الأعلى." : " has been officially accredited by SUPKEM."}
           </p>
@@ -232,7 +261,7 @@ export function CertificateCanvas({
                   className={`font-serif text-2xl italic px-2 -mb-2 ${isArabic ? "font-arabic" : ""}`}
                   style={{ color: "#475569" }}
                 >
-                  {isArabic ? "مسؤول السجل" : "Registry Officer"}
+                  {signatoryTitle || certificate.signatory_title || (isArabic ? "الرئيس الوطني" : "National Chairman")}
                 </span>
               )}
             </div>
@@ -240,7 +269,7 @@ export function CertificateCanvas({
               className={`text-[10px] font-bold uppercase tracking-widest mt-4 ${isArabic ? "font-arabic" : ""}`}
               style={{ color: "#94a3b8" }}
             >
-              {isArabic ? "ختم المقر الرئيسي" : "SUPKEM HQ Seal"}
+              {signatoryTitle || certificate.signatory_title || (isArabic ? "الرئيس الوطني" : "National Chairman")}
             </p>
           </div>
 
