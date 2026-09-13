@@ -115,6 +115,8 @@ export default function SettingsHub() {
     canAccessModule(user, cat.module)
   );
 
+  const canUsers = canAccessModule(user, "users");
+
   return (
     <RoleGuard module="settings">
       <motion.div
@@ -141,7 +143,7 @@ export default function SettingsHub() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* User Management */}
-        {isAdmin && (
+        {canUsers && (
           <motion.div variants={item}>
             <Link href="/admin/users">
               <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-slate-900 rounded-[32px] p-8 md:p-10 hover:shadow-[0_20px_50px_rgb(0,0,0,0.2)] hover:-translate-y-1 transition-all duration-500 group border border-slate-800 h-full relative overflow-hidden">
