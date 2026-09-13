@@ -7,8 +7,17 @@ import { ServicesHeader } from "./_components/ServicesHeader";
 import { ServicesTable } from "./_components/ServicesTable";
 import { ServiceFormModal } from "./_components/ServiceFormModal";
 import { AIGenerationModal } from "./_components/AIGenerationModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminServices() {
+    return (
+        <RoleGuard module="services">
+            <AdminServicesContent />
+        </RoleGuard>
+    );
+}
+
+function AdminServicesContent() {
     const {
         services,
         loading,

@@ -10,8 +10,17 @@ import CertificateCard from "@/app/[locale]/(dashboard)/admin/certificates/_comp
 import DocumentIssuanceStudio from "@/app/[locale]/(dashboard)/admin/certificates/_components/DocumentIssuanceStudio";
 import { useLettersLogic } from "@/app/[locale]/(dashboard)/admin/letters/_hooks/useLettersLogic";
 import { useTranslations } from "next-intl";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminLetters() {
+  return (
+    <RoleGuard module="letters">
+      <AdminLettersContent />
+    </RoleGuard>
+  );
+}
+
+function AdminLettersContent() {
   const t = useTranslations("Dashboard.admin.certificates");
   const {
     certificates,

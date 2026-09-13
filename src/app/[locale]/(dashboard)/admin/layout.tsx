@@ -21,7 +21,7 @@ export default function AdminLayout({
 
   return (
     <ProtectedRoute
-      requiredRole={["Admin", "Super Admin", "IT Officer", "Finance Officer"]}
+      requiredRole={["Admin", "Super Admin", "IT Officer", "Finance Officer", "Agent"]}
     >
       <div className="flex min-h-screen bg-primary/[0.02] print:block print:min-h-0 print:bg-white">
         <AdminSidebar

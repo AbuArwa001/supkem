@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
+import { canAccessModule } from "@/lib/permissions";
 
 export default function AdminOverview() {
   const t = useTranslations("Dashboard.admin.overview");
@@ -38,6 +39,13 @@ export default function AdminOverview() {
   const { user } = useAuth();
   const { data, isLoading, isValidating, mutate, isReportOpen, setIsReportOpen } =
     useAdminDashboard();
+
+  const canOrg = canAccessModule(user, "organizations");
+  const canUsers = canAccessModule(user, "users");
+  const canServices = canAccessModule(user, "services");
+  const canNews = canAccessModule(user, "news");
+  const hasAnyQuickAction = canOrg || canUsers || canServices || canNews;
+  const canReport = canAccessModule(user, "users") || canAccessModule(user, "organizations");
 
   if (isLoading) return <DashboardSkeleton />;
 
@@ -134,56 +142,68 @@ export default function AdminOverview() {
           </Button>
 
           {/* Quick Actions Dropdown */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="rounded-2xl border-slate-200 bg-white font-black text-xs uppercase tracking-wider h-12 px-5 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 text-slate-700 cursor-pointer"
+          {hasAnyQuickAction && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="rounded-2xl border-slate-200 bg-white font-black text-xs uppercase tracking-wider h-12 px-5 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 text-slate-700 cursor-pointer"
+                >
+                  <Plus size={16} className="text-emerald-700" />
+                  {t("quickActions")}
+                  <ChevronDown size={14} className="text-slate-400" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                className="rounded-2xl border border-slate-100 shadow-xl p-2 min-w-[220px] bg-white text-slate-700 z-50"
               >
-                <Plus size={16} className="text-emerald-700" />
-                {t("quickActions")}
-                <ChevronDown size={14} className="text-slate-400" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="end"
-              className="rounded-2xl border border-slate-100 shadow-xl p-2 min-w-[220px] bg-white text-slate-700 z-50"
-            >
-              <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
-                <Link href="/admin/organizations" className="flex items-center gap-2">
-                  <Building2 size={15} className="text-emerald-600" />
-                  {t("registerOrg")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
-                <Link href="/admin/users" className="flex items-center gap-2">
-                  <Users size={15} className="text-indigo-600" />
-                  {t("addNewUser")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
-                <Link href="/admin/services" className="flex items-center gap-2">
-                  <Award size={15} className="text-amber-600" />
-                  {t("createService")}
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
-                <Link href="/admin/news" className="flex items-center gap-2">
-                  <Sparkles size={15} className="text-teal-600" />
-                  {t("publishNews")}
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                {canOrg && (
+                  <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
+                    <Link href="/admin/organizations" className="flex items-center gap-2">
+                      <Building2 size={15} className="text-emerald-600" />
+                      {t("registerOrg")}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {canUsers && (
+                  <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
+                    <Link href="/admin/users" className="flex items-center gap-2">
+                      <Users size={15} className="text-indigo-600" />
+                      {t("addNewUser")}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {canServices && (
+                  <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
+                    <Link href="/admin/services" className="flex items-center gap-2">
+                      <Award size={15} className="text-amber-600" />
+                      {t("createService")}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {canNews && (
+                  <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
+                    <Link href="/admin/news" className="flex items-center gap-2">
+                      <Sparkles size={15} className="text-teal-600" />
+                      {t("publishNews")}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
 
           {/* Executive PDF Report Button */}
-          <Button
-            onClick={() => setIsReportOpen(true)}
-            className="rounded-2xl font-black bg-emerald-700 hover:bg-emerald-800 text-white h-12 px-6 shadow-lg shadow-emerald-700/20 transition-all active:scale-95 flex items-center gap-2.5 uppercase tracking-wider text-xs cursor-pointer"
-          >
-            <BarChart3 size={16} />
-            {t("generateReport")}
-          </Button>
+          {canReport && (
+            <Button
+              onClick={() => setIsReportOpen(true)}
+              className="rounded-2xl font-black bg-emerald-700 hover:bg-emerald-800 text-white h-12 px-6 shadow-lg shadow-emerald-700/20 transition-all active:scale-95 flex items-center gap-2.5 uppercase tracking-wider text-xs cursor-pointer"
+            >
+              <BarChart3 size={16} />
+              {t("generateReport")}
+            </Button>
+          )}
         </div>
       </div>
 

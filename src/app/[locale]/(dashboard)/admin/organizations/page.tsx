@@ -8,6 +8,7 @@ import { useAdminOrganizationsLogic } from "./_components/useAdminOrganizationsL
 import { OrganizationHeader } from "./_components/OrganizationHeader";
 import { OrganizationStatusFilters } from "./_components/OrganizationStatusFilters";
 import { OrganizationCard } from "./_components/OrganizationCard";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminOrganizations() {
     const {
@@ -24,6 +25,7 @@ export default function AdminOrganizations() {
     } = useAdminOrganizationsLogic();
 
     return (
+        <RoleGuard module="organizations">
         <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -88,6 +90,7 @@ export default function AdminOrganizations() {
                 </motion.div>
             )}
         </motion.div>
+        </RoleGuard>
     );
 }
 

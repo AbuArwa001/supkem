@@ -5,8 +5,17 @@ import { useNewsPaperLogic } from "./_hooks/useNewsPaperLogic";
 import { NewsPaperHeader } from "./_components/NewsPaperHeader";
 import { NewsPaperGrid } from "./_components/NewsPaperGrid";
 import { NewsPaperModal } from "./_components/NewsPaperModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminNewsPapers() {
+  return (
+    <RoleGuard module="newspapers">
+      <AdminNewsPapersContent />
+    </RoleGuard>
+  );
+}
+
+function AdminNewsPapersContent() {
   const {
     newsPapers,
     loading,

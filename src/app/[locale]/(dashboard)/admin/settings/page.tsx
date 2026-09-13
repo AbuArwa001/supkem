@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
+import { canAccessModule, PermissionModule } from "@/lib/permissions";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const container = {
   hidden: { opacity: 0 },
@@ -34,20 +36,24 @@ const item = {
 
 export default function SettingsHub() {
   const { user } = useAuth();
-  const isAdmin =
-    user?.is_superuser ||
-    user?.is_staff ||
-    user?.role?.role_name?.toLowerCase().includes("admin") ||
-    user?.role_name?.toLowerCase().includes("admin");
 
-  const settingsCategories = [
+  const allSettingsCategories: Array<{
+    title: string;
+    description: string;
+    icon: any;
+    color: string;
+    bg: string;
+    link: string;
+    module: PermissionModule;
+  }> = [
     {
       title: "Account Profile",
       description: "Manage your personal information, security preferences, and account identity.",
       icon: UserCircle,
       color: "text-blue-600",
       bg: "bg-blue-50",
-      link: "/admin/settings/profile"
+      link: "/admin/settings/profile",
+      module: "settings_profile"
     },
     {
       title: "Social Feeds & Aggregator",
@@ -56,7 +62,7 @@ export default function SettingsHub() {
       color: "text-emerald-600",
       bg: "bg-emerald-50",
       link: "/admin/settings/social",
-      isAdminOnly: true
+      module: "settings_social"
     },
     {
       title: "System Parameters",
@@ -65,7 +71,7 @@ export default function SettingsHub() {
       color: "text-primary",
       bg: "bg-primary/5",
       link: "/admin/settings/system-parameters",
-      isAdminOnly: true
+      module: "settings_system_parameters"
     },
     {
       title: "Notifications",
@@ -74,6 +80,7 @@ export default function SettingsHub() {
       color: "text-amber-600",
       bg: "bg-amber-50",
       link: "/admin/settings/notifications",
+      module: "settings_notifications"
     },
     {
       title: "Access Control",
@@ -82,7 +89,7 @@ export default function SettingsHub() {
       icon: ShieldCheck,
       color: "text-indigo-600",
       bg: "bg-indigo-50",
-      isAdminOnly: true
+      module: "settings_access_control"
     },
     {
       title: "Data Audit Logs",
@@ -91,7 +98,7 @@ export default function SettingsHub() {
       icon: Database,
       color: "text-slate-600",
       bg: "bg-slate-50",
-      isAdminOnly: true
+      module: "settings_audit"
     },
     {
       title: "Integrations",
@@ -100,17 +107,22 @@ export default function SettingsHub() {
       icon: Plug,
       color: "text-violet-600",
       bg: "bg-violet-50",
-      isAdminOnly: true
+      module: "settings_integrations"
     },
   ];
 
+  const settingsCategories = allSettingsCategories.filter((cat) =>
+    canAccessModule(user, cat.module)
+  );
+
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="space-y-12"
-    >
+    <RoleGuard module="settings">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="space-y-12"
+      >
       <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 md:p-12 rounded-[40px] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] mb-4">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 bg-slate-900 text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl shadow-black/10">
@@ -185,5 +197,6 @@ export default function SettingsHub() {
         })}
       </div>
     </motion.div>
+  </RoleGuard>
   );
 }

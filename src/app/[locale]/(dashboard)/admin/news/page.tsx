@@ -5,12 +5,17 @@ import { useNewsLogic } from "./_hooks/useNewsLogic";
 import { NewsHeader } from "./_components/NewsHeader";
 import { NewsGrid } from "./_components/NewsGrid";
 import { NewsModal } from "./_components/NewsModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
-/**
- * Admin News CMS Page
- * Refactored to follow strict readability constraints.
- */
 export default function AdminNews() {
+  return (
+    <RoleGuard module="news">
+      <AdminNewsContent />
+    </RoleGuard>
+  );
+}
+
+function AdminNewsContent() {
   const {
     news,
     loading,

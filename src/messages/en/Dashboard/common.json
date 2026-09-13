@@ -12,5 +12,8 @@
   "na": "N/A",
   "certification": "Certification",
   "officialLetter": "Official Letter",
-  "search": "Search platform..."
+  "search": "Search platform...",
+  "accessRestricted": "Access Restricted",
+  "accessRestrictedDesc": "Your account clearance level does not grant access to this interface view.",
+  "returnToOverview": "Return to Dashboard"
 }

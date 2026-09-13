@@ -5,8 +5,17 @@ import { useLeadershipLogic } from "./_hooks/useLeadershipLogic";
 import { LeadershipHeader } from "./_components/LeadershipHeader";
 import { LeadershipGrid } from "./_components/LeadershipGrid";
 import { LeadershipModal } from "./_components/LeadershipModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminLeadership() {
+  return (
+    <RoleGuard module="leadership">
+      <AdminLeadershipContent />
+    </RoleGuard>
+  );
+}
+
+function AdminLeadershipContent() {
   const {
     profiles,
     loading,

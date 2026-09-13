@@ -12,6 +12,8 @@
   "na": "غير متاح",
   "certification": "شهادة",
   "officialLetter": "خطاب رسمي",
-  "search": "البحث في المنصة..."
+  "search": "البحث في المنصة...",
+  "accessRestricted": "الوصول مقيد",
+  "accessRestrictedDesc": "مستوى صلاحية حسابك لا يسمح بعرض هذه الواجهة.",
+  "returnToOverview": "العودة إلى لوحة التحكم"
 }
-  

@@ -10,8 +10,17 @@ import { OrganizationRecords } from "./_components/OrganizationRecords";
 import { OrganizationPersonnel } from "./_components/OrganizationPersonnel";
 import { OrganizationAdministrativeActions } from "./_components/OrganizationAdministrativeActions";
 import { AddPersonnelModal } from "./_components/AddPersonnelModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function OrganizationDetail() {
+    return (
+        <RoleGuard module="organizations">
+            <OrganizationDetailContent />
+        </RoleGuard>
+    );
+}
+
+function OrganizationDetailContent() {
     const {
         id,
         router,

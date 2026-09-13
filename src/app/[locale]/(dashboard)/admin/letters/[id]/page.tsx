@@ -10,12 +10,17 @@ import { CertificateError } from "./_components/CertificateError";
 import { ApplicationReference } from "./_components/ApplicationReference";
 
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+import { RoleGuard } from "@/components/RoleGuard";
 
-/**
- * Admin Certificate Detail Page
- * Refactored to follow strict readability constraints.
- */
 export default function AdminCertificateDetail() {
+  return (
+    <RoleGuard module="letters">
+      <AdminLetterDetailContent />
+    </RoleGuard>
+  );
+}
+
+function AdminLetterDetailContent() {
   const {
     certificate,
     loading,

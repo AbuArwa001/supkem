@@ -2,6 +2,7 @@
 
 import { useProtectedRouteLogic } from "./useProtectedRouteLogic";
 import { LoadingSpinner } from "./_components/LoadingSpinner";
+import { hasRole } from "@/lib/permissions";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -18,9 +19,8 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
 
   if (!isAuthenticated) return null;
 
-  if (requiredRole) {
-    const roles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
-    if (!roles.includes(user?.role?.role_name)) return null;
+  if (requiredRole && !hasRole(user, requiredRole)) {
+    return null;
   }
 
   return <>{children}</>;

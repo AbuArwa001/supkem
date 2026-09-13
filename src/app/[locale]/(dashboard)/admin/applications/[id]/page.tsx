@@ -11,8 +11,17 @@ import OrganizationProfile from "@/app/[locale]/(dashboard)/admin/applications/[
 import ServiceDetails from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/ServiceDetails";
 import ActionSidebar from "@/app/[locale]/(dashboard)/admin/applications/[id]/_components/ActionSidebar";
 import { useApplicationDetailLogic } from "@/app/[locale]/(dashboard)/admin/applications/[id]/_hooks/useApplicationDetailLogic";
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function ApplicationDetail() {
+  return (
+    <RoleGuard module="applications">
+      <ApplicationDetailContent />
+    </RoleGuard>
+  );
+}
+
+function ApplicationDetailContent() {
   const params = useParams();
   const id = params.id as string | string[];
   const { app, loading, submitting, handleAction, handleDelete, router } =

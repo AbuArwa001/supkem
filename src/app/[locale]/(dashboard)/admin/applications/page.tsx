@@ -18,10 +18,19 @@ import { PaginationControl } from "@/components/PaginationControl";
 import { BulkActionBar } from "@/components/BulkActionBar";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const FILTER_OPTIONS = ["all", "pending", "approved", "rejected", "withdrawn"];
 
 export default function AdminApplications() {
+  return (
+    <RoleGuard module="applications">
+      <AdminApplicationsContent />
+    </RoleGuard>
+  );
+}
+
+function AdminApplicationsContent() {
   const {
     applications,
     filteredApps,
