@@ -15,3 +15,15 @@ export const updateRolePermissionsService = async (
     });
     return res.data;
 };
+
+export const createRoleService = async (
+    roleName: string,
+    permissionIds: (string | number)[]
+) => {
+    const res = await api.post("/users/roles/", {
+        role_name: roleName,
+        permission_ids: permissionIds,
+    });
+    return res.data;
+};
+

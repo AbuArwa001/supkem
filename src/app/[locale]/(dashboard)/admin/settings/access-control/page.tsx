@@ -7,6 +7,7 @@ import {
     Shield,
     Lock,
     ShieldCheck,
+    ShieldPlus,
     CheckCircle2,
     Search,
     RefreshCw,
@@ -21,8 +22,10 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
+import { usePermissions } from "@/hooks/usePermissions";
 import { format } from "date-fns";
 import { RolePermissionsDialog } from "@/components/forms/RolePermissionsDialog";
+import { AddRoleDialog } from "@/components/forms/AddRoleDialog";
 import { Link } from "@/i18n/routing";
 
 // --- Types ---
@@ -97,6 +100,7 @@ export default function AccessControlPage() {
 
 function AccessControlContent() {
     const { user } = useAuth();
+    const { isSuperAdmin } = usePermissions();
     const isAdmin =
         user?.is_superuser ||
         user?.is_staff ||
@@ -105,6 +109,7 @@ function AccessControlContent() {
     const [search, setSearch] = useState("");
     const [selectedRole, setSelectedRole] = useState<Role | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
 
     const { data: rawRoles, isLoading, error, mutate } = useSWR<any>(
         isAdmin ? "/users/roles/" : null,
@@ -155,14 +160,26 @@ function AccessControlContent() {
                         </p>
                     </div>
                 </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => mutate()}
-                    className="rounded-xl hover:bg-slate-100 text-slate-500"
-                >
-                    <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
-                </Button>
+                <div className="flex items-center gap-3 self-start md:self-end">
+                    {isSuperAdmin && (
+                        <Button
+                            onClick={() => setIsAddRoleOpen(true)}
+                            className="h-11 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                        >
+                            <ShieldPlus className="h-4 w-4" />
+                            <span>Add Role</span>
+                        </Button>
+                    )}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => mutate()}
+                        className="h-11 w-11 rounded-xl hover:bg-slate-100 text-slate-500"
+                        title="Refresh roles"
+                    >
+                        <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
+                    </Button>
+                </div>
             </header>
 
             <div className="relative group">
@@ -260,6 +277,12 @@ function AccessControlContent() {
                 }}
                 role={selectedRole}
             />
+
+            <AddRoleDialog
+                isOpen={isAddRoleOpen}
+                onClose={() => setIsAddRoleOpen(false)}
+            />
+
 
             <footer className="pt-12 text-center pb-8">
                 <div className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-50/50 rounded-full border border-indigo-100/50">
