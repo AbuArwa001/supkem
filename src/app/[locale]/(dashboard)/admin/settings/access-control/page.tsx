@@ -236,7 +236,7 @@ function AccessControlContent() {
                             <Users size={16} />
                         </div>
                     </div>
-                    <div className="text-2xl font-black font-outfit text-slate-900">{totalUsersGoverned}</div>
+                    <div className="text-2xl font-black font-outfit text-slate-900">{totalGovernedUsers}</div>
                     <p className="text-[11px] text-slate-400 font-medium">Assigned authority profiles</p>
                 </Card>
             </div>
