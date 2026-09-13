@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle, ArrowUpRight, Sparkles } from "lucide-react";
-import { scrollToFirstError } from "../_utils/formScrollUtils";
+import { scrollToFirstError } from "@/app/[locale]/(dashboard)/portal/applications/new/_utils/formScrollUtils";
 
 interface FormErrorBannerProps {
   errors: Record<string, string | undefined | null>;

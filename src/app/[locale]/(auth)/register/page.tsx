@@ -14,6 +14,7 @@ export default function RegisterPage() {
     fieldErrors,
     formData,
     setFormData,
+    updateField,
     handleSubmit
   } = useRegisterLogic();
 
@@ -37,6 +38,7 @@ export default function RegisterPage() {
         <RegisterForm
           formData={formData}
           setFormData={setFormData}
+          onFieldChange={updateField}
           onSubmit={handleSubmit}
           loading={loading}
           error={error}
