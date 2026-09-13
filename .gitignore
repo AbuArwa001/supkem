@@ -43,3 +43,4 @@ next-env.d.ts
 /public/SUPKEM Strategic Plan 2022-27.pdf
 .env*.local
 /docs
+pandoc*
