@@ -7,6 +7,7 @@ import { ServicesHeader } from "./_components/ServicesHeader";
 import { ServicesTable } from "./_components/ServicesTable";
 import { ServiceFormModal } from "./_components/ServiceFormModal";
 import { AIGenerationModal } from "./_components/AIGenerationModal";
+import { CategoryManagementModal } from "./_components/CategoryManagementModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminServices() {
@@ -23,8 +24,12 @@ function AdminServicesContent() {
         loading,
         searchTerm,
         setSearchTerm,
+        categories,
+        loadingCategories,
         isModalOpen,
         setIsModalOpen,
+        isCategoryModalOpen,
+        setIsCategoryModalOpen,
         isAIModalOpen,
         setIsAIModalOpen,
         aiPrompt,
@@ -37,7 +42,9 @@ function AdminServicesContent() {
         handleOpenModal,
         handleSubmit,
         handleDelete,
-        handleGenerateAI
+        handleGenerateAI,
+        handleCreateCategory,
+        handleDeleteCategory
     } = useAdminServicesLogic();
 
     return (
@@ -46,6 +53,7 @@ function AdminServicesContent() {
                 searchTerm={searchTerm}
                 onSearchChange={setSearchTerm}
                 onAddService={() => handleOpenModal()}
+                onManageCategories={() => setIsCategoryModalOpen(true)}
             />
 
             <ServicesTable 
@@ -60,11 +68,25 @@ function AdminServicesContent() {
                     <ServiceFormModal 
                         editingItem={editingItem}
                         formData={formData}
+                        categories={categories}
                         isSubmitting={isSubmitting}
                         setFormData={setFormData}
                         onSubmit={handleSubmit}
                         onClose={() => setIsModalOpen(false)}
                         onOpenAIGeneration={() => setIsAIModalOpen(true)}
+                        onQuickAddCategory={async (name) => handleCreateCategory({ name })}
+                    />
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {isCategoryModalOpen && (
+                    <CategoryManagementModal 
+                        categories={categories}
+                        loading={loadingCategories}
+                        onClose={() => setIsCategoryModalOpen(false)}
+                        onAddCategory={handleCreateCategory}
+                        onDeleteCategory={handleDeleteCategory}
                     />
                 )}
             </AnimatePresence>
@@ -83,3 +105,4 @@ function AdminServicesContent() {
         </div>
     );
 }
+

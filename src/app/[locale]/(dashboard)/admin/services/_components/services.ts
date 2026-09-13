@@ -1,11 +1,34 @@
 import api from "@/lib/api";
 
-import { ServiceItem, ServiceFormData } from "./types";
+import { ServiceItem, ServiceFormData, ServiceCategoryItem } from "./types";
 
 export async function fetchServicesApi(): Promise<ServiceItem[]> {
     const res = await api.get("/services/services/");
     return res.data.results || res.data;
 }
+
+export async function fetchServiceCategoriesApi(): Promise<ServiceCategoryItem[]> {
+    const res = await api.get("/services/categories/");
+    return res.data.results || res.data;
+}
+
+export async function createServiceCategoryApi(data: { name: string; description?: string }): Promise<ServiceCategoryItem> {
+    const payload: Record<string, any> = {
+        name: data.name.trim(),
+        name_en: data.name.trim(),
+        description: data.description?.trim() || "",
+        description_en: data.description?.trim() || "",
+    };
+    const res = await api.post("/services/categories/", payload);
+    return res.data;
+}
+
+export async function deleteServiceCategoryApi(id: string, force?: boolean): Promise<any> {
+    const query = force ? "?force=true" : "";
+    const res = await api.delete(`/services/categories/${id}/${query}`);
+    return res.data;
+}
+
 
 export async function createServiceApi(data: ServiceFormData): Promise<void> {
     const payload: Record<string, any> = {

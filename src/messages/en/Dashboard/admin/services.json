@@ -3,6 +3,7 @@
   "desc": "Manage and configure organizational services.",
   "search": "Search services...",
   "addService": "Add Service",
+  "manageCategories": "Manage Categories",
   "table": {
     "details": "Service Details",
     "category": "Category",
@@ -21,6 +22,9 @@
     "name": "Service Name",
     "namePlaceholder": "Enter service name...",
     "category": "Category",
+    "addNewCategory": "+ Add New Category",
+    "quickAddCategory": "Quick Add Category",
+    "selectCategory": "Select a category",
     "targetAudience": "Target Audience",
     "documentType": "Type of Document Offered",
     "docTypeCertificate": "Official Certificate",
@@ -37,6 +41,22 @@
     "saving": "Saving...",
     "update": "Update Service",
     "create": "Create Service"
+  },
+  "categoryModal": {
+    "title": "Service Categories",
+    "subtitle": "Create, view, and organize categories for SUPKEM services.",
+    "newCategory": "Add New Category",
+    "name": "Category Name",
+    "namePlaceholder": "e.g. Social Welfare, Youth & Sports...",
+    "description": "Description (Optional)",
+    "descPlaceholder": "Brief description of this category...",
+    "addButton": "Add Category",
+    "adding": "Adding...",
+    "existingCategories": "Current Categories",
+    "servicesCount": "{count} services",
+    "noCategories": "No categories found.",
+    "deleteConfirm": "Are you sure you want to delete category '{name}'?",
+    "close": "Close"
   },
   "aiModal": {
     "title": "AI Content Assistant",

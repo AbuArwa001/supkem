@@ -3,6 +3,7 @@
   "desc": "إدارة وتكوين الخدمات التنظيمية.",
   "search": "البحث عن الخدمات...",
   "addService": "إضافة خدمة",
+  "manageCategories": "إدارة الفئات",
   "table": {
     "details": "تفاصيل الخدمة",
     "category": "الفئة",
@@ -21,6 +22,9 @@
     "name": "اسم الخدمة",
     "namePlaceholder": "أدخل اسم الخدمة...",
     "category": "الفئة",
+    "addNewCategory": "+ إضافة فئة جديدة",
+    "quickAddCategory": "إضافة سريعة لفئة",
+    "selectCategory": "اختر فئة",
     "targetAudience": "الجمهور المستهدف",
     "documentType": "نوع الوثيقة المقدمة",
     "docTypeCertificate": "شهادة رسمية",
@@ -37,6 +41,22 @@
     "saving": "جاري الحفظ...",
     "update": "تحديث الخدمة",
     "create": "إنشاء خدمة"
+  },
+  "categoryModal": {
+    "title": "فئات الخدمات",
+    "subtitle": "إنشاء وعرض وتنظيم فئات خدمات المجلس الأعلى.",
+    "newCategory": "إضافة فئة جديدة",
+    "name": "اسم الفئة",
+    "namePlaceholder": "مثلاً: الرعاية الاجتماعية، الشباب والرياضة...",
+    "description": "الوصف (اختياري)",
+    "descPlaceholder": "وصف موجز لهذه الفئة...",
+    "addButton": "إضافة فئة",
+    "adding": "جاري الإضافة...",
+    "existingCategories": "الفئات الحالية",
+    "servicesCount": "{count} خدمات",
+    "noCategories": "لم يتم العثور على فئات.",
+    "deleteConfirm": "هل أنت متأكد من حذف الفئة '{name}'؟",
+    "close": "إغلاق"
   },
   "aiModal": {
     "title": "مساعد المحتوى بالذكاء الاصطناعي",

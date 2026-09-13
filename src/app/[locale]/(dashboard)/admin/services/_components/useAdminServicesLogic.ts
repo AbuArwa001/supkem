@@ -2,19 +2,25 @@ import { useState, useEffect } from "react";
 
 import { 
     fetchServicesApi, 
+    fetchServiceCategoriesApi,
+    createServiceCategoryApi,
+    deleteServiceCategoryApi,
     createServiceApi, 
     updateServiceApi, 
     deleteServiceApi, 
     generateAIDescriptionApi 
 } from "./services";
-import { ServiceItem, ServiceFormData } from "./types";
+import { ServiceItem, ServiceFormData, ServiceCategoryItem } from "./types";
 
 export function useAdminServicesLogic() {
     const [services, setServices] = useState<ServiceItem[]>([]);
+    const [categories, setCategories] = useState<ServiceCategoryItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingCategories, setLoadingCategories] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
     
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<ServiceItem | null>(null);
     const [formData, setFormData] = useState<ServiceFormData>({
         name: "",
@@ -27,24 +33,35 @@ export function useAdminServicesLogic() {
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+
     const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const [aiPrompt, setAiPrompt] = useState("");
     const [isAIGenerating, setIsAIGenerating] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
-        const loadServices = async () => {
+        const loadData = async () => {
             setLoading(true);
+            setLoadingCategories(true);
             try {
-                const data = await fetchServicesApi();
-                if (isMounted) setServices(data);
+                const [servicesData, categoriesData] = await Promise.all([
+                    fetchServicesApi(),
+                    fetchServiceCategoriesApi()
+                ]);
+                if (isMounted) {
+                    setServices(servicesData);
+                    setCategories(categoriesData);
+                }
             } catch (err) {
-                console.error("Failed to fetch services", err);
+                console.error("Failed to fetch services or categories", err);
             } finally {
-                if (isMounted) setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                    setLoadingCategories(false);
+                }
             }
         };
-        loadServices();
+        loadData();
         return () => { isMounted = false; };
     }, []);
 
@@ -57,6 +74,40 @@ export function useAdminServicesLogic() {
             console.error("Failed to fetch services", err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchCategories = async () => {
+        setLoadingCategories(true);
+        try {
+            const data = await fetchServiceCategoriesApi();
+            setCategories(data);
+        } catch (err) {
+            console.error("Failed to fetch categories", err);
+        } finally {
+            setLoadingCategories(false);
+        }
+    };
+
+    const handleCreateCategory = async (data: { name: string; description?: string }): Promise<ServiceCategoryItem | null> => {
+        try {
+            const newCat = await createServiceCategoryApi(data);
+            await fetchCategories();
+            return newCat;
+        } catch (err) {
+            console.error("Failed to create category", err);
+            throw err;
+        }
+    };
+
+    const handleDeleteCategory = async (id: string, force?: boolean): Promise<boolean> => {
+        try {
+            await deleteServiceCategoryApi(id, force);
+            await fetchCategories();
+            return true;
+        } catch (err) {
+            console.error("Failed to delete category", err);
+            throw err;
         }
     };
 
@@ -74,9 +125,10 @@ export function useAdminServicesLogic() {
             });
         } else {
             setEditingItem(null);
+            const defaultCategory = categories.length > 0 ? categories[0].name : "Accreditation";
             setFormData({
                 name: "",
-                category: "Accreditation",
+                category: defaultCategory,
                 target_audience: "Both",
                 document_type: "Certificate",
                 description: "",
@@ -86,6 +138,7 @@ export function useAdminServicesLogic() {
         }
         setIsModalOpen(true);
     };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -177,9 +230,17 @@ export function useAdminServicesLogic() {
         formData,
         setFormData,
         isSubmitting,
+        categories,
+
+        loadingCategories,
+        isCategoryModalOpen,
+        setIsCategoryModalOpen,
+        handleCreateCategory,
+        handleDeleteCategory,
         handleOpenModal,
         handleSubmit,
         handleDelete,
         handleGenerateAI
     };
 }
+

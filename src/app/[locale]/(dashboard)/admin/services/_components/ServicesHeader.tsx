@@ -1,15 +1,16 @@
 "use client";
 
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Layers } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 interface ServicesHeaderProps {
     searchTerm: string;
     onSearchChange: (value: string) => void;
     onAddService: () => void;
+    onManageCategories: () => void;
 }
 
-export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: ServicesHeaderProps) {
+export function ServicesHeader({ searchTerm, onSearchChange, onAddService, onManageCategories }: ServicesHeaderProps) {
     const t = useTranslations("Dashboard.admin.services");
 
     return (
@@ -23,7 +24,7 @@ export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: Ser
                 </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full lg:w-auto">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
                 <div className="relative group w-full sm:w-auto">
                     <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/30 group-focus-within:text-primary transition-colors" />
                     <input
@@ -35,13 +36,21 @@ export function ServicesHeader({ searchTerm, onSearchChange, onAddService }: Ser
                 </div>
 
                 <button
-                    onClick={onAddService}
-                    className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex rtl:flex-row-reverse items-center justify-center gap-2 shrink-0 whitespace-nowrap w-full sm:w-auto"
+                    onClick={onManageCategories}
+                    className="px-5 py-3 bg-white hover:bg-primary/[0.04] text-primary border border-border hover:border-primary/30 rounded-2xl font-bold text-sm shadow-xs flex rtl:flex-row-reverse items-center justify-center gap-2 shrink-0 whitespace-nowrap w-full sm:w-auto transition-all cursor-pointer"
                 >
-                    <Plus size={20} /> {t("addService")}
+                    <Layers size={18} /> {t("manageCategories")}
+                </button>
+
+                <button
+                    onClick={onAddService}
+                    className="px-6 py-3 bg-primary text-white rounded-2xl font-bold text-sm hover-lift premium-gradient shadow-lg flex rtl:flex-row-reverse items-center justify-center gap-2 shrink-0 whitespace-nowrap w-full sm:w-auto cursor-pointer"
+                >
+                    <Plus size={18} /> {t("addService")}
                 </button>
             </div>
         </div>
     );
 }
+
 

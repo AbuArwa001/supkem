@@ -1,22 +1,26 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban } from "lucide-react";
+
+import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ServiceFormData, ServiceItem } from "./types";
+import { ServiceFormData, ServiceItem, ServiceCategoryItem } from "./types";
 import { useTranslations } from "next-intl";
 
 interface ServiceFormModalProps {
     editingItem: ServiceItem | null;
     formData: ServiceFormData;
+    categories: ServiceCategoryItem[];
     isSubmitting: boolean;
     setFormData: (data: ServiceFormData) => void;
     onSubmit: (e: React.FormEvent) => void;
     onClose: () => void;
     onOpenAIGeneration: () => void;
+    onQuickAddCategory?: (name: string) => Promise<ServiceCategoryItem | null>;
 }
 
-const CATEGORIES = [
+const DEFAULT_CATEGORIES = [
     "Accreditation",
     "Halal",
     "Marriage",
@@ -24,6 +28,7 @@ const CATEGORIES = [
     "Employment",
     "Pilgrimage",
     "Kosher",
+    "Travel",
     "Other",
 ];
 
@@ -38,13 +43,56 @@ const DOCUMENT_OPTIONS = [
 export function ServiceFormModal({
     editingItem,
     formData,
+    categories,
     isSubmitting,
     setFormData,
     onSubmit,
     onClose,
-    onOpenAIGeneration
+    onOpenAIGeneration,
+    onQuickAddCategory,
 }: ServiceFormModalProps) {
     const t = useTranslations("Dashboard.admin.services.modal");
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
+    const [newCategoryName, setNewCategoryName] = useState("");
+    const [isAddingCategoryLoading, setIsAddingCategoryLoading] = useState(false);
+
+    const categoryNames = useMemo(() => {
+        const names = new Set<string>();
+        categories.forEach(c => {
+            if (c.name) names.add(c.name);
+        });
+        if (names.size === 0) {
+            DEFAULT_CATEGORIES.forEach(c => names.add(c));
+        }
+        if (formData.category) {
+            names.add(formData.category);
+        }
+        return Array.from(names);
+    }, [categories, formData.category]);
+
+    const handleCreateCategoryInline = async () => {
+        if (!newCategoryName.trim()) return;
+        setIsAddingCategoryLoading(true);
+        try {
+            if (onQuickAddCategory) {
+                const created = await onQuickAddCategory(newCategoryName.trim());
+                if (created) {
+                    setFormData({ ...formData, category: created.name });
+                } else {
+                    setFormData({ ...formData, category: newCategoryName.trim() });
+                }
+            } else {
+                setFormData({ ...formData, category: newCategoryName.trim() });
+            }
+            setNewCategoryName("");
+            setIsAddingCategory(false);
+        } catch (err) {
+            console.error("Failed to add category inline", err);
+        } finally {
+            setIsAddingCategoryLoading(false);
+        }
+    };
+
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -83,15 +131,70 @@ export function ServiceFormModal({
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">{t("category")}</label>
-                            <select
-                                value={formData.category}
-                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
-                            >
-                                {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-                            </select>
+                            <div className="flex items-center justify-between px-1">
+                                <label className="text-sm font-bold text-primary uppercase tracking-widest">{t("category")}</label>
+                                {!isAddingCategory ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsAddingCategory(true)}
+                                        className="text-xs font-bold text-secondary hover:text-secondary/80 flex items-center gap-1 transition-colors cursor-pointer"
+                                    >
+                                        <Plus size={13} /> {t("addNewCategory")}
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={() => { setIsAddingCategory(false); setNewCategoryName(""); }}
+                                        className="text-xs font-bold text-foreground/50 hover:text-foreground transition-colors cursor-pointer"
+                                    >
+                                        {t("cancel")}
+                                    </button>
+                                )}
+                            </div>
+
+                            {!isAddingCategory ? (
+                                <select
+                                    value={formData.category}
+                                    onChange={(e) => {
+                                        if (e.target.value === "__NEW__") {
+                                            setIsAddingCategory(true);
+                                        } else {
+                                            setFormData({ ...formData, category: e.target.value });
+                                        }
+                                    }}
+                                    className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all cursor-pointer"
+                                >
+                                    {categoryNames.map(c => <option key={c} value={c}>{c}</option>)}
+                                    <option value="__NEW__">{t("addNewCategory")}</option>
+                                </select>
+                            ) : (
+                                <div className="flex items-center gap-2">
+                                    <input
+                                        autoFocus
+                                        value={newCategoryName}
+                                        onChange={(e) => setNewCategoryName(e.target.value)}
+                                        placeholder={t("namePlaceholder")}
+                                        onKeyDown={(e) => {
+                                            if (e.key === "Enter") {
+                                                e.preventDefault();
+                                                handleCreateCategoryInline();
+                                            }
+                                        }}
+                                        className="flex-1 px-5 py-4 bg-primary/[0.02] border border-primary/40 rounded-2xl outline-none font-medium text-primary text-sm transition-all"
+                                    />
+                                    <button
+                                        type="button"
+                                        disabled={isAddingCategoryLoading || !newCategoryName.trim()}
+                                        onClick={handleCreateCategoryInline}
+                                        className="px-5 py-4 bg-primary text-white font-bold rounded-2xl text-xs hover-lift flex items-center gap-1.5 disabled:opacity-50 cursor-pointer shrink-0 shadow-sm"
+                                    >
+                                        {isAddingCategoryLoading ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+                                        {t("create")}
+                                    </button>
+                                </div>
+                            )}
                         </div>
+
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
