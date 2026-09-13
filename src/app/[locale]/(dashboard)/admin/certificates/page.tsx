@@ -72,25 +72,45 @@ function AdminCertificatesContent() {
         </div>
       </div>
 
-      <div className="space-y-12">
-        {Object.entries(groupedCerts).map(([serviceName, serviceCerts]) => (
-          <div key={serviceName} className="space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-              <h3 className="text-lg font-black text-secondary uppercase tracking-[0.2em] px-4 whitespace-nowrap">
-                {serviceName === "Other Certifications" ? t("otherCerts") : serviceName}
-              </h3>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
-            </div>
+      {Object.keys(groupedCerts).length > 0 ? (
+        <div className="space-y-12">
+          {Object.entries(groupedCerts).map(([serviceName, serviceCerts]) => (
+            <div key={serviceName} className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+                <h3 className="text-lg font-black text-secondary uppercase tracking-[0.2em] px-4 whitespace-nowrap">
+                  {serviceName === "Other Certifications" ? t("otherCerts") : serviceName}
+                </h3>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+              </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {serviceCerts.map((cert, index) => (
-                <CertificateCard key={cert.id} cert={cert} index={index} />
-              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {serviceCerts.map((cert, index) => (
+                  <CertificateCard key={cert.id} cert={cert} index={index} />
+                ))}
+              </div>
             </div>
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white border border-border/80 rounded-3xl p-16 text-center max-w-2xl mx-auto shadow-sm">
+          <div className="w-20 h-20 bg-amber-500/10 text-amber-600 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Award size={40} />
           </div>
-        ))}
-      </div>
+          <h3 className="text-2xl font-black font-outfit text-slate-800 tracking-tight mb-2">
+            No Certificates Issued Yet
+          </h3>
+          <p className="text-slate-500 text-sm max-w-md mx-auto mb-8 leading-relaxed">
+            Certificates issued for approved applications will appear here organized by service. Click below to issue your first certificate.
+          </p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg inline-flex items-center gap-2"
+          >
+            <Award size={18} /> {t("issueNew")}
+          </button>
+        </div>
+      )}
 
       <DocumentIssuanceStudio
         isOpen={isModalOpen}

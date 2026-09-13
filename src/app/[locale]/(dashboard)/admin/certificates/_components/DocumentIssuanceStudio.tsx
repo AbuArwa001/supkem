@@ -238,13 +238,27 @@ export default function DocumentIssuanceStudio({
                       className="w-full p-3.5 bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-2xl text-sm font-semibold text-slate-800 appearance-none outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all cursor-pointer"
                       disabled={isLoadingApplications || isIssuing || message?.type === "success"}
                     >
-                      <option value="">{isLoadingApplications ? "Loading..." : "Choose an application..."}</option>
+                      <option value="">
+                        {isLoadingApplications 
+                          ? "Loading applications..." 
+                          : eligibleApplications.length === 0 
+                            ? "No approved applications awaiting issuance" 
+                            : "Choose an application..."}
+                      </option>
                       {eligibleApplications.map((app) => (
                         <option key={app.id} value={app.id}>
                           {app.organization_name || app.user_name || "N/A"} - {app.service_name} ({app.service_document_type || "Standard"})
                         </option>
                       ))}
                     </select>
+                    {!isLoadingApplications && eligibleApplications.length === 0 && (
+                      <div className="p-3 bg-amber-50 border border-amber-200/80 rounded-xl text-xs text-amber-800 flex items-start gap-2 mt-2">
+                        <AlertCircle size={15} className="shrink-0 mt-0.5 text-amber-600" />
+                        <span>
+                          No approved applications awaiting document issuance. Applications must be marked as <strong>Approved</strong> in the Applications manager before a certificate or letter can be issued.
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Doc Type & Language Toggle */}
