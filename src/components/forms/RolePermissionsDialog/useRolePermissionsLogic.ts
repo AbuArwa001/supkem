@@ -1,21 +1,27 @@
 import { useState, useMemo, useEffect } from "react";
 import useSWR, { mutate } from "swr";
 import { toast } from "sonner";
-import { fetchPermissionsService, updateRolePermissionsService, updateRoleService, deleteRoleService } from "./services";
+import {
+    fetchPermissionsService,
+    updateRolePermissionsService,
+    updateRoleService,
+    deleteRoleService
+} from "./services";
 import { usePermissions } from "@/hooks/usePermissions";
 import type { Permission, Role } from "./types";
-
-const MODULE_DISPLAY: Record<string, string> = {
-    user: "Users", role: "Roles", permission: "Permissions",
-    organization: "Organizations", application: "Applications",
-    service: "Services", news: "News", location: "Locations",
-};
+import {
+    PERMISSION_MODULES,
+    getModuleForPermission,
+    PERMISSION_METADATA
+} from "./permissionsRegistry";
+import type { GroupedModule } from "./_components/PermissionsList";
 
 export function useRolePermissionsLogic(isOpen: boolean, role: Role | null, onClose: () => void) {
     const { isSuperAdmin } = usePermissions();
     const [roleName, setRoleName] = useState("");
     const [search, setSearch] = useState("");
     const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
+    const [expandedModuleIds, setExpandedModuleIds] = useState<string[]>([]);
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -23,6 +29,18 @@ export function useRolePermissionsLogic(isOpen: boolean, role: Role | null, onCl
         if (role) {
             setSelectedIds(role.permissions.map(p => p.id));
             setRoleName(role.role_name);
+            // Default expanded modules: all modules that have at least one permission assigned to this role
+            const activeModuleIds = new Set<string>();
+            role.permissions.forEach(perm => {
+                const mod = getModuleForPermission(perm);
+                if (mod) activeModuleIds.add(mod.id);
+            });
+            // If empty, expand finance and applications
+            if (activeModuleIds.size === 0) {
+                setExpandedModuleIds(["finance", "applications"]);
+            } else {
+                setExpandedModuleIds(Array.from(activeModuleIds));
+            }
         }
     }, [role]);
 
@@ -31,40 +49,106 @@ export function useRolePermissionsLogic(isOpen: boolean, role: Role | null, onCl
         fetchPermissionsService
     );
 
+    // Filter out internal Django and non-app permissions
+    const sanitizedPermissions = useMemo(() => {
+        if (!allPermissions) return [];
+        return allPermissions.filter(perm => getModuleForPermission(perm) !== null);
+    }, [allPermissions]);
+
+    // Build structured modules
+    const modules = useMemo<GroupedModule[]>(() => {
+        if (!sanitizedPermissions.length) return [];
+
+        const searchLower = search.trim().toLowerCase();
+        const map = new Map<string, Permission[]>();
+
+        PERMISSION_MODULES.forEach((mod) => {
+            map.set(mod.id, []);
+        });
+
+        sanitizedPermissions.forEach((perm) => {
+            const mod = getModuleForPermission(perm);
+            if (!mod) return;
+
+            if (searchLower) {
+                const meta = PERMISSION_METADATA[perm.codename];
+                const matches =
+                    perm.name.toLowerCase().includes(searchLower) ||
+                    perm.codename.toLowerCase().includes(searchLower) ||
+                    mod.title.toLowerCase().includes(searchLower) ||
+                    (meta?.label && meta.label.toLowerCase().includes(searchLower)) ||
+                    (meta?.summary && meta.summary.toLowerCase().includes(searchLower));
+
+                if (!matches) return;
+            }
+
+            const current = map.get(mod.id) || [];
+            current.push(perm);
+            map.set(mod.id, current);
+        });
+
+        const result: GroupedModule[] = [];
+        PERMISSION_MODULES.forEach((meta) => {
+            const perms = map.get(meta.id) || [];
+            if (perms.length > 0) {
+                result.push({ meta, permissions: perms });
+            }
+        });
+
+        return result;
+    }, [sanitizedPermissions, search]);
+
+    // Auto-expand on search
+    useEffect(() => {
+        if (search.trim()) {
+            setExpandedModuleIds(modules.map((m) => m.meta.id));
+        }
+    }, [search, modules]);
+
     const togglePermission = (id: string | number) => {
         setSelectedIds(prev => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]);
     };
 
+    const handleToggleSection = (ids: (string | number)[], selectAll: boolean) => {
+        setSelectedIds(prev => {
+            if (selectAll) {
+                return Array.from(new Set([...prev, ...ids]));
+            } else {
+                return prev.filter(id => !ids.includes(id));
+            }
+        });
+    };
+
+    const handleToggleExpand = (moduleId: string) => {
+        setExpandedModuleIds(prev =>
+            prev.includes(moduleId) ? prev.filter(id => id !== moduleId) : [...prev, moduleId]
+        );
+    };
+
+    const handleExpandAll = () => {
+        if (expandedModuleIds.length === modules.length) {
+            setExpandedModuleIds([]);
+        } else {
+            setExpandedModuleIds(modules.map(m => m.meta.id));
+        }
+    };
+
     const handleSelectAll = () => {
-        if (!allPermissions) return;
-        if (selectedIds.length === allPermissions.length) {
+        const allIds = sanitizedPermissions.map(p => p.id);
+        if (selectedIds.length === allIds.length) {
             setSelectedIds([]);
         } else {
-            setSelectedIds(allPermissions.map(p => p.id));
+            setSelectedIds(allIds);
         }
     };
 
     const isAllSelected = Boolean(
-        allPermissions && allPermissions.length > 0 && selectedIds.length === allPermissions.length
+        sanitizedPermissions.length > 0 && selectedIds.length === sanitizedPermissions.length
     );
 
-    const filteredPermissions = allPermissions?.filter(perm =>
-        perm.name.toLowerCase().includes(search.toLowerCase()) ||
-        perm.codename.toLowerCase().includes(search.toLowerCase())
+    const isAllExpanded = Boolean(
+        modules.length > 0 && expandedModuleIds.length === modules.length
     );
-
-    const groupedPermissions = useMemo(() => {
-        if (!filteredPermissions) return {};
-        const groups: Record<string, Permission[]> = {};
-        filteredPermissions.forEach(perm => {
-            const parts = perm.codename.split("_");
-            const model = parts.slice(1).join("_");
-            const groupName = MODULE_DISPLAY[model] || model.charAt(0).toUpperCase() + model.slice(1);
-            if (!groups[groupName]) groups[groupName] = [];
-            groups[groupName].push(perm);
-        });
-        return groups;
-    }, [filteredPermissions]);
 
     const handleSave = async () => {
         if (!role) return;
@@ -111,7 +195,7 @@ export function useRolePermissionsLogic(isOpen: boolean, role: Role | null, onCl
             mutate("/users/roles/");
             onClose();
         } catch (error: any) {
-            const msg = error.response?.data?.detail || "Failed to delete role";
+            const msg = error.response?.data?.detail || "Failed to delete role.";
             toast.error(msg);
         } finally {
             setIsDeleting(false);
@@ -119,9 +203,26 @@ export function useRolePermissionsLogic(isOpen: boolean, role: Role | null, onCl
     };
 
     return {
-        roleName, setRoleName,
-        search, setSearch, selectedIds, isSaving, isDeleting, isLoadingPerms,
-        groupedPermissions, togglePermission, handleSave, handleDelete,
-        handleSelectAll, isAllSelected, isSuperAdmin
+        roleName,
+        setRoleName,
+        search,
+        setSearch,
+        selectedIds,
+        isSaving,
+        isDeleting,
+        isLoadingPerms,
+        modules,
+        expandedModuleIds,
+        isAllExpanded,
+        handleToggleExpand,
+        handleExpandAll,
+        handleToggleSection,
+        togglePermission,
+        handleSave,
+        handleDelete,
+        handleSelectAll,
+        isAllSelected,
+        isSuperAdmin,
+        totalPermissionsCount: sanitizedPermissions.length
     };
 }

@@ -2,6 +2,8 @@ export interface Permission {
     id: string | number;
     name: string;
     codename: string;
+    app_label?: string;
+    model?: string;
 }
 
 export interface Role {

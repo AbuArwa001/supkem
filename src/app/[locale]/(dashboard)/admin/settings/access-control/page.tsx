@@ -65,21 +65,33 @@ const item = {
 };
 
 const MODULE_DISPLAY: Record<string, string> = {
+    payment: "Finance & Payments",
+    application: "Applications",
+    certification: "Certificates",
+    letter: "Letters",
+    service: "Services",
+    servicecategory: "Service Categories",
+    organization: "Organizations",
     user: "Users",
     role: "Roles",
-    permission: "Permissions",
-    organization: "Organizations",
-    application: "Applications",
-    service: "Services",
     news: "News",
-    location: "Locations",
+    newspaper: "Newspapers",
+    videobriefing: "Video Briefings",
+    newsgallery: "Media Gallery",
+    region: "Regions",
+    countycouncil: "County Councils",
+    systemparameter: "System Parameters",
+    maintenance: "Maintenance",
+    leadershipprofile: "Leadership",
 };
 
 const ACTION_COLOR: Record<string, string> = {
-    view: "bg-blue-50 text-blue-600 border-blue-100",
-    add: "bg-emerald-50 text-emerald-600 border-emerald-100",
-    change: "bg-amber-50 text-amber-600 border-amber-100",
-    delete: "bg-rose-50 text-rose-600 border-rose-100",
+    view: "bg-sky-50 text-sky-700 border-sky-200",
+    add: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    change: "bg-amber-50 text-amber-700 border-amber-200",
+    delete: "bg-rose-50 text-rose-700 border-rose-200",
+    reconcile: "bg-purple-50 text-purple-700 border-purple-200",
+    export: "bg-purple-50 text-purple-700 border-purple-200",
 };
 
 function formatPermission(codename: string) {
@@ -90,7 +102,7 @@ function formatPermission(codename: string) {
     return {
         action: action.charAt(0).toUpperCase() + action.slice(1),
         module: MODULE_DISPLAY[model] || model.charAt(0).toUpperCase() + model.slice(1),
-        color: ACTION_COLOR[action] || "bg-slate-50 text-slate-600 border-slate-100",
+        color: ACTION_COLOR[action] || "bg-slate-50 text-slate-600 border-slate-200",
     };
 }
 
