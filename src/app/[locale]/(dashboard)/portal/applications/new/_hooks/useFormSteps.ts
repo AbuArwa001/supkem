@@ -3,6 +3,7 @@ import { useState } from "react";
 
 // Internal — validation utils, types
 import { deriveServiceFlags, validateStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_utils/validation";
+import { scrollToFirstError } from "@/app/[locale]/(dashboard)/portal/applications/new/_utils/formScrollUtils";
 import type { ApplicationFormData, Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
 export function useFormSteps(
@@ -17,20 +18,47 @@ export function useFormSteps(
   const runValidation = (currentStep: number) => {
     const newErrors = validateStep(currentStep, formData, flags);
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    const hasErrors = Object.keys(newErrors).length > 0;
+    if (hasErrors) {
+      // Intelligently auto-scroll and focus the first invalid field
+      scrollToFirstError(newErrors, {
+        customMessage: "Please complete all required fields to proceed",
+      });
+      return false;
+    }
+    return true;
   };
 
   const handleNextStep = () => {
     if (runValidation(step)) {
       setStep((s) => s + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 80, behavior: "smooth" });
     }
   };
 
   const handlePrevStep = () => {
     setStep((s) => s - 1);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 80, behavior: "smooth" });
   };
 
-  return { step, errors, setErrors, flags, handleNextStep, handlePrevStep, runValidation };
+  const clearFieldError = (fieldName: string) => {
+    if (errors[fieldName]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[fieldName];
+        return next;
+      });
+    }
+  };
+
+  return {
+    step,
+    errors,
+    setErrors,
+    clearFieldError,
+    flags,
+    handleNextStep,
+    handlePrevStep,
+    runValidation,
+  };
 }

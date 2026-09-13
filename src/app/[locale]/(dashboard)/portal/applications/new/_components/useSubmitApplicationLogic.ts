@@ -1,6 +1,7 @@
 // React/Next.js core
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "@/i18n/routing";
+import { toast } from "sonner";
 
 // Internal — hooks, services, data, types
 import { useFormSteps } from "@/app/[locale]/(dashboard)/portal/applications/new/_hooks/useFormSteps";
@@ -80,8 +81,10 @@ export function useSubmitApplicationLogic() {
       router.push(
         `/portal/applications/new/confirm?appId=${response.id}&service=${encodeURIComponent(selectedService?.name ?? "Service")}&fee=${fee}`,
       );
-    } catch (err) {
+    } catch (err: any) {
       console.error("Submission failed", err);
+      const msg = err?.response?.data?.detail || "Application submission failed. Please review your information and try again.";
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -93,5 +96,6 @@ export function useSubmitApplicationLogic() {
     isHajjUmrahService, isEducationService, isTravelVisaService,
     isEmploymentService, canSelectOrganization, updateSubDetails,
     handleNextStep, handlePrevStep, handleSubmit, setFormData, setErrors,
+    clearFieldError,
   };
 }
