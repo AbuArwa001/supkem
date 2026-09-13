@@ -1,6 +1,6 @@
 "use client";
 
-import { Edit2, Trash2, Settings, Loader2 } from "lucide-react";
+import { Edit2, Trash2, Settings, Loader2, Award, FileText, Ban } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceItem } from "./types";
 import { useTranslations, useLocale } from "next-intl";
@@ -33,6 +33,7 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                         <tr className="text-xs font-bold text-foreground/40 uppercase tracking-widest">
                             <th className="px-8 py-5 text-start">{t("details")}</th>
                             <th className="px-8 py-5 text-start hidden md:table-cell">{t("category")}</th>
+                            <th className="px-8 py-5 text-start hidden xl:table-cell">{t("documentType")}</th>
                             <th className="px-8 py-5 text-start hidden sm:table-cell">{t("fee")}</th>
                             <th className="px-8 py-5 text-start hidden lg:table-cell">{t("status")}</th>
                             <th className="px-8 py-5 text-end">{t("actions")}</th>
@@ -57,6 +58,24 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                                     <span className="px-3 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-black uppercase tracking-widest">
                                         {service.category}
                                     </span>
+                                </td>
+                                <td className="px-8 py-6 hidden xl:table-cell">
+                                    {service.document_type === "Letter" ? (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-blue-700 border border-blue-200/80 rounded-full text-xs font-bold">
+                                            <FileText size={13} className="text-blue-500" />
+                                            {isAr ? "خطاب رسمي" : "Official Letter"}
+                                        </span>
+                                    ) : service.document_type === "None" ? (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-xs font-bold">
+                                            <Ban size={13} className="text-slate-400" />
+                                            {isAr ? "بدون وثيقة" : "No Document"}
+                                        </span>
+                                    ) : (
+                                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200/80 rounded-full text-xs font-bold">
+                                            <Award size={13} className="text-emerald-500" />
+                                            {isAr ? "شهادة رسمية" : "Certificate"}
+                                        </span>
+                                    )}
                                 </td>
                                 <td className="px-8 py-6 hidden sm:table-cell">
                                     <p className="font-bold text-primary flex items-center gap-1">
@@ -94,7 +113,7 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                         })}
                         {services.length === 0 && (
                             <tr>
-                                <td colSpan={5} className="px-8 py-20 text-center">
+                                <td colSpan={6} className="px-8 py-20 text-center">
                                     <div className="w-20 h-20 bg-primary/5 rounded-3xl flex items-center justify-center mx-auto mb-4">
                                         <Settings className="text-primary/20" size={40} />
                                     </div>

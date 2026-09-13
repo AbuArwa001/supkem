@@ -34,6 +34,18 @@ export function ApplicationSummaryCard({ service }: ApplicationSummaryCardProps)
             <p className="font-black text-amber-400">{feeLabel}</p>
           </div>
         </div>
+        <div className="flex justify-between items-center pt-1">
+          <div>
+            <p className="text-xs text-white/40 mb-0.5 font-bold">Document Offered</p>
+            <p className="font-bold text-sm text-emerald-400">
+              {service.document_type === "Letter"
+                ? (isAr ? "خطاب رسمي / تزكية" : "Official Letter")
+                : service.document_type === "None"
+                ? (isAr ? "بدون وثيقة" : "No Document")
+                : (isAr ? "شهادة رسمية" : "Official Certificate")}
+            </p>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

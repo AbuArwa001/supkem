@@ -17,6 +17,7 @@ export interface ApplicationDetail extends Application {
   updated_at?: string;
   comments?: string;
   user_name?: string;
+  service_document_type?: string;
   certification?: { id: string; serial_number: string };
   letter?: { id: string; serial_number: string } | null;
   marriage_details?: MarriageDetails | null;

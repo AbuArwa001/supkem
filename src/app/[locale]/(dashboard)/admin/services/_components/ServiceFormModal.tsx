@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { X, Sparkles, DollarSign, CheckCircle2, Loader2 } from "lucide-react";
+import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceFormData, ServiceItem } from "./types";
 import { useTranslations } from "next-intl";
@@ -28,6 +28,12 @@ const CATEGORIES = [
 ];
 
 const AUDIENCES = ["Both", "Organization", "Individual"];
+
+const DOCUMENT_OPTIONS = [
+    { value: "Certificate", labelKey: "docTypeCertificate" as const, icon: Award },
+    { value: "Letter", labelKey: "docTypeLetter" as const, icon: FileText },
+    { value: "None", labelKey: "docTypeNone" as const, icon: Ban },
+];
 
 export function ServiceFormModal({
     editingItem,
@@ -112,6 +118,46 @@ export function ServiceFormModal({
                                     className="w-full ltr:pl-12 rtl:pr-12 px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                                 />
                             </div>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 px-1">
+                            <label className="text-sm font-bold text-primary uppercase tracking-widest">
+                                {t("documentType")}
+                            </label>
+                            <span className="text-xs text-foreground/50 font-medium">
+                                {t("docTypeHelper")}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            {DOCUMENT_OPTIONS.map((opt) => {
+                                const Icon = opt.icon;
+                                const isSelected = (formData.document_type || "Certificate") === opt.value;
+                                return (
+                                    <button
+                                        type="button"
+                                        key={opt.value}
+                                        onClick={() => setFormData({ ...formData, document_type: opt.value })}
+                                        className={cn(
+                                            "flex items-center gap-3 p-4 rounded-2xl border text-left rtl:text-right transition-all cursor-pointer",
+                                            isSelected
+                                                ? "border-primary bg-primary/[0.06] text-primary shadow-sm ring-2 ring-primary/20"
+                                                : "border-border hover:border-primary/30 bg-primary/[0.01] text-foreground/70"
+                                        )}
+                                    >
+                                        <div className={cn(
+                                            "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all",
+                                            isSelected ? "bg-primary text-white shadow-sm" : "bg-primary/5 text-primary"
+                                        )}>
+                                            <Icon size={18} />
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                            <p className="font-bold text-xs sm:text-sm truncate">{t(opt.labelKey)}</p>
+                                        </div>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 

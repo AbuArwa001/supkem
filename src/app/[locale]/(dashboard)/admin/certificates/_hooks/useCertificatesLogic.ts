@@ -25,7 +25,7 @@ export function useCertificatesLogic() {
     if (isModalOpen) {
       const fetchEligible = async () => {
         setIsLoadingApplications(true);
-        const data = await certificateService.fetchEligibleApplications();
+        const data = await certificateService.fetchEligibleApplications("Certificate");
         setEligibleApplications(data);
         setIsLoadingApplications(false);
       };

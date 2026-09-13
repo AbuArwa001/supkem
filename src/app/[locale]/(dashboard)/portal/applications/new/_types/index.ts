@@ -85,6 +85,7 @@ export interface Service {
   fee: number;
   category: string;
   target_audience: "Individual" | "Organization";
+  document_type?: string;
 }
 
 export interface Organization {
@@ -99,6 +100,7 @@ export interface PortalApplicationDetail extends ApplicationFormData {
   service_name: string;
   user_name: string;
   service_fee: number;
+  service_document_type?: string;
   status: string;
   submitted_at: string;
   updated_at: string;

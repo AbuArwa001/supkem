@@ -8,6 +8,7 @@ export interface ServiceItem {
     description_en?: string;
     description_ar?: string;
     fee: string;
+    document_type?: string;
     is_active: boolean;
     created_at: string;
     updated_at: string;
@@ -18,6 +19,7 @@ export interface ServiceFormData {
     name: string;
     category: string;
     target_audience?: string;
+    document_type?: string;
     description: string;
     fee: string;
     is_active: boolean;

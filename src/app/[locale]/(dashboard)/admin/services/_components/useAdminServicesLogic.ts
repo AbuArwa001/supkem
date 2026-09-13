@@ -19,6 +19,8 @@ export function useAdminServicesLogic() {
     const [formData, setFormData] = useState<ServiceFormData>({
         name: "",
         category: "Accreditation",
+        target_audience: "Both",
+        document_type: "Certificate",
         description: "",
         fee: "",
         is_active: true
@@ -65,6 +67,7 @@ export function useAdminServicesLogic() {
                 name: item.name || item.name_en || item.name_ar || "",
                 category: item.category,
                 target_audience: item.target_audience || "Both",
+                document_type: item.document_type || "Certificate",
                 description: item.description || item.description_en || item.description_ar || "",
                 fee: item.fee,
                 is_active: item.is_active
@@ -75,6 +78,7 @@ export function useAdminServicesLogic() {
                 name: "",
                 category: "Accreditation",
                 target_audience: "Both",
+                document_type: "Certificate",
                 description: "",
                 fee: "",
                 is_active: true

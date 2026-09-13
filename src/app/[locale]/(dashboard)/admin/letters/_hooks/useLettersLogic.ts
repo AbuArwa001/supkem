@@ -25,7 +25,7 @@ export function useLettersLogic() {
     if (isModalOpen) {
       const fetchEligible = async () => {
         setIsLoadingApplications(true);
-        const data = await certificateService.fetchEligibleApplications();
+        const data = await certificateService.fetchEligibleApplications("Letter");
         setEligibleApplications(data);
         setIsLoadingApplications(false);
       };
