@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import { getUserRoleName } from "@/lib/permissions";
+
 export function UserNavDropdown() {
   const { user, logout } = useAuth();
 
@@ -25,6 +27,8 @@ export function UserNavDropdown() {
         .toUpperCase()
     : "U";
 
+  const displayRole = getUserRoleName(user) || "Member";
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3 md:border-l md:border-white/10 md:pl-6 cursor-pointer outline-none group hover:opacity-80 transition-opacity">
@@ -36,7 +40,7 @@ export function UserNavDropdown() {
             {user.full_name || "User"}
           </span>
           <span className="text-[10px] uppercase font-bold tracking-widest text-secondary leading-none mt-1">
-            {user.role?.role_name || "Member"}
+            {displayRole}
           </span>
         </div>
         <ChevronDown size={14} className="text-white/40 hidden md:block group-hover:text-white transition-colors" />

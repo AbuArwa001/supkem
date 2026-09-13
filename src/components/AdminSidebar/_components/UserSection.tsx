@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { LogOut, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getUserRoleName } from "@/lib/permissions";
 
 export const UserSection = ({
   isCollapsed,
@@ -41,7 +42,7 @@ export const UserSection = ({
               {user?.full_name || tp("member")}
             </p>
             <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest truncate mt-0.5">
-              {user?.role?.role_name || t("administrator")}
+              {getUserRoleName(user) || t("administrator")}
             </p>
           </motion.div>
         )}
