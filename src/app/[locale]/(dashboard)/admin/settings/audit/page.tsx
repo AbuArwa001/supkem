@@ -36,10 +36,19 @@ import { Input } from "@/components/ui/input";
 import api from "@/lib/api";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { RoleGuard } from "@/components/RoleGuard";
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function DataLogsPage() {
+    return (
+        <RoleGuard module="settings_audit">
+            <DataLogsPageContent />
+        </RoleGuard>
+    );
+}
+
+function DataLogsPageContent() {
     const [view, setView] = useState<"logs" | "stats">("logs");
     const [search, setSearch] = useState("");
 

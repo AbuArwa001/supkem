@@ -7,12 +7,17 @@ import { DeadlineHeader } from "./_components/DeadlineHeader";
 import { DeadlineToolbar } from "./_components/DeadlineToolbar";
 import { DeadlineList } from "./_components/DeadlineList";
 import { EmptyDeadlines } from "./_components/EmptyDeadlines";
+import { RoleGuard } from "@/components/RoleGuard";
 
-/**
- * Admin Deadlines Page
- * Refactored to follow strict readability constraints.
- */
 export default function DeadlinesPage() {
+  return (
+    <RoleGuard module="deadlines">
+      <DeadlinesPageContent />
+    </RoleGuard>
+  );
+}
+
+function DeadlinesPageContent() {
   const {
     filteredDeadlines,
     loading,

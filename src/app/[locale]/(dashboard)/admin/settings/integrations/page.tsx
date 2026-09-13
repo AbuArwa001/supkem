@@ -29,6 +29,7 @@ import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import api from "@/lib/api";
+import { RoleGuard } from "@/components/RoleGuard";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface IntegrationParam {
@@ -447,6 +448,14 @@ function IntegrationCard({
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function IntegrationsPage() {
+    return (
+        <RoleGuard module="settings_integrations">
+            <IntegrationsPageContent />
+        </RoleGuard>
+    );
+}
+
+function IntegrationsPageContent() {
     const { user } = useAuth();
     const isAdmin =
         user?.is_superuser ||

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { userService, type UserStatsData } from "../_services/userService";
 import type { QuickTab } from "../_components/UserFilters";
+import { canAccessModule } from "@/lib/permissions";
 
 export interface UserItem {
   id: string | number;
@@ -31,11 +32,7 @@ export interface UserItem {
  */
 export const useUsersLogic = () => {
   const { user: currentUser } = useAuth();
-  const isAdmin =
-    currentUser?.is_superuser ||
-    currentUser?.is_staff ||
-    currentUser?.role?.role_name?.toLowerCase().includes("admin") ||
-    currentUser?.role_name?.toLowerCase().includes("admin");
+  const isAdmin = canAccessModule(currentUser, "users");
 
   const [page, setPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");

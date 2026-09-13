@@ -5,12 +5,17 @@ import { useVideosLogic } from "./_hooks/useVideosLogic";
 import { VideoHeader } from "./_components/VideoHeader";
 import { VideoCard } from "./_components/VideoCard";
 import { VideoModal } from "./_components/VideoModal";
+import { RoleGuard } from "@/components/RoleGuard";
 
-/**
- * Admin Videos Page
- * Manages video briefings and press content.
- */
 export default function AdminVideos() {
+  return (
+    <RoleGuard module="videos">
+      <AdminVideosContent />
+    </RoleGuard>
+  );
+}
+
+function AdminVideosContent() {
   const {
     videos,
     loading,

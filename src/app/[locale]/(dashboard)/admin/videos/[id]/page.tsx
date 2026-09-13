@@ -8,16 +8,21 @@ import { useVideoDetailLogic } from "./_hooks/useVideoDetailLogic";
 import { VideoPreviewHeader } from "./_components/VideoPreviewHeader";
 import { VideoPlayerSection } from "./_components/VideoPlayerSection";
 import { VideoMetadataSidebar } from "./_components/VideoMetadataSidebar";
+import { RoleGuard } from "@/components/RoleGuard";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-/**
- * Admin Video Detail Page - Briefing Preview.
- * Adheres to 200-line readability constraint.
- */
 export default function AdminVideoDetail({ params }: PageProps) {
+  return (
+    <RoleGuard module="videos">
+      <AdminVideoDetailContent params={params} />
+    </RoleGuard>
+  );
+}
+
+function AdminVideoDetailContent({ params }: PageProps) {
   const { id } = use(params);
   const { video, loading, handleDelete } = useVideoDetailLogic(id);
 

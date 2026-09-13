@@ -85,8 +85,17 @@ function formatPermission(codename: string) {
 }
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
+import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AccessControlPage() {
+    return (
+        <RoleGuard module="settings_access_control">
+            <AccessControlContent />
+        </RoleGuard>
+    );
+}
+
+function AccessControlContent() {
     const { user } = useAuth();
     const isAdmin =
         user?.is_superuser ||
