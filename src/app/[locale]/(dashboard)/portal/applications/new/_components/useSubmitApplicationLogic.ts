@@ -24,7 +24,7 @@ export function useSubmitApplicationLogic() {
 
   const selectedService = services.find((s) => s.id === formData.service);
 
-  const { step, errors, setErrors, flags, handleNextStep, handlePrevStep, runValidation } =
+  const { step, errors, setErrors, clearFieldError, flags, handleNextStep, handlePrevStep, runValidation } =
     useFormSteps(formData, selectedService);
 
   const { isIndividualService, isMarriageService, isHajjUmrahService, isEducationService,
