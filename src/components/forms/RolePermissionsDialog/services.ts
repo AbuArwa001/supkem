@@ -27,3 +27,22 @@ export const createRoleService = async (
     return res.data;
 };
 
+export const updateRoleService = async (
+    roleId: string,
+    roleName: string,
+    permissionIds: (string | number)[]
+) => {
+    const res = await api.patch(`/users/roles/${roleId}/`, {
+        role_name: roleName,
+        permissions: permissionIds,
+    });
+    return res.data;
+};
+
+export const deleteRoleService = async (roleId: string) => {
+    const res = await api.delete(`/users/roles/${roleId}/`);
+    return res.data;
+};
+
+
+

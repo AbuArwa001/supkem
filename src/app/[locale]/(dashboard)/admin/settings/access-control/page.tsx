@@ -8,12 +8,16 @@ import {
     Lock,
     ShieldCheck,
     ShieldPlus,
+    ShieldAlert,
     CheckCircle2,
     Search,
     RefreshCw,
     AlertCircle,
     ChevronRight,
-    ChevronLeft
+    ChevronLeft,
+    Users,
+    Layers,
+    Sparkles
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -39,9 +43,12 @@ interface Role {
     id: string;
     role_name: string;
     permissions: Permission[];
+    users_count?: number;
+    is_system_role?: boolean;
     created_at: string;
     updated_at: string;
 }
+
 
 // --- Animations ---
 const container = {
@@ -136,12 +143,17 @@ function AccessControlContent() {
         role.role_name.toLowerCase().includes(search.toLowerCase())
     );
 
+    const totalRoles = roles.length;
+    const coreRoles = roles.filter(r => r.is_system_role).length;
+    const customRoles = roles.filter(r => !r.is_system_role).length;
+    const totalGovernedUsers = roles.reduce((sum, r) => sum + (r.users_count || 0), 0);
+
     return (
         <motion.div
             variants={container}
             initial="hidden"
             animate="show"
-            className="space-y-12"
+            className="space-y-10"
         >
             <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                 <div className="flex items-center gap-4">
@@ -156,7 +168,7 @@ function AccessControlContent() {
                             Access <span className="text-foreground/40 italic">Control</span>
                         </h1>
                         <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                            Operational role definitions and fine-grained <span className="text-indigo-500 underline decoration-indigo-500/20 underline-offset-4 decoration-4">permission profiles</span>.
+                            Operational role definitions, user assignments, and fine-grained <span className="text-indigo-500 underline decoration-indigo-500/20 underline-offset-4 decoration-4">permission profiles</span>.
                         </p>
                     </div>
                 </div>
@@ -181,6 +193,53 @@ function AccessControlContent() {
                     </Button>
                 </div>
             </header>
+
+            {/* Role Management Summary Cards */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Defined Roles</span>
+                        <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+                            <Layers size={16} />
+                        </div>
+                    </div>
+                    <div className="text-2xl font-black font-outfit text-slate-900">{totalRoles}</div>
+                    <p className="text-[11px] text-slate-400 font-medium">Access boundaries active</p>
+                </Card>
+
+                <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Core System Roles</span>
+                        <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+                            <ShieldCheck size={16} />
+                        </div>
+                    </div>
+                    <div className="text-2xl font-black font-outfit text-slate-900">{coreRoles}</div>
+                    <p className="text-[11px] text-slate-400 font-medium">Protected baseline roles</p>
+                </Card>
+
+                <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Custom Profiles</span>
+                        <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
+                            <ShieldPlus size={16} />
+                        </div>
+                    </div>
+                    <div className="text-2xl font-black font-outfit text-slate-900">{customRoles}</div>
+                    <p className="text-[11px] text-slate-400 font-medium">Super Admin created</p>
+                </Card>
+
+                <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Governed Users</span>
+                        <div className="p-2 rounded-xl bg-teal-50 text-teal-600">
+                            <Users size={16} />
+                        </div>
+                    </div>
+                    <div className="text-2xl font-black font-outfit text-slate-900">{totalUsersGoverned}</div>
+                    <p className="text-[11px] text-slate-400 font-medium">Assigned authority profiles</p>
+                </Card>
+            </div>
 
             <div className="relative group">
                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
@@ -212,21 +271,36 @@ function AccessControlContent() {
                             }}
                             className="cursor-pointer"
                         >
-                            <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden hover:shadow-premium-hover transition-all duration-500 group flex flex-col h-full">
+                            <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden hover:shadow-premium-hover transition-all duration-500 group flex flex-col h-full border border-transparent hover:border-slate-100">
                                 <CardHeader className="p-8 pb-4">
                                     <div className="flex items-start justify-between">
-                                        <div className="bg-indigo-50 p-4 rounded-2xl text-indigo-600 group-hover:scale-110 transition-transform duration-500">
-                                            <ShieldCheck size={32} />
+                                        <div className={`p-4 rounded-2xl transition-transform duration-500 group-hover:scale-110 ${
+                                            role.is_system_role ? "bg-indigo-50 text-indigo-600" : "bg-emerald-50 text-emerald-600"
+                                        }`}>
+                                            {role.is_system_role ? <ShieldCheck size={30} /> : <ShieldAlert size={30} />}
                                         </div>
-                                        <Badge className="bg-slate-100 text-slate-500 border-none font-black px-3 py-1 rounded-full uppercase tracking-widest text-[9px]">
-                                            {role.permissions.length} POLICIES
-                                        </Badge>
+                                        <div className="flex flex-col items-end gap-1.5">
+                                            <Badge className={`border-none font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[8px] ${
+                                                role.is_system_role ? "bg-slate-100 text-slate-600" : "bg-emerald-100 text-emerald-800"
+                                            }`}>
+                                                {role.is_system_role ? "CORE SYSTEM" : "CUSTOM ROLE"}
+                                            </Badge>
+                                            <div className="flex items-center gap-1.5">
+                                                <Badge className="bg-slate-100 text-slate-500 border-none font-black px-2 py-0.5 rounded-full uppercase tracking-widest text-[8px]">
+                                                    {role.permissions.length} POLICIES
+                                                </Badge>
+                                                <Badge className="bg-slate-100 text-slate-500 border-none font-black px-2 py-0.5 rounded-full uppercase tracking-widest text-[8px] flex items-center gap-1">
+                                                    <Users size={9} />
+                                                    {role.users_count ?? 0}
+                                                </Badge>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <CardTitle className="text-2xl font-black tracking-tight text-slate-900 mt-6 font-outfit uppercase">
+                                    <CardTitle className="text-2xl font-black tracking-tight text-slate-900 mt-5 font-outfit uppercase">
                                         {role.role_name}
                                     </CardTitle>
                                     <p className="text-slate-400 font-bold text-xs uppercase tracking-tight mt-1">
-                                        System-Defined Authority Profile
+                                        {role.is_system_role ? "System-Defined Authority Profile" : "Custom Delegated Authority Profile"}
                                     </p>
                                 </CardHeader>
                                 <CardContent className="p-8 pt-4 flex-1 flex flex-col justify-between">
@@ -260,7 +334,10 @@ function AccessControlContent() {
                                             <Lock size={12} />
                                             {role.updated_at ? format(new Date(role.updated_at), "MMM dd") : "STABLE"}
                                         </span>
-                                        <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                                        <span className="text-[11px] font-black text-indigo-600 uppercase tracking-wider flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                                            Manage
+                                            <ChevronRight className="h-4 w-4" />
+                                        </span>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -268,6 +345,7 @@ function AccessControlContent() {
                     ))
                 )}
             </div>
+
 
             <RolePermissionsDialog
                 isOpen={isDialogOpen}
