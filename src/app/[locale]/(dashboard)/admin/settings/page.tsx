@@ -166,8 +166,6 @@ export default function SettingsHub() {
           </motion.div>
         )}
         {settingsCategories.map((category, index) => {
-          if (category.isAdminOnly && !isAdmin) return null;
-
           const cardContent = (
             <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] bg-white rounded-[32px] overflow-hidden hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group cursor-pointer border border-slate-100 hover:border-slate-300 h-full">
               <CardHeader className="p-8 md:p-10 pb-0 flex flex-row items-start justify-between">
