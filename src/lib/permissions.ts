@@ -13,6 +13,7 @@ export type PermissionModule =
   | "certificates"
   | "letters"
   | "services"
+  | "finance"
   | "news"
   | "newspapers"
   | "leadership"
@@ -79,6 +80,14 @@ export const MODULE_ROLES_MAP: Record<PermissionModule, string[]> = {
     "Finance Officer",
     "Agent",
   ],
+
+  // Financial Analytics & Payment Ledger
+  finance: [
+    "Super Admin",
+    "Admin",
+    "Finance Officer",
+  ],
+
 
   // Media & Public Communications
   news: [

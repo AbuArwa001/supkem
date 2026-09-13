@@ -13,6 +13,7 @@ import {
   Calendar,
   Sparkles,
   ChevronDown,
+  Receipt,
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useAdminDashboard } from "./_hooks/useAdminDashboard";
@@ -44,7 +45,8 @@ export default function AdminOverview() {
   const canUsers = canAccessModule(user, "users");
   const canServices = canAccessModule(user, "services");
   const canNews = canAccessModule(user, "news");
-  const hasAnyQuickAction = canOrg || canUsers || canServices || canNews;
+  const canFinance = canAccessModule(user, "finance");
+  const hasAnyQuickAction = canOrg || canUsers || canServices || canNews || canFinance;
   const canReport = canAccessModule(user, "users") || canAccessModule(user, "organizations");
 
   if (isLoading) return <DashboardSkeleton />;
@@ -187,6 +189,14 @@ export default function AdminOverview() {
                     <Link href="/admin/news" className="flex items-center gap-2">
                       <Sparkles size={15} className="text-teal-600" />
                       {t("publishNews")}
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {canFinance && (
+                  <DropdownMenuItem asChild className="rounded-xl font-bold text-xs py-2.5 px-3 cursor-pointer">
+                    <Link href="/admin/finance" className="flex items-center gap-2">
+                      <Receipt size={15} className="text-emerald-600" />
+                      Finance & Payments
                     </Link>
                   </DropdownMenuItem>
                 )}
