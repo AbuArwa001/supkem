@@ -9,6 +9,7 @@ Built with **Next.js 15 (App Router)** and **React 19**, it interfaces with a Dj
 ## 🚀 Key Features
 
 - **Public Website:** Access to recent news, featured articles, image galleries, and council information with a focus on SEO and fast load times.
+- **Public Credential Verification:** Publicly verify official SUPKEM certificates, marriage records, and recommendation letters in real-time by scanning embedded vector QR codes or searching serial numbers.
 - **Admin Dashboard:** A secure, role-based portal for administrators to manage users, organizations (county councils and institutions), and content (CMS for news and galleries).
 - **Authentication system:** Secure login and session management.
 - **Media Management:** Directly upload and manage gallery images (integrated with backend S3 storage).
@@ -17,10 +18,11 @@ Built with **Next.js 15 (App Router)** and **React 19**, it interfaces with a Dj
 
 ## 🛠️ Tech Stack
 
-- **Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
 - **UI & Styling:** [Tailwind CSS v4](https://tailwindcss.com/), Radix UI primitives, [Framer Motion](https://www.framer.com/motion/) for micro-animations.
 - **Data Fetching:** Axios, [SWR](https://swr.vercel.app/)
 - **Icons:** [Lucide React](https://lucide.dev/)
+- **QR Code Generation:** [qrcode.react](https://github.com/zpao/qrcode.react) (crisp vector SVG QR rendering)
 - **Emails:** [Resend](https://resend.com/)
 - **Utilities:** `date-fns`, `html2canvas`, `jspdf`, `clsx`, `tailwind-merge`
 
@@ -32,8 +34,8 @@ The project utilizes Next.js route groups to logically separate different parts 
 src/
 ├── app/
 │   ├── (auth)/         # Authentication pages (login, forgotten password, etc.)
-│   ├── (dashboard)/    # Authenticated portal & admin features (CMS, Users, Orgs)
-│   ├── (public)/       # Public-facing views (Home, News, About)
+│   ├── (dashboard)/    # Authenticated portal & admin features (CMS, Users, Orgs, Certificates)
+│   ├── (public)/       # Public-facing views (Home, News, About, Verify)
 │   ├── _components/    # Shared, reusable UI components
 │   └── _hooks/         # Shared custom React hooks
 ```
