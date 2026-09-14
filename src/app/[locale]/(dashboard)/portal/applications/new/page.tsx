@@ -169,8 +169,11 @@ export default function SubmitApplication() {
             canSelectOrganization={canSelectOrganization}
             isIndividualService={isIndividualService}
             isMarriageService={isMarriageService}
+            isOtherService={isOtherService}
             step={step}
+            loading={loading}
             onNext={handleNextStep}
+            onBack={handlePrevStep}
             onOrganizationChange={(id) => {
               setFormData({ ...formData, organization: id });
               if (errors.organization) {
