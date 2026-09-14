@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Layout, FilePlus, Check, Sparkles, Award, FileText } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Layout, FilePlus, Check, Sparkles, Award, FileText, Search, X, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Service } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 import { useLocale } from "next-intl";
@@ -11,9 +12,10 @@ interface ServiceCardProps {
   selected: boolean;
   hasError: boolean;
   onSelect: (service: Service) => void;
+  onProceed?: () => void;
 }
 
-function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps) {
+function ServiceCard({ service, selected, hasError, onSelect, onProceed }: ServiceCardProps) {
   const locale = useLocale();
   const isAr = locale === "ar";
   const displayName = isAr
@@ -23,12 +25,29 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
     ? service.description_ar || service.description || service.description_en
     : service.description || service.description_en || service.description_ar;
 
+  const handleClick = () => {
+    if (selected && onProceed) {
+      onProceed();
+    } else {
+      onSelect(service);
+    }
+  };
+
   return (
-    <label
+    <div
+      role="button"
+      tabIndex={0}
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleClick();
+        }
+      }}
       className={cn(
-        "p-6 rounded-[22px] border-2 cursor-pointer transition-all duration-300 flex flex-col justify-between gap-5 group relative overflow-hidden select-none",
+        "p-6 rounded-[22px] border-2 cursor-pointer transition-all duration-300 flex flex-col justify-between gap-5 group relative overflow-hidden select-none focus:outline-none focus:ring-4 focus:ring-primary/20",
         selected
-          ? "border-primary bg-gradient-to-b from-primary/[0.04] to-primary/[0.08] shadow-xl shadow-primary/10 ring-4 ring-primary/15 scale-[1.01]"
+          ? "border-primary bg-gradient-to-b from-primary/[0.05] to-primary/[0.09] shadow-xl shadow-primary/10 ring-4 ring-primary/15 scale-[1.01]"
           : hasError
           ? "border-rose-300 bg-rose-50/30 hover:border-rose-400"
           : "border-slate-200/90 hover:border-primary/40 bg-white hover:shadow-lg hover:shadow-slate-200/50 hover:-translate-y-0.5"
@@ -38,8 +57,9 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
         type="radio"
         name="service"
         value={service.id}
-        className="hidden"
-        onChange={() => onSelect(service)}
+        checked={selected}
+        readOnly
+        className="sr-only"
       />
 
       {/* Top row: Icon, Fee, and Selection Indicator */}
@@ -63,7 +83,7 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
                 : "bg-blue-50 text-blue-700 border-blue-200/80"
             )}
           >
-            {service.fee > 0 ? `KES ${Number(service.fee).toLocaleString()}` : "NO FEE"}
+            {service.fee > 0 ? `KES ${Number(service.fee).toLocaleString()}` : isAr ? "مجاني" : "NO FEE"}
           </span>
         </div>
 
@@ -95,7 +115,7 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
         </p>
       </div>
 
-      {/* Bottom: Tags */}
+      {/* Tags row */}
       <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-slate-100">
         <span className="text-[10px] font-black uppercase tracking-wider text-secondary-foreground bg-secondary/20 px-2.5 py-1 rounded-lg">
           {service.category}
@@ -124,7 +144,33 @@ function ServiceCard({ service, selected, hasError, onSelect }: ServiceCardProps
           </span>
         )}
       </div>
-    </label>
+
+      {/* Seamless instant action when selected */}
+      {selected && (
+        <motion.div
+          initial={{ opacity: 0, height: 0, marginTop: 0 }}
+          animate={{ opacity: 1, height: "auto", marginTop: 8 }}
+          exit={{ opacity: 0, height: 0, marginTop: 0 }}
+          className="pt-3 border-t border-primary/20 flex items-center justify-between gap-3"
+        >
+          <div className="flex items-center gap-1.5 text-xs font-bold text-primary">
+            <Sparkles size={14} className="text-secondary animate-pulse" />
+            <span>{isAr ? "الخدمة المحددة" : "Selected Service"}</span>
+          </div>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onProceed?.();
+            }}
+            className="px-4 py-2 rounded-xl bg-primary hover:bg-accent text-white font-black text-xs font-outfit shadow-md shadow-primary/25 flex items-center gap-1.5 cursor-pointer hover:scale-[1.03] active:scale-[0.97] transition-all"
+          >
+            <span>{isAr ? "المتابعة للخطوة التالية" : "Continue to Next Step"}</span>
+            <ArrowRight size={14} className="rtl:rotate-180" />
+          </button>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
@@ -133,49 +179,167 @@ export function ServiceSelection({
   selectedServiceId,
   errors,
   onSelect,
+  onProceed,
 }: {
   services: Service[];
   selectedServiceId: string;
   errors: Record<string, string>;
   onSelect: (service: Service) => void;
+  onProceed?: () => void;
 }) {
+  const locale = useLocale();
+  const isAr = locale === "ar";
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  // Dynamic categories
+  const categories = useMemo(() => {
+    const cats = new Set<string>();
+    services.forEach((s) => {
+      if (s.category) cats.add(s.category);
+    });
+    return ["all", ...Array.from(cats)];
+  }, [services]);
+
+  // Filter services by search and category
+  const filteredServices = useMemo(() => {
+    return services.filter((s) => {
+      const nameMatch = (s.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (s.name_ar || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (s.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (s.description_ar || "").toLowerCase().includes(searchQuery.toLowerCase());
+
+      const categoryMatch =
+        activeCategory === "all" ||
+        s.category?.toLowerCase() === activeCategory.toLowerCase() ||
+        (activeCategory === "individual" && s.target_audience === "Individual") ||
+        (activeCategory === "organization" && s.target_audience === "Organization");
+
+      return nameMatch && categoryMatch;
+    });
+  }, [services, searchQuery, activeCategory]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="space-y-8"
+      className="space-y-6"
       data-error-field="service"
       id="field-service"
     >
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/15 shadow-xs">
-          <Layout size={24} />
-        </div>
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-2xl font-black font-outfit text-slate-900">Select Accreditation Service</h3>
-            <span className="text-xs font-black text-rose-500 uppercase tracking-widest bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
-              Required
-            </span>
+      {/* Header and subtitle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/15 shadow-xs shrink-0">
+            <Layout size={24} />
           </div>
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mt-0.5">
-            Choose the official SUPKEM certificate or endorsement program
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-2xl font-black font-outfit text-slate-900">
+                {isAr ? "اختر خدمة الاعتماد" : "Select Accreditation Service"}
+              </h3>
+              <span className="text-xs font-black text-rose-500 uppercase tracking-widest bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-md">
+                {isAr ? "مطلوب" : "Required"}
+              </span>
+            </div>
+            <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mt-0.5">
+              {isAr
+                ? "اختر الشهادة أو برنامج التزكية الرسمي من سوبكيم"
+                : "Choose the official SUPKEM certificate or endorsement program"}
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-        {services.map((service) => (
-          <ServiceCard
-            key={service.id}
-            service={service}
-            selected={selectedServiceId === service.id}
-            hasError={!!errors.service}
-            onSelect={onSelect}
+      {/* Search & Quick Filters to eliminate scrolling through large card lists */}
+      <div className="space-y-3 bg-slate-50/70 border border-slate-200/80 p-3 sm:p-4 rounded-2xl">
+        <div className="relative">
+          <Search size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 rtl:left-auto rtl:right-3.5" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={isAr ? "ابحث عن خدمة بالاسم أو الوصف..." : "Search services by name or keyword..."}
+            className="w-full pl-10 pr-10 rtl:pl-10 rtl:pr-10 py-2.5 bg-white border border-slate-200 rounded-xl text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
           />
-        ))}
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 rtl:right-auto rtl:left-3"
+            >
+              <X size={16} />
+            </button>
+          )}
+        </div>
+
+        {/* Category Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs font-bold">
+          <button
+            type="button"
+            onClick={() => setActiveCategory("all")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer",
+              activeCategory === "all"
+                ? "bg-primary text-white shadow-xs"
+                : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300"
+            )}
+          >
+            {isAr ? "جميع الخدمات" : "All Services"} ({services.length})
+          </button>
+          {categories
+            .filter((c) => c !== "all")
+            .map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                className={cn(
+                  "px-3 py-1.5 rounded-lg whitespace-nowrap transition-all cursor-pointer",
+                  activeCategory.toLowerCase() === cat.toLowerCase()
+                    ? "bg-primary text-white shadow-xs"
+                    : "bg-white text-slate-600 border border-slate-200 hover:border-slate-300"
+                )}
+              >
+                {cat}
+              </button>
+            ))}
+        </div>
       </div>
+
+      {/* Service Cards Grid */}
+      {filteredServices.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {filteredServices.map((service) => (
+            <ServiceCard
+              key={service.id}
+              service={service}
+              selected={selectedServiceId === service.id}
+              hasError={!!errors.service}
+              onSelect={onSelect}
+              onProceed={onProceed}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="p-8 text-center bg-white border border-dashed border-slate-200 rounded-2xl space-y-2">
+          <p className="text-slate-500 font-bold text-sm">
+            {isAr ? "لم يتم العثور على خدمات مطابقة للبحث" : "No services match your search or filter"}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setSearchQuery("");
+              setActiveCategory("all");
+            }}
+            className="text-xs font-bold text-primary hover:underline cursor-pointer"
+          >
+            {isAr ? "إعادة ضبط عوامل التصفية" : "Reset filters"}
+          </button>
+        </div>
+      )}
     </motion.div>
   );
 }
+

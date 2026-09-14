@@ -13,6 +13,8 @@ interface ApplicationSidebarProps {
   canSelectOrganization: boolean;
   isIndividualService: boolean;
   isMarriageService: boolean;
+  step?: number;
+  onNext?: () => void;
   onOrganizationChange: (id: string) => void;
 }
 
@@ -24,6 +26,8 @@ export function ApplicationSidebar({
   canSelectOrganization,
   isIndividualService,
   isMarriageService,
+  step,
+  onNext,
   onOrganizationChange,
 }: ApplicationSidebarProps) {
   const showIndividualNotice = isIndividualService && !isMarriageService;
@@ -53,10 +57,15 @@ export function ApplicationSidebar({
         </div>
 
         {selectedService && (
-          <ApplicationSummaryCard service={selectedService} />
+          <ApplicationSummaryCard
+            service={selectedService}
+            step={step}
+            onNext={onNext}
+          />
         )}
       </div>
     </div>
   );
 }
+
 
