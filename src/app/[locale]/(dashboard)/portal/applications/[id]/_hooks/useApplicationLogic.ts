@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/routing";
 
 // Internal — services
+import { toast } from "sonner";
 import { portalApplicationService } from "@/app/[locale]/(dashboard)/portal/applications/[id]/_services/portalApplicationService";
 import type { PortalApplicationDetail } from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
 
@@ -18,6 +19,7 @@ export const useApplicationLogic = () => {
 
   const fetchApplication = async () => {
     try {
+      setLoading(true);
       const data = await portalApplicationService.fetchById(params.id as string);
       setApplication(data as PortalApplicationDetail);
     } catch (err: unknown) {
@@ -37,7 +39,12 @@ export const useApplicationLogic = () => {
     const appId = application.id;
     const svc = (application as any).service;
     const serviceName = svc?.name ?? application.service_name ?? "Service";
-    const fee = svc?.fee ?? application.service_fee ?? 0;
+    const rawFee = svc?.fee ?? application.service_fee ?? 0;
+    const fee = rawFee !== undefined && rawFee !== null && !isNaN(Number(rawFee)) ? Number(rawFee) : 0;
+    if (fee <= 0) {
+      toast.info("This service is free. No payment is required.");
+      return;
+    }
     router.push(`/portal/applications/new/confirm?appId=${appId}&service=${encodeURIComponent(serviceName)}&fee=${fee}`);
   };
 

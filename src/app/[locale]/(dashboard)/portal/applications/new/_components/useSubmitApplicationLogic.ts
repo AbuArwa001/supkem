@@ -77,7 +77,16 @@ export function useSubmitApplicationLogic() {
         employment_details: isEmploymentService ? formData.employment_details : null,
       };
       const response = await applicationSubmitService.submitApplication(payload as Record<string, unknown>);
-      const fee = selectedService?.fee ? Number(selectedService.fee) : 1500;
+      const rawFee = selectedService?.fee;
+      const fee = rawFee !== undefined && rawFee !== null && !isNaN(Number(rawFee)) ? Number(rawFee) : 0;
+      
+      // If service fee is 0, bypass M-Pesa payment entirely
+      if (fee <= 0) {
+        toast.success("Application submitted successfully! No payment required for this service.");
+        router.push(`/portal/applications/${response.id}`);
+        return;
+      }
+
       router.push(
         `/portal/applications/new/confirm?appId=${response.id}&service=${encodeURIComponent(selectedService?.name ?? "Service")}&fee=${fee}`,
       );

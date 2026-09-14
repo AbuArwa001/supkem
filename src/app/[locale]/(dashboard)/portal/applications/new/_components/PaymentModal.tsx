@@ -47,25 +47,32 @@ export function PaymentModal({ applicationId, serviceName, serviceFee, onSuccess
     const interval = setInterval(async () => {
       attempts++;
       try {
-        if (attempts >= 2 && attempts % 2 === 0) {
-          try {
-            await applicationSubmitService.checkPaymentStatus(applicationId);
-          } catch {
-            // ignore fallback error
-          }
-        }
         const appData = await applicationSubmitService.getApplication(applicationId);
         if (appData.payment?.status === "Completed") {
           setStatus("success");
           clearInterval(interval);
           setTimeout(onSuccess, 2000);
+          return;
         } else if (appData.payment?.status === "Failed") {
           setStatus("error");
           setErrorMsg("Payment failed or was cancelled remotely.");
           clearInterval(interval);
+          return;
+        }
+
+        if (attempts >= 3 && attempts % 3 === 0) {
+          applicationSubmitService.checkPaymentStatus(applicationId).then((res) => {
+            if (res?.status === "Completed" || res?.payment?.status === "Completed") {
+              setStatus("success");
+              clearInterval(interval);
+              setTimeout(onSuccess, 2000);
+            }
+          }).catch(() => {
+            // keep waiting quietly
+          });
         }
       } catch { /* keep waiting */ }
-    }, 3000);
+    }, 2500);
     return () => clearInterval(interval);
   }, [status, applicationId, onSuccess]);
 

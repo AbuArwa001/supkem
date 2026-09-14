@@ -18,13 +18,19 @@ const formatPhone = (raw: string): string => {
 
 export const isValidPhone = (formatted: string): boolean => /^0(7|1)\d{8}$/.test(formatted.replace(/\D/g, ""));
 
-export function useConfirmPayment(appId: string) {
+export function useConfirmPayment(appId: string, fee?: number) {
   const router = useRouter();
   const { user } = useAuth();
   const [phoneNumber, setPhoneNumber] = useState("");
   const [status, setStatus] = useState<ConfirmStatus>("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const [appData, setAppData] = useState<any | null>(null);
+
+  useEffect(() => {
+    if (fee !== undefined && fee <= 0 && appId) {
+      router.replace(`/portal/applications/${appId}`);
+    }
+  }, [fee, appId, router]);
 
   useEffect(() => { if (user?.phone_number && !phoneNumber) setPhoneNumber(formatPhone(user.phone_number)); }, [user, phoneNumber]);
 
@@ -46,6 +52,10 @@ export function useConfirmPayment(appId: string) {
   usePaymentPolling({ appId, status, onSuccess: onPollSuccess, onError: onPollError });
 
   const handlePay = async () => {
+    if (fee !== undefined && fee <= 0) {
+      router.push(`/portal/applications/${appId}`);
+      return;
+    }
     if (!isValidPhone(phoneNumber)) { setErrorMsg("Enter a valid Kenyan number."); return; }
     setErrorMsg(""); setStatus("initiating");
     try {

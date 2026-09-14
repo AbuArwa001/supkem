@@ -22,7 +22,7 @@ function ConfirmPageContent() {
   const fee = Number(searchParams.get("fee") ?? "0");
   const displayRef = appId ? `APP-${appId.split("-").pop()?.toUpperCase()}` : "PENDING";
 
-  const payment = useConfirmPayment(appId);
+  const payment = useConfirmPayment(appId, fee);
 
   return (
     <div

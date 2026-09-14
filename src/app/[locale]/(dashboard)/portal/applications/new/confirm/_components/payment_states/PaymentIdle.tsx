@@ -12,6 +12,28 @@ interface PaymentIdleProps {
 }
 
 export function PaymentIdle({ fee, phoneNumber, isValid, errorMsg, onPhoneChange, onPay }: PaymentIdleProps) {
+  if (fee <= 0) {
+    return (
+      <div className="space-y-6 animate-in fade-in duration-500 text-center py-6">
+        <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center mx-auto shadow-lg border border-emerald-500/30">
+          <CheckCircle2 className="w-8 h-8 text-emerald-400" />
+        </div>
+        <div>
+          <h4 className="text-2xl font-black text-white tracking-tight">Complimentary Service</h4>
+          <p className="text-sm text-white/60 font-medium mt-1">
+            This service has no application fee. You can proceed directly without M-Pesa.
+          </p>
+        </div>
+        <button
+          onClick={onPay}
+          className="w-full flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#20bd5a] text-white py-5 px-6 rounded-[20px] font-black text-xl shadow-[0_0_40px_rgba(37,211,102,0.3)] hover:shadow-[0_0_60px_rgba(37,211,102,0.5)] transform hover:-translate-y-1 transition-all duration-300"
+        >
+          Complete Application (Free)
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="flex items-center gap-5">

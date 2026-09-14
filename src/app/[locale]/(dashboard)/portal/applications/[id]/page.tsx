@@ -25,7 +25,9 @@ export default function ApplicationDetail() {
     refreshParams
   } = useApplicationLogic();
 
-  const isPaymentPending = !application?.payment || application.payment.status !== "Completed";
+  const serviceFee = Number((application?.service as any)?.fee ?? (application as any)?.service_fee ?? 0);
+  const isFreeService = !isNaN(serviceFee) && serviceFee <= 0;
+  const isPaymentPending = !isFreeService && (!application?.payment || application.payment.status !== "Completed");
 
   if (loading) {
     return <LoadingState />;

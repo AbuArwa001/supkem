@@ -19,24 +19,33 @@ export function usePaymentPolling({ appId, status, onSuccess, onError }: PollPro
     const poll = async () => {
       attemptsRef.current++;
       try {
-        if (attemptsRef.current >= 2 && attemptsRef.current % 2 === 0) {
-          try {
-            await applicationSubmitService.checkPaymentStatus(appId);
-          } catch {
-            // fallback quietly
-          }
-        }
+        // 1. Fast DB check first (instant response, reflects M-Pesa webhook callback)
         const data = await applicationSubmitService.getApplication(appId);
         const payStatus = (data as any).payment?.status;
         if (payStatus === "Completed") {
           clearInterval(interval);
           onSuccess(data);
+          return;
         } else if (payStatus === "Failed") {
           clearInterval(interval);
           onError("M-Pesa payment was declined. Check your PIN and balance.");
+          return;
         } else if (attemptsRef.current >= MAX) {
           clearInterval(interval);
           onError("Payment confirmation timed out. If money was deducted, please contact support with your reference number.");
+          return;
+        }
+
+        // 2. Non-blocking query to STK status query every 4th attempt (~8s) as fallback
+        if (attemptsRef.current >= 3 && attemptsRef.current % 3 === 0) {
+          applicationSubmitService.checkPaymentStatus(appId).then((res) => {
+            if (res?.status === "Completed" || res?.payment?.status === "Completed") {
+              clearInterval(interval);
+              onSuccess({ ...data, payment: res.payment || (data as any).payment });
+            }
+          }).catch(() => {
+            // Keep polling DB quietly
+          });
         }
       } catch { /* silent poll */ }
     };
