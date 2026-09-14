@@ -257,22 +257,18 @@ export function ServiceSelection({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
-  if (dataLoading) {
-    return <ServiceSelectionSkeleton />;
-  }
-
-  // Dynamic categories
+  // Dynamic categories (called unconditionally)
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    services.forEach((s) => {
+    (services || []).forEach((s) => {
       if (s.category) cats.add(s.category);
     });
     return ["all", ...Array.from(cats)];
   }, [services]);
 
-  // Filter services by search and category
+  // Filter services by search and category (called unconditionally)
   const filteredServices = useMemo(() => {
-    return services.filter((s) => {
+    return (services || []).filter((s) => {
       const nameMatch = (s.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (s.name_ar || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
         (s.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -287,6 +283,10 @@ export function ServiceSelection({
       return nameMatch && categoryMatch;
     });
   }, [services, searchQuery, activeCategory]);
+
+  if (dataLoading) {
+    return <ServiceSelectionSkeleton />;
+  }
 
   return (
     <motion.div
