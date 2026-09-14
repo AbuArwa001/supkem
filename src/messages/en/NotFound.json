@@ -1,0 +1,36 @@
+{
+  "badge": "Error 404 • Resource Not Found",
+  "title": "Lost in the Digital Ummah?",
+  "description": "The page, document, or service link you are looking for has been moved, updated, or is no longer accessible.",
+  "searchPlaceholder": "Search services, verification, news...",
+  "pressEnter": "Press Enter to search services",
+  "returnHome": "Return Home",
+  "goBack": "Go Back",
+  "quickNavigation": "Suggested Destinations",
+  "requestedUrl": "Requested URL",
+  "copyUrl": "Copy URL",
+  "urlCopied": "URL copied to clipboard",
+  "reportIssue": "Report Issue",
+  "destinations": {
+    "services": {
+      "title": "Services Directory",
+      "description": "Accreditation, Halal certification, Pilgrimage & Marriage registration"
+    },
+    "verify": {
+      "title": "Credential Verification",
+      "description": "Verify official SUPKEM certificates and letters in real-time"
+    },
+    "portal": {
+      "title": "Member & Citizen Portal",
+      "description": "Track ongoing applications, submit documents, and manage profiles"
+    },
+    "news": {
+      "title": "News & Press Releases",
+      "description": "National announcements, circulars, and community updates"
+    },
+    "contact": {
+      "title": "Contact Secretariat",
+      "description": "Reach out to SUPKEM headquarters or regional county offices"
+    }
+  }
+}

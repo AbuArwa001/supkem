@@ -13,6 +13,7 @@ import PrivacyPolicy from './PrivacyPolicy.json';
 import ServicesPage from './ServicesPage';
 import StrategicFocus from './StrategicFocus';
 import TermsOfService from './TermsOfService.json';
+import NotFound from './NotFound.json';
 
 export default {
   "About": About,
@@ -26,6 +27,7 @@ export default {
   "Index": Index,
   "Navbar": Navbar,
   "NewsPage": NewsPage,
+  "NotFound": NotFound,
   "PrivacyPolicy": PrivacyPolicy,
   "ServicesPage": ServicesPage,
   "StrategicFocus": StrategicFocus,
