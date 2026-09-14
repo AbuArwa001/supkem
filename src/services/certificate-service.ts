@@ -8,6 +8,10 @@ export interface Certificate {
   expires_at: string | null;
   service_name?: string;
   organization_name?: string;
+  user_name?: string;
+  holder_name?: string;
+  recipient?: string;
+  subject?: string;
   language?: "en" | "ar";
   custom_text_en?: string;
   custom_text_ar?: string;
@@ -17,6 +21,8 @@ export interface Certificate {
   application_detail?: {
     service_name: string;
     organization_name?: string;
+    user_name?: string;
+    holder_name?: string;
     pilgrim_details?: any;
     education_details?: any;
     travel_visa_details?: any;

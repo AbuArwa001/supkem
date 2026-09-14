@@ -193,7 +193,7 @@ export function CertificateCanvas({
               className="border-b pb-0.5 mx-1"
               style={{ color: "#16543d", borderColor: "rgba(22, 84, 61, 0.2)" }}
             >
-              {certificate.organization_name || (isArabic ? "المنظمة المعينة" : "The designated organization")}
+              {certificate.holder_name || certificate.organization_name || certificate.user_name || (isArabic ? "الجهة المعنية" : "The designated entity")}
             </strong>
             {isArabic ? " معتمدة رسمياً من قبل المجلس الأعلى." : " has been officially accredited by SUPKEM."}
           </p>
