@@ -18,6 +18,7 @@ export function useSubmitApplicationLogic() {
   const router = useRouter();
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
   const [organizations, setOrganizations] = useState<Organization[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [formData, setFormData] = useState<ApplicationFormData>(initialFormData);
@@ -49,12 +50,17 @@ export function useSubmitApplicationLogic() {
 
   // Fetch organisations and services on mount
   useEffect(() => {
+    setDataLoading(true);
     Promise.all([
       applicationSubmitService.fetchOrganizations(),
       applicationSubmitService.fetchServices(),
     ])
-      .then(([orgs, servs]) => { setOrganizations(orgs); setServices(servs); })
-      .catch((err) => console.error("Failed to fetch data", err));
+      .then(([orgs, servs]) => {
+        setOrganizations(orgs);
+        setServices(servs);
+      })
+      .catch((err) => console.error("Failed to fetch data", err))
+      .finally(() => setDataLoading(false));
   }, []);
 
   const updateSubDetails = (type: keyof ApplicationFormData, field: string, value: unknown) => {
@@ -100,7 +106,7 @@ export function useSubmitApplicationLogic() {
   };
 
   return {
-    loading, organizations, services, formData, step, errors,
+    loading, dataLoading, organizations, services, formData, step, errors,
     selectedService, isIndividualService, isMarriageService,
     isHajjUmrahService, isEducationService, isTravelVisaService,
     isEmploymentService, canSelectOrganization, updateSubDetails,

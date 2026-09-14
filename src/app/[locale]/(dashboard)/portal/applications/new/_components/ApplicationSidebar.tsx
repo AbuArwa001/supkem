@@ -6,6 +6,35 @@ import { OrganizationPicker } from "./sidebar/OrganizationPicker";
 import { ApplicationSummaryCard } from "./sidebar/ApplicationSummaryCard";
 import { ArrowRight, ArrowLeft, ShieldCheck, Sparkles, Loader2, Lock } from "lucide-react";
 import { useLocale } from "next-intl";
+import { Skeleton } from "@/components/ui/skeleton";
+
+export function SidebarSkeleton() {
+  return (
+    <div className="space-y-5 animate-fadeIn">
+      {/* Applying Entity Box Skeleton */}
+      <div className="p-7 sm:p-8 rounded-[24px] bg-white border border-slate-200/90 shadow-xl shadow-slate-200/50 space-y-6">
+        <div className="flex items-center gap-3">
+          <Skeleton className="w-6 h-6 rounded-lg bg-slate-200/80" />
+          <Skeleton className="h-6 w-36 rounded-lg bg-slate-200/80" />
+        </div>
+        <div className="space-y-3">
+          <Skeleton className="h-14 w-full rounded-2xl bg-slate-200/60" />
+          <Skeleton className="h-14 w-full rounded-2xl bg-slate-200/60" />
+        </div>
+      </div>
+
+      {/* Action Box Skeleton */}
+      <div className="p-6 rounded-[24px] bg-white border border-slate-200/90 shadow-xl shadow-slate-200/60 space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-5 w-24 rounded-full bg-slate-200/80" />
+          <Skeleton className="h-4 w-20 rounded bg-slate-200/60" />
+        </div>
+        <Skeleton className="h-14 w-full rounded-2xl bg-slate-200/80" />
+        <Skeleton className="h-3 w-44 rounded-full mx-auto bg-slate-200/60" />
+      </div>
+    </div>
+  );
+}
 
 interface ApplicationSidebarProps {
   organizations: Organization[];
@@ -18,6 +47,7 @@ interface ApplicationSidebarProps {
   isOtherService?: boolean;
   step?: number;
   loading?: boolean;
+  dataLoading?: boolean;
   onOrganizationChange: (id: string) => void;
   onNext?: () => void;
   onBack?: () => void;
@@ -34,6 +64,7 @@ export function ApplicationSidebar({
   isOtherService = false,
   step = 1,
   loading = false,
+  dataLoading = false,
   onOrganizationChange,
   onNext,
   onBack,
@@ -41,6 +72,16 @@ export function ApplicationSidebar({
   const locale = useLocale();
   const isAr = locale === "ar";
   const showIndividualNotice = isIndividualService && !isMarriageService;
+
+  if (dataLoading) {
+    return (
+      <div className="lg:col-span-4 space-y-6">
+        <div className="sticky top-6">
+          <SidebarSkeleton />
+        </div>
+      </div>
+    );
+  }
 
   const hasMultipleSteps = isMarriageService || isOtherService;
   const isLastStep =

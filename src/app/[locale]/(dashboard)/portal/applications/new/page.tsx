@@ -20,12 +20,13 @@ import { FormNavigation } from "./_components/FormNavigation";
 import { FormErrorBanner } from "./_components/ui/FormErrorBanner";
 
 /** Local component to handle conditional rendering of form steps */
-function StepRenderer({ step, flags, formData, errors, services, updateSubDetails, setFormData, setErrors, onProceed }: any) {
+function StepRenderer({ step, flags, formData, errors, services, dataLoading, updateSubDetails, setFormData, setErrors, onProceed }: any) {
   if (step === 1) return (
     <ServiceSelection
       services={services}
       selectedServiceId={formData.service}
       errors={errors}
+      dataLoading={dataLoading}
       onProceed={onProceed}
       onSelect={(s) => {
         setFormData({
@@ -102,6 +103,7 @@ export default function SubmitApplication() {
 
   const {
     loading,
+    dataLoading,
     organizations,
     services,
     formData,
@@ -154,6 +156,7 @@ export default function SubmitApplication() {
               formData={formData}
               errors={errors}
               services={services}
+              dataLoading={dataLoading}
               updateSubDetails={updateSubDetails}
               setFormData={setFormData}
               setErrors={setErrors}
@@ -172,6 +175,7 @@ export default function SubmitApplication() {
             isOtherService={isOtherService}
             step={step}
             loading={loading}
+            dataLoading={dataLoading}
             onNext={handleNextStep}
             onBack={handlePrevStep}
             onOrganizationChange={(id) => {
