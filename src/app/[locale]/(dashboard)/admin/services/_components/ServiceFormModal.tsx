@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 
-import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban, Plus } from "lucide-react";
+import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban, Plus, Infinity, Clock, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceFormData, ServiceItem, ServiceCategoryItem } from "./types";
 import { useTranslations } from "next-intl";
@@ -263,6 +263,118 @@ export function ServiceFormModal({
                             })}
                         </div>
                     </div>
+
+                    {/* Certificate Validity & Expiration Policy */}
+                    {formData.document_type === "Certificate" && (
+                        <div className="p-5 rounded-2xl bg-primary/[0.02] border border-border space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <h4 className="text-sm font-bold text-primary flex items-center gap-2">
+                                        <Award size={16} className="text-primary" />
+                                        <span>Certificate Expiration & Validity</span>
+                                    </h4>
+                                    <p className="text-xs text-foreground/50 font-medium mt-0.5">
+                                        Define whether certificates issued for this service expire or remain indefinitely valid.
+                                    </p>
+                                </div>
+                                <span className={cn(
+                                    "px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border",
+                                    formData.is_indefinite !== false
+                                        ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                        : "bg-blue-50 text-blue-700 border-blue-200"
+                                )}>
+                                    {formData.is_indefinite !== false ? "Indefinite Validity" : "Fixed Expiry"}
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({
+                                        ...formData,
+                                        is_indefinite: true,
+                                        validity_duration: "Indefinite",
+                                        expiration_date: null
+                                    })}
+                                    className={cn(
+                                        "p-4 rounded-xl border-2 text-left rtl:text-right transition-all cursor-pointer flex items-start gap-3",
+                                        formData.is_indefinite !== false
+                                            ? "border-emerald-600 bg-emerald-50/50 shadow-xs ring-2 ring-emerald-500/10"
+                                            : "border-border bg-white hover:border-primary/30"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                                        formData.is_indefinite !== false ? "bg-emerald-600 text-white" : "bg-primary/5 text-primary"
+                                    )}>
+                                        <Infinity size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-primary">Indefinite (Never Expires)</p>
+                                        <p className="text-[11px] text-foreground/60 mt-0.5 leading-relaxed">
+                                            Permanent certificate with no expiration date (e.g. Marriage certificates, lifetime accreditations).
+                                        </p>
+                                    </div>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setFormData({
+                                        ...formData,
+                                        is_indefinite: false,
+                                        validity_duration: formData.validity_duration && formData.validity_duration !== "Indefinite"
+                                            ? formData.validity_duration
+                                            : "1 Year"
+                                    })}
+                                    className={cn(
+                                        "p-4 rounded-xl border-2 text-left rtl:text-right transition-all cursor-pointer flex items-start gap-3",
+                                        formData.is_indefinite === false
+                                            ? "border-primary bg-primary/[0.06] shadow-xs ring-2 ring-primary/10"
+                                            : "border-border bg-white hover:border-primary/30"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                                        formData.is_indefinite === false ? "bg-primary text-white" : "bg-primary/5 text-primary"
+                                    )}>
+                                        <Clock size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-primary">Fixed Validity Duration</p>
+                                        <p className="text-[11px] text-foreground/60 mt-0.5 leading-relaxed">
+                                            Certificate expires after a designated period from the date of issue.
+                                        </p>
+                                    </div>
+                                </button>
+                            </div>
+
+                            {/* Duration selection if not indefinite */}
+                            {formData.is_indefinite === false && (
+                                <div className="pt-2 border-t border-border/60 space-y-3">
+                                    <label className="text-xs font-bold text-primary uppercase tracking-wider block">
+                                        Select Validity Period
+                                    </label>
+                                    <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                                        {["6 Months", "1 Year", "2 Years", "3 Years", "5 Years"].map((dur) => (
+                                            <button
+                                                type="button"
+                                                key={dur}
+                                                onClick={() => setFormData({ ...formData, validity_duration: dur })}
+                                                className={cn(
+                                                    "py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center",
+                                                    formData.validity_duration === dur
+                                                        ? "bg-primary text-white border-primary shadow-xs"
+                                                        : "bg-white text-foreground/70 border-border hover:border-primary/40"
+                                                )}
+                                            >
+                                                {dur}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between px-1">

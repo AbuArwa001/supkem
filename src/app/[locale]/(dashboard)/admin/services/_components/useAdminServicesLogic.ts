@@ -29,7 +29,10 @@ export function useAdminServicesLogic() {
         document_type: "Certificate",
         description: "",
         fee: "",
-        is_active: true
+        is_active: true,
+        is_indefinite: true,
+        validity_duration: "Indefinite",
+        expiration_date: null,
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -121,7 +124,10 @@ export function useAdminServicesLogic() {
                 document_type: item.document_type || "Certificate",
                 description: item.description || item.description_en || item.description_ar || "",
                 fee: item.fee,
-                is_active: item.is_active
+                is_active: item.is_active,
+                is_indefinite: item.is_indefinite !== undefined ? item.is_indefinite : true,
+                validity_duration: item.validity_duration || "Indefinite",
+                expiration_date: item.expiration_date || null,
             });
         } else {
             setEditingItem(null);
@@ -133,7 +139,10 @@ export function useAdminServicesLogic() {
                 document_type: "Certificate",
                 description: "",
                 fee: "",
-                is_active: true
+                is_active: true,
+                is_indefinite: true,
+                validity_duration: "Indefinite",
+                expiration_date: null,
             });
         }
         setIsModalOpen(true);

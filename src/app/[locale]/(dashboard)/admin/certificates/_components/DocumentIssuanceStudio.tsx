@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Award, FileText, X, Loader2, CheckCircle2, AlertCircle, 
   PenTool, Image as ImageIcon, Eye, Eraser, Code2, AlignLeft, 
-  User, Building, Calendar, Hash, Sparkles
+  User, Building, Calendar, Hash, Sparkles, Infinity
 } from "lucide-react";
 import SignatureCanvas from "react-signature-canvas";
 
@@ -68,6 +68,14 @@ export default function DocumentIssuanceStudio({
   const [subject, setSubject] = useState("");
   const [signatoryTitle, setSignatoryTitle] = useState("Secretary General");
 
+  // Certificate Expiry State
+  const [isIndefinite, setIsIndefinite] = useState(true);
+  const [expiryDateString, setExpiryDateString] = useState(() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() + 1);
+    return d.toISOString().split("T")[0];
+  });
+
   // Editor mode: Normal Text vs Markdown
   const [isMarkdown, setIsMarkdown] = useState(false);
 
@@ -101,6 +109,28 @@ export default function DocumentIssuanceStudio({
       // Default letter subject if empty
       if (!subject && selectedApp.service_name) {
         setSubject(`OFFICIAL RECOMMENDATION - ${selectedApp.service_name.toUpperCase()}`);
+      }
+
+      // Auto-populate certificate validity policy from service
+      if (selectedApp.service_is_indefinite !== undefined) {
+        setIsIndefinite(selectedApp.service_is_indefinite);
+      } else {
+        setIsIndefinite(true);
+      }
+
+      if (selectedApp.service_expiration_date) {
+        setExpiryDateString(selectedApp.service_expiration_date);
+        setIsIndefinite(false);
+      } else if (selectedApp.service_validity_duration && selectedApp.service_validity_duration !== "Indefinite") {
+        setIsIndefinite(false);
+        const d = new Date();
+        const dur = selectedApp.service_validity_duration;
+        if (dur.includes("6 Month")) d.setMonth(d.getMonth() + 6);
+        else if (dur.includes("2 Year")) d.setFullYear(d.getFullYear() + 2);
+        else if (dur.includes("3 Year")) d.setFullYear(d.getFullYear() + 3);
+        else if (dur.includes("5 Year")) d.setFullYear(d.getFullYear() + 5);
+        else d.setFullYear(d.getFullYear() + 1);
+        setExpiryDateString(d.toISOString().split("T")[0]);
       }
     }
   }, [selectedAppId, selectedApp]);
@@ -174,6 +204,9 @@ export default function DocumentIssuanceStudio({
       recipient: docType === "Letter" ? recipient : undefined,
       subject: docType === "Letter" ? subject : undefined,
       signatoryTitle: signatoryTitle,
+      expiresAt: docType === "Certificate"
+        ? (isIndefinite ? null : (expiryDateString ? new Date(expiryDateString).toISOString() : null))
+        : undefined,
     };
 
     handleIssueDocument(payload);
@@ -363,6 +396,69 @@ export default function DocumentIssuanceStudio({
                           className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                         />
                       </div>
+                    </div>
+                  )}
+
+                  {/* Certificate Expiration Controls */}
+                  {docType === "Certificate" && (
+                    <div className="space-y-3 p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/80">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-600 flex items-center gap-1.5">
+                          <Calendar size={13} className="text-primary" /> Certificate Expiration
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setIsIndefinite(!isIndefinite)}
+                          className={cn(
+                            "flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all",
+                            isIndefinite
+                              ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                              : "bg-slate-200 text-slate-600 hover:bg-slate-300"
+                          )}
+                        >
+                          <Infinity size={13} />
+                          {isIndefinite ? "Indefinite (Never Expires)" : "Set Expiry Date"}
+                        </button>
+                      </div>
+
+                      {isIndefinite ? (
+                        <div className="flex items-center gap-2 p-2.5 bg-emerald-50/60 rounded-xl border border-emerald-200 text-emerald-800 text-xs font-semibold">
+                          <Infinity size={15} className="text-emerald-600 shrink-0" />
+                          <span>This certificate will remain valid indefinitely with no expiration date.</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <input
+                            type="date"
+                            value={expiryDateString}
+                            onChange={(e) => setExpiryDateString(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                            className="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                          />
+                          <div className="flex flex-wrap gap-1.5">
+                            {[
+                              { label: "+6 Months", addMonths: 6 },
+                              { label: "+1 Year", addMonths: 12 },
+                              { label: "+2 Years", addMonths: 24 },
+                              { label: "+3 Years", addMonths: 36 },
+                              { label: "+5 Years", addMonths: 60 },
+                            ].map((preset) => (
+                              <button
+                                type="button"
+                                key={preset.label}
+                                onClick={() => {
+                                  const d = new Date();
+                                  d.setMonth(d.getMonth() + preset.addMonths);
+                                  setExpiryDateString(d.toISOString().split("T")[0]);
+                                }}
+                                className="text-[10px] font-bold px-2 py-1 rounded-lg border bg-white text-slate-600 border-slate-200 hover:border-primary/40 hover:bg-primary/5 transition-all"
+                              >
+                                {preset.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -573,9 +669,9 @@ export default function DocumentIssuanceStudio({
                            signatory_title: signatoryTitle,
                          } as any}
                          certificateRef={{ current: null }}
-                         issueDate={new Date()}
-                         expiryDate={new Date(new Date().setFullYear(new Date().getFullYear() + 1))}
-                         isValid={true}
+                          issueDate={new Date()}
+                          expiryDate={isIndefinite ? null : (expiryDateString ? new Date(expiryDateString) : null)}
+                          isValid={true}
                          language={language}
                          customText={language === "en" ? customTextEn : customTextAr}
                          signatoryTitle={signatoryTitle}

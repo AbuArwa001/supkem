@@ -51,6 +51,10 @@ export const certificateService = {
       body.signatory_title = payload.signatoryTitle;
     }
 
+    if (!isLetter && payload.expiresAt !== undefined) {
+      body.expires_at = payload.expiresAt;
+    }
+
     if (isLetter) {
       if (payload.recipient) body.recipient = payload.recipient;
       if (payload.subject) body.subject = payload.subject;

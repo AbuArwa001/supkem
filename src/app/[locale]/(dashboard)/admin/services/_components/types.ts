@@ -10,6 +10,9 @@ export interface ServiceItem {
     fee: string;
     document_type?: string;
     is_active: boolean;
+    is_indefinite?: boolean;
+    validity_duration?: string;
+    expiration_date?: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: any;
@@ -36,5 +39,9 @@ export interface ServiceFormData {
     description: string;
     fee: string;
     is_active: boolean;
+    is_indefinite?: boolean;
+    validity_duration?: string;
+    expiration_date?: string | null;
 }
+
 
