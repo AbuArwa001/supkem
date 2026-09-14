@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Search } from "lucide-react";
 
 import { InfoBox } from "@/app/[locale]/(dashboard)/portal/certificates/[id]/_components/InfoBox";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 import type { Certificate } from "@/services/certificate-service";
 
 interface GenericCertificateContentProps {
@@ -99,15 +100,16 @@ export function GenericCertificateContent({
         </div>
 
         <div
-          className="w-24 h-24 bg-white border rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0"
+          className="w-24 h-24 bg-white border rounded-xl p-1.5 shadow-xs flex flex-col items-center justify-center shrink-0 overflow-hidden"
           style={{ borderColor: "rgba(226, 232, 240, 0.8)" }}
         >
-          <div
-            className="w-full h-full rounded flex items-center justify-center"
-            style={{ backgroundColor: "#f8fafc" }}
-          >
-            <Search size={24} style={{ color: "#cbd5e1" }} />
-          </div>
+          <CertificateQRCode
+            hash={certificate.qr_code_hash}
+            serialNumber={certificate.serial_number}
+            size={70}
+            showLabel
+            fgColor="#16543d"
+          />
         </div>
       </div>
     </>

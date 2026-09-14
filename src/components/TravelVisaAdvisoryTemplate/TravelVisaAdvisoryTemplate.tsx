@@ -28,7 +28,10 @@ export default function TravelVisaAdvisoryTemplate({ certificate }: TravelVisaAd
                     serial_number={certificate.serial_number} 
                 />
                 
-                <TemplateFooter />
+                <TemplateFooter 
+                    serialNumber={certificate.serial_number}
+                    qrCodeHash={certificate.qr_code_hash}
+                />
             </div>
         </div>
     );

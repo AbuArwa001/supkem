@@ -1,6 +1,12 @@
 import { ShieldCheck, Plane, Globe } from "lucide-react";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 
-export const TemplateFooter = () => {
+interface TemplateFooterProps {
+    serialNumber?: string;
+    qrCodeHash?: string;
+}
+
+export const TemplateFooter = ({ serialNumber, qrCodeHash }: TemplateFooterProps) => {
     return (
         <>
             <div className="pt-10">
@@ -25,14 +31,25 @@ export const TemplateFooter = () => {
             </div>
 
             {/* Footer QR/Verification */}
-            <div className="mt-12 flex items-center justify-between gap-6 opacity-30 invert print:opacity-10">
-                <div className="flex gap-4">
+            <div className="mt-12 flex items-center justify-between gap-6">
+                <div className="flex gap-4 opacity-40">
                     <Plane size={32} />
                     <Globe size={32} />
                 </div>
-                <div className="h-px bg-slate-800 flex-1" />
-                <div className="w-16 h-16 bg-slate-800 rounded-lg shrink-0 flex items-center justify-center text-white font-black text-xs">
-                    SUPKEM VISA
+                <div className="h-px bg-slate-300 flex-1" />
+                <div className="shrink-0 flex items-center gap-3">
+                    <div className="text-right">
+                        <p className="text-[9px] font-black uppercase tracking-widest text-slate-700">Official Visa Advisory</p>
+                        <p className="text-[7px] font-bold uppercase text-slate-400">Scan to verify</p>
+                    </div>
+                    <div className="p-1 bg-white border border-slate-200 rounded-lg shadow-xs">
+                        <CertificateQRCode
+                            hash={qrCodeHash}
+                            serialNumber={serialNumber}
+                            size={56}
+                            fgColor="#0f172a"
+                        />
+                    </div>
                 </div>
             </div>
         </>

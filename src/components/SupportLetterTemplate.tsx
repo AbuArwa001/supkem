@@ -30,7 +30,10 @@ export default function SupportLetterTemplate({ certificate }: SupportLetterTemp
         <LetterSignOff />
       </div>
 
-      <LetterFooter />
+      <LetterFooter 
+        serialNumber={certificate.serial_number}
+        qrCodeHash={certificate.qr_code_hash}
+      />
     </div>
   );
 }

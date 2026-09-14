@@ -3,6 +3,7 @@ import api from "@/lib/api";
 export interface Certificate {
   id: string;
   serial_number: string;
+  qr_code_hash?: string;
   issued_at: string;
   expires_at: string | null;
   service_name?: string;

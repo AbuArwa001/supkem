@@ -48,7 +48,11 @@ export default function MarriageCertificateTemplate({
           <MarriageDetailsSection details={details} />
         </div>
 
-        <CertificateFooter dateOfIssuance={details.date_of_issuance} />
+        <CertificateFooter 
+          dateOfIssuance={details.date_of_issuance} 
+          serialNumber={certificate.serial_number}
+          qrCodeHash={certificate.qr_code_hash}
+        />
 
         <div className="absolute bottom-2 left-2 rotate-12 opacity-10">
           <Award size={16} />

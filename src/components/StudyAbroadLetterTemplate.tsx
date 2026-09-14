@@ -30,7 +30,10 @@ export default function StudyAbroadLetterTemplate({ certificate }: StudyAbroadLe
         <LetterSignOff />
       </div>
 
-      <LetterFooter />
+      <LetterFooter 
+        serialNumber={certificate.serial_number}
+        qrCodeHash={certificate.qr_code_hash}
+      />
     </div>
   );
 }

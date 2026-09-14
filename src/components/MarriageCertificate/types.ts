@@ -33,6 +33,7 @@ export interface MarriageDetails {
 export interface MarriageCertificateTemplateProps {
   certificate: {
     serial_number?: string;
+    qr_code_hash?: string;
     application_detail?: {
       marriage_details?: MarriageDetails;
     };

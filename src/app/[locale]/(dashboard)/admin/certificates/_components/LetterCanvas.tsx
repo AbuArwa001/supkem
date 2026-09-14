@@ -3,6 +3,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 
 export function interpolateVariables(text: string, context: {
   userName?: string | null;
@@ -196,23 +197,35 @@ export function LetterCanvas({
         )}
       </div>
 
-      {/* Signature */}
-      <div className={`mt-auto pt-8 border-t flex flex-col ${isArabic ? "items-end text-right" : "items-start text-left"}`} style={{ borderColor: "#e2e8f0" }}>
-        <div className="w-44 h-20 mb-3 flex items-end justify-start relative">
-            {signatureBase64 ? (
-              <img src={signatureBase64} alt="Signature" className="max-h-full max-w-full object-contain mix-blend-multiply" />
-            ) : (
-              <span className={`font-serif italic text-xl ${isArabic ? "font-arabic" : ""}`} style={{ color: "#94a3b8" }}>
-                {isArabic ? "[ توقيع غير متوفر ]" : "[ No Signature ]"}
-              </span>
-            )}
+      {/* Signature & Verification QR */}
+      <div className={`mt-auto pt-8 border-t flex items-end justify-between ${isArabic ? "flex-row-reverse" : ""}`} style={{ borderColor: "#e2e8f0" }}>
+        <div className={`flex flex-col ${isArabic ? "items-end text-right" : "items-start text-left"}`}>
+          <div className="w-44 h-20 mb-3 flex items-end justify-start relative">
+              {signatureBase64 ? (
+                <img src={signatureBase64} alt="Signature" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+              ) : (
+                <span className={`font-serif italic text-xl ${isArabic ? "font-arabic" : ""}`} style={{ color: "#94a3b8" }}>
+                  {isArabic ? "[ توقيع غير متوفر ]" : "[ No Signature ]"}
+                </span>
+              )}
+          </div>
+          <p className={`font-bold text-base ${isArabic ? "font-arabic" : ""}`} style={{ color: "#1e293b" }}>
+            {resolvedSignatory}
+          </p>
+          <p className={`text-xs font-medium mt-0.5 ${isArabic ? "font-arabic" : ""}`} style={{ color: "#64748b" }}>
+            {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}
+          </p>
         </div>
-        <p className={`font-bold text-base ${isArabic ? "font-arabic" : ""}`} style={{ color: "#1e293b" }}>
-          {resolvedSignatory}
-        </p>
-        <p className={`text-xs font-medium mt-0.5 ${isArabic ? "font-arabic" : ""}`} style={{ color: "#64748b" }}>
-          {isArabic ? "المجلس الأعلى لمسلمي كينيا" : "Supreme Council of Kenya Muslims"}
-        </p>
+
+        <div className="flex flex-col items-center">
+          <CertificateQRCode
+            hash={letter.qr_code_hash}
+            serialNumber={letter.serial_number}
+            size={68}
+            showLabel
+            fgColor="#16543d"
+          />
+        </div>
       </div>
 
     </motion.div>

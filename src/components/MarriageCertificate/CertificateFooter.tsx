@@ -1,10 +1,12 @@
-import { ShieldCheck } from "lucide-react";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 
 interface CertificateFooterProps {
   dateOfIssuance: string;
+  serialNumber?: string;
+  qrCodeHash?: string;
 }
 
-export const CertificateFooter = ({ dateOfIssuance }: CertificateFooterProps) => (
+export const CertificateFooter = ({ dateOfIssuance, serialNumber, qrCodeHash }: CertificateFooterProps) => (
   <div className="mt-8 flex justify-between items-end border-t-2 border-slate-200 pt-4">
     <div className="flex gap-8 items-end">
       <div className="space-y-1.5 flex flex-col items-start min-w-[200px]">
@@ -31,17 +33,22 @@ export const CertificateFooter = ({ dateOfIssuance }: CertificateFooterProps) =>
       </div>
     </div>
 
-    <div className="text-center space-y-3 opacity-70 group hover:opacity-100 transition-opacity">
-      <div className="bg-primary/5 p-2 rounded-2xl inline-block border border-primary/10">
-        <ShieldCheck className="text-primary" size={28} />
-      </div>
-      <div className="space-y-0.5">
+    <div className="flex items-center gap-4">
+      <div className="text-right space-y-0.5 hidden sm:block">
         <p className="text-[9px] font-black uppercase tracking-[0.25em] text-slate-800">
           AUTHENTIC DOCUMENT
         </p>
-        <p className="text-[7px] font-black uppercase tracking-[0.1em] text-slate-500 max-w-[220px] leading-tight mx-auto">
-          Issued by the Supreme Council of Kenya Muslims <br /> Verified & Digitally Recorded
+        <p className="text-[7px] font-black uppercase tracking-[0.1em] text-slate-500 max-w-[180px] leading-tight ml-auto">
+          Supreme Council of Kenya Muslims <br /> Scan QR code to verify
         </p>
+      </div>
+      <div className="p-1 bg-white border border-slate-200 rounded-lg shadow-xs">
+        <CertificateQRCode
+          hash={qrCodeHash}
+          serialNumber={serialNumber}
+          size={56}
+          fgColor="#0f172a"
+        />
       </div>
     </div>
   </div>

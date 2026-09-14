@@ -5,6 +5,7 @@ import { ShieldCheck } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { interpolateVariables } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 
 interface CertificateCanvasProps {
   certificate: any;
@@ -274,15 +275,16 @@ export function CertificateCanvas({
           </div>
 
           <div
-            className="w-24 h-24 bg-white border rounded-xl p-2 shadow-sm flex flex-col items-center justify-center shrink-0"
+            className="w-24 h-24 bg-white border rounded-xl p-1.5 shadow-xs flex flex-col items-center justify-center shrink-0 overflow-hidden"
             style={{ borderColor: "rgba(226, 232, 240, 0.8)" }}
           >
-            <div
-              className="w-full h-full rounded flex items-center justify-center"
-              style={{ backgroundColor: "#f8fafc" }}
-            >
-              <ShieldCheck size={32} style={{ color: "#cbd5e1" }} />
-            </div>
+            <CertificateQRCode
+              hash={certificate.qr_code_hash}
+              serialNumber={certificate.serial_number}
+              size={70}
+              showLabel
+              fgColor="#16543d"
+            />
           </div>
         </div>
       </div>

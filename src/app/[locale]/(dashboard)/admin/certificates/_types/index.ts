@@ -10,6 +10,7 @@ export interface Certificate {
   service_document_type?: string;
   issued_at: string;
   serial_number: string;
+  qr_code_hash?: string;
   custom_text_en?: string | null;
   custom_text_ar?: string | null;
   language?: string;
