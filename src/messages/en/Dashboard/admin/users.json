@@ -32,6 +32,7 @@
     "selected": "{count} selected",
     "activate": "Activate",
     "suspend": "Suspend",
+    "resendVerification": "Resend Verification",
     "export": "Export CSV",
     "delete": "Delete",
     "deselect": "Deselect",

@@ -32,6 +32,7 @@
     "selected": "تم تحديد {count}",
     "activate": "تفعيل",
     "suspend": "تعليق",
+    "resendVerification": "إعادة إرسال التحقق",
     "export": "تصدير CSV",
     "delete": "حذف",
     "deselect": "إلغاء التحديد",

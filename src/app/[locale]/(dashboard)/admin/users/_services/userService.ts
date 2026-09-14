@@ -34,7 +34,7 @@ export const userService = {
 
   bulkAction: async (
     userIds: (string | number)[],
-    action: "activate" | "deactivate" | "delete"
+    action: "activate" | "deactivate" | "delete" | "resend_verification"
   ) => {
     return api.post(`/users/users/bulk_action/`, { user_ids: userIds, action });
   },

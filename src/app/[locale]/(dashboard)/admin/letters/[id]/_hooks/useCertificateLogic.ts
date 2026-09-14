@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "@/i18n/routing";
-import { domToPng } from "modern-screenshot";
-import jsPDF from "jspdf";
+import { downloadElementAsPdf } from "@/lib/pdfDownloader";
 import { Certificate, CertificateService } from "@/services/certificate-service";
 
 export function useCertificateLogic() {
@@ -40,32 +39,9 @@ export function useCertificateLogic() {
 
         setIsDownloading(true);
         try {
-            const dataUrl = await domToPng(certificateRef.current, {
-                scale: 2,
-            });
-
-            const img = new (window as any).Image();
-            img.src = dataUrl;
-            await new Promise((resolve) => (img.onload = resolve));
-
-            const pdf = new jsPDF({
-                orientation: "portrait",
-                unit: "px",
-                format: [img.width / 2, img.height / 2],
-            });
-
-            pdf.addImage(
-                dataUrl,
-                "PNG",
-                0,
-                0,
-                img.width / 2,
-                img.height / 2,
-                undefined,
-                "FAST",
-            );
-            pdf.save(
-                `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`,
+            await downloadElementAsPdf(
+                certificateRef.current,
+                `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`
             );
         } catch (err) {
             console.error("Failed to generate PDF", err);

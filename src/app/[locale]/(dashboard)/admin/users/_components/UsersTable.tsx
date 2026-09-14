@@ -11,6 +11,7 @@ import {
   Download,
   Trash2,
   X,
+  Mail,
 } from "lucide-react";
 import {
   Table,
@@ -50,7 +51,7 @@ interface UsersTableProps {
   selectedUserIds: (string | number)[];
   onToggleSelectUser: (id: string | number) => void;
   onSelectAll: (checked: boolean) => void;
-  onBulkAction: (action: "activate" | "deactivate" | "delete") => void;
+  onBulkAction: (action: "activate" | "deactivate" | "delete" | "resend_verification") => void;
   onExportSelected: () => void;
 }
 
@@ -158,6 +159,17 @@ export const UsersTable = ({
               >
                 <XCircle className="h-3.5 w-3.5" />
                 {tb("suspend")}
+              </Button>
+
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => onBulkAction("resend_verification")}
+                className="h-8 rounded-xl text-sky-400 hover:text-sky-300 hover:bg-sky-950 font-black text-[11px] uppercase tracking-wider flex items-center gap-1.5"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                {tb("resendVerification")}
               </Button>
 
               <Button

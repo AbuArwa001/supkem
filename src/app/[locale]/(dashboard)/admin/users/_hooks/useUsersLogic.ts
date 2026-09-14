@@ -219,13 +219,24 @@ export const useUsersLogic = () => {
     }
   };
 
-  const handleBulkAction = async (action: "activate" | "deactivate" | "delete") => {
+  const handleBulkAction = async (
+    action: "activate" | "deactivate" | "delete" | "resend_verification"
+  ) => {
     if (selectedUserIds.length === 0) return;
 
     if (
       action === "delete" &&
       !confirm(
         `Are you sure you want to permanently delete ${selectedUserIds.length} selected users?`
+      )
+    ) {
+      return;
+    }
+
+    if (
+      action === "resend_verification" &&
+      !confirm(
+        `Resend verification email to ${selectedUserIds.length} selected user(s)?`
       )
     ) {
       return;
