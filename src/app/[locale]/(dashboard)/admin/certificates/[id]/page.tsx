@@ -59,6 +59,10 @@ function AdminCertificateDetailContent() {
           issueDate={issueDate}
           expiryDate={expiryDate}
           isValid={isValid}
+          language={certificate.language || "en"}
+          customText={certificate.language === "ar" ? certificate.custom_text_ar : certificate.custom_text_en}
+          signatureBase64={certificate.digital_signature}
+          signatoryTitle={certificate.signatory_title}
         />
       </DocumentScaleWrapper>
 

@@ -36,6 +36,8 @@ export function CertificateCanvas({
   isMarkdown = false,
 }: CertificateCanvasProps) {
   const isArabic = language === "ar";
+  const resolvedSignature = signatureBase64 || certificate.digital_signature;
+  const resolvedSignatory = signatoryTitle || certificate.signatory_title || (isArabic ? "الرئيس الوطني" : "National Chairman");
 
   return (
     <motion.div
@@ -255,14 +257,14 @@ export function CertificateCanvas({
               className={`w-48 h-20 border-b flex items-end justify-center relative overflow-hidden ${isArabic ? "ml-auto" : ""}`}
               style={{ borderColor: "#1e293b" }}
             >
-              {signatureBase64 ? (
-                <img src={signatureBase64} alt="Signature" className="h-full object-contain pb-1 mix-blend-multiply" />
+              {resolvedSignature ? (
+                <img src={resolvedSignature} alt="Signature" className="h-full object-contain pb-1 mix-blend-multiply" />
               ) : (
                 <span
                   className={`font-serif text-2xl italic px-2 -mb-2 ${isArabic ? "font-arabic" : ""}`}
                   style={{ color: "#475569" }}
                 >
-                  {signatoryTitle || certificate.signatory_title || (isArabic ? "الرئيس الوطني" : "National Chairman")}
+                  {resolvedSignatory}
                 </span>
               )}
             </div>
@@ -270,7 +272,7 @@ export function CertificateCanvas({
               className={`text-[10px] font-bold uppercase tracking-widest mt-4 ${isArabic ? "font-arabic" : ""}`}
               style={{ color: "#94a3b8" }}
             >
-              {signatoryTitle || certificate.signatory_title || (isArabic ? "الرئيس الوطني" : "National Chairman")}
+              {resolvedSignatory}
             </p>
           </div>
 

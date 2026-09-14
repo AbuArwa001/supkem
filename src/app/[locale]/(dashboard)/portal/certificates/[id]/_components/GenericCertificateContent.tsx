@@ -89,13 +89,21 @@ export function GenericCertificateContent({
         style={{ borderColor: "rgba(226, 232, 240, 0.6)" }}
       >
         <div className="text-left">
-          <div className="w-40 h-10 border-b flex items-end" style={{ borderColor: "#1e293b" }}>
-            <span className="font-serif text-2xl italic px-2 -mb-2" style={{ color: "#475569" }}>
-              Official Signatory
-            </span>
+          <div className="w-48 h-20 border-b flex items-end justify-center relative overflow-hidden" style={{ borderColor: "#1e293b" }}>
+            {certificate.digital_signature ? (
+              <img
+                src={certificate.digital_signature}
+                alt="Signature"
+                className="h-full object-contain pb-1 mix-blend-multiply"
+              />
+            ) : (
+              <span className="font-serif text-2xl italic px-2 -mb-2" style={{ color: "#475569" }}>
+                {certificate.signatory_title || "Official Signatory"}
+              </span>
+            )}
           </div>
           <p className="text-[10px] font-bold uppercase tracking-widest mt-4" style={{ color: "#94a3b8" }}>
-            Authorized Signature
+            {certificate.signatory_title || "Authorized Signature"}
           </p>
         </div>
 

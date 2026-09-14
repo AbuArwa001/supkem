@@ -12,6 +12,7 @@ export interface Certificate {
   custom_text_en?: string;
   custom_text_ar?: string;
   digital_signature?: string;
+  signatory_title?: string;
   application: string | number;
   application_detail?: {
     service_name: string;

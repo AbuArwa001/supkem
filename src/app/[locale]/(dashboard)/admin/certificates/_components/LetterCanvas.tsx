@@ -201,8 +201,8 @@ export function LetterCanvas({
       <div className={`mt-auto pt-8 border-t flex items-end justify-between ${isArabic ? "flex-row-reverse" : ""}`} style={{ borderColor: "#e2e8f0" }}>
         <div className={`flex flex-col ${isArabic ? "items-end text-right" : "items-start text-left"}`}>
           <div className="w-44 h-20 mb-3 flex items-end justify-start relative">
-              {signatureBase64 ? (
-                <img src={signatureBase64} alt="Signature" className="max-h-full max-w-full object-contain mix-blend-multiply" />
+              {signatureBase64 || letter.digital_signature ? (
+                <img src={signatureBase64 || letter.digital_signature} alt="Signature" className="max-h-full max-w-full object-contain mix-blend-multiply" />
               ) : (
                 <span className={`font-serif italic text-xl ${isArabic ? "font-arabic" : ""}`} style={{ color: "#94a3b8" }}>
                   {isArabic ? "[ توقيع غير متوفر ]" : "[ No Signature ]"}
