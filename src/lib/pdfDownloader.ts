@@ -26,6 +26,13 @@ async function inlineImages(root: HTMLElement): Promise<() => void> {
           reader.readAsDataURL(blob);
         });
         img.src = base64;
+        if (img.decode) {
+          try {
+            await img.decode();
+          } catch {
+            // ignore decode error if already cached/rendered
+          }
+        }
       } catch (err) {
         console.warn("Could not inline image for PDF capture:", src, err);
       }
@@ -51,11 +58,15 @@ export async function downloadElementAsPdf(
   let restoreImages: (() => void) | null = null;
   let canvas: HTMLCanvasElement | null = null;
 
+  const rect = element.getBoundingClientRect();
+  const width = Math.max(element.scrollWidth, element.offsetWidth, Math.round(rect.width), 800);
+  const height = Math.max(element.scrollHeight, element.offsetHeight, Math.round(rect.height), 600);
+
   try {
     // 1. Pre-inline images to avoid canvas tainting
     restoreImages = await inlineImages(element);
 
-    // 2. Render canvas using html2canvas-pro with safe CORS settings
+    // 2. Render canvas using html2canvas-pro with explicit bounds & layout unwrap
     canvas = await html2canvas(element, {
       scale: 2,
       useCORS: true,
@@ -63,12 +74,32 @@ export async function downloadElementAsPdf(
       backgroundColor: "#ffffff",
       logging: false,
       imageTimeout: 15000,
+      scrollX: 0,
+      scrollY: 0,
+      width,
+      height,
+      windowWidth: document.documentElement.offsetWidth || width,
+      windowHeight: document.documentElement.offsetHeight || height,
+      onclone: (clonedDoc, clonedElement) => {
+        clonedElement.style.transform = "none";
+        clonedElement.style.margin = "0";
+        clonedElement.style.opacity = "1";
+        clonedElement.style.visibility = "visible";
+        let parent = clonedElement.parentElement;
+        while (parent && parent !== clonedDoc.body) {
+          parent.style.transform = "none";
+          parent.style.overflow = "visible";
+          parent = parent.parentElement;
+        }
+      },
     });
   } catch (canvasErr) {
     console.warn("html2canvas-pro failed, trying modern-screenshot fallback:", canvasErr);
     try {
       canvas = await domToCanvas(element, {
         scale: 2,
+        width,
+        height,
         font: false,
         timeout: 8000,
       });

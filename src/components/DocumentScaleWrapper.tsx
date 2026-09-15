@@ -73,9 +73,9 @@ export function DocumentScaleWrapper({
         )}
       </div>
 
-      {/* Overflow container */}
+      {/* Document container */}
       <div
-        className={`w-full flex justify-center no-print ${
+        className={`w-full flex justify-center print:block print:w-full ${
           isFullZoom ? "overflow-x-auto pb-4 justify-start sm:justify-center" : ""
         }`}
       >
@@ -85,7 +85,7 @@ export function DocumentScaleWrapper({
             height: isFullZoom ? `${baseHeight}px` : `${scaledHeight}px`,
             transition: "width 0.2s ease, height 0.2s ease",
           }}
-          className="relative shrink-0 overflow-hidden"
+          className="relative shrink-0 overflow-hidden print:w-full print:h-auto print:overflow-visible print:transform-none"
         >
           <div
             style={{
@@ -95,15 +95,11 @@ export function DocumentScaleWrapper({
               transformOrigin: "top left",
               transition: "transform 0.2s ease",
             }}
+            className="print:transform-none print:w-full print:min-h-0"
           >
             {children}
           </div>
         </div>
-      </div>
-
-      {/* Printable version that ignores scaling */}
-      <div className="hidden print:block print:w-full print:transform-none">
-        {children}
       </div>
     </div>
   );
