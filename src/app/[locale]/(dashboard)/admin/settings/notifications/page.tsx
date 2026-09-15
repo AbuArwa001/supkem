@@ -30,6 +30,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { RoleGuard } from "@/components/RoleGuard";
+import { canAccessModule } from "@/lib/permissions";
 
 // --- Types ---
 interface SystemParameter {
@@ -65,37 +67,31 @@ const item = {
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function NotificationsSettingsPage() {
+    return (
+        <RoleGuard module="settings_notifications">
+            <NotificationsSettingsContent />
+        </RoleGuard>
+    );
+}
+
+function NotificationsSettingsContent() {
     const { user } = useAuth();
-    const isAdmin = user?.role?.role_name === "Admin" || user?.is_staff;
+    const canAccess = canAccessModule(user, "settings_notifications");
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
     const [updatingKey, setUpdatingKey] = useState<string | null>(null);
 
     const { data: rawParams, isLoading: paramsLoading, mutate: mutateParams } = useSWR<any>(
-        isAdmin ? "/configurations/system-parameters/?category=notifications" : null,
+        canAccess ? "/configurations/system-parameters/?category=notifications" : null,
         fetcher
     );
 
     const { data: rawRoles, isLoading: rolesLoading } = useSWR<any>(
-        isAdmin ? "/users/roles/" : null,
+        canAccess ? "/users/roles/" : null,
         fetcher
     );
 
     const parameters = Array.isArray(rawParams) ? rawParams : (rawParams?.results || []);
     const roles = Array.isArray(rawRoles) ? rawRoles : (rawRoles?.results || []);
-
-    if (!isAdmin) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-                <div className="bg-rose-50 p-6 rounded-full">
-                    <AlertCircle className="h-12 w-12 text-rose-500" />
-                </div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Access Restricted</h2>
-                <p className="text-slate-500 font-semibold max-w-md text-center">
-                    Notification architecture requires system admin privileges to modify.
-                </p>
-            </div>
-        );
-    }
 
     const handleValueChange = (key: string, value: string) => {
         setPendingChanges(prev => ({ ...prev, [key]: value }));
@@ -108,10 +104,10 @@ export default function NotificationsSettingsPage() {
         setUpdatingKey(key);
         try {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
-            toast.success("Setting updated successfully");
+            toast.success(`Notification setting "${key}" updated successfully`);
             if (parameters) {
                 const updatedParams = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
-                mutateParams(rawParams.results ? { ...rawParams, results: updatedParams } : updatedParams, false);
+                mutateParams(rawParams?.results ? { ...rawParams, results: updatedParams } : updatedParams, false);
             }
             setPendingChanges(prev => {
                 const next = { ...prev };

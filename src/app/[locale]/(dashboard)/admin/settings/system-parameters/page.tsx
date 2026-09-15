@@ -28,6 +28,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "@/i18n/routing";
+import { toast } from "sonner";
+import { RoleGuard } from "@/components/RoleGuard";
+import { canAccessModule } from "@/lib/permissions";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface SystemParameter {
@@ -37,7 +40,7 @@ interface SystemParameter {
     description: string;
     value: string;
     data_type: 'string' | 'number' | 'boolean' | 'json';
-    category: 'general' | 'financial' | 'notifications' | 'system';
+    category: 'general' | 'financial' | 'notifications' | 'system' | 'integrations';
     updated_at: string;
 }
 
@@ -58,26 +61,35 @@ const item = {
 };
 
 // ─── Constants ───────────────────────────────────────────────────────────────
-const CATEGORY_CONFIG: Record<ParameterCategory, { label: string; icon: any; color: string }> = {
+const CATEGORY_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
     general: { label: "General", icon: LayoutDashboard, color: "text-indigo-600 bg-indigo-50" },
     financial: { label: "Financial", icon: DollarSign, color: "text-emerald-600 bg-emerald-50" },
     notifications: { label: "Notifications", icon: Bell, color: "text-rose-600 bg-rose-50" },
     system: { label: "System", icon: Cpu, color: "text-slate-600 bg-slate-50" },
+    integrations: { label: "Integrations", icon: Settings2, color: "text-violet-600 bg-violet-50" },
 };
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function SystemParametersPage() {
+    return (
+        <RoleGuard module="settings_system_parameters">
+            <SystemParametersContent />
+        </RoleGuard>
+    );
+}
+
+function SystemParametersContent() {
     const { user } = useAuth();
-    const isAdmin = user?.role?.role_name === "Admin" || user?.is_staff;
+    const canAccess = canAccessModule(user, "settings_system_parameters");
 
     const [search, setSearch] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState<ParameterCategory | "all">("all");
+    const [selectedCategory, setSelectedCategory] = useState<string>("all");
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
     const [updatingKey, setUpdatingKey] = useState<string | null>(null);
 
     const { data: rawData, error, mutate, isLoading } = useSWR<any>(
-        isAdmin ? "/configurations/system-parameters/" : null,
+        canAccess ? "/configurations/system-parameters/" : null,
         fetcher
     );
 
@@ -90,10 +102,10 @@ export default function SystemParametersPage() {
         setUpdatingKey(key);
         try {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
-            // Update local cache
+            toast.success(`Parameter "${key}" committed successfully`);
             if (parameters) {
                 const updatedParameters = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
-                mutate(rawData.results ? { ...rawData, results: updatedParameters } : updatedParameters, false);
+                mutate(rawData?.results ? { ...rawData, results: updatedParameters } : updatedParameters, false);
             }
             setPendingChanges(prev => {
                 const next = { ...prev };
@@ -102,29 +114,15 @@ export default function SystemParametersPage() {
             });
         } catch (err) {
             console.error("Failed to update parameter", err);
-            alert("Failed to update parameter. Please try again.");
+            toast.error("Failed to update parameter. Please try again.");
         } finally {
             setUpdatingKey(null);
         }
     };
 
-    if (!isAdmin) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-                <div className="bg-rose-50 p-6 rounded-full">
-                    <AlertCircle className="h-12 w-12 text-rose-500" />
-                </div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Access Restricted</h2>
-                <p className="text-slate-500 font-semibold max-w-md text-center">
-                    System configuration requires top-level administrative clearance.
-                </p>
-            </div>
-        );
-    }
-
     const filteredParameters = parameters?.filter((p: SystemParameter) => {
-        const matchesSearch = p.name.toLowerCase().includes(search.toLowerCase()) ||
-            p.key.toLowerCase().includes(search.toLowerCase());
+        const matchesSearch = (p.name || "").toLowerCase().includes(search.toLowerCase()) ||
+            (p.key || "").toLowerCase().includes(search.toLowerCase());
         const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
@@ -236,12 +234,15 @@ export default function SystemParametersPage() {
                                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                             <div className="space-y-4 flex-1">
                                                 <div className="flex items-center gap-3">
-                                                    <div className={`p-2 rounded-xl ${CATEGORY_CONFIG[param.category].color}`}>
-                                                        {(() => {
-                                                            const Icon = CATEGORY_CONFIG[param.category].icon;
-                                                            return <Icon className="h-4 w-4" />;
-                                                        })()}
-                                                    </div>
+                                                    {(() => {
+                                                        const conf = CATEGORY_CONFIG[param.category] || { label: param.category, icon: Cpu, color: "text-slate-600 bg-slate-50" };
+                                                        const Icon = conf.icon;
+                                                        return (
+                                                            <div className={`p-2 rounded-xl ${conf.color}`}>
+                                                                <Icon className="h-4 w-4" />
+                                                            </div>
+                                                        );
+                                                    })()}
                                                     <div>
                                                         <h3 className="text-lg font-bold text-slate-900 tracking-tight uppercase font-outfit">
                                                             {param.name}

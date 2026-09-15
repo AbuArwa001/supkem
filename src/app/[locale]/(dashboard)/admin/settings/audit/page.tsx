@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -43,13 +44,17 @@ const fetcher = (url: string) => api.get(url).then(res => res.data);
 export default function DataLogsPage() {
     return (
         <RoleGuard module="settings_audit">
-            <DataLogsPageContent />
+            <Suspense fallback={<div className="p-12 text-center text-slate-400 font-bold">Loading audit logs...</div>}>
+                <DataLogsPageContent />
+            </Suspense>
         </RoleGuard>
     );
 }
 
 function DataLogsPageContent() {
-    const [view, setView] = useState<"logs" | "stats">("logs");
+    const searchParams = useSearchParams();
+    const initialTab = (searchParams.get("tab") || searchParams.get("view")) === "stats" ? "stats" : "logs";
+    const [view, setView] = useState<"logs" | "stats">(initialTab);
     const [search, setSearch] = useState("");
 
     const { data: logs, isLoading: isLoadingLogs } = useSWR(
@@ -70,6 +75,12 @@ function DataLogsPageContent() {
                 return <Badge className="bg-blue-500 hover:bg-blue-600">Updated</Badge>;
             case "DELETE":
                 return <Badge className="bg-rose-500 hover:bg-rose-600">Deleted</Badge>;
+            case "LOGIN":
+                return <Badge className="bg-violet-500 hover:bg-violet-600">Login</Badge>;
+            case "CONFIG":
+                return <Badge className="bg-amber-500 hover:bg-amber-600">Config</Badge>;
+            case "SECURITY":
+                return <Badge className="bg-indigo-500 hover:bg-indigo-600">Security</Badge>;
             default:
                 return <Badge variant="outline">{action}</Badge>;
         }
@@ -235,8 +246,10 @@ function DataLogsPageContent() {
                                 </div>
                                 <div className="relative z-10">
                                     <p className="text-indigo-100 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">DB Engine</p>
-                                    <h3 className="text-3xl font-black mb-1">{stats?.database_engine?.toUpperCase() || "SQLITE"}</h3>
-                                    <p className="text-indigo-100/60 text-xs font-medium">Core Persistence Tier</p>
+                                    <h3 className="text-2xl font-black mb-1 truncate">{stats?.database_engine || "SQLite 3"}</h3>
+                                    <p className="text-indigo-100/60 text-xs font-medium">
+                                        {stats?.database_tables_count ? `${stats.database_tables_count} tables registered` : "Core Persistence Tier"}
+                                    </p>
                                 </div>
                             </Card>
 
@@ -268,8 +281,8 @@ function DataLogsPageContent() {
                                 </div>
                                 <div className="relative z-10">
                                     <p className="text-white/80 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">System Status</p>
-                                    <h3 className="text-3xl font-black mb-1">OPTIMAL</h3>
-                                    <p className="text-white/60 text-xs font-medium">Processing latency: minimal</p>
+                                    <h3 className="text-2xl font-black mb-1 truncate">{stats?.database_status?.toUpperCase() || "OPTIMAL"}</h3>
+                                    <p className="text-white/60 text-xs font-medium">Telemetry latency: nominal</p>
                                 </div>
                             </Card>
                         </div>

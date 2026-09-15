@@ -347,12 +347,16 @@ export function ITDashboardView() {
               {dbEngine}
             </div>
             <div className="flex items-center justify-between text-xs pt-1">
-              <span className="text-slate-500 font-medium">Audit Activity: 24h</span>
+              <span className="text-slate-500 font-medium">
+                {stats?.recent_activity_count !== undefined
+                  ? `${stats.recent_activity_count} Events (24h)`
+                  : "Audit Activity: 24h"}
+              </span>
               <Link
-                href="/admin/settings/system-parameters"
+                href="/admin/settings/audit?tab=stats"
                 className="text-purple-700 hover:underline font-bold flex items-center gap-0.5"
               >
-                Settings <ArrowUpRight size={13} />
+                Telemetry <ArrowUpRight size={13} />
               </Link>
             </div>
           </CardContent>
@@ -507,6 +511,12 @@ export function ITDashboardView() {
                       ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                       : log.action === "DELETE"
                       ? "bg-rose-50 text-rose-700 border-rose-200"
+                      : log.action === "LOGIN"
+                      ? "bg-violet-50 text-violet-700 border-violet-200"
+                      : log.action === "CONFIG"
+                      ? "bg-amber-50 text-amber-700 border-amber-200"
+                      : log.action === "SECURITY"
+                      ? "bg-indigo-50 text-indigo-700 border-indigo-200"
                       : "bg-blue-50 text-blue-700 border-blue-200";
 
                   return (
