@@ -11,16 +11,19 @@ export function validateStep(step: number, formData: ApplicationFormData, flags:
   if (step === 2) {
     if (flags.isMarriageService) {
       const m = formData.marriage_details;
-      if (!m.husband_name) errs.husband_name = "Husband name required";
-      if (!m.husband_id_passport) errs.husband_id_passport = "ID required";
-      if (!m.husband_age) errs.husband_age = "Age required";
-      if (!m.husband_occupation) errs.husband_occupation = "Occupation required";
-      if (!m.husband_residence_county) errs.husband_residence_county = "County required";
-      if (!m.husband_residence_sub_county) errs.husband_residence_sub_county = "Sub-county required";
-      if (!m.wife_name) errs.wife_name = "Wife name required";
-      if (!m.wife_id_passport) errs.wife_id_passport = "ID required";
-      if (!m.wife_age) errs.wife_age = "Age required";
-      if (!m.wife_occupation) errs.wife_occupation = "Occupation required";
+      if (!m.husband_name?.trim()) errs.husband_name = "Groom's full legal name is required";
+      if (!m.husband_id_passport?.trim()) errs.husband_id_passport = "Groom's National ID or Passport is required";
+      if (!m.husband_age || Number(m.husband_age) < 18) errs.husband_age = "Groom's age is required (minimum 18 years)";
+      if (!m.husband_occupation?.trim()) errs.husband_occupation = "Groom's occupation is required";
+      if (!m.husband_residence_county?.trim()) errs.husband_residence_county = "Groom's county of residence is required";
+      if (!m.husband_residence_sub_county?.trim()) errs.husband_residence_sub_county = "Groom's sub-county is required";
+      
+      if (!m.wife_name?.trim()) errs.wife_name = "Bride's full legal name is required";
+      if (!m.wife_id_passport?.trim()) errs.wife_id_passport = "Bride's National ID or Passport is required";
+      if (!m.wife_age || Number(m.wife_age) < 18) errs.wife_age = "Bride's age is required (minimum 18 years)";
+      if (!m.wife_occupation?.trim()) errs.wife_occupation = "Bride's occupation is required";
+      if (!m.wife_residence_county?.trim()) errs.wife_residence_county = "Bride's county of residence is required";
+      if (!m.wife_residence_sub_county?.trim()) errs.wife_residence_sub_county = "Bride's sub-county is required";
     }
     if (flags.isHajjUmrahService) {
       const p = formData.pilgrim_details;
@@ -49,14 +52,17 @@ export function validateStep(step: number, formData: ApplicationFormData, flags:
 
   if (step === 3 && flags.isMarriageService) {
     const m = formData.marriage_details;
-    if (!m.wife_waliyy_name) errs.wife_waliyy_name = "Waliyy required";
-    if (!m.wife_waliyy_relationship) errs.wife_waliyy_relationship = "Relationship required";
-    if (!m.agreed_mahr) errs.agreed_mahr = "Mahr detail required";
-    if (!m.paid_mahr_and_deferred) errs.paid_mahr_and_deferred = "Status required";
-    if (!m.date_of_marriage) errs.date_of_marriage = "Date required";
-    if (!m.place_of_marriage) errs.place_of_marriage = "Place required";
-    if (!m.witness_1_name) errs.witness_1_name = "Witness 1 required";
-    if (!m.witness_2_name) errs.witness_2_name = "Witness 2 required";
+    if (!m.wife_waliyy_name?.trim()) errs.wife_waliyy_name = "Bride's guardian (Waliyy) full name is required";
+    if (!m.wife_waliyy_relationship?.trim()) errs.wife_waliyy_relationship = "Relationship to bride is required (e.g. Father/Brother)";
+    if (!m.agreed_mahr?.trim()) errs.agreed_mahr = "Agreed Mahr (dowry value/specification) is required";
+    if (!m.paid_mahr_and_deferred?.trim()) errs.paid_mahr_and_deferred = "Payment status (paid vs deferred) is required";
+    if (!m.date_of_marriage?.trim()) errs.date_of_marriage = "Date of marriage solemnization is required";
+    if (!m.place_of_marriage?.trim()) errs.place_of_marriage = "Place of marriage (Mosque or venue) is required";
+    if (!m.county_of_marriage?.trim()) errs.county_of_marriage = "County of marriage solemnization is required";
+    if (!m.witness_1_name?.trim()) errs.witness_1_name = "First Muslim witness's full name is required";
+    if (!m.witness_1_id?.trim()) errs.witness_1_id = "First witness's ID or Passport number is required";
+    if (!m.witness_2_name?.trim()) errs.witness_2_name = "Second Muslim witness's full name is required";
+    if (!m.witness_2_id?.trim()) errs.witness_2_id = "Second witness's ID or Passport number is required";
   }
   return errs;
 }
