@@ -257,31 +257,35 @@ export function ServiceSelection({
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
-  // Dynamic categories (called unconditionally)
+  // Dynamic categories (called unconditionally, active services only)
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    (services || []).forEach((s) => {
-      if (s.category) cats.add(s.category);
-    });
+    (services || [])
+      .filter((s) => s.is_active !== false)
+      .forEach((s) => {
+        if (s.category) cats.add(s.category);
+      });
     return ["all", ...Array.from(cats)];
   }, [services]);
 
-  // Filter services by search and category (called unconditionally)
+  // Filter services by search, category, and active status
   const filteredServices = useMemo(() => {
-    return (services || []).filter((s) => {
-      const nameMatch = (s.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (s.name_ar || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (s.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (s.description_ar || "").toLowerCase().includes(searchQuery.toLowerCase());
+    return (services || [])
+      .filter((s) => s.is_active !== false)
+      .filter((s) => {
+        const nameMatch = (s.name || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (s.name_ar || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (s.description || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+          (s.description_ar || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-      const categoryMatch =
-        activeCategory === "all" ||
-        s.category?.toLowerCase() === activeCategory.toLowerCase() ||
-        (activeCategory === "individual" && s.target_audience === "Individual") ||
-        (activeCategory === "organization" && s.target_audience === "Organization");
+        const categoryMatch =
+          activeCategory === "all" ||
+          s.category?.toLowerCase() === activeCategory.toLowerCase() ||
+          (activeCategory === "individual" && s.target_audience === "Individual") ||
+          (activeCategory === "organization" && s.target_audience === "Organization");
 
-      return nameMatch && categoryMatch;
-    });
+        return nameMatch && categoryMatch;
+      });
   }, [services, searchQuery, activeCategory]);
 
   if (dataLoading) {

@@ -86,6 +86,7 @@ export interface Service {
   category: string;
   target_audience: "Individual" | "Organization";
   document_type?: string;
+  is_active?: boolean;
 }
 
 export interface Organization {

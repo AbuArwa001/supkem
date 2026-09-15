@@ -5,7 +5,10 @@ export const fetchOrganizations = (): Promise<Organization[]> =>
   api.get("/organizations/organizations/").then((res) => res.data.results || res.data);
 
 export const fetchServices = (): Promise<Service[]> =>
-  api.get("/services/services/").then((res) => res.data.results || res.data);
+  api.get("/services/services/?is_active=true").then((res) => {
+    const data = res.data.results || res.data;
+    return Array.isArray(data) ? data.filter((s: any) => s.is_active !== false) : data;
+  });
 
 export const submitApplication = (payload: any): Promise<any> =>
   api.post("/applications/applications/", payload).then((res) => res.data);

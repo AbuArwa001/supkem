@@ -10,7 +10,10 @@ export const applicationSubmitService = {
     api.get("/organizations/organizations/").then((res) => res.data.results || res.data),
 
   fetchServices: (): Promise<Service[]> =>
-    api.get("/services/services/").then((res) => res.data.results || res.data),
+    api.get("/services/services/?is_active=true").then((res) => {
+      const data = res.data.results || res.data;
+      return Array.isArray(data) ? data.filter((s: Service) => s.is_active !== false) : data;
+    }),
 
   submitApplication: (payload: Record<string, unknown>): Promise<{ id: string }> =>
     api.post("/applications/applications/", payload).then((res) => res.data),
