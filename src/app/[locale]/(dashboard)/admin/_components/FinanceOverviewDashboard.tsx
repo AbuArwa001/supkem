@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/dialog";
 import api from "@/lib/api";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -104,6 +105,7 @@ interface FinanceAnalyticsData {
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
 export function FinanceOverviewDashboard() {
+  const t = useTranslations("Dashboard.admin.finance");
   const { user } = useAuth();
   const userName = user?.first_name || user?.full_name || "Finance Officer";
   const [selectedPayment, setSelectedPayment] = useState<PaymentRecord | null>(null);
@@ -238,7 +240,7 @@ export function FinanceOverviewDashboard() {
             >
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <Activity size={12} />
-              Financial Telemetry Live
+              {t("financialTelemetryLive")}
             </motion.div>
 
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold tracking-wider uppercase">
@@ -254,7 +256,7 @@ export function FinanceOverviewDashboard() {
               <span className="text-emerald-700 italic">{userName}</span>
             </h1>
             <p className="text-slate-500 font-medium text-sm md:text-base mt-1 max-w-2xl">
-              Financial command center: executive cashflow overview, revenue breakdown, settlement health, and quick reconciliation.
+              {t("commandCenterDesc")}
             </p>
           </div>
         </div>
@@ -266,7 +268,7 @@ export function FinanceOverviewDashboard() {
             variant="outline"
             size="icon"
             onClick={handleRefreshAll}
-            title="Refresh financial data"
+            title={t("refresh")}
             className="rounded-2xl border-slate-200 bg-white h-12 w-12 hover:bg-slate-50 shadow-sm transition-all shrink-0 cursor-pointer"
           >
             <RefreshCw
@@ -281,7 +283,7 @@ export function FinanceOverviewDashboard() {
             className="rounded-2xl border-slate-200 bg-white font-black text-xs uppercase tracking-wider h-12 px-5 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 text-slate-700 cursor-pointer"
           >
             <FileDown size={16} className="text-emerald-700" />
-            <span>Export CSV</span>
+            <span>{t("exportCSV")}</span>
           </Button>
 
           {/* Primary CTA: Open Payments & Ledger */}
@@ -291,7 +293,7 @@ export function FinanceOverviewDashboard() {
           >
             <Link href="/admin/finance">
               <Receipt size={16} />
-              <span>Open Transactions Ledger</span>
+              <span>{t("openLedger")}</span>
               <ArrowRight size={14} className="ml-0.5" />
             </Link>
           </Button>
@@ -311,12 +313,12 @@ export function FinanceOverviewDashboard() {
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-wider text-amber-900">
-                Action Recommended
+                {t("actionRecommended")}
               </p>
               <p className="text-xs text-amber-800 font-medium">
-                {pendingCount > 0 && `${pendingCount} pending payment request${pendingCount > 1 ? "s" : ""} awaiting settlement.`}
+                {pendingCount > 0 && t("pendingPayments", { count: pendingCount })}
                 {pendingCount > 0 && failedCount > 0 && " • "}
-                {failedCount > 0 && `${failedCount} transaction${failedCount > 1 ? "s" : ""} flagged as failed.`}
+                {failedCount > 0 && t("failedTransactions", { count: failedCount })}
               </p>
             </div>
           </div>
@@ -324,7 +326,7 @@ export function FinanceOverviewDashboard() {
             href="/admin/finance"
             className="inline-flex items-center gap-1.5 text-xs font-black text-amber-900 hover:text-amber-950 underline underline-offset-2 shrink-0 self-start sm:self-auto"
           >
-            <span>Review in Ledger</span>
+            <span>{t("reviewInLedger")}</span>
             <ArrowUpRight size={14} />
           </Link>
         </motion.div>
@@ -337,7 +339,7 @@ export function FinanceOverviewDashboard() {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-emerald-800">
-                Total Revenue Collected
+                {t("totalRevenue")}
               </span>
               <div className="p-2.5 rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
                 <CheckCircle2 size={20} />
@@ -354,21 +356,21 @@ export function FinanceOverviewDashboard() {
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-emerald-100 text-emerald-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
-                    {completedCount} Settled
+                    {t("settled", { count: completedCount })}
                   </Badge>
-                  <span className="text-xs text-slate-400 font-medium">Reconciled</span>
+                  <span className="text-xs text-slate-400 font-medium">{t("reconciled")}</span>
                 </div>
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* Pending Collections */}
+        {/* {t("pendingCollections")} */}
         <Card className="border-none shadow-premium rounded-[2rem] bg-gradient-to-br from-amber-500/10 via-amber-50/50 to-white overflow-hidden relative border border-amber-500/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-amber-800">
-                Pending Collections
+                {t("pendingCollections")}
               </span>
               <div className="p-2.5 rounded-2xl bg-amber-500 text-white shadow-md shadow-amber-500/20">
                 <Clock size={20} />
@@ -385,21 +387,21 @@ export function FinanceOverviewDashboard() {
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-amber-100 text-amber-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
-                    {pendingCount} Pending
+                    {t("pending", { count: pendingCount })}
                   </Badge>
-                  <span className="text-xs text-slate-400 font-medium">Awaiting payment</span>
+                  <span className="text-xs text-slate-400 font-medium">{t("awaitingPayment")}</span>
                 </div>
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* Total Payment Requests */}
+        {/* {t("totalRequests")} */}
         <Card className="border-none shadow-premium rounded-[2rem] bg-gradient-to-br from-blue-500/10 via-blue-50/50 to-white overflow-hidden relative border border-blue-500/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-blue-800">
-                Total Payment Requests
+                {t("totalRequests")}
               </span>
               <div className="p-2.5 rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
                 <Receipt size={20} />
@@ -412,14 +414,14 @@ export function FinanceOverviewDashboard() {
             ) : (
               <>
                 <div className="text-2xl sm:text-3xl font-black font-outfit text-slate-900 tracking-tight">
-                  {totalRequests.toLocaleString()} <span className="text-sm font-semibold text-slate-400">Total</span>
+                  {totalRequests.toLocaleString()} <span className="text-sm font-semibold text-slate-400">{t("total")}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xs text-slate-500 font-semibold">
-                    Avg KES {Number(analytics?.average_transaction_value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    {t("avg")} KES {Number(analytics?.average_transaction_value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </span>
                   {failedCount > 0 && (
-                    <span className="text-xs text-rose-500 font-bold">• {failedCount} failed</span>
+                    <span className="text-xs text-rose-500 font-bold">• {t("failed", { count: failedCount })}</span>
                   )}
                 </div>
               </>
@@ -432,7 +434,7 @@ export function FinanceOverviewDashboard() {
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-teal-800">
-                Settlement Success Rate
+                {t("successRate")}
               </span>
               <div className="p-2.5 rounded-2xl bg-teal-600 text-white shadow-md shadow-teal-600/20">
                 <TrendingUp size={20} />
@@ -467,14 +469,14 @@ export function FinanceOverviewDashboard() {
             <div>
               <CardTitle className="text-xl font-black font-outfit text-slate-900 uppercase tracking-tight flex items-center gap-2.5">
                 <Layers className="h-5 w-5 text-emerald-600" />
-                Revenue by Service Category
+                {t("revenueByCategory")}
               </CardTitle>
               <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-                Proportional breakdown of revenue generated across official SUPKEM services.
+                {t("revenueByCategoryDesc")}
               </CardDescription>
             </div>
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold text-xs uppercase px-3 py-1">
-              Active Portfolio
+              {t("activePortfolio")}
             </Badge>
           </div>
 
@@ -501,7 +503,7 @@ export function FinanceOverviewDashboard() {
                             {item.category}
                           </span>
                           <span className="text-[11px] text-slate-400 font-medium">
-                            • {item.count} {item.count === 1 ? "payment" : "payments"}
+                            • {item.count} {item.count === 1 ? t("payment") : t("payments")}
                           </span>
                         </div>
                       </div>
@@ -510,7 +512,7 @@ export function FinanceOverviewDashboard() {
                           KES {Number(item.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </span>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                          {percent.toFixed(1)}% of total
+                          {percent.toFixed(1)}{t("ofTotal")}
                         </p>
                       </div>
                     </div>
@@ -526,7 +528,7 @@ export function FinanceOverviewDashboard() {
             ) : (
               <div className="text-center py-12 text-slate-400">
                 <Receipt className="h-10 w-10 mx-auto text-slate-300 mb-2" />
-                <p className="font-semibold text-sm">No service collections recorded yet.</p>
+                <p className="font-semibold text-sm">{t("noServiceCollections")}</p>
               </div>
             )}
           </div>
@@ -537,10 +539,10 @@ export function FinanceOverviewDashboard() {
           <div className="space-y-2">
             <CardTitle className="text-xl font-black font-outfit text-slate-900 uppercase tracking-tight flex items-center gap-2.5">
               <ShieldCheck className="h-5 w-5 text-emerald-600" />
-              Settlement Health
+              {t("settlementHealth")}
             </CardTitle>
             <CardDescription className="text-slate-400 font-medium text-xs">
-              Distribution of incoming requests by operational settlement status.
+              {t("settlementHealthDesc")}
             </CardDescription>
           </div>
 
@@ -552,8 +554,8 @@ export function FinanceOverviewDashboard() {
                   <CheckCircle2 size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-emerald-900">Completed</span>
-                  <p className="text-[11px] text-emerald-700 font-semibold">{completedCount} transactions</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-emerald-900">{t("completed")}</span>
+                  <p className="text-[11px] text-emerald-700 font-semibold">{t("transactions", { count: completedCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-emerald-950 font-outfit">
@@ -568,8 +570,8 @@ export function FinanceOverviewDashboard() {
                   <Clock size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">Pending</span>
-                  <p className="text-[11px] text-amber-700 font-semibold">{pendingCount} requests</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pending")}</span>
+                  <p className="text-[11px] text-amber-700 font-semibold">{t("requests", { count: pendingCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-amber-950 font-outfit">
@@ -584,8 +586,8 @@ export function FinanceOverviewDashboard() {
                   <XCircle size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">Failed</span>
-                  <p className="text-[11px] text-rose-700 font-semibold">{failedCount} dropped</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failed")}</span>
+                  <p className="text-[11px] text-rose-700 font-semibold">{t("dropped", { count: failedCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-rose-950 font-outfit">
@@ -596,7 +598,7 @@ export function FinanceOverviewDashboard() {
 
           <div className="pt-4 border-t border-slate-100 text-center">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              Payments reconciled with Safaricom Daraja M-Pesa STK Push
+              {t("reconciledWithMpesa")}
             </p>
           </div>
         </Card>
@@ -608,14 +610,14 @@ export function FinanceOverviewDashboard() {
           <div>
             <div className="flex items-center gap-3">
               <CardTitle className="text-xl sm:text-2xl font-black font-outfit text-slate-900 uppercase tracking-tight">
-                Recent Financial Activity
+                {t("recentActivity")}
               </CardTitle>
               <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 font-bold text-xs uppercase px-3 py-1">
-                Live Audit Stream
+                {t("liveAuditStream")}
               </Badge>
             </div>
             <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-              Latest incoming payment records and settlement verifications.
+              {t("recentActivityDesc")}
             </CardDescription>
           </div>
 
@@ -626,7 +628,7 @@ export function FinanceOverviewDashboard() {
             className="rounded-2xl border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 font-black text-xs uppercase tracking-wider h-11 px-4 text-emerald-800 flex items-center gap-2 self-start sm:self-auto cursor-pointer"
           >
             <Link href="/admin/finance">
-              <span>View Full Ledger ({payments.length} records)</span>
+              <span>{t("viewFullLedger", { count: payments.length })}</span>
               <ArrowRight size={14} />
             </Link>
           </Button>
@@ -637,13 +639,13 @@ export function FinanceOverviewDashboard() {
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100">
               <tr>
-                <th className="py-3.5 px-5">Receipt / Reference</th>
-                <th className="py-3.5 px-5">Applicant & Entity</th>
-                <th className="py-3.5 px-5">Service</th>
-                <th className="py-3.5 px-5">Amount</th>
-                <th className="py-3.5 px-5">Status</th>
-                <th className="py-3.5 px-5">Date</th>
-                <th className="py-3.5 px-5 text-right">Action</th>
+                <th className="py-3.5 px-5">{t("receiptRef")}</th>
+                <th className="py-3.5 px-5">{t("applicantEntity")}</th>
+                <th className="py-3.5 px-5">{t("service")}</th>
+                <th className="py-3.5 px-5">{t("amount")}</th>
+                <th className="py-3.5 px-5">{t("status")}</th>
+                <th className="py-3.5 px-5">{t("date")}</th>
+                <th className="py-3.5 px-5 text-right">{t("action")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
@@ -676,17 +678,17 @@ export function FinanceOverviewDashboard() {
                       {/* Receipt */}
                       <td className="py-3.5 px-5">
                         <span className="font-black text-slate-900 font-mono text-xs">
-                          {p.receipt_number || p.checkout_request_id?.slice(0, 14) || "NO-RECEIPT"}
+                          {p.receipt_number || p.checkout_request_id?.slice(0, 14) || t("noReceipt")}
                         </span>
                         <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                          M-PESA STK
+                          {t("mpesaStk")}
                         </div>
                       </td>
 
                       {/* Applicant & Org */}
                       <td className="py-3.5 px-5">
                         <div className="font-bold text-slate-900">
-                          {p.applicant_name || "Applicant"}
+                          {p.applicant_name || t("applicant")}
                         </div>
                         <div className="text-[11px] text-slate-400 font-medium truncate max-w-[180px]">
                           {p.organization_name ? (
@@ -695,7 +697,7 @@ export function FinanceOverviewDashboard() {
                               {p.organization_name}
                             </span>
                           ) : (
-                            p.applicant_email || "Individual Citizen"
+                            p.applicant_email || t("individualCitizen")
                           )}
                         </div>
                       </td>
@@ -703,7 +705,7 @@ export function FinanceOverviewDashboard() {
                       {/* Service */}
                       <td className="py-3.5 px-5">
                         <span className="font-bold text-slate-800 line-clamp-1">
-                          {p.service_name || "Official Service"}
+                          {p.service_name || t("officialService")}
                         </span>
                         {p.service_category && (
                           <span className="text-[10px] font-bold text-emerald-700 uppercase">
@@ -756,7 +758,7 @@ export function FinanceOverviewDashboard() {
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-slate-400">
                     <Receipt className="h-8 w-8 mx-auto text-slate-300 mb-2" />
-                    <p className="font-bold text-sm text-slate-600">No payment transactions recorded yet.</p>
+                    <p className="font-bold text-sm text-slate-600">{t("noTransactions")}</p>
                   </td>
                 </tr>
               )}
@@ -772,14 +774,14 @@ export function FinanceOverviewDashboard() {
               className="inline-flex items-center gap-1.5 hover:text-emerald-700 transition-colors"
             >
               <Award size={14} className="text-amber-600" />
-              <span>Configure Services & Fees</span>
+              <span>{t("configureServices")}</span>
             </Link>
             <Link
               href="/admin/applications"
               className="inline-flex items-center gap-1.5 hover:text-emerald-700 transition-colors"
             >
               <FileText size={14} className="text-blue-600" />
-              <span>Applications Registry</span>
+              <span>{t("applicationsRegistry")}</span>
             </Link>
           </div>
 
@@ -787,7 +789,7 @@ export function FinanceOverviewDashboard() {
             href="/admin/finance"
             className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-emerald-700 hover:text-emerald-800"
           >
-            <span>Open Comprehensive Ledger & Search</span>
+            <span>{t("openComprehensiveLedger")}</span>
             <ArrowRight size={14} />
           </Link>
         </div>
@@ -806,7 +808,7 @@ export function FinanceOverviewDashboard() {
                   </div>
                   <div>
                     <h2 className="text-xl font-black text-slate-900 font-outfit uppercase tracking-tight">
-                      Payment Receipt & Audit
+                      {t("paymentReceiptAudit")}
                     </h2>
                     <p className="text-slate-400 font-mono text-xs mt-0.5">
                       {selectedPayment.receipt_number || selectedPayment.checkout_request_id || selectedPayment.id}
@@ -839,7 +841,7 @@ export function FinanceOverviewDashboard() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-400 uppercase">Payment Channel</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase">{t("paymentChannel")}</span>
                     <p className="text-xs font-black text-slate-800 uppercase">M-Pesa Express (STK)</p>
                   </div>
                 </div>
@@ -850,7 +852,7 @@ export function FinanceOverviewDashboard() {
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
                       Applicant Name
                     </span>
-                    <p className="font-bold text-slate-900">{selectedPayment.applicant_name || "Applicant"}</p>
+                    <p className="font-bold text-slate-900">{selectedPayment.applicant_name || t("applicant")}</p>
                   </div>
 
                   <div className="space-y-1">

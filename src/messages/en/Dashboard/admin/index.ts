@@ -10,6 +10,9 @@ import report from './report.json';
 import services from './services.json';
 import tables from './tables.json';
 import users from './users.json';
+import finance from './finance.json';
+import letters from './letters.json';
+import it from './it.json';
 
 export default {
   "applications": applications,
@@ -24,4 +27,7 @@ export default {
   "services": services,
   "tables": tables,
   "users": users,
+  "finance": finance,
+  "letters": letters,
+  "it": it,
 };

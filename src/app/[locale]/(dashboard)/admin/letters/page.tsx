@@ -22,6 +22,7 @@ export default function AdminLetters() {
 
 function AdminLettersContent() {
   const t = useTranslations("Dashboard.admin.certificates");
+  const tl = useTranslations("Dashboard.admin.letters");
   const {
     certificates,
     groupedCerts,
@@ -46,7 +47,7 @@ function AdminLettersContent() {
             Issued Letters
           </h1>
           <p className="text-foreground/60 font-medium">
-            You have {certificates.length} issued letters across all services.
+            {tl("subtitle", { count: certificates.length })}
           </p>
         </div>
 
@@ -59,7 +60,7 @@ function AdminLettersContent() {
             <input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={t("search")}
+              placeholder={tl("search")}
               className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-64 shadow-sm"
             />
           </div>
@@ -67,7 +68,7 @@ function AdminLettersContent() {
             onClick={() => setIsModalOpen(true)}
             className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex items-center gap-2"
           >
-            <Award size={18} /> {t("issueNew")}
+            <Award size={18} /> {tl("issueNew")}
           </button>
         </div>
       </div>
@@ -79,7 +80,7 @@ function AdminLettersContent() {
               <div className="flex items-center gap-4">
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
                 <h3 className="text-lg font-black text-secondary uppercase tracking-[0.2em] px-4 whitespace-nowrap">
-                  {serviceName === "Other Certifications" ? "Other Letters" : serviceName}
+                  {serviceName === "Other Certifications" ? tl("otherLetters") : serviceName}
                 </h3>
                 <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
               </div>
@@ -101,13 +102,13 @@ function AdminLettersContent() {
             No Letters Issued Yet
           </h3>
           <p className="text-slate-500 text-sm max-w-md mx-auto mb-8 leading-relaxed">
-            Recommendation and introduction letters issued for approved applications will appear here organized by service. Click below to issue your first letter.
+            {tl("noLettersDesc")}
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
             className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg inline-flex items-center gap-2"
           >
-            <Award size={18} /> {t("issueNew")}
+            <Award size={18} /> {tl("issueNew")}
           </button>
         </div>
       )}

@@ -1,0 +1,62 @@
+{
+  "refreshTelemetry": "Refresh IT Telemetry",
+  "successRefresh": "IT telemetry & audit logs refreshed",
+  "userIdentityDir": "User Identity Directory",
+  "activeUsers": "Active:",
+  "manage": "Manage",
+  "securityRBAC": "Security & RBAC",
+  "active": "Active",
+  "rolesPrivileges": "Roles & Privileges Protected",
+  "roles": "Roles",
+  "coreIntegrations": "Core Integrations",
+  "mpesaEmailKnockAI": "M-Pesa, Email, Knock, AI",
+  "configure": "Configure",
+  "dbInfrastructure": "Database & Infrastructure",
+  "events24h": "{count} Events (24h)",
+  "auditActivity24h": "Audit Activity: 24h",
+  "telemetry": "Telemetry",
+  
+  "itOpsHub": "IT Operations & Administration Hub",
+  "directShortcuts": "Direct operational shortcuts",
+  "launchModule": "Launch Module",
+  
+  "usersDesc": "Manage user credentials, status, activation, and role assignments.",
+  "usersBadge": "{count} Users",
+  "usersTitle": "User Directory & Access",
+  
+  "rbacDesc": "Configure role permissions, staff privileges, and security boundaries.",
+  "rbacBadge": "Security",
+  "rbacTitle": "Access Control (RBAC)",
+  
+  "apiDesc": "Manage API credentials for M-Pesa, Resend, Knock, and OpenAI.",
+  "apiBadge": "4 Services",
+  "apiTitle": "API & Integrations Hub",
+  
+  "auditDesc": "Live stream of administrative actions, data modifications, and logins.",
+  "auditBadge": "Audit Logs",
+  "auditTitle": "Security & Audit Trail",
+  
+  "paramsDesc": "Application settings, system fee thresholds, and maintenance toggles.",
+  "paramsBadge": "{count} Params",
+  "paramsTitle": "System Parameters",
+  
+  "orgDesc": "Inspect registered mosques, institutions, and religious bodies.",
+  "orgBadge": "Directory",
+  "orgTitle": "Mosque & Org Directory",
+  
+  "apiIntegrations": "API & Cloud Integrations",
+  "manageCredentials": "Manage API Credentials & Secrets",
+  
+  "recentSecurityTrail": "Recent Security & Audit Trail",
+  "viewFullLogs": "View Full Logs",
+  "noRecentAudit": "No recent audit records found",
+  "modified": "modified",
+  "by": "By",
+  "recent": "Recent",
+  
+  "primaryDashboardTitle": "IT Operations & Infrastructure • Primary Dashboard",
+  "allSystemsOp": "All Systems Operational",
+  "welcomeBack": "Welcome back,",
+  "commandCenterDesc": "Centralized IT command center: user identity governance, cloud integrations, and infrastructure telemetry.",
+  "fullAuditTrail": "Full Audit Trail"
+}
