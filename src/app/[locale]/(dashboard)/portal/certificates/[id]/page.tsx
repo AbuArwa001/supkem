@@ -8,6 +8,7 @@ import { CertificateLoading } from "./_components/CertificateLoading";
 import { CertificateError } from "./_components/CertificateError";
 
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+import { DownloadProgressModal } from "@/components/DownloadProgressModal";
 
 /**
  * Portal Certificate Detail Page
@@ -58,6 +59,13 @@ export default function CertificateDetail() {
       {certificate.application && (
         <CertificateReference applicationId={certificate.application} />
       )}
+
+      <DownloadProgressModal
+        isOpen={isDownloading}
+        documentType="Certificate"
+        title="Generating Official SUPKEM Certificate"
+        serialNumber={certificate.serial_number}
+      />
     </div>
   );
 }

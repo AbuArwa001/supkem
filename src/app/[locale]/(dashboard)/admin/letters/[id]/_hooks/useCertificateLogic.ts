@@ -38,11 +38,17 @@ export function useCertificateLogic() {
         if (!certificateRef.current || !certificate) return;
 
         setIsDownloading(true);
+        const startTime = Date.now();
         try {
             await downloadElementAsPdf(
                 certificateRef.current,
-                `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`
+                `SUPKEM-Letter-${certificate?.serial_number || "Digital"}.pdf`,
+                { orientation: "portrait" }
             );
+            const elapsed = Date.now() - startTime;
+            if (elapsed < 1200) {
+                await new Promise((r) => setTimeout(r, 1200 - elapsed));
+            }
         } catch (err) {
             console.error("Failed to generate PDF", err);
         } finally {

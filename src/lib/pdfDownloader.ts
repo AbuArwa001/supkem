@@ -46,29 +46,31 @@ async function inlineImages(root: HTMLElement): Promise<() => void> {
   };
 }
 
+export interface PdfDownloadOptions {
+  orientation?: "landscape" | "portrait" | "auto";
+  margin?: number;
+}
+
 /**
- * Downloads a DOM element as a high-resolution PDF document.
- * Uses html2canvas-pro for modern CSS color support, pre-inlines images to prevent canvas
- * tainting, and renders high-quality JPEG/PNG streams into jsPDF.
+ * Downloads a DOM element as a high-resolution, standard A4 PDF document.
+ * Supports landscape and portrait orientations with automatic aspect-ratio scaling
+ * and perfect horizontal and vertical centering.
  */
 export async function downloadElementAsPdf(
   element: HTMLElement,
-  filename: string
+  filename: string,
+  options?: PdfDownloadOptions
 ): Promise<void> {
   let restoreImages: (() => void) | null = null;
   let canvas: HTMLCanvasElement | null = null;
-
-  const rect = element.getBoundingClientRect();
-  const width = Math.max(element.scrollWidth, element.offsetWidth, Math.round(rect.width), 800);
-  const height = Math.max(element.scrollHeight, element.offsetHeight, Math.round(rect.height), 600);
 
   try {
     // 1. Pre-inline images to avoid canvas tainting
     restoreImages = await inlineImages(element);
 
-    // 2. Render canvas using html2canvas-pro with explicit bounds & layout unwrap
+    // 2. Render canvas using html2canvas-pro at high print resolution (scale 3)
     canvas = await html2canvas(element, {
-      scale: 2,
+      scale: 3,
       useCORS: true,
       allowTaint: false,
       backgroundColor: "#ffffff",
@@ -76,10 +78,6 @@ export async function downloadElementAsPdf(
       imageTimeout: 15000,
       scrollX: 0,
       scrollY: 0,
-      width,
-      height,
-      windowWidth: document.documentElement.offsetWidth || width,
-      windowHeight: document.documentElement.offsetHeight || height,
       onclone: (clonedDoc, clonedElement) => {
         clonedElement.style.transform = "none";
         clonedElement.style.margin = "0";
@@ -97,9 +95,7 @@ export async function downloadElementAsPdf(
     console.warn("html2canvas-pro failed, trying modern-screenshot fallback:", canvasErr);
     try {
       canvas = await domToCanvas(element, {
-        scale: 2,
-        width,
-        height,
+        scale: 3,
         font: false,
         timeout: 8000,
       });
@@ -118,15 +114,20 @@ export async function downloadElementAsPdf(
     throw new Error("Failed to generate PDF: rendered canvas is empty.");
   }
 
-  const imgWidth = canvas.width;
-  const imgHeight = canvas.height;
-  const isLandscape = imgWidth > imgHeight;
+  // Determine standard A4 orientation:
+  // Certificates default to landscape; letters default to portrait.
+  const isLandscape = options?.orientation && options.orientation !== "auto"
+    ? options.orientation === "landscape"
+    : canvas.width >= canvas.height;
 
   const pdf = new jsPDF({
     orientation: isLandscape ? "landscape" : "portrait",
-    unit: "px",
-    format: [imgWidth / 2, imgHeight / 2],
+    unit: "mm",
+    format: "a4",
   });
+
+  const pageWidth = pdf.internal.pageSize.getWidth();   // 297mm (landscape) or 210mm (portrait)
+  const pageHeight = pdf.internal.pageSize.getHeight(); // 210mm (landscape) or 297mm (portrait)
 
   // Use high-quality JPEG format to guarantee clean signature & avoid corrupt PNG header issues
   let imgData = canvas.toDataURL("image/jpeg", 0.98);
@@ -137,13 +138,31 @@ export async function downloadElementAsPdf(
     format = "PNG";
   }
 
+  // Calculate proportional dimensions to fit standard A4 with clean margins and perfect centering
+  const margin = options?.margin ?? (isLandscape ? 6 : 10);
+  const printableWidth = Math.max(pageWidth - (margin * 2), 10);
+  const printableHeight = Math.max(pageHeight - (margin * 2), 10);
+
+  const canvasRatio = canvas.width / canvas.height;
+  let renderWidth = printableWidth;
+  let renderHeight = printableWidth / canvasRatio;
+
+  if (renderHeight > printableHeight) {
+    renderHeight = printableHeight;
+    renderWidth = printableHeight * canvasRatio;
+  }
+
+  // Perfectly center on the page horizontally and vertically
+  const offsetX = margin + ((printableWidth - renderWidth) / 2);
+  const offsetY = margin + ((printableHeight - renderHeight) / 2);
+
   pdf.addImage(
     imgData,
     format,
-    0,
-    0,
-    imgWidth / 2,
-    imgHeight / 2,
+    offsetX,
+    offsetY,
+    renderWidth,
+    renderHeight,
     undefined,
     "FAST"
   );

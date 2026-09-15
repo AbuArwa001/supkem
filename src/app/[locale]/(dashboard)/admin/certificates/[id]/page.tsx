@@ -9,6 +9,7 @@ import { CertificateError } from "./_components/CertificateError";
 import { ApplicationReference } from "./_components/ApplicationReference";
 
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+import { DownloadProgressModal } from "@/components/DownloadProgressModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminCertificateDetail() {
@@ -69,6 +70,13 @@ function AdminCertificateDetailContent() {
       {certificate.application && (
         <ApplicationReference applicationId={certificate.application} />
       )}
+
+      <DownloadProgressModal
+        isOpen={isDownloading}
+        documentType="Certificate"
+        title="Generating Official SUPKEM Certificate"
+        serialNumber={certificate.serial_number}
+      />
     </div>
   );
 }

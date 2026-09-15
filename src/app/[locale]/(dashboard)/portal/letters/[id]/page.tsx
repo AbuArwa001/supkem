@@ -17,6 +17,7 @@ import { Link } from "@/i18n/routing";
 import api from "@/lib/api";
 import { LetterCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/_components/LetterCanvas";
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
+import { DownloadProgressModal } from "@/components/DownloadProgressModal";
 import { useTranslations } from "next-intl";
 
 export default function LetterDetail() {
@@ -55,11 +56,17 @@ export default function LetterDetail() {
   const handleDownloadPDF = async () => {
     if (!letterRef.current) return;
     setIsDownloading(true);
+    const startTime = Date.now();
     try {
       await downloadElementAsPdf(
         letterRef.current,
-        `SUPKEM-Letter-${letter?.serial_number || "Official"}.pdf`
+        `SUPKEM-Letter-${letter?.serial_number || "Official"}.pdf`,
+        { orientation: "portrait" }
       );
+      const elapsed = Date.now() - startTime;
+      if (elapsed < 1200) {
+        await new Promise((r) => setTimeout(r, 1200 - elapsed));
+      }
     } catch (err) {
       console.error("Failed to generate PDF", err);
     } finally {
@@ -202,6 +209,13 @@ export default function LetterDetail() {
           </Link>
         </div>
       )}
+
+      <DownloadProgressModal
+        isOpen={isDownloading}
+        documentType="Letter"
+        title="Generating Official SUPKEM Letter"
+        serialNumber={letter.serial_number}
+      />
     </div>
   );
 }
