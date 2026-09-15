@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import useSWR from "swr";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   CreditCard,
   Receipt,
@@ -11,24 +11,22 @@ import {
   CheckCircle2,
   XCircle,
   AlertCircle,
-  Search,
   RefreshCw,
   FileDown,
-  ChevronRight,
-  ExternalLink,
-  Phone,
-  Building,
-  User,
-  Calendar,
-  Layers,
+  ArrowRight,
   ArrowUpRight,
+  ExternalLink,
+  Layers,
   ShieldCheck,
   Smartphone,
-  ChevronLeft,
-  DollarSign
+  Building,
+  Calendar,
+  Activity,
+  Award,
+  FileText,
+  Sliders,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -38,16 +36,13 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogFooter
 } from "@/components/ui/dialog";
 import api from "@/lib/api";
-import { RoleGuard } from "@/components/RoleGuard";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
-// --- Types ---
 interface ServiceRevenueItem {
   service_name: string;
   category: string;
@@ -103,28 +98,14 @@ interface FinanceAnalyticsData {
   daily_trend: TrendItem[];
   monthly_trend: TrendItem[];
   status_distribution: StatusItem[];
-  recent_transactions: PaymentRecord[];
+  recent_transactions?: PaymentRecord[];
 }
 
 const fetcher = (url: string) => api.get(url).then((res) => res.data);
 
-export default function FinanceDashboardPage() {
-  return (
-    <RoleGuard module="finance">
-      <FinanceDashboardView isMainDashboard={false} />
-    </RoleGuard>
-  );
-}
-
-export interface FinanceDashboardViewProps {
-  isMainDashboard?: boolean;
-}
-
-export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboardViewProps) {
+export function FinanceOverviewDashboard() {
   const { user } = useAuth();
   const userName = user?.first_name || user?.full_name || "Finance Officer";
-  const [search, setSearch] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [selectedPayment, setSelectedPayment] = useState<PaymentRecord | null>(null);
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
@@ -136,7 +117,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
     mutate: mutateAnalytics,
   } = useSWR<FinanceAnalyticsData>("/applications/payments/analytics/", fetcher);
 
-  // Fetch all payment ledger items
+  // Fetch recent payments for quick audit stream
   const {
     data: rawPayments,
     isLoading: isPaymentsLoading,
@@ -150,17 +131,23 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
     return rawPayments.results || [];
   }, [rawPayments]);
 
+  const recentPayments = useMemo(() => {
+    return payments.slice(0, 7);
+  }, [payments]);
+
+  const isRefreshing = isAnalyticsValidating || isPaymentsValidating;
+
   const handleRefreshAll = () => {
     mutateAnalytics();
     mutatePayments();
-    toast.success("Finance records refreshed");
+    toast.success("Financial telemetry refreshed");
   };
 
   const handleCheckMpesaStatus = async (paymentId: string) => {
     setIsCheckingStatus(true);
     try {
       const res = await api.post(`/applications/payments/${paymentId}/check_status/`);
-      toast.info(`M-Pesa Status: ${res.data?.status || "Checked"}`);
+      toast.info(`M-Pesa Live Status: ${res.data?.status || "Verified"}`);
       mutateAnalytics();
       mutatePayments();
       if (res.data?.payment) {
@@ -174,8 +161,8 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
   };
 
   const handleExportCSV = () => {
-    if (!filteredPayments.length) {
-      toast.error("No transactions to export");
+    if (!payments.length) {
+      toast.error("No transactions available to export");
       return;
     }
 
@@ -191,7 +178,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
       "Date",
     ];
 
-    const rows = filteredPayments.map((p) => [
+    const rows = payments.map((p) => [
       `"${p.receipt_number || p.checkout_request_id || p.id}"`,
       `"${p.applicant_name || "N/A"}"`,
       `"${p.applicant_email || "N/A"}"`,
@@ -207,92 +194,141 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `SUPKEM_Finance_Ledger_${format(new Date(), "yyyyMMdd_HHmm")}.csv`);
+    link.setAttribute("download", `SUPKEM_Finance_Summary_${format(new Date(), "yyyyMMdd_HHmm")}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    toast.success("Finance report exported as CSV");
+    toast.success("Financial summary exported as CSV");
   };
-
-  // Filtering payments
-  const filteredPayments = useMemo(() => {
-    return payments.filter((p) => {
-      const matchesStatus =
-        selectedStatus === "All" || p.status.toLowerCase() === selectedStatus.toLowerCase();
-      const q = search.toLowerCase().trim();
-      if (!q) return matchesStatus;
-
-      const matchesSearch =
-        p.receipt_number?.toLowerCase().includes(q) ||
-        p.checkout_request_id?.toLowerCase().includes(q) ||
-        p.phone_number?.toLowerCase().includes(q) ||
-        p.applicant_name?.toLowerCase().includes(q) ||
-        p.applicant_email?.toLowerCase().includes(q) ||
-        p.organization_name?.toLowerCase().includes(q) ||
-        p.service_name?.toLowerCase().includes(q);
-
-      return matchesStatus && matchesSearch;
-    });
-  }, [payments, selectedStatus, search]);
 
   const totalCollected = analytics?.total_collected || 0;
   const totalPending = analytics?.total_pending || 0;
+  const totalFailed = analytics?.total_failed || 0;
   const totalRequests = analytics?.total_requests || payments.length;
   const collectionRate = analytics?.collection_rate || 0;
   const completedCount = analytics?.completed_count || 0;
   const pendingCount = analytics?.pending_count || 0;
   const failedCount = analytics?.failed_count || 0;
 
-  const isRefreshing = isAnalyticsValidating || isPaymentsValidating;
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
+
+  const formattedDate = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date());
 
   return (
     <div className="space-y-10 pb-16 min-h-screen">
-      {/* Header */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-slate-100">
-        <div className="flex items-center gap-4">
-          <Link
-            href="/admin"
-            className="p-2.5 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400 hover:text-primary mt-1"
-            title="Back to Dashboard"
-          >
-            <ChevronLeft size={24} />
-          </Link>
-          <div>
-            <div className="flex items-center gap-2 mb-1.5">
-              <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-black tracking-widest text-[10px] uppercase px-2.5 py-0.5">
-                M-Pesa Daraja STK Push • Audit Ledger
-              </Badge>
+      {/* Executive Command Header */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-2">
+        <div className="space-y-2">
+          {/* Status Badges */}
+          <div className="flex flex-wrap items-center gap-2.5">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-[10px] font-black tracking-widest uppercase shadow-2xs"
+            >
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <Activity size={12} />
+              Financial Telemetry Live
+            </motion.div>
+
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold tracking-wider uppercase">
+              <Calendar size={11} className="text-slate-400" />
+              {formattedDate}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-black font-outfit text-slate-900 tracking-tight">
-              Payments Ledger & <span className="text-primary italic">Reconciliation</span>
+          </div>
+
+          {/* Heading */}
+          <div>
+            <h1 className="text-3xl md:text-5xl font-black font-outfit text-slate-900 tracking-tight leading-tight">
+              {getGreeting()},{" "}
+              <span className="text-emerald-700 italic">{userName}</span>
             </h1>
-            <p className="text-slate-500 font-medium text-sm mt-1">
-              Real-time payment settlements, M-Pesa transaction auditing, Daraja query verification, and ledger search.
+            <p className="text-slate-500 font-medium text-sm md:text-base mt-1 max-w-2xl">
+              Financial command center: executive cashflow overview, revenue breakdown, settlement health, and quick reconciliation.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 self-start md:self-end">
+        {/* Action Controls */}
+        <div className="flex items-center gap-3 flex-wrap">
+          {/* Refresh button */}
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleRefreshAll}
+            title="Refresh financial data"
+            className="rounded-2xl border-slate-200 bg-white h-12 w-12 hover:bg-slate-50 shadow-sm transition-all shrink-0 cursor-pointer"
+          >
+            <RefreshCw
+              className={`h-4 w-4 text-slate-600 ${isRefreshing ? "animate-spin text-emerald-600" : ""}`}
+            />
+          </Button>
+
+          {/* Export Report */}
           <Button
             variant="outline"
             onClick={handleExportCSV}
-            className="h-11 px-4 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs flex items-center gap-2 shadow-sm"
+            className="rounded-2xl border-slate-200 bg-white font-black text-xs uppercase tracking-wider h-12 px-5 hover:bg-slate-50 shadow-sm transition-all flex items-center gap-2 text-slate-700 cursor-pointer"
           >
-            <FileDown className="h-4 w-4 text-slate-500" />
+            <FileDown size={16} className="text-emerald-700" />
             <span>Export CSV</span>
           </Button>
 
+          {/* Primary CTA: Open Payments & Ledger */}
           <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleRefreshAll}
-            className="h-11 w-11 rounded-xl hover:bg-slate-100 text-slate-500 border border-slate-200"
-            title="Refresh financial data"
+            asChild
+            className="rounded-2xl font-black bg-emerald-700 hover:bg-emerald-800 text-white h-12 px-6 shadow-lg shadow-emerald-700/20 transition-all active:scale-95 flex items-center gap-2.5 uppercase tracking-wider text-xs cursor-pointer"
           >
-            <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin text-primary" : ""}`} />
+            <Link href="/admin/finance">
+              <Receipt size={16} />
+              <span>Open Transactions Ledger</span>
+              <ArrowRight size={14} className="ml-0.5" />
+            </Link>
           </Button>
         </div>
-      </header>
+      </div>
+
+      {/* Attention Alert Banner if Pending or Failed exist */}
+      {(pendingCount > 0 || failedCount > 0) && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-amber-950"
+        >
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-amber-500 text-white shrink-0">
+              <AlertCircle size={18} />
+            </div>
+            <div>
+              <p className="text-xs font-black uppercase tracking-wider text-amber-900">
+                Action Recommended
+              </p>
+              <p className="text-xs text-amber-800 font-medium">
+                {pendingCount > 0 && `${pendingCount} pending payment request${pendingCount > 1 ? "s" : ""} awaiting settlement.`}
+                {pendingCount > 0 && failedCount > 0 && " • "}
+                {failedCount > 0 && `${failedCount} transaction${failedCount > 1 ? "s" : ""} flagged as failed.`}
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/admin/finance"
+            className="inline-flex items-center gap-1.5 text-xs font-black text-amber-900 hover:text-amber-950 underline underline-offset-2 shrink-0 self-start sm:self-auto"
+          >
+            <span>Review in Ledger</span>
+            <ArrowUpRight size={14} />
+          </Link>
+        </motion.div>
+      )}
 
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
@@ -320,7 +356,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <Badge className="bg-emerald-100 text-emerald-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
                     {completedCount} Settled
                   </Badge>
-                  <span className="text-xs text-slate-400 font-medium">100% verified</span>
+                  <span className="text-xs text-slate-400 font-medium">Reconciled</span>
                 </div>
               </>
             )}
@@ -349,7 +385,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-amber-100 text-amber-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
-                    {pendingCount} Pending Requests
+                    {pendingCount} Pending
                   </Badge>
                   <span className="text-xs text-slate-400 font-medium">Awaiting payment</span>
                 </div>
@@ -430,14 +466,14 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <CardTitle className="text-xl font-black font-outfit text-slate-900 uppercase tracking-tight flex items-center gap-2.5">
-                <Layers className="h-5 w-5 text-primary" />
+                <Layers className="h-5 w-5 text-emerald-600" />
                 Revenue by Service Category
               </CardTitle>
               <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-                Breakdown of collections per certification and operational service.
+                Proportional breakdown of revenue generated across official SUPKEM services.
               </CardDescription>
             </div>
-            <Badge className="bg-primary/10 text-primary border-none font-bold text-xs uppercase px-3 py-1">
+            <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold text-xs uppercase px-3 py-1">
               Active Portfolio
             </Badge>
           </div>
@@ -461,7 +497,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                           {item.service_name}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[11px] font-bold text-primary uppercase">
+                          <span className="text-[11px] font-bold text-emerald-700 uppercase">
                             {item.category}
                           </span>
                           <span className="text-[11px] text-slate-400 font-medium">
@@ -480,7 +516,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     </div>
                     <div className="w-full bg-slate-200/80 h-2 rounded-full overflow-hidden">
                       <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-teal-500 transition-all duration-700"
+                        className="h-full rounded-full bg-gradient-to-r from-emerald-600 to-teal-500 transition-all duration-700"
                         style={{ width: `${Math.max(percent, 2)}%` }}
                       />
                     </div>
@@ -553,7 +589,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 </div>
               </div>
               <span className="text-sm font-black text-rose-950 font-outfit">
-                KES {Number(analytics?.total_failed || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                KES {Number(totalFailed).toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </span>
             </div>
           </div>
@@ -566,83 +602,65 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
         </Card>
       </div>
 
-      {/* Payment Ledger & Transactions Table */}
+      {/* Quick Financial Operations & Recent Transactions Preview */}
       <Card className="border-none shadow-premium bg-white rounded-[2.5rem] overflow-hidden p-8 space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-3">
-              <CardTitle className="text-2xl font-black font-outfit text-slate-900 uppercase tracking-tight">
-                Payments Audit Ledger
+              <CardTitle className="text-xl sm:text-2xl font-black font-outfit text-slate-900 uppercase tracking-tight">
+                Recent Financial Activity
               </CardTitle>
-              <Badge className="bg-slate-100 text-slate-600 border-none font-bold text-xs uppercase px-3 py-1">
-                {filteredPayments.length} of {payments.length} Records
+              <Badge className="bg-emerald-50 text-emerald-800 border-emerald-200 font-bold text-xs uppercase px-3 py-1">
+                Live Audit Stream
               </Badge>
             </div>
             <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-              Detailed transaction log of all citizen and institutional application payments.
+              Latest incoming payment records and settlement verifications.
             </CardDescription>
           </div>
 
-          {/* Status Filter Tabs */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 border border-slate-200/60 self-start">
-            {(["All", "Completed", "Pending", "Failed"] as const).map((status) => (
-              <button
-                key={status}
-                onClick={() => setSelectedStatus(status)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
-                  selectedStatus === status
-                    ? "bg-white text-slate-900 shadow-sm"
-                    : "text-slate-500 hover:text-slate-900"
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
+          {/* Direct Link to Payments & Ledger */}
+          <Button
+            asChild
+            variant="outline"
+            className="rounded-2xl border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/50 font-black text-xs uppercase tracking-wider h-11 px-4 text-emerald-800 flex items-center gap-2 self-start sm:self-auto cursor-pointer"
+          >
+            <Link href="/admin/finance">
+              <span>View Full Ledger ({payments.length} records)</span>
+              <ArrowRight size={14} />
+            </Link>
+          </Button>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search by receipt code, applicant name, phone number, service, or mosque/organization..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-11 h-12 rounded-2xl border-slate-200 bg-slate-50/50 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all shadow-none"
-          />
-        </div>
-
-        {/* Transactions Table */}
+        {/* Compact Table of Recent Records */}
         <div className="overflow-x-auto rounded-2xl border border-slate-100">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100">
               <tr>
-                <th className="py-4 px-5">Receipt / Reference</th>
-                <th className="py-4 px-5">Applicant & Entity</th>
-                <th className="py-4 px-5">Service</th>
-                <th className="py-4 px-5">Amount</th>
-                <th className="py-4 px-5">Channel & Phone</th>
-                <th className="py-4 px-5">Status</th>
-                <th className="py-4 px-5">Date</th>
-                <th className="py-4 px-5 text-right">Action</th>
+                <th className="py-3.5 px-5">Receipt / Reference</th>
+                <th className="py-3.5 px-5">Applicant & Entity</th>
+                <th className="py-3.5 px-5">Service</th>
+                <th className="py-3.5 px-5">Amount</th>
+                <th className="py-3.5 px-5">Status</th>
+                <th className="py-3.5 px-5">Date</th>
+                <th className="py-3.5 px-5 text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
               {isPaymentsLoading ? (
-                [...Array(5)].map((_, i) => (
+                [...Array(4)].map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-28 rounded" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-36 rounded" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-24 rounded" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-20 rounded" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-24 rounded" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-5 w-16 rounded-full" /></td>
-                    <td className="py-4 px-5"><Skeleton className="h-4 w-24 rounded" /></td>
-                    <td className="py-4 px-5 text-right"><Skeleton className="h-8 w-16 rounded ml-auto" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-4 w-28 rounded" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-4 w-36 rounded" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-4 w-24 rounded" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-4 w-20 rounded" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-5 w-16 rounded-full" /></td>
+                    <td className="py-3.5 px-5"><Skeleton className="h-4 w-24 rounded" /></td>
+                    <td className="py-3.5 px-5 text-right"><Skeleton className="h-7 w-14 rounded ml-auto" /></td>
                   </tr>
                 ))
-              ) : filteredPayments.length > 0 ? (
-                filteredPayments.map((p) => {
+              ) : recentPayments.length > 0 ? (
+                recentPayments.map((p) => {
                   const statusColors: Record<string, string> = {
                     Completed: "bg-emerald-50 text-emerald-700 border-emerald-200",
                     Pending: "bg-amber-50 text-amber-700 border-amber-200",
@@ -656,23 +674,21 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                       className="hover:bg-slate-50/80 transition-colors cursor-pointer group"
                     >
                       {/* Receipt */}
-                      <td className="py-4 px-5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-black text-slate-900 font-mono text-xs">
-                            {p.receipt_number || p.checkout_request_id?.slice(0, 14) || "NO-RECEIPT"}
-                          </span>
-                        </div>
-                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                          M-PESA STK
+                      <td className="py-3.5 px-5">
+                        <span className="font-black text-slate-900 font-mono text-xs">
+                          {p.receipt_number || p.checkout_request_id?.slice(0, 14) || "NO-RECEIPT"}
                         </span>
+                        <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                          M-PESA STK
+                        </div>
                       </td>
 
                       {/* Applicant & Org */}
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 px-5">
                         <div className="font-bold text-slate-900">
                           {p.applicant_name || "Applicant"}
                         </div>
-                        <div className="text-[11px] text-slate-400 font-medium truncate max-w-[200px]">
+                        <div className="text-[11px] text-slate-400 font-medium truncate max-w-[180px]">
                           {p.organization_name ? (
                             <span className="flex items-center gap-1">
                               <Building size={11} />
@@ -685,34 +701,26 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                       </td>
 
                       {/* Service */}
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 px-5">
                         <span className="font-bold text-slate-800 line-clamp-1">
                           {p.service_name || "Official Service"}
                         </span>
                         {p.service_category && (
-                          <span className="text-[10px] font-bold text-primary uppercase">
+                          <span className="text-[10px] font-bold text-emerald-700 uppercase">
                             {p.service_category}
                           </span>
                         )}
                       </td>
 
                       {/* Amount */}
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 px-5">
                         <span className="font-black text-slate-900 font-outfit text-sm">
                           KES {Number(p.amount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </span>
                       </td>
 
-                      {/* Channel & Phone */}
-                      <td className="py-4 px-5">
-                        <div className="flex items-center gap-1.5 font-mono text-xs text-slate-600">
-                          <Smartphone size={13} className="text-slate-400" />
-                          <span>{p.phone_number || "N/A"}</span>
-                        </div>
-                      </td>
-
                       {/* Status */}
-                      <td className="py-4 px-5">
+                      <td className="py-3.5 px-5">
                         <Badge
                           className={`border font-black text-[9px] uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
                             statusColors[p.status] || "bg-slate-50 text-slate-600 border-slate-200"
@@ -723,12 +731,12 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                       </td>
 
                       {/* Date */}
-                      <td className="py-4 px-5 text-slate-500 text-xs">
-                        {p.created_at ? format(new Date(p.created_at), "MMM dd, yyyy HH:mm") : "N/A"}
+                      <td className="py-3.5 px-5 text-slate-500 text-xs">
+                        {p.created_at ? format(new Date(p.created_at), "MMM dd, HH:mm") : "N/A"}
                       </td>
 
                       {/* Action */}
-                      <td className="py-4 px-5 text-right">
+                      <td className="py-3.5 px-5 text-right">
                         <Button
                           variant="ghost"
                           size="sm"
@@ -736,7 +744,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                             e.stopPropagation();
                             setSelectedPayment(p);
                           }}
-                          className="h-8 px-3 rounded-lg text-xs font-bold text-primary hover:bg-primary/10"
+                          className="h-8 px-3 rounded-lg text-xs font-bold text-emerald-700 hover:bg-emerald-50"
                         >
                           Details
                         </Button>
@@ -746,19 +754,46 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 })
               ) : (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-400">
+                  <td colSpan={7} className="py-12 text-center text-slate-400">
                     <Receipt className="h-8 w-8 mx-auto text-slate-300 mb-2" />
-                    <p className="font-bold text-sm text-slate-600">No payment transactions match your query.</p>
-                    <p className="text-xs text-slate-400 mt-1">Try clearing your search or status filter.</p>
+                    <p className="font-bold text-sm text-slate-600">No payment transactions recorded yet.</p>
                   </td>
                 </tr>
               )}
             </tbody>
           </table>
         </div>
+
+        {/* Footer Navigation Strip */}
+        <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-slate-100">
+          <div className="flex items-center gap-6 text-xs text-slate-500 font-medium">
+            <Link
+              href="/admin/services"
+              className="inline-flex items-center gap-1.5 hover:text-emerald-700 transition-colors"
+            >
+              <Award size={14} className="text-amber-600" />
+              <span>Configure Services & Fees</span>
+            </Link>
+            <Link
+              href="/admin/applications"
+              className="inline-flex items-center gap-1.5 hover:text-emerald-700 transition-colors"
+            >
+              <FileText size={14} className="text-blue-600" />
+              <span>Applications Registry</span>
+            </Link>
+          </div>
+
+          <Link
+            href="/admin/finance"
+            className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-emerald-700 hover:text-emerald-800"
+          >
+            <span>Open Comprehensive Ledger & Search</span>
+            <ArrowRight size={14} />
+          </Link>
+        </div>
       </Card>
 
-      {/* Transaction Detail Modal */}
+      {/* Quick Transaction Detail Modal */}
       <Dialog open={Boolean(selectedPayment)} onOpenChange={(open) => !open && setSelectedPayment(null)}>
         <DialogContent className="max-w-xl p-0 overflow-hidden border-none shadow-premium rounded-[2rem] bg-white">
           {selectedPayment && (
@@ -766,7 +801,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
               {/* Modal Header */}
               <div className="p-8 pb-6 border-b border-slate-100 bg-gradient-to-r from-emerald-50/40 via-teal-50/20 to-white flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="p-3.5 rounded-2xl bg-primary/10 text-primary">
+                  <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100">
                     <Receipt size={26} />
                   </div>
                   <div>
@@ -850,7 +885,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
                       Category
                     </span>
-                    <p className="font-bold text-primary">{selectedPayment.service_category || "General"}</p>
+                    <p className="font-bold text-emerald-700">{selectedPayment.service_category || "General"}</p>
                   </div>
 
                   <div className="space-y-1">

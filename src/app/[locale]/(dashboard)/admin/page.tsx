@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
 import { canAccessModule, getUserRoleName } from "@/lib/permissions";
-import { FinanceDashboardView } from "./finance/page";
+import { FinanceOverviewDashboard } from "./_components/FinanceOverviewDashboard";
 import { ITDashboardView } from "./_components/ITDashboardView";
 
 export default function AdminOverview() {
@@ -41,7 +41,7 @@ export default function AdminOverview() {
   const roleName = getUserRoleName(user);
 
   if (roleName === "Finance Officer") {
-    return <FinanceDashboardView isMainDashboard={true} />;
+    return <FinanceOverviewDashboard />;
   }
 
   if (roleName === "IT Officer") {

@@ -26,8 +26,11 @@ export function useAdminSidebarLogic() {
   const roleName = getUserRoleName(user);
 
   let overviewLabel = t("overview");
+  let financeLabel = "Finance & Payments";
+
   if (roleName === "Finance Officer") {
-    overviewLabel = "Finance Dashboard";
+    overviewLabel = "Finance Overview";
+    financeLabel = "Payments & Ledger";
   } else if (roleName === "IT Officer") {
     overviewLabel = "IT Operations";
   }
@@ -38,7 +41,7 @@ export function useAdminSidebarLogic() {
     { name: t("applications"), href: "/admin/applications", icon: FileText, module: "applications" },
     { name: t("certificates"), href: "/admin/certificates", icon: Award, module: "certificates" },
     { name: "Letters", href: "/admin/letters", icon: FileText, module: "letters" },
-    { name: "Finance & Payments", href: "/admin/finance", icon: Receipt, module: "finance" },
+    { name: financeLabel, href: "/admin/finance", icon: Receipt, module: "finance" },
     { name: t("newsCms"), href: "/admin/news", icon: FileText, module: "news" },
     { name: t("newsPapers"), href: "/admin/news-papers", icon: FileText, module: "newspapers" },
     { name: t("leadership"), href: "/admin/leadership", icon: Users, module: "leadership" },
