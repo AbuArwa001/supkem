@@ -1,10 +1,11 @@
-import html2canvas from "html2canvas";
-import { domToPng } from "modern-screenshot";
+import html2canvas from "html2canvas-pro";
+import { domToCanvas } from "modern-screenshot";
 import jsPDF from "jspdf";
 
 /**
  * Downloads a DOM element as a high-resolution PDF document.
- * Uses html2canvas for robust DOM rasterization and proper orientation.
+ * Uses html2canvas-pro for robust modern CSS color (oklab/oklch) support,
+ * with modern-screenshot domToCanvas as a fallback.
  */
 export async function downloadElementAsPdf(
   element: HTMLElement,
@@ -26,23 +27,20 @@ export async function downloadElementAsPdf(
     imgWidth = canvas.width;
     imgHeight = canvas.height;
   } catch (canvasErr) {
-    console.warn("html2canvas failed, attempting domToPng fallback:", canvasErr);
+    console.warn("html2canvas-pro failed, attempting domToCanvas fallback:", canvasErr);
     try {
-      imgData = await domToPng(element, {
+      const fallbackCanvas = await domToCanvas(element, {
         scale: 2,
         font: false,
         timeout: 5000,
       });
-      const img = new Image();
-      img.src = imgData;
-      await new Promise<void>((resolve, reject) => {
-        img.onload = () => resolve();
-        img.onerror = (e) => reject(new Error("Failed to load rendered image into memory: " + e));
-      });
-      imgWidth = img.width;
-      imgHeight = img.height;
+      imgData = fallbackCanvas.toDataURL("image/png");
+      imgWidth = fallbackCanvas.width;
+      imgHeight = fallbackCanvas.height;
     } catch (domErr) {
-      throw new Error(`Failed to generate PDF: ${canvasErr} | ${domErr}`);
+      const canvasMsg = canvasErr instanceof Error ? canvasErr.message : String(canvasErr);
+      const domMsg = domErr instanceof Error ? domErr.message : String(domErr);
+      throw new Error(`Failed to generate PDF: ${canvasMsg} | ${domMsg}`);
     }
   }
 

@@ -25,6 +25,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.34.3",
     "html2canvas": "^1.4.1",
+    "html2canvas-pro": "^2.4.3",
     "js-cookie": "^3.0.5",
     "jspdf": "^4.2.0",
     "lucide-react": "^0.576.0",
