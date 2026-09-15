@@ -23,7 +23,10 @@ export default function AdminLetters() {
 function AdminLettersContent() {
   const t = useTranslations("Dashboard.admin.certificates");
   const tl = useTranslations("Dashboard.admin.letters");
+<<<<<<< HEAD
   const tSn = useTranslations("Dashboard.admin.serviceNames");
+=======
+>>>>>>> d641572f8fa55aec97d7c0764ef67790b7be0ec7
   const {
     certificates,
     groupedCerts,
@@ -76,6 +79,7 @@ function AdminLettersContent() {
 
       {Object.keys(groupedCerts).length > 0 ? (
         <div className="space-y-12">
+<<<<<<< HEAD
           {Object.entries(groupedCerts).map(([serviceName, serviceCerts]) => {
             const displayHeader = serviceName === "Other Certifications" 
               ? tl("otherLetters") 
@@ -89,6 +93,17 @@ function AdminLettersContent() {
                   </h3>
                   <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
                 </div>
+=======
+          {Object.entries(groupedCerts).map(([serviceName, serviceCerts]) => (
+            <div key={serviceName} className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+                <h3 className="text-lg font-black text-secondary uppercase tracking-[0.2em] px-4 whitespace-nowrap">
+                  {serviceName === "Other Certifications" ? tl("otherLetters") : serviceName}
+                </h3>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-transparent" />
+              </div>
+>>>>>>> d641572f8fa55aec97d7c0764ef67790b7be0ec7
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {serviceCerts.map((cert, index) => (

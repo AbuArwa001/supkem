@@ -13,7 +13,10 @@ import users from './users.json';
 import finance from './finance.json';
 import letters from './letters.json';
 import it from './it.json';
+<<<<<<< HEAD
 import serviceNames from './serviceNames.json';
+=======
+>>>>>>> d641572f8fa55aec97d7c0764ef67790b7be0ec7
 
 export default {
   "applications": applications,
@@ -31,5 +34,8 @@ export default {
   "finance": finance,
   "letters": letters,
   "it": it,
+<<<<<<< HEAD
   "serviceNames": serviceNames,
+=======
+>>>>>>> d641572f8fa55aec97d7c0764ef67790b7be0ec7
 };
