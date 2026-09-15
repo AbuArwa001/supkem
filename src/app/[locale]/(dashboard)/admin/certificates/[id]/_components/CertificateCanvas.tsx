@@ -154,7 +154,7 @@ export function CertificateCanvas({
 
       <div className="relative z-10 w-full flex flex-col items-center">
         <Image
-          src="/logo.svg"
+          src="/logo.png"
           alt="SUPKEM Logo"
           width={80}
           height={80}
@@ -258,7 +258,7 @@ export function CertificateCanvas({
               style={{ borderColor: "#1e293b" }}
             >
               {resolvedSignature ? (
-                <img src={resolvedSignature} alt="Signature" className="h-full object-contain pb-1 mix-blend-multiply" />
+                <img src={resolvedSignature} alt="Signature" crossOrigin="anonymous" className="h-full object-contain pb-1 mix-blend-multiply" />
               ) : (
                 <span
                   className={`font-serif text-2xl italic px-2 -mb-2 ${isArabic ? "font-arabic" : ""}`}

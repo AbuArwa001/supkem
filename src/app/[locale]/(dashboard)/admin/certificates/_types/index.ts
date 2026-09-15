@@ -9,6 +9,7 @@ export interface Certificate {
   service_name?: string;
   service_document_type?: string;
   issued_at: string;
+  expires_at?: string | null;
   serial_number: string;
   qr_code_hash?: string;
   custom_text_en?: string | null;

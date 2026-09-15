@@ -67,7 +67,7 @@ export default function CertificateCard({
             </p>
             <p className="text-xs font-bold text-primary flex items-center gap-1">
               <Calendar size={12} />{" "}
-              {new Date(cert.issued_at).toLocaleDateString()}
+              {cert.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
             </p>
           </div>
           <div className="space-y-1">
@@ -79,6 +79,15 @@ export default function CertificateCard({
             </p>
           </div>
         </div>
+
+        {type === "certificate" && (
+          <div className="flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-100 text-xs">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Validity</span>
+            <span className="font-semibold text-slate-700">
+              {cert.expires_at ? `Expires: ${new Date(cert.expires_at).toLocaleDateString()}` : "Indefinite (No Expiry)"}
+            </span>
+          </div>
+        )}
 
         <Link
           href={`/admin/${type}s/${cert.id}`}

@@ -137,6 +137,7 @@ export function GenericCertificateContent({
               <img
                 src={certificate.digital_signature}
                 alt="Signature"
+                crossOrigin="anonymous"
                 className="h-full object-contain pb-1 mix-blend-multiply"
               />
             ) : (
