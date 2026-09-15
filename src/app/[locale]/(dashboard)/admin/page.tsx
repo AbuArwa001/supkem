@@ -32,9 +32,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
-import { canAccessModule } from "@/lib/permissions";
+import { canAccessModule, getUserRoleName } from "@/lib/permissions";
+import { FinanceDashboardView } from "./finance/page";
+import { ITDashboardView } from "./_components/ITDashboardView";
 
 export default function AdminOverview() {
+  const { user } = useAuth();
+  const roleName = getUserRoleName(user);
+
+  if (roleName === "Finance Officer") {
+    return <FinanceDashboardView isMainDashboard={true} />;
+  }
+
+  if (roleName === "IT Officer") {
+    return <ITDashboardView />;
+  }
+
+  return <AdminOverviewContent />;
+}
+
+function AdminOverviewContent() {
   const t = useTranslations("Dashboard.admin.overview");
   const tc = useTranslations("Dashboard.common");
   const { user } = useAuth();

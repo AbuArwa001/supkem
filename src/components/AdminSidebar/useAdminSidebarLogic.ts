@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { MenuItem } from "./types";
-import { canAccessModule } from "@/lib/permissions";
+import { canAccessModule, getUserRoleName } from "@/lib/permissions";
 
 export function useAdminSidebarLogic() {
   const t = useTranslations("Dashboard.admin.nav");
@@ -23,8 +23,17 @@ export function useAdminSidebarLogic() {
   const { user, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const roleName = getUserRoleName(user);
+
+  let overviewLabel = t("overview");
+  if (roleName === "Finance Officer") {
+    overviewLabel = "Finance Dashboard";
+  } else if (roleName === "IT Officer") {
+    overviewLabel = "IT Operations";
+  }
+
   const allMenuItems: MenuItem[] = [
-    { name: t("overview"), href: "/admin", icon: LayoutDashboard, module: "overview" },
+    { name: overviewLabel, href: "/admin", icon: LayoutDashboard, module: "overview" },
     { name: t("organizations"), href: "/admin/organizations", icon: Building2, module: "organizations" },
     { name: t("applications"), href: "/admin/applications", icon: FileText, module: "applications" },
     { name: t("certificates"), href: "/admin/certificates", icon: Award, module: "certificates" },

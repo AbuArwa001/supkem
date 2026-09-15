@@ -43,6 +43,7 @@ import {
 import api from "@/lib/api";
 import { RoleGuard } from "@/components/RoleGuard";
 import { Link } from "@/i18n/routing";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { format } from "date-fns";
 
@@ -110,12 +111,18 @@ const fetcher = (url: string) => api.get(url).then((res) => res.data);
 export default function FinanceDashboardPage() {
   return (
     <RoleGuard module="finance">
-      <FinanceContent />
+      <FinanceDashboardView isMainDashboard={false} />
     </RoleGuard>
   );
 }
 
-function FinanceContent() {
+export interface FinanceDashboardViewProps {
+  isMainDashboard?: boolean;
+}
+
+export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboardViewProps) {
+  const { user } = useAuth();
+  const userName = user?.first_name || user?.full_name || "Finance Officer";
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [selectedPayment, setSelectedPayment] = useState<PaymentRecord | null>(null);
@@ -243,23 +250,35 @@ function FinanceContent() {
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-2 border-b border-slate-100">
         <div className="flex items-center gap-4">
-          <Link
-            href="/admin"
-            className="p-2.5 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400 hover:text-primary mt-1"
-          >
-            <ChevronLeft size={24} />
-          </Link>
+          {!isMainDashboard && (
+            <Link
+              href="/admin"
+              className="p-2.5 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400 hover:text-primary mt-1"
+            >
+              <ChevronLeft size={24} />
+            </Link>
+          )}
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-black tracking-widest text-[10px] uppercase px-2.5 py-0.5">
-                Financial Operations & Ledger
+                {isMainDashboard ? "Finance Command Center • Primary Dashboard" : "Financial Operations & Ledger"}
               </Badge>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black font-outfit text-slate-900 tracking-tight">
-              Finance & <span className="text-primary italic">Revenue Analytics</span>
+              {isMainDashboard ? (
+                <>
+                  Welcome back, <span className="text-primary italic">{userName}</span>
+                </>
+              ) : (
+                <>
+                  Finance & <span className="text-primary italic">Revenue Analytics</span>
+                </>
+              )}
             </h1>
             <p className="text-slate-500 font-medium text-sm mt-1">
-              Real-time payment settlements, outstanding fee requests, service earnings, and audit trail.
+              {isMainDashboard
+                ? "Your primary financial command center: real-time M-Pesa collections, pending settlements, and revenue analytics."
+                : "Real-time payment settlements, outstanding fee requests, service earnings, and audit trail."}
             </p>
           </div>
         </div>
