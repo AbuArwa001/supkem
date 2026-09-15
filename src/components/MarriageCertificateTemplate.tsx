@@ -1,14 +1,12 @@
 "use client";
 
-import Image from "next/image";
-import { Award } from "lucide-react";
 import { MarriageCertificateTemplateProps } from "./MarriageCertificate/types";
 import { CertificateHeader } from "./MarriageCertificate/CertificateHeader";
-import { CertificateFooter } from "./MarriageCertificate/CertificateFooter";
 import { HusbandDetails } from "./MarriageCertificate/HusbandDetails";
 import { WifeDetails } from "./MarriageCertificate/WifeDetails";
 import { MarriageDetailsSection } from "./MarriageCertificate/MarriageDetailsSection";
 import { Row } from "./MarriageCertificate/Row";
+import { CertificateQRCode } from "@/components/CertificateQRCode";
 
 export default function MarriageCertificateTemplate({
   certificate,
@@ -16,62 +14,94 @@ export default function MarriageCertificateTemplate({
   const details = certificate.application_detail?.marriage_details;
   if (!details) return null;
 
+  const entryNo =
+    details.marriage_entry_no ||
+    `KCMRC  ${certificate.serial_number || "E88"} OF ${new Date(
+      details.date_of_marriage || Date.now()
+    ).getFullYear()}`;
+
+  const formattedDateOfMarriage = details.date_of_marriage
+    ? new Date(details.date_of_marriage)
+        .toLocaleDateString(undefined, {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
+        .toUpperCase()
+    : "";
+
   return (
-    <div className="w-full max-w-[850px] mx-auto p-12 bg-[#fafaf8] text-slate-900 font-serif relative border-[16px] border-double border-slate-300 shadow-2xl print:shadow-none print:p-8 print:border-none overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/natural-paper.png')]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.04] pointer-events-none">
-        <Image src="/logo.svg" alt="" width={600} height={600} />
-      </div>
+    <div
+      className="w-full max-w-[820px] mx-auto p-6 sm:p-8 bg-[#fdfdfc] text-slate-950 font-serif relative border-2 border-slate-900 shadow-2xl print:shadow-none print:p-6 print:border-slate-900 print:w-full print:max-w-none overflow-hidden"
+      style={{
+        boxSizing: "border-box",
+      }}
+    >
+      {/* Subtle Government Document Texture Overlay */}
+      <div className="absolute inset-0 opacity-[0.015] pointer-events-none bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]" />
 
-      <div className="relative z-10 border-[1px] border-slate-400 p-8 h-full">
-        <CertificateHeader serialNumber={certificate.serial_number} />
+      {/* Official Header */}
+      <CertificateHeader serialNumber={certificate.serial_number} />
 
-        <div className="border-[2px] border-slate-900 overflow-hidden shadow-sm bg-white/40">
-          <Row
-            en="Marriage Entry No."
-            value={details.marriage_entry_no}
-            ar="رقم تسجيل الزواج"
-          />
-          <Row
-            en="Date of Marriage"
-            value={new Date(details.date_of_marriage)
-              .toLocaleDateString(undefined, {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })
-              .toUpperCase()}
-            ar="تاريخ الزواج"
-          />
-          <HusbandDetails details={details} />
-          <WifeDetails details={details} />
-          <MarriageDetailsSection details={details} />
-        </div>
-
-        <CertificateFooter 
-          dateOfIssuance={details.date_of_issuance} 
-          serialNumber={certificate.serial_number}
-          qrCodeHash={certificate.qr_code_hash}
+      {/* The Official 26-Row Table */}
+      <div className="border border-slate-900 bg-white/60 shadow-xs relative z-10">
+        {/* Row 1: Marriage Entry No. */}
+        <Row
+          en="Marriage Entry No."
+          value={entryNo}
+          ar="رقم تسجيل الزواج"
         />
 
-        <div className="absolute bottom-2 left-2 rotate-12 opacity-10">
-          <Award size={16} />
-        </div>
-        <div className="absolute bottom-2 right-2 -rotate-12 opacity-10">
-          <Award size={16} />
-        </div>
+        {/* Row 2: Date of Marriage */}
+        <Row
+          en="Date of Marriage"
+          value={formattedDateOfMarriage}
+          ar="تاريخ الزواج"
+        />
+
+        {/* Rows 3 - 8: Husband's Details */}
+        <HusbandDetails details={details} />
+
+        {/* Rows 9 - 14: Wife's Details */}
+        <WifeDetails details={details} />
+
+        {/* Rows 15 - 26: Waliyy, Mahr, Venue, Signatures, Witnesses, Officer, Issuance */}
+        <MarriageDetailsSection
+          details={details}
+          dateOfIssuance={details.date_of_issuance || certificate.issued_at}
+        />
       </div>
 
-      <style jsx>{`
-        .divide-slate-800 > :not([hidden]) ~ :not([hidden]) {
-          border-color: #1e293b;
-        }
-        .font-mono {
-          font-family:
-            ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-            "Liberation Mono", "Courier New", monospace;
-        }
-      `}</style>
+      {/* Discreet Verification Seal & QR Code below the table */}
+      <div className="mt-3 pt-2 flex items-center justify-between text-slate-600 border-t border-slate-200/80">
+        <div className="text-left space-y-0.5">
+          <p className="text-[8px] font-sans font-black uppercase tracking-[0.2em] text-slate-700">
+            OFFICIAL REPUBLIC OF KENYA MUSLIM MARRIAGE REGISTER
+          </p>
+          <p className="text-[7.5px] font-serif text-slate-500">
+            Supreme Council of Kenya Muslims (SUPKEM) • Sharia Compliance Unit
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <span className="text-[7.5px] font-mono font-bold text-slate-500 uppercase block">
+              Digital Verification
+            </span>
+            <span className="text-[8.5px] font-mono font-black text-slate-800">
+              SN: {certificate.serial_number}
+            </span>
+          </div>
+          <div className="p-1 bg-white border border-slate-300 rounded shadow-2xs">
+            <CertificateQRCode
+              hash={certificate.qr_code_hash}
+              serialNumber={certificate.serial_number}
+              size={36}
+              fgColor="#0f172a"
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

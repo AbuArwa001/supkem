@@ -5,28 +5,34 @@ export interface RowProps {
   value: string;
   ar: string;
   className?: string;
+  superscript?: string;
 }
 
 export const Row = ({ en, value, ar, className = "" }: RowProps) => (
   <div
     className={cn(
-      "border-b border-slate-900 flex divide-x divide-slate-800 min-h-[42px]",
-      className,
+      "border-b border-slate-900 flex divide-x divide-slate-900 min-h-[34px] text-slate-950",
+      className
     )}
   >
-    <div className="w-[190px] p-2 bg-slate-100/30 flex items-center">
-      <span className="text-[10px] font-bold text-slate-800 uppercase leading-tight font-sans tracking-tighter">
+    {/* Left: English Label */}
+    <div className="w-[190px] sm:w-[210px] p-1.5 px-2 bg-transparent flex items-center shrink-0">
+      <span className="text-[11px] font-serif font-normal text-slate-900 leading-snug">
         {en}
       </span>
     </div>
-    <div className="flex-1 p-2 flex items-center px-4">
-      <p className="text-sm font-black text-slate-900 uppercase font-mono tracking-tight whitespace-pre-wrap">
+
+    {/* Center: Value */}
+    <div className="flex-1 p-1.5 px-3 flex items-center">
+      <p className="text-[12px] sm:text-[13px] font-mono font-bold uppercase tracking-tight text-slate-950 whitespace-pre-wrap">
         {value || ""}
       </p>
     </div>
-    <div className="w-[190px] p-2 bg-slate-100/30 flex items-center justify-end text-right">
+
+    {/* Right: Arabic Label */}
+    <div className="w-[190px] sm:w-[210px] p-1.5 px-2 bg-transparent flex items-center justify-end text-right shrink-0">
       <span
-        className="text-[12px] font-black text-slate-900 leading-tight"
+        className="text-[12px] font-arabic font-bold text-slate-900 leading-tight"
         dir="rtl"
       >
         {ar}

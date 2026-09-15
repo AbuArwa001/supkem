@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 import { CertificateCanvas } from "@/app/[locale]/(dashboard)/admin/certificates/[id]/_components/CertificateCanvas";
 import { LetterCanvas } from "./LetterCanvas";
+import MarriageCertificateTemplate from "@/components/MarriageCertificateTemplate";
 
 export type DocumentType = "Certificate" | "Letter";
 export type Language = "en" | "ar";
@@ -703,24 +704,69 @@ export default function DocumentIssuanceStudio({
                  {selectedAppId ? (
                    <div className="scale-[0.4] xs:scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-90 xl:scale-100 origin-top transition-all">
                      {docType === "Certificate" ? (
-                       <CertificateCanvas
-                         certificate={{
-                           service_name: selectedApp?.service_name || "Official Certification",
-                           organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
-                           user_name: selectedApp?.user_name,
-                           serial_number: "PREVIEW-12345",
-                           signatory_title: signatoryTitle,
-                         } as any}
-                         certificateRef={{ current: null }}
-                          issueDate={startDateString ? new Date(startDateString) : new Date()}
-                          expiryDate={isIndefinite ? null : (expiryDateString ? new Date(expiryDateString) : null)}
-                          isValid={true}
-                         language={language}
-                         customText={language === "en" ? customTextEn : customTextAr}
-                         signatoryTitle={signatoryTitle}
-                         isMarkdown={isMarkdown}
-                         signatureBase64={sigType === "upload" ? uploadedSig || undefined : (sigCanvas.current?.isEmpty() ? undefined : sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png"))}
-                       />
+                       selectedApp?.service_name?.toLowerCase().includes("marriage") ? (
+                         <div className="w-[820px] max-w-full origin-top">
+                           <MarriageCertificateTemplate
+                             certificate={{
+                               serial_number: "PREVIEW-0781",
+                               issued_at: startDateString || new Date().toISOString(),
+                               expires_at: isIndefinite ? null : expiryDateString,
+                               application_detail: {
+                                 service_name: selectedApp?.service_name,
+                                 user_name: selectedApp?.user_name,
+                                 marriage_details: selectedApp?.marriage_details || {
+                                   husband_name: selectedApp?.user_name || "KHALFANI ATHMAN KHALFAN",
+                                   husband_id_passport: "ID N.O: 31783475",
+                                   husband_age: "27",
+                                   husband_marital_status: "FIRST MARRIAGE",
+                                   husband_occupation: "ICT OFFICER, MINISTRY OF AGRICULTURE",
+                                   husband_residence_county: "MOMBASA",
+                                   husband_residence_sub_county: "CHANGAMWE",
+                                   wife_name: "RIZIKI MOHAMED GAMUMU",
+                                   wife_id_passport: "ID NO: 32288080",
+                                   wife_age: "29",
+                                   wife_marital_status: "VIRGIN",
+                                   wife_occupation: "A CAKE BAKER",
+                                   wife_residence_county: "MOMBASA",
+                                   wife_residence_sub_county: "KISAUNI",
+                                   wife_waliyy_name: "HASSAN MOHAMED GAMUMU",
+                                   wife_waliyy_relationship: "HER BROTHER",
+                                   agreed_mahr: "A SET OF GOLD WORTH KSHS. 75,000/=",
+                                   paid_mahr_and_deferred: "DEFERRED",
+                                   particulars_of_gifts: "KSHS. 20,000/= PAID",
+                                   place_of_marriage: "MASJID NOOR, KIDARAJANI, BAMBURI",
+                                   county_of_marriage: "MOMBASA",
+                                   date_of_marriage: startDateString || "2022-07-02",
+                                   witness_1_name: "SEIF MOHAMED MAKUTA",
+                                   witness_1_id: "29653490",
+                                   witness_2_name: "HAMAD MOHAMMED",
+                                   witness_2_id: "28869113",
+                                   marriage_officer_name: "Hon. Khamis Ramadhani",
+                                 },
+                               } as any,
+                             } as any}
+                           />
+                         </div>
+                       ) : (
+                         <CertificateCanvas
+                           certificate={{
+                             service_name: selectedApp?.service_name || "Official Certification",
+                             organization_name: selectedApp?.organization_name || selectedApp?.user_name || "Organization Name",
+                             user_name: selectedApp?.user_name,
+                             serial_number: "PREVIEW-12345",
+                             signatory_title: signatoryTitle,
+                           } as any}
+                           certificateRef={{ current: null }}
+                           issueDate={startDateString ? new Date(startDateString) : new Date()}
+                           expiryDate={isIndefinite ? null : (expiryDateString ? new Date(expiryDateString) : null)}
+                           isValid={true}
+                           language={language}
+                           customText={language === "en" ? customTextEn : customTextAr}
+                           signatoryTitle={signatoryTitle}
+                           isMarkdown={isMarkdown}
+                           signatureBase64={sigType === "upload" ? uploadedSig || undefined : (sigCanvas.current?.isEmpty() ? undefined : sigCanvas.current?.getTrimmedCanvas().toDataURL("image/png"))}
+                         />
+                       )
                      ) : (
                        <LetterCanvas
                          letter={{

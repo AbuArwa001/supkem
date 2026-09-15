@@ -17,8 +17,11 @@ interface CertificateCanvasProps {
 
 export const CertificateCanvas = forwardRef<HTMLDivElement, CertificateCanvasProps>(
   ({ certificate, issueDate, expiryDate, isValid }, ref) => {
-    const serviceName =
-      certificate.application_detail?.service_name?.toLowerCase() || "";
+    const serviceName = (
+      certificate.service_name ||
+      certificate.application_detail?.service_name ||
+      ""
+    ).toLowerCase();
     const isMarriage = serviceName.includes("marriage");
 
     return (
@@ -26,9 +29,13 @@ export const CertificateCanvas = forwardRef<HTMLDivElement, CertificateCanvasPro
         ref={ref}
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="relative bg-white border border-border/80 shadow-2xl rounded-[20px] overflow-hidden p-8 md:p-16 lg:p-24 flex flex-col items-center text-center max-w-4xl mx-auto print:shadow-none print:border-none print:rounded-none print:m-0 print:p-8 certificate-canvas"
+        className={
+          isMarriage
+            ? "relative w-full flex justify-center bg-transparent print:m-0 print:p-0 certificate-canvas"
+            : "relative bg-white border border-border/80 shadow-2xl rounded-[20px] overflow-hidden p-8 md:p-16 lg:p-24 flex flex-col items-center text-center max-w-4xl mx-auto print:shadow-none print:border-none print:rounded-none print:m-0 print:p-8 certificate-canvas"
+        }
       >
-        <CertificatePrintStyles />
+        <CertificatePrintStyles isMarriage={isMarriage} />
         <CertificateBackground hidden={isMarriage} />
 
         <div className="relative z-10 w-full flex flex-col items-center">

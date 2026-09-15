@@ -37,6 +37,12 @@ export default function CertificateDetail() {
     );
   }
 
+  const isMarriage = (
+    certificate?.service_name ||
+    certificate?.application_detail?.service_name ||
+    ""
+  ).toLowerCase().includes("marriage");
+
   return (
     <div className="space-y-8 pb-20 max-w-5xl mx-auto">
       <CertificateHeader
@@ -46,7 +52,11 @@ export default function CertificateDetail() {
         isDownloading={isDownloading}
       />
 
-      <DocumentScaleWrapper isLandscape={true} baseWidth={1000} baseHeight={700}>
+      <DocumentScaleWrapper
+        isLandscape={!isMarriage}
+        baseWidth={isMarriage ? 820 : 1000}
+        baseHeight={isMarriage ? 1160 : 700}
+      >
         <CertificateCanvas
           ref={certificateRef}
           certificate={certificate}

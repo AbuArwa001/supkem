@@ -12,6 +12,8 @@ import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
 import { DownloadProgressModal } from "@/components/DownloadProgressModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
+import MarriageCertificateTemplate from "@/components/MarriageCertificateTemplate";
+
 export default function AdminCertificateDetail() {
   return (
     <RoleGuard module="certificates">
@@ -44,6 +46,13 @@ function AdminCertificateDetailContent() {
     return <CertificateError error={error} onReturn={handleReturnToRegistry} />;
   }
 
+  const serviceName = (
+    certificate.service_name ||
+    certificate.application_detail?.service_name ||
+    ""
+  ).toLowerCase();
+  const isMarriage = serviceName.includes("marriage");
+
   return (
     <div className="space-y-8 pb-20 max-w-5xl mx-auto">
       <CertificateHeader
@@ -53,18 +62,32 @@ function AdminCertificateDetailContent() {
         onDownload={handleDownloadPDF}
       />
 
-      <DocumentScaleWrapper isLandscape={true} baseWidth={1000} baseHeight={700}>
-        <CertificateCanvas
-          certificate={certificate}
-          certificateRef={certificateRef}
-          issueDate={issueDate}
-          expiryDate={expiryDate}
-          isValid={isValid}
-          language={certificate.language || "en"}
-          customText={certificate.language === "ar" ? certificate.custom_text_ar : certificate.custom_text_en}
-          signatureBase64={certificate.digital_signature}
-          signatoryTitle={certificate.signatory_title}
-        />
+      <DocumentScaleWrapper
+        isLandscape={!isMarriage}
+        baseWidth={isMarriage ? 820 : 1000}
+        baseHeight={isMarriage ? 1160 : 700}
+      >
+        {isMarriage ? (
+          <div ref={certificateRef} className="w-full flex justify-center bg-transparent">
+            <MarriageCertificateTemplate certificate={certificate} />
+          </div>
+        ) : (
+          <CertificateCanvas
+            certificate={certificate}
+            certificateRef={certificateRef}
+            issueDate={issueDate}
+            expiryDate={expiryDate}
+            isValid={isValid}
+            language={certificate.language || "en"}
+            customText={
+              certificate.language === "ar"
+                ? certificate.custom_text_ar
+                : certificate.custom_text_en
+            }
+            signatureBase64={certificate.digital_signature}
+            signatoryTitle={certificate.signatory_title}
+          />
+        )}
       </DocumentScaleWrapper>
 
       {certificate.application && (

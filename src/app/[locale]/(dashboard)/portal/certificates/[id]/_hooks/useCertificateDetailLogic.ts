@@ -41,11 +41,18 @@ export function useCertificateDetailLogic() {
 
     setIsDownloading(true);
     const startTime = Date.now();
+    const serviceName = (
+      certificate?.service_name ||
+      certificate?.application_detail?.service_name ||
+      ""
+    ).toLowerCase();
+    const isMarriage = serviceName.includes("marriage");
+
     try {
       await downloadElementAsPdf(
         certificateRef.current,
         `SUPKEM-Certificate-${certificate?.serial_number || "Digital"}.pdf`,
-        { orientation: "landscape" }
+        { orientation: isMarriage ? "portrait" : "landscape" }
       );
       const elapsed = Date.now() - startTime;
       if (elapsed < 1200) {

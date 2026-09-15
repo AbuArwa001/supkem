@@ -1,15 +1,19 @@
 /**
  * Injects the print-mode and canvas CSS variable overrides required by
- * CertificateCanvas. Extracted to keep the parent component under 100 lines.
+ * CertificateCanvas. Supports portrait mode for Muslim Marriage Certificates.
  */
-export function CertificatePrintStyles() {
+interface CertificatePrintStylesProps {
+  isMarriage?: boolean;
+}
+
+export function CertificatePrintStyles({ isMarriage = false }: CertificatePrintStylesProps) {
   return (
     /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
     // @ts-ignore — jsx attribute is valid for styled-jsx
     <style jsx global>{`
       @media print {
         @page {
-          size: A4 landscape;
+          size: ${isMarriage ? "A4 portrait" : "A4 landscape"};
           margin: 0;
         }
 
@@ -30,9 +34,9 @@ export function CertificatePrintStyles() {
           color: #000000 !important;
           margin: 0 !important;
           padding: 0 !important;
-          width: 297mm !important;
-          height: 210mm !important;
-          max-height: 210mm !important;
+          width: ${isMarriage ? "210mm" : "297mm"} !important;
+          height: ${isMarriage ? "297mm" : "210mm"} !important;
+          max-height: ${isMarriage ? "297mm" : "210mm"} !important;
           overflow: hidden !important;
         }
 
@@ -51,12 +55,12 @@ export function CertificatePrintStyles() {
           position: fixed !important;
           left: 0 !important;
           top: 0 !important;
-          width: 297mm !important;
-          height: 210mm !important;
-          max-height: 210mm !important;
+          width: ${isMarriage ? "210mm" : "297mm"} !important;
+          height: ${isMarriage ? "297mm" : "210mm"} !important;
+          max-height: ${isMarriage ? "297mm" : "210mm"} !important;
           box-sizing: border-box !important;
           margin: 0 !important;
-          padding: 10mm 14mm !important;
+          padding: ${isMarriage ? "6mm 8mm" : "10mm 14mm"} !important;
           border: none !important;
           box-shadow: none !important;
           border-radius: 0 !important;

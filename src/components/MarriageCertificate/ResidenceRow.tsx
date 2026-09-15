@@ -5,34 +5,41 @@ interface ResidenceRowProps {
 }
 
 export const ResidenceRow = ({ county, subCounty, arLabel }: ResidenceRowProps) => (
-  <div className="border-b border-slate-900 flex divide-x divide-slate-800 min-h-[45px]">
-    <div className="w-[190px] p-2 bg-slate-100/30 flex items-center">
-      <span className="text-[10px] font-bold text-slate-800 uppercase leading-tight font-sans tracking-tighter">
+  <div className="border-b border-slate-900 flex divide-x divide-slate-900 min-h-[36px] text-slate-950">
+    <div className="w-[190px] sm:w-[210px] p-1.5 px-2 flex items-center shrink-0">
+      <span className="text-[11px] font-serif font-normal text-slate-900 leading-snug">
         Residence
       </span>
     </div>
-    <div className="flex-1 flex divide-x divide-slate-800">
-      <div className="flex-1 p-2 flex flex-col items-center justify-center bg-white/60">
-        <span className="text-[9px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-1">
-          County{" "}
-          <span dir="rtl" className="text-[11px] font-black">
+
+    <div className="flex-1 flex divide-x divide-slate-900">
+      <div className="flex-1 p-1 px-2.5 flex flex-col justify-center">
+        <span className="text-[10px] font-serif text-slate-800 flex items-center gap-1.5">
+          <span>County</span>
+          <span dir="rtl" className="font-arabic font-bold text-[11px]">
             الإقليم
           </span>
         </span>
-        <p className="text-[13px] font-black uppercase font-mono">{county}</p>
+        <p className="text-[12px] sm:text-[13px] font-mono font-bold uppercase text-slate-950">
+          {county || ""}
+        </p>
       </div>
-      <div className="flex-1 p-2 flex flex-col items-center justify-center bg-white/60">
-        <span className="text-[9px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-1">
-          Sub-County{" "}
-          <span dir="rtl" className="text-[11px] font-black">
+
+      <div className="flex-1 p-1 px-2.5 flex flex-col justify-center">
+        <span className="text-[10px] font-serif text-slate-800 flex items-center gap-1.5">
+          <span>Sub-County</span>
+          <span dir="rtl" className="font-arabic font-bold text-[11px]">
             المحافظة
           </span>
         </span>
-        <p className="text-[13px] font-black uppercase font-mono">{subCounty}</p>
+        <p className="text-[12px] sm:text-[13px] font-mono font-bold uppercase text-slate-950">
+          {subCounty || ""}
+        </p>
       </div>
     </div>
-    <div className="w-[190px] p-2 bg-slate-100/30 flex items-center justify-end text-right">
-      <span className="text-[12px] font-black text-slate-900 leading-tight" dir="rtl">
+
+    <div className="w-[190px] sm:w-[210px] p-1.5 px-2 flex items-center justify-end text-right shrink-0">
+      <span className="text-[12px] font-arabic font-bold text-slate-900 leading-tight" dir="rtl">
         {arLabel}
       </span>
     </div>
