@@ -20,6 +20,10 @@ export default function CertificateCard({
   type?: "certificate" | "letter";
 }) {
   const t = useTranslations("Dashboard.admin.certificates");
+  const tSn = useTranslations("Dashboard.admin.serviceNames");
+
+  const rawName = cert.application_detail?.service_name || cert.service_name;
+  const translatedName = rawName && tSn.has(rawName) ? tSn(rawName) : rawName || t("digitalCert");
 
   return (
     <motion.div
@@ -51,9 +55,7 @@ export default function CertificateCard({
             {t("activeCert")}
           </p>
           <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer tracking-tight leading-tight">
-            {cert.application_detail?.service_name ||
-              cert.service_name ||
-              t("digitalCert")}
+            {translatedName}
           </h4>
           <p className="text-xs font-bold text-foreground/40 mt-1 uppercase tracking-widest">
             {cert.organization_name || cert.application_detail?.user_name || "N/A"}

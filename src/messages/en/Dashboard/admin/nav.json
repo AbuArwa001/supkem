@@ -11,5 +11,10 @@
   "users": "User Management",
   "settings": "Settings",
   "mainMenu": "Main Menu",
-  "administrator": "Administrator"
+  "administrator": "Administrator",
+  "letters": "Letters",
+  "finance": "Finance & Payments",
+  "financeOverview": "Finance Overview",
+  "paymentsLedger": "Payments & Ledger",
+  "itOperations": "IT Operations"
 }

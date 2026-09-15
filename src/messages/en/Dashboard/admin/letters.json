@@ -1,0 +1,11 @@
+{
+  "title": "Issued Letters",
+  "subtitle": "You have {count} issued letters across all services.",
+  "search": "Search letters...",
+  "issueNew": "Issue New Letter",
+  "otherLetters": "Other Letters",
+  "noLettersTitle": "No Letters Issued Yet",
+  "noLettersDesc": "Recommendation and introduction letters issued for approved applications will appear here organized by service. Click below to issue your first letter.",
+  
+  "generatingLetter": "Generating Official SUPKEM Letter"
+}

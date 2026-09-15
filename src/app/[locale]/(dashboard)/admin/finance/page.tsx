@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dialog";
 import api from "@/lib/api";
 import { RoleGuard } from "@/components/RoleGuard";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -121,10 +122,11 @@ export interface FinanceDashboardViewProps {
 }
 
 export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboardViewProps) {
+  const t = useTranslations("Dashboard.admin.finance");
   const { user } = useAuth();
   const userName = user?.first_name || user?.full_name || "Finance Officer";
   const [search, setSearch] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<string>(t("all"));
   const [selectedPayment, setSelectedPayment] = useState<PaymentRecord | null>(null);
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
 
@@ -218,7 +220,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
   const filteredPayments = useMemo(() => {
     return payments.filter((p) => {
       const matchesStatus =
-        selectedStatus === "All" || p.status.toLowerCase() === selectedStatus.toLowerCase();
+        selectedStatus === t("all") || p.status.toLowerCase() === selectedStatus.toLowerCase();
       const q = search.toLowerCase().trim();
       if (!q) return matchesStatus;
 
@@ -253,21 +255,21 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <Link
             href="/admin"
             className="p-2.5 hover:bg-slate-100 rounded-2xl transition-colors text-slate-400 hover:text-primary mt-1"
-            title="Back to Dashboard"
+            title={t("backToDashboard")}
           >
             <ChevronLeft size={24} />
           </Link>
           <div>
             <div className="flex items-center gap-2 mb-1.5">
               <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-black tracking-widest text-[10px] uppercase px-2.5 py-0.5">
-                M-Pesa Daraja STK Push • Audit Ledger
+                {t("mpesaDaraja")}
               </Badge>
             </div>
             <h1 className="text-3xl sm:text-4xl font-black font-outfit text-slate-900 tracking-tight">
-              Payments Ledger & <span className="text-primary italic">Reconciliation</span>
+              {t("ledgerTitle")} <span className="text-primary italic">{t("ledgerTitleSpan")}</span>
             </h1>
             <p className="text-slate-500 font-medium text-sm mt-1">
-              Real-time payment settlements, M-Pesa transaction auditing, Daraja query verification, and ledger search.
+              {t("ledgerDesc")}
             </p>
           </div>
         </div>
@@ -279,7 +281,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
             className="h-11 px-4 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs flex items-center gap-2 shadow-sm"
           >
             <FileDown className="h-4 w-4 text-slate-500" />
-            <span>Export CSV</span>
+            <span>{t("exportCSV")}</span>
           </Button>
 
           <Button
@@ -301,7 +303,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-emerald-800">
-                Total Revenue Collected
+                {t("totalRevenue")}
               </span>
               <div className="p-2.5 rounded-2xl bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
                 <CheckCircle2 size={20} />
@@ -318,21 +320,21 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-emerald-100 text-emerald-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
-                    {completedCount} Settled
+                    {t("settled", { count: completedCount })}
                   </Badge>
-                  <span className="text-xs text-slate-400 font-medium">100% verified</span>
+                  <span className="text-xs text-slate-400 font-medium">{t("verified100")}</span>
                 </div>
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* Pending Collections */}
+        {/* {t("pendingCollections")} */}
         <Card className="border-none shadow-premium rounded-[2rem] bg-gradient-to-br from-amber-500/10 via-amber-50/50 to-white overflow-hidden relative border border-amber-500/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-amber-800">
-                Pending Collections
+                {t("pendingCollections")}
               </span>
               <div className="p-2.5 rounded-2xl bg-amber-500 text-white shadow-md shadow-amber-500/20">
                 <Clock size={20} />
@@ -349,21 +351,21 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge className="bg-amber-100 text-amber-800 border-none font-bold text-[10px] px-2 py-0.5 uppercase">
-                    {pendingCount} Pending Requests
+                    {t("pendingRequests", { count: pendingCount })}
                   </Badge>
-                  <span className="text-xs text-slate-400 font-medium">Awaiting payment</span>
+                  <span className="text-xs text-slate-400 font-medium">{t("awaitingPayment")}</span>
                 </div>
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* Total Payment Requests */}
+        {/* {t("totalRequests")} */}
         <Card className="border-none shadow-premium rounded-[2rem] bg-gradient-to-br from-blue-500/10 via-blue-50/50 to-white overflow-hidden relative border border-blue-500/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-blue-800">
-                Total Payment Requests
+                {t("totalRequests")}
               </span>
               <div className="p-2.5 rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
                 <Receipt size={20} />
@@ -376,14 +378,14 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
             ) : (
               <>
                 <div className="text-2xl sm:text-3xl font-black font-outfit text-slate-900 tracking-tight">
-                  {totalRequests.toLocaleString()} <span className="text-sm font-semibold text-slate-400">Total</span>
+                  {totalRequests.toLocaleString()} <span className="text-sm font-semibold text-slate-400">{t("total")}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="text-xs text-slate-500 font-semibold">
-                    Avg KES {Number(analytics?.average_transaction_value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    {t("avg")} KES {Number(analytics?.average_transaction_value || 0).toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </span>
                   {failedCount > 0 && (
-                    <span className="text-xs text-rose-500 font-bold">• {failedCount} failed</span>
+                    <span className="text-xs text-rose-500 font-bold">• {t("failed", { count: failedCount })}</span>
                   )}
                 </div>
               </>
@@ -396,7 +398,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase tracking-wider text-teal-800">
-                Settlement Success Rate
+                {t("successRate")}
               </span>
               <div className="p-2.5 rounded-2xl bg-teal-600 text-white shadow-md shadow-teal-600/20">
                 <TrendingUp size={20} />
@@ -431,14 +433,14 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
             <div>
               <CardTitle className="text-xl font-black font-outfit text-slate-900 uppercase tracking-tight flex items-center gap-2.5">
                 <Layers className="h-5 w-5 text-primary" />
-                Revenue by Service Category
+                {t("revenueByCategory")}
               </CardTitle>
               <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-                Breakdown of collections per certification and operational service.
+                {t("revenueByCategoryDesc")}
               </CardDescription>
             </div>
             <Badge className="bg-primary/10 text-primary border-none font-bold text-xs uppercase px-3 py-1">
-              Active Portfolio
+              {t("activePortfolio")}
             </Badge>
           </div>
 
@@ -465,7 +467,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                             {item.category}
                           </span>
                           <span className="text-[11px] text-slate-400 font-medium">
-                            • {item.count} {item.count === 1 ? "payment" : "payments"}
+                            • {item.count} {item.count === 1 ? t("payment") : t("payments")}
                           </span>
                         </div>
                       </div>
@@ -474,7 +476,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                           KES {Number(item.total_amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </span>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                          {percent.toFixed(1)}% of total
+                          {percent.toFixed(1)}{t("ofTotal")}
                         </p>
                       </div>
                     </div>
@@ -490,7 +492,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
             ) : (
               <div className="text-center py-12 text-slate-400">
                 <Receipt className="h-10 w-10 mx-auto text-slate-300 mb-2" />
-                <p className="font-semibold text-sm">No service collections recorded yet.</p>
+                <p className="font-semibold text-sm">{t("noServiceCollections")}</p>
               </div>
             )}
           </div>
@@ -501,10 +503,10 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <div className="space-y-2">
             <CardTitle className="text-xl font-black font-outfit text-slate-900 uppercase tracking-tight flex items-center gap-2.5">
               <ShieldCheck className="h-5 w-5 text-emerald-600" />
-              Settlement Health
+              {t("settlementHealth")}
             </CardTitle>
             <CardDescription className="text-slate-400 font-medium text-xs">
-              Distribution of incoming requests by operational settlement status.
+              {t("settlementHealthDesc")}
             </CardDescription>
           </div>
 
@@ -516,8 +518,8 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <CheckCircle2 size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-emerald-900">Completed</span>
-                  <p className="text-[11px] text-emerald-700 font-semibold">{completedCount} transactions</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-emerald-900">{t("completed")}</span>
+                  <p className="text-[11px] text-emerald-700 font-semibold">{t("transactions", { count: completedCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-emerald-950 font-outfit">
@@ -532,8 +534,8 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <Clock size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">Pending</span>
-                  <p className="text-[11px] text-amber-700 font-semibold">{pendingCount} requests</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pending")}</span>
+                  <p className="text-[11px] text-amber-700 font-semibold">{t("requests", { count: pendingCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-amber-950 font-outfit">
@@ -548,8 +550,8 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <XCircle size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">Failed</span>
-                  <p className="text-[11px] text-rose-700 font-semibold">{failedCount} dropped</p>
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failed")}</span>
+                  <p className="text-[11px] text-rose-700 font-semibold">{t("dropped", { count: failedCount })}</p>
                 </div>
               </div>
               <span className="text-sm font-black text-rose-950 font-outfit">
@@ -560,7 +562,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
 
           <div className="pt-4 border-t border-slate-100 text-center">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-              Payments reconciled with Safaricom Daraja M-Pesa STK Push
+              {t("reconciledWithMpesa")}
             </p>
           </div>
         </Card>
@@ -572,22 +574,22 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <div>
             <div className="flex items-center gap-3">
               <CardTitle className="text-2xl font-black font-outfit text-slate-900 uppercase tracking-tight">
-                Payments Audit Ledger
+                {t("auditLedger")}
               </CardTitle>
               <Badge className="bg-slate-100 text-slate-600 border-none font-bold text-xs uppercase px-3 py-1">
-                {filteredPayments.length} of {payments.length} Records
+                {t("recordsCount", { filtered: filteredPayments.length, total: payments.length })}
               </Badge>
             </div>
             <CardDescription className="text-slate-400 font-medium text-xs mt-1">
-              Detailed transaction log of all citizen and institutional application payments.
+              {t("auditLedgerDesc")}
             </CardDescription>
           </div>
 
           {/* Status Filter Tabs */}
           <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 border border-slate-200/60 self-start">
-            {(["All", "Completed", "Pending", "Failed"] as const).map((status) => (
+            {([t("all"), "Completed", "Pending", "Failed"] as const).map((status) => (
               <button
-                key={status}
+                key={status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pending").replace("{count} ","") : t("failed").replace("{count} ","")}
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
                   selectedStatus === status
@@ -595,7 +597,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     : "text-slate-500 hover:text-slate-900"
                 }`}
               >
-                {status}
+                {status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pending").replace("{count} ","") : t("failed").replace("{count} ","")}
               </button>
             ))}
           </div>
@@ -605,7 +607,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <Input
-            placeholder="Search by receipt code, applicant name, phone number, service, or mosque/organization..."
+            placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-11 h-12 rounded-2xl border-slate-200 bg-slate-50/50 font-medium text-sm focus:bg-white focus:ring-2 focus:ring-primary/10 transition-all shadow-none"
@@ -617,14 +619,14 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-100">
               <tr>
-                <th className="py-4 px-5">Receipt / Reference</th>
-                <th className="py-4 px-5">Applicant & Entity</th>
-                <th className="py-4 px-5">Service</th>
-                <th className="py-4 px-5">Amount</th>
-                <th className="py-4 px-5">Channel & Phone</th>
-                <th className="py-4 px-5">Status</th>
-                <th className="py-4 px-5">Date</th>
-                <th className="py-4 px-5 text-right">Action</th>
+                <th className="py-4 px-5">{t("receiptRef")}</th>
+                <th className="py-4 px-5">{t("applicantEntity")}</th>
+                <th className="py-4 px-5">{t("service")}</th>
+                <th className="py-4 px-5">{t("amount")}</th>
+                <th className="py-4 px-5">{t("channelPhone")}</th>
+                <th className="py-4 px-5">{t("status")}</th>
+                <th className="py-4 px-5">{t("date")}</th>
+                <th className="py-4 px-5 text-right">{t("action")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-xs">
@@ -659,18 +661,18 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                       <td className="py-4 px-5">
                         <div className="flex items-center gap-2">
                           <span className="font-black text-slate-900 font-mono text-xs">
-                            {p.receipt_number || p.checkout_request_id?.slice(0, 14) || "NO-RECEIPT"}
+                            {p.receipt_number || p.checkout_request_id?.slice(0, 14) || t("noReceipt")}
                           </span>
                         </div>
                         <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                          M-PESA STK
+                          {t("mpesaStk")}
                         </span>
                       </td>
 
                       {/* Applicant & Org */}
                       <td className="py-4 px-5">
                         <div className="font-bold text-slate-900">
-                          {p.applicant_name || "Applicant"}
+                          {p.applicant_name || t("applicant")}
                         </div>
                         <div className="text-[11px] text-slate-400 font-medium truncate max-w-[200px]">
                           {p.organization_name ? (
@@ -679,7 +681,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                               {p.organization_name}
                             </span>
                           ) : (
-                            p.applicant_email || "Individual Citizen"
+                            p.applicant_email || t("individualCitizen")
                           )}
                         </div>
                       </td>
@@ -687,7 +689,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                       {/* Service */}
                       <td className="py-4 px-5">
                         <span className="font-bold text-slate-800 line-clamp-1">
-                          {p.service_name || "Official Service"}
+                          {p.service_name || t("officialService")}
                         </span>
                         {p.service_category && (
                           <span className="text-[10px] font-bold text-primary uppercase">
@@ -748,8 +750,8 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                 <tr>
                   <td colSpan={8} className="py-12 text-center text-slate-400">
                     <Receipt className="h-8 w-8 mx-auto text-slate-300 mb-2" />
-                    <p className="font-bold text-sm text-slate-600">No payment transactions match your query.</p>
-                    <p className="text-xs text-slate-400 mt-1">Try clearing your search or status filter.</p>
+                    <p className="font-bold text-sm text-slate-600">{t("noTransactionsMatch")}</p>
+                    <p className="text-xs text-slate-400 mt-1">{t("tryClearingSearch")}</p>
                   </td>
                 </tr>
               )}
@@ -771,7 +773,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   </div>
                   <div>
                     <h2 className="text-xl font-black text-slate-900 font-outfit uppercase tracking-tight">
-                      Payment Receipt & Audit
+                      {t("paymentReceiptAudit")}
                     </h2>
                     <p className="text-slate-400 font-mono text-xs mt-0.5">
                       {selectedPayment.receipt_number || selectedPayment.checkout_request_id || selectedPayment.id}
@@ -804,7 +806,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-400 uppercase">Payment Channel</span>
+                    <span className="text-xs font-bold text-slate-400 uppercase">{t("paymentChannel")}</span>
                     <p className="text-xs font-black text-slate-800 uppercase">M-Pesa Express (STK)</p>
                   </div>
                 </div>
@@ -815,7 +817,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">
                       Applicant Name
                     </span>
-                    <p className="font-bold text-slate-900">{selectedPayment.applicant_name || "Applicant"}</p>
+                    <p className="font-bold text-slate-900">{selectedPayment.applicant_name || t("applicant")}</p>
                   </div>
 
                   <div className="space-y-1">

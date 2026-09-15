@@ -11,5 +11,10 @@
   "users": "إدارة المستخدمين",
   "settings": "الإعدادات",
   "mainMenu": "القائمة الرئيسية",
-  "administrator": "المدير"
+  "administrator": "المدير",
+  "letters": "الخطابات",
+  "finance": "المالية والمدفوعات",
+  "financeOverview": "نظرة عامة على المالية",
+  "paymentsLedger": "المدفوعات والدفتر",
+  "itOperations": "عمليات تكنولوجيا المعلومات"
 }

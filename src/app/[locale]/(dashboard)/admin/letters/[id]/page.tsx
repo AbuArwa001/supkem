@@ -12,6 +12,7 @@ import { ApplicationReference } from "./_components/ApplicationReference";
 import { DocumentScaleWrapper } from "@/components/DocumentScaleWrapper";
 import { DownloadProgressModal } from "@/components/DownloadProgressModal";
 import { RoleGuard } from "@/components/RoleGuard";
+import { useTranslations } from "next-intl";
 
 export default function AdminCertificateDetail() {
   return (
@@ -22,6 +23,7 @@ export default function AdminCertificateDetail() {
 }
 
 function AdminLetterDetailContent() {
+  const tl = useTranslations("Dashboard.admin.letters");
   const {
     certificate,
     loading,
@@ -72,7 +74,7 @@ function AdminLetterDetailContent() {
       <DownloadProgressModal
         isOpen={isDownloading}
         documentType="Letter"
-        title="Generating Official SUPKEM Letter"
+        title={tl("generatingLetter")}
         serialNumber={certificate.serial_number}
       />
     </div>

@@ -31,6 +31,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/lib/api";
 import { toast } from "sonner";
@@ -59,6 +60,7 @@ interface SystemStats {
 }
 
 export function ITDashboardView() {
+  const t = useTranslations("Dashboard.admin.it");
   const { user } = useAuth();
   const userName = user?.first_name || user?.full_name || "IT Officer";
 
@@ -95,7 +97,7 @@ export function ITDashboardView() {
     mutateStats();
     mutateLogs();
     mutateParams();
-    toast.success("IT telemetry & audit logs refreshed");
+    toast.success(t("successRefresh"));
   };
 
   const totalUsers = stats?.user_stats?.total ?? 0;
@@ -106,56 +108,56 @@ export function ITDashboardView() {
 
   const quickActions = [
     {
-      title: "User Directory & Access",
-      desc: "Manage user credentials, status, activation, and role assignments.",
+      title: t("usersTitle"),
+      desc: t("usersDesc"),
       href: "/admin/users",
       icon: Users,
-      badge: `${totalUsers} Users`,
+      badge: t("usersBadge", { count: totalUsers }),
       color: "from-blue-600 to-indigo-600",
       lightBg: "bg-blue-50 text-blue-700 border-blue-200",
     },
     {
-      title: "Access Control (RBAC)",
-      desc: "Configure role permissions, staff privileges, and security boundaries.",
+      title: t("rbacTitle"),
+      desc: t("rbacDesc"),
       href: "/admin/settings/access-control",
       icon: Shield,
-      badge: "Security",
+      badge: t("rbacBadge"),
       color: "from-emerald-600 to-teal-600",
       lightBg: "bg-emerald-50 text-emerald-700 border-emerald-200",
     },
     {
-      title: "API & Integrations Hub",
-      desc: "Manage API credentials for M-Pesa, Resend, Knock, and OpenAI.",
+      title: t("apiTitle"),
+      desc: t("apiDesc"),
       href: "/admin/settings/integrations",
       icon: Plug,
-      badge: "4 Services",
+      badge: t("apiBadge"),
       color: "from-amber-600 to-orange-600",
       lightBg: "bg-amber-50 text-amber-700 border-amber-200",
     },
     {
-      title: "Security & Audit Trail",
-      desc: "Live stream of administrative actions, data modifications, and logins.",
+      title: t("auditTitle"),
+      desc: t("auditDesc"),
       href: "/admin/settings/audit",
       icon: Activity,
-      badge: "Audit Logs",
+      badge: t("auditBadge"),
       color: "from-purple-600 to-violet-600",
       lightBg: "bg-purple-50 text-purple-700 border-purple-200",
     },
     {
-      title: "System Parameters",
-      desc: "Application settings, system fee thresholds, and maintenance toggles.",
+      title: t("paramsTitle"),
+      desc: t("paramsDesc"),
       href: "/admin/settings/system-parameters",
       icon: Sliders,
-      badge: `${totalParams} Params`,
+      badge: t("paramsBadge", { count: totalParams }),
       color: "from-slate-700 to-slate-900",
       lightBg: "bg-slate-100 text-slate-700 border-slate-200",
     },
     {
-      title: "Mosque & Org Directory",
-      desc: "Inspect registered mosques, institutions, and religious bodies.",
+      title: t("orgTitle"),
+      desc: t("orgDesc"),
       href: "/admin/organizations",
       icon: Building2,
-      badge: "Directory",
+      badge: t("orgBadge"),
       color: "from-teal-600 to-cyan-600",
       lightBg: "bg-teal-50 text-teal-700 border-teal-200",
     },
@@ -204,18 +206,18 @@ export function ITDashboardView() {
           <div className="flex items-center gap-2 mb-2">
             <Badge className="bg-indigo-50 text-indigo-700 border-indigo-200 font-black tracking-widest text-[10px] uppercase px-2.5 py-0.5 flex items-center gap-1.5">
               <Server size={12} />
-              IT Operations & Infrastructure • Primary Dashboard
+              {t("primaryDashboardTitle")}
             </Badge>
             <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold text-[10px] uppercase px-2 py-0.5 flex items-center gap-1">
               <CheckCircle2 size={11} />
-              All Systems Operational
+              {t("allSystemsOp")}
             </Badge>
           </div>
           <h1 className="text-3xl sm:text-4xl font-black font-outfit text-slate-900 tracking-tight">
-            Welcome back, <span className="text-primary italic">{userName}</span>
+            {t("welcomeBack")} <span className="text-primary italic">{userName}</span>
           </h1>
           <p className="text-slate-500 font-medium text-sm mt-1">
-            Centralized IT command center: user identity governance, cloud integrations, and infrastructure telemetry.
+            {t("commandCenterDesc")}
           </p>
         </div>
 
@@ -226,7 +228,7 @@ export function ITDashboardView() {
               className="h-11 px-4 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs flex items-center gap-2 shadow-sm"
             >
               <Activity className="h-4 w-4 text-purple-600" />
-              <span>Full Audit Trail</span>
+              <span>{t("fullAuditTrail")}</span>
             </Button>
           </Link>
 
@@ -235,7 +237,7 @@ export function ITDashboardView() {
             size="icon"
             onClick={handleRefresh}
             className="h-11 w-11 rounded-xl hover:bg-slate-100 text-slate-500 border border-slate-200"
-            title="Refresh IT Telemetry"
+            title={t("refreshTelemetry")}
           >
             <RefreshCw className={`h-4 w-4 ${isRefreshing ? "animate-spin text-primary" : ""}`} />
           </Button>
@@ -272,7 +274,7 @@ export function ITDashboardView() {
                 href="/admin/users"
                 className="text-blue-700 hover:underline font-bold flex items-center gap-0.5"
               >
-                Manage <ArrowUpRight size={13} />
+                {t("manage")} <ArrowUpRight size={13} />
               </Link>
             </div>
           </CardContent>
@@ -291,9 +293,9 @@ export function ITDashboardView() {
             </div>
           </CardHeader>
           <CardContent className="space-y-1">
-            <div className="text-3xl font-black font-outfit text-slate-900">Active</div>
+            <div className="text-3xl font-black font-outfit text-slate-900">{t("active")}</div>
             <div className="flex items-center justify-between text-xs pt-1">
-              <span className="text-slate-500 font-medium">Roles & Privileges Protected</span>
+              <span className="text-slate-500 font-medium">{t("rolesPrivileges")}</span>
               <Link
                 href="/admin/settings/access-control"
                 className="text-emerald-700 hover:underline font-bold flex items-center gap-0.5"
@@ -304,7 +306,7 @@ export function ITDashboardView() {
           </CardContent>
         </Card>
 
-        {/* API & Cloud Integrations */}
+        {/* {t("apiIntegrations")} */}
         <Card className="border-none shadow-premium rounded-[2rem] bg-gradient-to-br from-amber-500/10 via-amber-50/40 to-white overflow-hidden relative border border-amber-500/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
@@ -319,7 +321,7 @@ export function ITDashboardView() {
           <CardContent className="space-y-1">
             <div className="text-3xl font-black font-outfit text-slate-900">4 / 4</div>
             <div className="flex items-center justify-between text-xs pt-1">
-              <span className="text-slate-500 font-medium">M-Pesa, Email, Knock, AI</span>
+              <span className="text-slate-500 font-medium">{t("mpesaEmailKnockAI")}</span>
               <Link
                 href="/admin/settings/integrations"
                 className="text-amber-700 hover:underline font-bold flex items-center gap-0.5"
@@ -348,15 +350,13 @@ export function ITDashboardView() {
             </div>
             <div className="flex items-center justify-between text-xs pt-1">
               <span className="text-slate-500 font-medium">
-                {stats?.recent_activity_count !== undefined
-                  ? `${stats.recent_activity_count} Events (24h)`
-                  : "Audit Activity: 24h"}
+                {stats?.recent_activity_count !== undefined ? t("events24h", { count: stats.recent_activity_count }) : t("auditActivity24h")}
               </span>
               <Link
                 href="/admin/settings/audit?tab=stats"
                 className="text-purple-700 hover:underline font-bold flex items-center gap-0.5"
               >
-                Telemetry <ArrowUpRight size={13} />
+                {t("telemetry")} <ArrowUpRight size={13} />
               </Link>
             </div>
           </CardContent>
@@ -368,9 +368,9 @@ export function ITDashboardView() {
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold font-outfit text-slate-900 tracking-tight flex items-center gap-2">
             <Cpu className="text-primary h-5 w-5" />
-            IT Operations & Administration Hub
+            {t("itOpsHub")}
           </h2>
-          <span className="text-xs text-slate-400 font-medium">Direct operational shortcuts</span>
+          <span className="text-xs text-slate-400 font-medium">{t("directShortcuts")}</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
@@ -411,7 +411,7 @@ export function ITDashboardView() {
                       </p>
                     </div>
                     <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-slate-600 group-hover:text-primary transition-colors">
-                      <span>Launch Module</span>
+                      <span>{t("launchModule")}</span>
                       <ArrowUpRight size={14} />
                     </div>
                   </div>
@@ -429,7 +429,7 @@ export function ITDashboardView() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold font-outfit text-slate-900 tracking-tight flex items-center gap-2">
               <Plug className="text-primary h-5 w-5" />
-              API & Cloud Integrations
+              {t("apiIntegrations")}
             </h2>
             <Link
               href="/admin/settings/integrations"
@@ -481,13 +481,13 @@ export function ITDashboardView() {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold font-outfit text-slate-900 tracking-tight flex items-center gap-2">
               <Activity className="text-purple-600 h-5 w-5" />
-              Recent Security & Audit Trail
+              {t("recentSecurityTrail")}
             </h2>
             <Link
               href="/admin/settings/audit"
               className="text-xs text-purple-700 font-bold hover:underline flex items-center gap-1"
             >
-              View Full Logs <ArrowUpRight size={12} />
+              {t("viewFullLogs")} <ArrowUpRight size={12} />
             </Link>
           </div>
 
@@ -501,7 +501,7 @@ export function ITDashboardView() {
             ) : !logs || logs.length === 0 ? (
               <div className="py-12 text-center">
                 <Clock className="h-8 w-8 text-slate-300 mx-auto mb-2" />
-                <p className="text-xs text-slate-500 font-medium">No recent audit records found</p>
+                <p className="text-xs text-slate-500 font-medium">{t("noRecentAudit")}</p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -532,10 +532,10 @@ export function ITDashboardView() {
                         </Badge>
                         <div className="min-w-0">
                           <p className="font-bold text-slate-900 truncate">
-                            {log.object_repr || `${log.content_type_name} modified`}
+                            {log.object_repr || `${log.content_type_name} ${t("modified")}`}
                           </p>
                           <p className="text-[11px] text-slate-500 truncate">
-                            By {log.user_details?.email || "System"} •{" "}
+                            {t("by")} {log.user_details?.email || "System"} •{" "}
                             {log.content_type_name?.toUpperCase() || "RECORD"}
                           </p>
                         </div>
@@ -543,7 +543,7 @@ export function ITDashboardView() {
 
                       <div className="text-right shrink-0">
                         <span className="text-[11px] text-slate-400 font-medium block">
-                          {log.timestamp ? format(new Date(log.timestamp), "HH:mm • dd MMM") : "Recent"}
+                          {log.timestamp ? format(new Date(log.timestamp), "HH:mm • dd MMM") : t("recent")}
                         </span>
                         {log.ip_address && (
                           <span className="text-[10px] text-slate-400 font-mono">
