@@ -21,7 +21,9 @@ interface NewsModalProps {
   editingItem: NewsItem | null;
   formData: {
     title: string;
+    title_ar: string;
     content: string;
+    content_ar: string;
     is_published: boolean;
     featured_image: File | null;
   };
@@ -218,6 +220,55 @@ export function NewsModal({
                       placeholder: t("contentPlaceholder"),
                     }}
                   />
+                </div>
+              </div>
+
+              {/* Arabic Translation Section */}
+              <div className="space-y-4 border border-dashed border-primary/20 rounded-2xl p-5 bg-primary/[0.01]">
+                <p className="text-sm font-black text-primary uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-secondary" />
+                  {t("arabicTranslation")}
+                </p>
+
+                {/* Arabic Title */}
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-primary/70 uppercase tracking-widest px-1">
+                    {t("titleAr")}
+                  </label>
+                  <input
+                    value={formData.title_ar}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title_ar: e.target.value })
+                    }
+                    placeholder={t("titleArPlaceholder")}
+                    dir="rtl"
+                    className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-right font-arabic"
+                  />
+                </div>
+
+                {/* Arabic Content */}
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-primary/70 uppercase tracking-widest px-1">
+                    {t("contentAr")}
+                  </label>
+                  <div
+                    data-color-mode="light"
+                    className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all"
+                  >
+                    <MDEditor
+                      value={formData.content_ar}
+                      onChange={(val?: string) =>
+                        setFormData({ ...formData, content_ar: val || "" })
+                      }
+                      preview="edit"
+                      height={200}
+                      className="!border-none"
+                      textareaProps={{
+                        placeholder: t("contentArPlaceholder"),
+                        dir: "rtl",
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
 
