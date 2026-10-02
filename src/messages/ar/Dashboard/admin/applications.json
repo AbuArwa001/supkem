@@ -16,5 +16,10 @@
   "submittedOn": "تاريخ التقديم",
   "noApplications": "لا توجد طلبات",
   "noApplicationsDesc": "حاول تعديل الفلاتر أو مصطلحات البحث.",
-  "type": "طلب عام"
+  "type": "طلب عام",
+  "serviceDetails": "تفاصيل الخدمة",
+  "paymentPending": "الدفع قيد الانتظار",
+  "paid": "مدفوع",
+  "serviceRef": "المرجع",
+  "standardFee": "رسوم المعالجة الاعتيادية"
 }

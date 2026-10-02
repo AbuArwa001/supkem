@@ -17,6 +17,7 @@ import {
 // Internal components
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useServiceName } from "@/hooks/useServiceName";
 
 // Types
 import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
@@ -35,6 +36,7 @@ export default function ApplicationCard({
   onToggleSelect,
 }: ApplicationCardProps) {
   const t = useTranslations("Dashboard.admin.applications");
+  const translateService = useServiceName();
 
   return (
     <motion.div
@@ -96,7 +98,7 @@ export default function ApplicationCard({
               : (t(`filters.${application.status.toUpperCase()}`) || application.status)}
           </span>
           <h4 className="text-xl font-bold font-outfit text-slate-900 leading-tight group-hover:text-primary transition-colors cursor-pointer line-clamp-2">
-            {application.display_id} {application.service_name ? `- ${application.service_name}` : ""}
+            {application.display_id} {application.service_name ? `- ${translateService(application.service_name)}` : ""}
           </h4>
           <p className="text-xs font-bold text-slate-400 uppercase tracking-widest line-clamp-1">
             {application.organization_name || t("type")}

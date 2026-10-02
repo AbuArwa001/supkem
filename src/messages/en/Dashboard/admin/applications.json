@@ -16,5 +16,10 @@
   "submittedOn": "Submitted on",
   "noApplications": "No applications found",
   "noApplicationsDesc": "Try adjusting your filters or search terms.",
-  "type": "General Application"
+  "type": "General Application",
+  "serviceDetails": "Service Details",
+  "paymentPending": "Payment Pending",
+  "paid": "Paid",
+  "serviceRef": "Ref",
+  "standardFee": "Standard Processing Fee"
 }
