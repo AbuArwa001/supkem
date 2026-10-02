@@ -534,7 +534,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <Clock size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pending")}</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pendingLabel")}</span>
                   <p className="text-[11px] text-amber-700 font-semibold">{t("requests", { count: pendingCount })}</p>
                 </div>
               </div>
@@ -550,7 +550,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                   <XCircle size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failed")}</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failedLabel")}</span>
                   <p className="text-[11px] text-rose-700 font-semibold">{t("dropped", { count: failedCount })}</p>
                 </div>
               </div>
@@ -589,7 +589,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
           <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-100 border border-slate-200/60 self-start">
             {([t("all"), "Completed", "Pending", "Failed"] as const).map((status) => (
               <button
-                key={status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pending").replace("{count} ","") : t("failed").replace("{count} ","")}
+                key={status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pendingLabel") : t("failedLabel")}
                 onClick={() => setSelectedStatus(status)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
                   selectedStatus === status
@@ -597,7 +597,7 @@ export function FinanceDashboardView({ isMainDashboard = false }: FinanceDashboa
                     : "text-slate-500 hover:text-slate-900"
                 }`}
               >
-                {status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pending").replace("{count} ","") : t("failed").replace("{count} ","")}
+                {status === "All" ? t("all") : status === "Completed" ? t("completed") : status === "Pending" ? t("pendingLabel") : t("failedLabel")}
               </button>
             ))}
           </div>

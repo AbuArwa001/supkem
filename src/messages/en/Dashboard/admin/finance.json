@@ -20,6 +20,8 @@
   "total": "Total",
   "avg": "Avg",
   "failed": "{count} failed",
+  "pendingLabel": "Pending",
+  "failedLabel": "Failed",
   "successRate": "Settlement Success Rate",
   "revenueByCategory": "Revenue by Service Category",
   "revenueByCategoryDesc": "Proportional breakdown of revenue generated across official SUPKEM services.",

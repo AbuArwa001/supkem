@@ -20,6 +20,8 @@
   "total": "الإجمالي",
   "avg": "المتوسط",
   "failed": "{count} فشلت",
+  "pendingLabel": "معلق",
+  "failedLabel": "فشلت",
   "successRate": "معدل نجاح التسويات",
   "revenueByCategory": "الإيرادات حسب فئة الخدمة",
   "revenueByCategoryDesc": "تفصيل نسبي للإيرادات المحصلة عبر خدمات المجلس الرسمية.",

@@ -570,7 +570,7 @@ export function FinanceOverviewDashboard() {
                   <Clock size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pending")}</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-amber-900">{t("pending", { count: pendingCount })}</span>
                   <p className="text-[11px] text-amber-700 font-semibold">{t("requests", { count: pendingCount })}</p>
                 </div>
               </div>
@@ -586,7 +586,7 @@ export function FinanceOverviewDashboard() {
                   <XCircle size={18} />
                 </div>
                 <div>
-                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failed")}</span>
+                  <span className="text-xs font-black uppercase tracking-wider text-rose-900">{t("failed", { count: failedCount })}</span>
                   <p className="text-[11px] text-rose-700 font-semibold">{t("dropped", { count: failedCount })}</p>
                 </div>
               </div>
