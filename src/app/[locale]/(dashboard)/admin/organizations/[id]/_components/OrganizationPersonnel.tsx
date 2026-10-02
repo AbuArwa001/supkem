@@ -1,9 +1,8 @@
 "use client";
 
 import { Users, Ban, Loader2, Trash2, Plus } from "lucide-react";
-
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
-
 import { Personnel } from "./types";
 
 interface OrganizationPersonnelProps {
@@ -25,6 +24,8 @@ export function OrganizationPersonnel({
     onRemovePersonnel,
     onOpenModal
 }: OrganizationPersonnelProps) {
+    const t = useTranslations("Dashboard.admin.organizations.detail");
+
     return (
         <div className="p-7 sm:p-8 rounded-[24px] bg-white border border-border shadow-xl shadow-slate-200/50 space-y-6 overflow-hidden relative">
             <div className="flex items-center justify-between">
@@ -33,9 +34,9 @@ export function OrganizationPersonnel({
                         <Users size={18} />
                     </div>
                     <div>
-                        <h4 className="font-black text-primary font-outfit">Assigned Personnel</h4>
+                        <h4 className="font-black text-primary font-outfit">{t("assignedPersonnel")}</h4>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                            {personnel.length} {personnel.length === 1 ? "Member" : "Members"}
+                            {personnel.length} {personnel.length === 1 ? t("member") : t("members")}
                         </p>
                     </div>
                 </div>
@@ -44,7 +45,7 @@ export function OrganizationPersonnel({
             <div className="space-y-3 max-h-[340px] overflow-y-auto pr-1 custom-scrollbar">
                 {personnel.length === 0 ? (
                     <div className="text-center py-8 text-slate-400 text-sm font-medium">
-                        No personnel assigned yet.
+                        {t("noPersonnel")}
                     </div>
                 ) : (
                     personnel.map((p) => {
@@ -75,7 +76,7 @@ export function OrganizationPersonnel({
                                             "text-sm font-bold truncate",
                                             p.status === 'Suspended' ? "text-rose-900" : "text-slate-800"
                                         )}>
-                                            {p.user.full_name} {isSelf && <span className="text-[10px] text-primary/70 font-bold">(You)</span>}
+                                            {p.user.full_name} {isSelf && <span className="text-[10px] text-primary/70 font-bold">({t("you")})</span>}
                                         </p>
                                         <div className="flex items-center gap-2 mt-0.5">
                                             <span className={cn(
@@ -93,12 +94,12 @@ export function OrganizationPersonnel({
                                 </div>
 
                                 {canManage && !isSelf && (
-                                    <div className="flex items-center gap-1 bg-slate-50 rounded-xl p-1 border border-slate-100 shrink-0 ml-2">
+                                    <div className="flex items-center gap-1 bg-slate-50 rounded-xl p-1 border border-slate-100 shrink-0 ms-2">
                                         {p.status !== 'Suspended' && onSuspendPersonnel && (
                                             <button
                                                 onClick={() => onSuspendPersonnel(p.user.id)}
                                                 disabled={actionLoading === p.user.id}
-                                                title="Suspend User Access"
+                                                title={t("suspendUserTitle")}
                                                 className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-white hover:text-amber-600 rounded-lg transition-all shadow-xs disabled:opacity-50 cursor-pointer"
                                             >
                                                 {actionLoading === p.user.id ? <Loader2 size={13} className="animate-spin" /> : <Ban size={13} />}
@@ -108,7 +109,7 @@ export function OrganizationPersonnel({
                                             <button
                                                 onClick={() => onRemovePersonnel(p.user.id)}
                                                 disabled={actionLoading === p.user.id}
-                                                title="Remove User Access"
+                                                title={t("removeUserTitle")}
                                                 className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-white hover:text-rose-600 rounded-lg transition-all shadow-xs disabled:opacity-50 cursor-pointer"
                                             >
                                                 {actionLoading === p.user.id ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
@@ -127,7 +128,7 @@ export function OrganizationPersonnel({
                     onClick={onOpenModal}
                     className="w-full py-3.5 bg-primary/[0.04] hover:bg-primary text-primary hover:text-white border border-primary/15 rounded-2xl font-black text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 group cursor-pointer"
                 >
-                    Add User Access <Plus size={15} className="group-hover:rotate-90 transition-transform" />
+                    {t("addUserAccess")} <Plus size={15} className="group-hover:rotate-90 transition-transform" />
                 </button>
             )}
         </div>
