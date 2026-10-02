@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { useCertificateLogic } from "./_hooks/useCertificateLogic";
 import { CertificateHeader } from "./_components/CertificateHeader";
 import { CertificateCanvas } from "./_components/CertificateCanvas";
@@ -23,6 +24,7 @@ export default function AdminCertificateDetail() {
 }
 
 function AdminCertificateDetailContent() {
+  const t = useTranslations("Dashboard.admin.certificates");
   const {
     certificate,
     loading,
@@ -97,7 +99,7 @@ function AdminCertificateDetailContent() {
       <DownloadProgressModal
         isOpen={isDownloading}
         documentType="Certificate"
-        title="Generating Official SUPKEM Certificate"
+        title={t("generatingCert")}
         serialNumber={certificate.serial_number}
       />
     </div>

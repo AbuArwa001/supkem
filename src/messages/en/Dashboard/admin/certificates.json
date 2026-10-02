@@ -8,5 +8,13 @@
   "digitalCert": "Digital Certificate",
   "serialNumber": "SERIAL NUMBER",
   "issuedDate": "ISSUED DATE",
-  "viewRegistryDetails": "View Registry Details"
+  "viewRegistryDetails": "View Registry Details",
+  "detailTitle": "Registry Detail",
+  "detailSubtitle": "Administrative Record View",
+  "downloadOriginal": "Download Original",
+  "generating": "Generating...",
+  "notFoundTitle": "Certificate Record Not Found",
+  "notFoundDesc": "The requested certificate registry record could not be retrieved.",
+  "returnToRegistry": "Return to Registry",
+  "generatingCert": "Generating Official SUPKEM Certificate"
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowLeft, Printer, Download } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CertificateHeaderProps {
   isDownloading: boolean;
@@ -17,6 +18,8 @@ export function CertificateHeader({
   onPrint,
   onDownload,
 }: CertificateHeaderProps) {
+  const t = useTranslations("Dashboard.admin.certificates");
+
   return (
     <div className="flex items-center justify-between no-print print:hidden">
       <div className="flex items-center gap-4">
@@ -26,15 +29,15 @@ export function CertificateHeader({
         >
           <ArrowLeft
             size={20}
-            className="text-slate-600 group-hover:-translate-x-1 transition-transform"
+            className="text-slate-600 group-hover:-translate-x-1 rtl:rotate-180 transition-transform"
           />
         </button>
         <div>
           <h1 className="text-3xl font-black font-outfit text-primary tracking-tight">
-            Registry Detail
+            {t("detailTitle")}
           </h1>
           <p className="text-sm font-medium text-slate-500 uppercase tracking-widest mt-1">
-            Administrative Record View
+            {t("detailSubtitle")}
           </p>
         </div>
       </div>
@@ -55,7 +58,7 @@ export function CertificateHeader({
           className="p-4 bg-primary text-white rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 group flex items-center gap-3 font-bold border border-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isDownloading ? (
-            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-lganimate-spin" />
+            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-lg animate-spin" />
           ) : (
             <Download
               size={20}
@@ -63,7 +66,7 @@ export function CertificateHeader({
             />
           )}
           <span className="hidden sm:inline">
-            {isDownloading ? "Generating..." : "Download Original"}
+            {isDownloading ? t("generating") : t("downloadOriginal")}
           </span>
         </button>
       </div>

@@ -8,5 +8,13 @@
   "digitalCert": "شهادة رقمية",
   "serialNumber": "الرقم التسلسلي",
   "issuedDate": "تاريخ الإصدار",
-  "viewRegistryDetails": "عرض تفاصيل السجل"
+  "viewRegistryDetails": "عرض تفاصيل السجل",
+  "detailTitle": "تفاصيل السجل",
+  "detailSubtitle": "عرض السجل الإداري",
+  "downloadOriginal": "تنزيل النسخة الأصلية",
+  "generating": "جاري الإنشاء...",
+  "notFoundTitle": "سجل الشهادة غير موجود",
+  "notFoundDesc": "تعذّر استرداد سجل الشهادة المطلوب.",
+  "returnToRegistry": "العودة إلى السجل",
+  "generatingCert": "جاري إنشاء شهادة المجلس الأعلى للمسلمين الرسمية"
 }
