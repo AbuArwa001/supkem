@@ -10,7 +10,9 @@ export function useNewsLogic() {
     const [editingItem, setEditingItem] = useState<NewsItem | null>(null);
     const [formData, setFormData] = useState({
         title: "",
+        title_ar: "",
         content: "",
+        content_ar: "",
         is_published: true,
         featured_image: null as File | null,
     });
@@ -43,7 +45,9 @@ export function useNewsLogic() {
             setEditingItem(item);
             setFormData({
                 title: item.title,
+                title_ar: item.title_ar || "",
                 content: item.content,
+                content_ar: item.content_ar || "",
                 is_published: item.is_published,
                 featured_image: null,
             });
@@ -52,7 +56,9 @@ export function useNewsLogic() {
             setEditingItem(null);
             setFormData({
                 title: "",
+                title_ar: "",
                 content: "",
+                content_ar: "",
                 is_published: true,
                 featured_image: null,
             });
@@ -96,7 +102,9 @@ export function useNewsLogic() {
 
         const data = new FormData();
         data.append("title", formData.title);
+        if (formData.title_ar) data.append("title_ar", formData.title_ar);
         data.append("content", formData.content);
+        if (formData.content_ar) data.append("content_ar", formData.content_ar);
         data.append("is_published", String(formData.is_published));
         if (formData.featured_image) {
             data.append("featured_image", formData.featured_image);
@@ -159,7 +167,8 @@ export function useNewsLogic() {
 
     const filteredNews = useMemo(() => {
         return news.filter((item) =>
-            item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (item.title_ar || "").toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [news, searchTerm]);
 
