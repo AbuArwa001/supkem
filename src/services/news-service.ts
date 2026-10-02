@@ -79,8 +79,10 @@ export interface NewsGalleryItem {
 export interface NewsItem {
     id: string;
     title: string;
+    title_ar: string | null;
     slug: string;
     content: string;
+    content_ar: string | null;
     featured_image: string | null;
     is_published: boolean;
     created_at: string;

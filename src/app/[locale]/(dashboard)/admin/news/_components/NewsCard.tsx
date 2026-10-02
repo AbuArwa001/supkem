@@ -5,7 +5,7 @@ import Image from "next/image";
 import { NewsItem } from "@/services/news-service";
 import { API_BASE_URL } from "@/lib/api";
 import { cn } from "@/lib/utils";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 interface NewsCardProps {
   item: NewsItem;
@@ -19,6 +19,11 @@ interface NewsCardProps {
  */
 export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
   const t = useTranslations("Dashboard.admin.news");
+  const locale = useLocale();
+  const isArabic = locale === "ar";
+
+  const displayTitle = (isArabic && item.title_ar) ? item.title_ar : item.title;
+  const displayContent = (isArabic && item.content_ar) ? item.content_ar : item.content;
 
   const imageUrl = item.featured_image
     ? item.featured_image.startsWith("http")
@@ -37,14 +42,14 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={item.title}
+            alt={displayTitle}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-500"
           />
         ) : (
           <ImageIcon className="text-primary/20" size={48} />
         )}
-        <div className="absolute top-4 right-4">
+        <div className="absolute top-4 end-4">
           <span
             className={cn(
               "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
@@ -60,11 +65,17 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
 
       <div className="p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
-          <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug">
-            {item.title}
+          <h3
+            className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug"
+            dir={isArabic ? "rtl" : "ltr"}
+          >
+            {displayTitle}
           </h3>
-          <p className="text-sm text-foreground/60 line-clamp-3 leading-relaxed">
-            {item.content}
+          <p
+            className="text-sm text-foreground/60 line-clamp-3 leading-relaxed"
+            dir={isArabic ? "rtl" : "ltr"}
+          >
+            {displayContent}
           </p>
         </div>
 
@@ -91,4 +102,3 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
     </motion.div>
   );
 }
-
