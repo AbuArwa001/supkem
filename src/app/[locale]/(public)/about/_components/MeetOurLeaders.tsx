@@ -34,7 +34,7 @@ function LeaderCard({ leader, isHead = false }: { leader: LeadershipProfile; isH
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
         
         {/* Socials overlaid on image */}
-        <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+        <div className="absolute top-4 end-4 flex flex-col gap-2 translate-x-12 rtl:-translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500 delay-100">
           {leader.linkedin_url && (
             <a href={leader.linkedin_url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md hover:bg-white text-white hover:text-slate-900 flex items-center justify-center transition-colors shadow-lg">
               <Linkedin size={16} />
@@ -61,7 +61,7 @@ function LeaderCard({ leader, isHead = false }: { leader: LeadershipProfile; isH
           {leader.name}
         </h3>
         {leader.bio && (
-          <p className={`mt-5 text-sm font-medium leading-relaxed italic border-l-2 pl-4 ${isHead ? "text-slate-400 border-slate-700" : "text-slate-500 border-slate-100"} line-clamp-3 group-hover:line-clamp-none transition-all duration-500`}>
+          <p className={`mt-5 text-sm font-medium leading-relaxed italic border-s-2 ps-4 ${isHead ? "text-slate-400 border-slate-700" : "text-slate-500 border-slate-100"} line-clamp-3 group-hover:line-clamp-none transition-all duration-500`}>
             {leader.bio}
           </p>
         )}
@@ -149,8 +149,8 @@ export function MeetOurLeaders() {
                   <div key={leader.id} className="relative flex flex-col items-center px-4 lg:px-12 w-full md:w-1/2 lg:w-auto">
                     {displayDeputies.length > 1 && (
                       <div className={`hidden lg:block absolute top-0 h-px bg-slate-300 ${
-                        i === 0 ? "left-[50%] right-0" :
-                        i === displayDeputies.length - 1 ? "left-0 right-[50%]" :
+                        i === 0 ? "ltr:left-[50%] ltr:right-0 rtl:right-[50%] rtl:left-0" :
+                        i === displayDeputies.length - 1 ? "ltr:left-0 ltr:right-[50%] rtl:right-0 rtl:left-[50%]" :
                         "left-0 right-0"
                       }`} />
                     )}
