@@ -7,6 +7,7 @@ interface OrganizationHeaderProps {
     name: string;
     id: string | number;
     status?: string;
+    contextTitle?: string;
     canEdit?: boolean;
     onEdit?: () => void;
     onBack: () => void;
@@ -16,6 +17,7 @@ export function OrganizationHeader({
     name,
     id,
     status,
+    contextTitle,
     canEdit = false,
     onEdit,
     onBack
@@ -23,6 +25,7 @@ export function OrganizationHeader({
     const t = useTranslations("Dashboard.admin.organizations.detail");
     const [copied, setCopied] = useState(false);
     const shortId = String(id).substring(0, 8).toUpperCase();
+    const displayContextTitle = contextTitle ?? t("contextTitle");
 
     const handleCopyId = () => {
         navigator.clipboard.writeText(String(id));
@@ -33,7 +36,7 @@ export function OrganizationHeader({
     return (
         <div className="space-y-3">
             <p className="text-[11px] font-black uppercase tracking-[0.2em] text-primary/60 font-outfit">
-                {t("contextTitle")}
+                {displayContextTitle}
             </p>
 
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
