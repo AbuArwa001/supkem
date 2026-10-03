@@ -308,88 +308,139 @@ export function ServiceFormModal({
                                 <div>
                                     <h4 className="text-sm font-bold text-primary flex items-center gap-2">
                                         <Award size={16} className="text-primary" />
-                                        <span>Certificate Expiration & Validity</span>
+                                        <span>{t("validityTitle")}</span>
                                     </h4>
                                     <p className="text-xs text-foreground/50 font-medium mt-0.5">
-                                        Define whether certificates issued for this service expire or remain indefinitely valid.
+                                        {t("validitySubtitle")}
                                     </p>
                                 </div>
                                 <span className={cn(
                                     "px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border",
-                                    formData.is_indefinite !== false
+                                    validityMode === "indefinite"
                                         ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                        : validityMode === "dates"
+                                        ? "bg-purple-50 text-purple-700 border-purple-200"
                                         : "bg-blue-50 text-blue-700 border-blue-200"
                                 )}>
-                                    {formData.is_indefinite !== false ? "Indefinite Validity" : "Fixed Expiry"}
+                                    {validityMode === "indefinite"
+                                        ? "Indefinite Validity"
+                                        : validityMode === "dates"
+                                        ? "Start & End Dates"
+                                        : `Fixed Duration (${formData.validity_duration || "1 Year"})`}
                                 </span>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                {/* Option 1: Indefinite */}
                                 <button
                                     type="button"
                                     onClick={() => setFormData({
                                         ...formData,
                                         is_indefinite: true,
                                         validity_duration: "Indefinite",
+                                        start_date: null,
+                                        end_date: null,
                                         expiration_date: null
                                     })}
                                     className={cn(
                                         "p-4 rounded-xl border-2 text-left rtl:text-right transition-all cursor-pointer flex items-start gap-3",
-                                        formData.is_indefinite !== false
+                                        validityMode === "indefinite"
                                             ? "border-emerald-600 bg-emerald-50/50 shadow-xs ring-2 ring-emerald-500/10"
                                             : "border-border bg-white hover:border-primary/30"
                                     )}
                                 >
                                     <div className={cn(
                                         "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-                                        formData.is_indefinite !== false ? "bg-emerald-600 text-white" : "bg-primary/5 text-primary"
+                                        validityMode === "indefinite" ? "bg-emerald-600 text-white" : "bg-primary/5 text-primary"
                                     )}>
                                         <Infinity size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-bold text-primary">Indefinite (Never Expires)</p>
+                                        <p className="text-xs font-bold text-primary">{t("indefiniteTitle")}</p>
                                         <p className="text-[11px] text-foreground/60 mt-0.5 leading-relaxed">
-                                            Permanent certificate with no expiration date (e.g. Marriage certificates, lifetime accreditations).
+                                            {t("indefiniteDesc")}
                                         </p>
                                     </div>
                                 </button>
 
+                                {/* Option 2: Fixed Duration */}
                                 <button
                                     type="button"
                                     onClick={() => setFormData({
                                         ...formData,
                                         is_indefinite: false,
-                                        validity_duration: formData.validity_duration && formData.validity_duration !== "Indefinite"
+                                        validity_duration: (formData.validity_duration && !["Indefinite", "Date Range", "Custom Date Range"].includes(formData.validity_duration))
                                             ? formData.validity_duration
-                                            : "1 Year"
+                                            : "1 Year",
+                                        start_date: null,
+                                        end_date: null,
+                                        expiration_date: null
                                     })}
                                     className={cn(
                                         "p-4 rounded-xl border-2 text-left rtl:text-right transition-all cursor-pointer flex items-start gap-3",
-                                        formData.is_indefinite === false
+                                        validityMode === "duration"
                                             ? "border-primary bg-primary/[0.06] shadow-xs ring-2 ring-primary/10"
                                             : "border-border bg-white hover:border-primary/30"
                                     )}
                                 >
                                     <div className={cn(
                                         "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-                                        formData.is_indefinite === false ? "bg-primary text-white" : "bg-primary/5 text-primary"
+                                        validityMode === "duration" ? "bg-primary text-white" : "bg-primary/5 text-primary"
                                     )}>
                                         <Clock size={18} />
                                     </div>
                                     <div>
-                                        <p className="text-xs font-bold text-primary">Fixed Validity Duration</p>
+                                        <p className="text-xs font-bold text-primary">{t("fixedDurationTitle")}</p>
                                         <p className="text-[11px] text-foreground/60 mt-0.5 leading-relaxed">
-                                            Certificate expires after a designated period from the date of issue.
+                                            {t("fixedDurationDesc")}
+                                        </p>
+                                    </div>
+                                </button>
+
+                                {/* Option 3: Start & End Dates */}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const today = new Date().toISOString().split("T")[0];
+                                        const nextYear = new Date();
+                                        nextYear.setFullYear(nextYear.getFullYear() + 1);
+                                        const nextYearStr = nextYear.toISOString().split("T")[0];
+                                        setFormData({
+                                            ...formData,
+                                            is_indefinite: false,
+                                            validity_duration: "Date Range",
+                                            start_date: formData.start_date || today,
+                                            end_date: formData.end_date || formData.expiration_date || nextYearStr,
+                                            expiration_date: formData.end_date || formData.expiration_date || nextYearStr
+                                        });
+                                    }}
+                                    className={cn(
+                                        "p-4 rounded-xl border-2 text-left rtl:text-right transition-all cursor-pointer flex items-start gap-3",
+                                        validityMode === "dates"
+                                            ? "border-purple-600 bg-purple-50/50 shadow-xs ring-2 ring-purple-500/10"
+                                            : "border-border bg-white hover:border-primary/30"
+                                    )}
+                                >
+                                    <div className={cn(
+                                        "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                                        validityMode === "dates" ? "bg-purple-600 text-white" : "bg-primary/5 text-primary"
+                                    )}>
+                                        <Calendar size={18} />
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-bold text-primary">{t("dateRangeTitle")}</p>
+                                        <p className="text-[11px] text-foreground/60 mt-0.5 leading-relaxed">
+                                            {t("dateRangeDesc")}
                                         </p>
                                     </div>
                                 </button>
                             </div>
 
-                            {/* Duration selection if not indefinite */}
-                            {formData.is_indefinite === false && (
+                            {/* Subpanel 1: Fixed Duration selection */}
+                            {validityMode === "duration" && (
                                 <div className="pt-2 border-t border-border/60 space-y-3">
                                     <label className="text-xs font-bold text-primary uppercase tracking-wider block">
-                                        Select Validity Period
+                                        {t("selectValidityPeriod")}
                                     </label>
                                     <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                                         {["6 Months", "1 Year", "2 Years", "3 Years", "5 Years"].map((dur) => (
@@ -410,6 +461,185 @@ export function ServiceFormModal({
                                     </div>
                                 </div>
                             )}
+
+                            {/* Subpanel 2: Start & End Dates selection */}
+                            {validityMode === "dates" && (
+                                <div className="pt-3 border-t border-border/60 space-y-4">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        {/* Start Date */}
+                                        <div className="space-y-1.5">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-xs font-bold text-primary uppercase tracking-wider">
+                                                    {t("startDateLabel")}
+                                                </label>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        const today = new Date().toISOString().split("T")[0];
+                                                        setFormData({ ...formData, start_date: today });
+                                                    }}
+                                                    className="text-[11px] font-bold text-primary hover:underline cursor-pointer"
+                                                >
+                                                    {t("today")}
+                                                </button>
+                                            </div>
+                                            <input
+                                                type="date"
+                                                required
+                                                value={formData.start_date || ""}
+                                                onChange={(e) => {
+                                                    const newStart = e.target.value;
+                                                    setFormData({ ...formData, start_date: newStart });
+                                                }}
+                                                className="w-full px-4 py-2.5 bg-white border border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10 rounded-xl text-xs font-semibold text-primary outline-none transition-all"
+                                            />
+                                        </div>
+
+                                        {/* End Date */}
+                                        <div className="space-y-1.5">
+                                            <div className="flex items-center justify-between">
+                                                <label className="text-xs font-bold text-primary uppercase tracking-wider">
+                                                    {t("endDateLabel")}
+                                                </label>
+                                                {formData.start_date && (
+                                                    <span className="text-[10px] text-foreground/50 font-medium">
+                                                        Min: {formData.start_date}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <input
+                                                type="date"
+                                                required
+                                                value={formData.end_date || formData.expiration_date || ""}
+                                                min={formData.start_date || undefined}
+                                                onChange={(e) => {
+                                                    const newEnd = e.target.value;
+                                                    setFormData({
+                                                        ...formData,
+                                                        end_date: newEnd,
+                                                        expiration_date: newEnd
+                                                    });
+                                                }}
+                                                className={cn(
+                                                    "w-full px-4 py-2.5 bg-white border rounded-xl text-xs font-semibold outline-none transition-all",
+                                                    dateSpan?.error
+                                                        ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100 text-red-600"
+                                                        : "border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10 text-primary"
+                                                )}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Quick Presets for End Date */}
+                                    <div className="space-y-1.5">
+                                        <span className="text-[11px] font-bold text-foreground/60">
+                                            {t("quickPresets")}:
+                                        </span>
+                                        <div className="flex flex-wrap gap-2">
+                                            {[
+                                                { label: "+6 Months", months: 6 },
+                                                { label: "+1 Year", months: 12 },
+                                                { label: "+2 Years", months: 24 },
+                                                { label: "+3 Years", months: 36 },
+                                                { label: "+5 Years", months: 60 },
+                                            ].map((preset) => (
+                                                <button
+                                                    type="button"
+                                                    key={preset.label}
+                                                    onClick={() => {
+                                                        const base = formData.start_date ? new Date(formData.start_date) : new Date();
+                                                        base.setMonth(base.getMonth() + preset.months);
+                                                        const endStr = base.toISOString().split("T")[0];
+                                                        setFormData({
+                                                            ...formData,
+                                                            end_date: endStr,
+                                                            expiration_date: endStr
+                                                        });
+                                                    }}
+                                                    className="px-2.5 py-1 text-xs font-bold rounded-lg border border-border bg-white text-foreground/70 hover:border-primary/40 hover:text-primary hover:bg-primary/[0.04] transition-all cursor-pointer"
+                                                >
+                                                    {preset.label}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Validation / Summary Feedback */}
+                                    {dateSpan?.error ? (
+                                        <div className="flex items-center gap-2 p-2.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                                            <AlertCircle size={15} className="shrink-0 text-red-500" />
+                                            <span>{t("invalidDateRange")}</span>
+                                        </div>
+                                    ) : dateSpan ? (
+                                        <div className="flex items-center gap-2 p-2.5 rounded-xl bg-purple-50/70 border border-purple-200/80 text-purple-900 text-xs font-semibold">
+                                            <Calendar size={15} className="shrink-0 text-purple-600" />
+                                            <span>
+                                                {t("validitySummary", {
+                                                    days: dateSpan.days,
+                                                    span: dateSpan.text,
+                                                    start: formData.start_date || "",
+                                                    end: formData.end_date || formData.expiration_date || ""
+                                                })}
+                                            </span>
+                                        </div>
+                                    ) : null}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* For Non-Certificate Services: Optional Schedule Window */}
+                    {formData.document_type !== "Certificate" && (
+                        <div className="p-5 rounded-2xl bg-primary/[0.02] border border-border space-y-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2">
+                                    <Calendar size={16} className="text-primary" />
+                                    <h4 className="text-sm font-bold text-primary">
+                                        {t("dateRangeTitle")} (Optional)
+                                    </h4>
+                                </div>
+                                {(formData.start_date || formData.end_date) && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setFormData({ ...formData, start_date: null, end_date: null, expiration_date: null })}
+                                        className="text-[11px] font-bold text-red-500 hover:underline cursor-pointer"
+                                    >
+                                        Clear Dates
+                                    </button>
+                                )}
+                            </div>
+                            <p className="text-xs text-foreground/50 font-medium">
+                                Define an optional designated active window or intake period for this service.
+                            </p>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-primary uppercase tracking-wider block">
+                                        {t("startDateLabel")}
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={formData.start_date || ""}
+                                        onChange={(e) => setFormData({ ...formData, start_date: e.target.value || null })}
+                                        className="w-full px-4 py-2.5 bg-white border border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10 rounded-xl text-xs font-semibold text-primary outline-none transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-primary uppercase tracking-wider block">
+                                        {t("endDateLabel")}
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={formData.end_date || formData.expiration_date || ""}
+                                        min={formData.start_date || undefined}
+                                        onChange={(e) => {
+                                            const val = e.target.value || null;
+                                            setFormData({ ...formData, end_date: val, expiration_date: val });
+                                        }}
+                                        className="w-full px-4 py-2.5 bg-white border border-border focus:border-primary/50 focus:ring-2 focus:ring-primary/10 rounded-xl text-xs font-semibold text-primary outline-none transition-all"
+                                    />
+                                </div>
+                            </div>
                         </div>
                     )}
 
