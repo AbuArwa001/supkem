@@ -529,14 +529,14 @@ export default function SocialSettingsPage() {
                       𝕏
                     </div>
                     <CardTitle className="text-xl font-bold font-outfit text-slate-900">
-                      Direct Twitter (X) API
+                      {t("twitter.title")}
                     </CardTitle>
                     <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-200 text-[10px] py-0 font-semibold">
-                      v2 API
+                      {t("twitter.badge")}
                     </Badge>
                   </div>
                   <CardDescription className="text-sm text-slate-500">
-                    Fetch official posts directly from SUPKEM's verified Twitter/X account via the official X API v2.
+                    {t("twitter.desc")}
                   </CardDescription>
                 </div>
 
@@ -544,7 +544,7 @@ export default function SocialSettingsPage() {
                   <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex flex-col items-end">
                       <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        Direct Ingestion
+                        {t("directIngestion")}
                         {isTogglingTwitter && (
                           <RefreshCw size={11} className="animate-spin text-slate-600" />
                         )}
@@ -561,7 +561,7 @@ export default function SocialSettingsPage() {
                               : "bg-slate-300"
                           }`}
                         />
-                        {settings.twitterApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                        {settings.twitterApi?.enabled ? t("activeStreaming") : t("inactive")}
                       </span>
                     </div>
                     <Switch
@@ -579,10 +579,10 @@ export default function SocialSettingsPage() {
                 {/* Username */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    X (Twitter) Username
+                    {t("twitter.usernameLabel")}
                   </label>
                   <Input
-                    placeholder="e.g. SUPKEM1"
+                    placeholder={t("twitter.usernamePlaceholder")}
                     value={settings.twitterApi?.username || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -601,7 +601,7 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm font-mono"
                   />
                   <p className="text-xs text-slate-400">
-                    Without the @ symbol. Default is <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">SUPKEM1</code>.
+                    {t("twitter.usernameHint", { default: "SUPKEM1" })}
                   </p>
                 </div>
 
@@ -609,13 +609,13 @@ export default function SocialSettingsPage() {
                 <div className="space-y-2 md:col-span-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      X API v2 Bearer Token
+                      {t("twitter.tokenLabel")}
                     </label>
                   </div>
                   <div className="relative">
                     <Input
                       type={showTwitterToken ? "text" : "password"}
-                      placeholder="AAAAAAAAAAAAAAAAAAAAA..."
+                      placeholder={t("twitter.tokenPlaceholder")}
                       value={settings.twitterApi?.bearerToken || ""}
                       onChange={(e) =>
                         setSettings((prev) => ({
@@ -637,11 +637,11 @@ export default function SocialSettingsPage() {
                       onClick={() => setShowTwitterToken(!showTwitterToken)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
-                      {showTwitterToken ? "Hide" : "Show"}
+                      {showTwitterToken ? t("hide") : t("show")}
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Generated from your X Developer Portal project.
+                    {t("twitter.tokenHint")}
                   </p>
                 </div>
               </div>
