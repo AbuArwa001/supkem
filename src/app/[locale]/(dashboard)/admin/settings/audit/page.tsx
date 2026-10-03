@@ -38,6 +38,7 @@ import api from "@/lib/api";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { RoleGuard } from "@/components/RoleGuard";
+import { useTranslations } from "next-intl";
 
 const fetcher = (url: string) => api.get(url).then(res => res.data);
 
@@ -52,6 +53,7 @@ export default function DataLogsPage() {
 }
 
 function DataLogsPageContent() {
+    const t = useTranslations("Dashboard.admin.settings.audit");
     const searchParams = useSearchParams();
     const initialTab = (searchParams.get("tab") || searchParams.get("view")) === "stats" ? "stats" : "logs";
     const [view, setView] = useState<"logs" | "stats">(initialTab);
@@ -102,11 +104,11 @@ function DataLogsPageContent() {
                     </Link>
                     <div>
                         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight flex items-center">
-                            Data Audit <span className="text-foreground/40 italic ml-2">Logs</span>
+                            {t("title")} <span className="text-foreground/40 italic ml-2">{t("titleSub")}</span>
                             <Database className="ml-4 h-8 w-8 text-primary shadow-sm" />
                         </h1>
                         <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                            Operational audit trail and system-wide state monitoring.
+                            {t("desc")}
                         </p>
                     </div>
                 </div>
@@ -120,7 +122,7 @@ function DataLogsPageContent() {
                             }`}
                     >
                         <History className="h-4 w-4 mr-2" />
-                        Audit Trail
+                        {t("auditTrail")}
                     </button>
                     <button
                         onClick={() => setView("stats")}
@@ -130,7 +132,7 @@ function DataLogsPageContent() {
                             }`}
                     >
                         <Activity className="h-4 w-4 mr-2" />
-                        System Health
+                        {t("systemHealth")}
                     </button>
                 </div>
             </header>

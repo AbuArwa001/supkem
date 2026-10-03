@@ -10,6 +10,8 @@ import { VideoPlayerSection } from "./_components/VideoPlayerSection";
 import { VideoMetadataSidebar } from "./_components/VideoMetadataSidebar";
 import { RoleGuard } from "@/components/RoleGuard";
 
+import { useTranslations } from "next-intl";
+
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -25,6 +27,7 @@ export default function AdminVideoDetail({ params }: PageProps) {
 function AdminVideoDetailContent({ params }: PageProps) {
   const { id } = use(params);
   const { video, loading, handleDelete } = useVideoDetailLogic(id);
+  const t = useTranslations("Dashboard.admin.videos.detail");
 
   if (loading) {
     return (
@@ -41,16 +44,16 @@ function AdminVideoDetailContent({ params }: PageProps) {
           <XCircle size={40} />
         </div>
         <h2 className="text-2xl font-bold font-outfit text-primary">
-          Video Not Found
+          {t("notFound")}
         </h2>
         <p className="text-foreground/60">
-          The video you are looking for does not exist or has been removed.
+          {t("notFoundDesc")}
         </p>
         <Link
           href="/admin/videos"
           className="inline-flex items-center gap-2 text-primary font-bold hover:underline"
         >
-          <ArrowLeft size={16} /> Back to Registry
+          <ArrowLeft size={16} /> {t("backToRegistry")}
         </Link>
       </div>
     );

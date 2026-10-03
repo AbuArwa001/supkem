@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Video as VideoIcon, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VideoFormData, VideoBriefingItem } from "../_hooks/useVideosLogic";
+import { useTranslations } from "next-intl";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -24,6 +25,8 @@ export const VideoModal = ({
   editingItem,
   isSubmitting,
 }: VideoModalProps) => {
+  const t = useTranslations("Dashboard.admin.videos");
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -43,7 +46,7 @@ export const VideoModal = ({
           >
             <div className="p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
-                {editingItem ? "Edit Video Briefing" : "Upload Video Briefing"}
+                {editingItem ? t("editVideo") : t("uploadVideoBriefing")}
               </h2>
               <button
                 onClick={onClose}
@@ -59,7 +62,7 @@ export const VideoModal = ({
             >
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Title
+                  {t("title")}
                 </label>
                 <input
                   required
@@ -67,14 +70,14 @@ export const VideoModal = ({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  placeholder="Enter video title..."
+                  placeholder={t("titlePlaceholder")}
                   className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Description
+                  {t("description")}
                 </label>
                 <textarea
                   rows={4}
@@ -82,14 +85,14 @@ export const VideoModal = ({
                   onChange={(e) =>
                     setFormData({ ...formData, description: e.target.value })
                   }
-                  placeholder="Add a short description... (optional)"
+                  placeholder={t("descriptionPlaceholder")}
                   className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none"
                 />
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Video File (*.mp4, *.webm)
+                  {t("videoFile")}
                 </label>
                 <div className="relative group">
                   <input
@@ -119,9 +122,9 @@ export const VideoModal = ({
                           {formData.video_file.name}
                         </span>
                       ) : editingItem ? (
-                        <span>Click to replace existing video</span>
+                        <span>{t("replaceVideo")}</span>
                       ) : (
-                        <span>Click to Browse Video File</span>
+                        <span>{t("browseVideo")}</span>
                       )}
                     </span>
                   </label>
@@ -130,7 +133,7 @@ export const VideoModal = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Visibility Status
+                  {t("visibilityStatus")}
                 </label>
                 <div className="flex items-center gap-4 py-4">
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -158,7 +161,7 @@ export const VideoModal = ({
                       )}
                     </div>
                     <span className="font-bold text-primary text-sm">
-                      Published to Public
+                      {t("publishedToPublic")}
                     </span>
                   </label>
                 </div>
@@ -170,7 +173,7 @@ export const VideoModal = ({
                   onClick={onClose}
                   className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   disabled={isSubmitting}
@@ -179,12 +182,12 @@ export const VideoModal = ({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={20} />
-                      Uploading...
+                      {t("uploading")}
                     </>
                   ) : editingItem ? (
-                    "Update Video"
+                    t("updateVideo")
                   ) : (
-                    "Upload Video"
+                    t("uploadVideo")
                   )}
                 </button>
               </div>

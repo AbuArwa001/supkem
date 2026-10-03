@@ -79,5 +79,17 @@
     "pressCtaTitle": "Looking for Media Kits or Official Press Statements?",
     "pressCtaDesc": "Contact the SUPKEM Communications Office for official commentary, press releases, or media inquiries.",
     "contactMedia": "Contact Communications Secretariat"
+  },
+  "videoDetail": {
+    "backToMedia": "Back to Media",
+    "pressBriefing": "Press Briefing",
+    "supkemMedia": "SUPKEM Media",
+    "aboutBriefing": "About this Briefing",
+    "defaultDesc": "Official press briefing and announcement from the Supreme Council of Kenya Muslims.",
+    "actions": "Actions",
+    "moreMedia": "More Media Content",
+    "stayInformed": "Stay Informed",
+    "followChannels": "Follow our official channels for the most accurate and up-to-date information.",
+    "contactPressOffice": "Contact Press Office"
   }
 }

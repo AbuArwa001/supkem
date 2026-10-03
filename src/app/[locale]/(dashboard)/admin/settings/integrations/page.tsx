@@ -30,6 +30,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import api from "@/lib/api";
 import { RoleGuard } from "@/components/RoleGuard";
+import { useTranslations } from "next-intl";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface IntegrationParam {
@@ -167,6 +168,7 @@ function TestButton({
     serviceId: string;
     disabled: boolean;
 }) {
+    const t = useTranslations("Dashboard.admin.settings.integrations");
     const [state, setState] = useState<"idle" | "loading" | "ok" | "error">("idle");
     const [msg, setMsg] = useState("");
 
@@ -203,7 +205,7 @@ function TestButton({
                 ) : (
                     <RefreshCw size={13} />
                 )}
-                Test Connection
+                {state === "loading" ? t("testing") : t("testConnection")}
             </Button>
             <AnimatePresence mode="wait">
                 {state !== "idle" && state !== "loading" && (
@@ -232,6 +234,7 @@ function IntegrationCard({
     params: Record<string, IntegrationParam>;
     onSaved: () => void;
 }) {
+    const t = useTranslations("Dashboard.admin.settings.integrations");
     const [expanded, setExpanded] = useState(false);
     const [saving, setSaving] = useState(false);
 
@@ -417,7 +420,7 @@ function IntegrationCard({
                                             rel="noreferrer"
                                             className="text-xs text-slate-400 hover:text-slate-600 underline underline-offset-2 transition-colors"
                                         >
-                                            View docs →
+                                            {t("viewDocs")}
                                         </a>
                                         <Button
                                             onClick={handleSave}
@@ -433,7 +436,7 @@ function IntegrationCard({
                                             ) : (
                                                 <Save size={15} />
                                             )}
-                                            Save {integration.label}
+                                            {t("saveIntegration", { label: integration.label })}
                                         </Button>
                                     </div>
                                 </div>
@@ -456,6 +459,7 @@ export default function IntegrationsPage() {
 }
 
 function IntegrationsPageContent() {
+    const t = useTranslations("Dashboard.admin.settings.integrations");
     const { user } = useAuth();
     const isAdmin =
         user?.is_superuser ||
@@ -483,7 +487,7 @@ function IntegrationsPageContent() {
                 <XCircle size={40} className="text-rose-400" />
                 <p className="font-semibold">You don&apos;t have permission to view this page.</p>
                 <Link href="/admin/settings" className="text-sm underline text-slate-400">
-                    ← Back to Settings
+                    ← {t("backToSettings")}
                 </Link>
             </div>
         );
@@ -504,7 +508,7 @@ function IntegrationsPageContent() {
                         className="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-600 transition-colors font-medium"
                     >
                         <ChevronLeft size={16} />
-                        Settings
+                        {t("backToSettings")}
                     </Link>
                 </div>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-8 md:p-12 rounded-[40px] border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
@@ -514,11 +518,11 @@ function IntegrationsPageContent() {
                         </div>
                         <div>
                             <h1 className="text-4xl lg:text-5xl font-black font-outfit text-slate-900 tracking-tight">
-                                Integrations{" "}
-                                <span className="text-slate-300 font-normal italic">Config</span>
+                                {t("title")}{" "}
+                                <span className="text-slate-300 font-normal italic">{t("titleSub")}</span>
                             </h1>
                             <p className="text-slate-500 font-medium text-lg mt-2">
-                                Manage API keys for Knock, M-Pesa, Resend, and OpenAI. Secrets are stored encrypted and never exposed in plain text.
+                                {t("desc")}
                             </p>
                         </div>
                     </div>
@@ -526,11 +530,13 @@ function IntegrationsPageContent() {
                     <div className="flex items-center gap-3 shrink-0">
                         <div className="text-right">
                             <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                                Status
+                                {t("status")}
                             </p>
                             <p className="text-sm font-bold text-slate-700 mt-0.5">
-                                {Object.values(params).filter((p) => p.is_configured).length} /{" "}
-                                {INTEGRATIONS.reduce((acc, i) => acc + i.paramKeys.length, 0)} keys set
+                                {t("keysSet", {
+                                    count: Object.values(params).filter((p) => p.is_configured).length,
+                                    total: INTEGRATIONS.reduce((acc, i) => acc + i.paramKeys.length, 0),
+                                })}
                             </p>
                         </div>
                     </div>

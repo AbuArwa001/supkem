@@ -3,17 +3,20 @@
 import { Calendar, User, Film, CheckCircle2, Edit2 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
+import { useTranslations } from "next-intl";
 
 interface VideoMetadataSidebarProps {
   video: VideoBriefingItem;
 }
 
 export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
+  const t = useTranslations("Dashboard.admin.videos.detail");
+
   return (
     <div className="lg:col-span-4 space-y-6">
       <div className="bg-white border border-border rounded-[16px] p-8 space-y-8">
         <h3 className="text-xl font-bold font-outfit text-primary">
-          Metadata Details
+          {t("metadataDetails")}
         </h3>
 
         <div className="space-y-6">
@@ -23,7 +26,7 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                Created Date
+                {t("createdDate")}
               </p>
               <p className="font-bold text-primary">
                 {new Date(video.created_at).toLocaleDateString()}
@@ -40,9 +43,9 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                Author
+                {t("author")}
               </p>
-              <p className="font-bold text-primary">SUPKEM Press Office</p>
+              <p className="font-bold text-primary">{t("pressOffice")}</p>
             </div>
           </div>
 
@@ -52,7 +55,7 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                File Path
+                {t("filePath")}
               </p>
               <p className="text-xs font-mono font-bold text-primary break-all">
                 {video.video_file}
@@ -66,12 +69,12 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                Visibility
+                {t("visibility")}
               </p>
               <p className="font-bold text-primary">
                 {video.is_published
-                  ? "Visible to Everyone"
-                  : "Internal Review Only"}
+                  ? t("visibleToEveryone")
+                  : t("internalReviewOnly")}
               </p>
             </div>
           </div>
@@ -82,7 +85,7 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
             href={`/admin/videos`}
             className="w-full py-4 bg-primary/5 text-primary rounded-2xl font-bold text-sm hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 group"
           >
-            <Edit2 size={16} /> Edit Data in Registry
+            <Edit2 size={16} /> {t("editData")}
           </Link>
         </div>
       </div>
@@ -93,15 +96,15 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
         </div>
         <div className="relative z-10 space-y-4">
           <h3 className="text-xl font-bold font-outfit tracking-tight">
-            System Info
+            {t("systemInfo")}
           </h3>
           <p className="text-xs opacity-80 leading-relaxed font-medium">
-            This video briefing is stored securely on the council media servers.
-            Last internal update was{" "}
-            {new Date(video.updated_at).toLocaleDateString()}.
+            {t("systemInfoDesc", {
+              date: new Date(video.updated_at).toLocaleDateString(),
+            })}
           </p>
           <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-            ID: {video.id}
+            {t("id", { id: video.id })}
           </p>
         </div>
       </div>

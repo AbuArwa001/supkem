@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
+import { useTranslations } from "next-intl";
 
 interface VideoPlayerSectionProps {
   video: VideoBriefingItem;
@@ -13,6 +14,9 @@ export const VideoPlayerSection = ({
   video,
   videoUrl,
 }: VideoPlayerSectionProps) => {
+  const t = useTranslations("Dashboard.admin.videos.detail");
+  const tv = useTranslations("Dashboard.admin.videos");
+
   return (
     <div className="lg:col-span-8 space-y-8">
       <div className="aspect-video bg-black rounded-[16px] overflow-hidden shadow-2xl border-4 border-white shadow-primary/5 relative">
@@ -29,7 +33,7 @@ export const VideoPlayerSection = ({
                 : "bg-amber-100 text-amber-600 border border-amber-200",
             )}
           >
-            {video.is_published ? "Status: Published" : "Status: Draft"}
+            {video.is_published ? t("statusPublished") : t("statusDraft")}
           </span>
         </div>
         <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">
@@ -38,10 +42,10 @@ export const VideoPlayerSection = ({
         <div className="h-px bg-border/50 w-full" />
         <div className="space-y-4">
           <h3 className="text-sm font-black uppercase tracking-widest text-foreground/40">
-            Description
+            {tv("description")}
           </h3>
           <p className="text-lg text-foreground/70 leading-relaxed font-medium">
-            {video.description || "No description provided."}
+            {video.description || tv("noDescription")}
           </p>
         </div>
       </div>

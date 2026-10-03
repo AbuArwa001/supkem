@@ -7,6 +7,8 @@ import { VideoCard } from "./_components/VideoCard";
 import { VideoModal } from "./_components/VideoModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
+import { useTranslations } from "next-intl";
+
 export default function AdminVideos() {
   return (
     <RoleGuard module="videos">
@@ -16,6 +18,7 @@ export default function AdminVideos() {
 }
 
 function AdminVideosContent() {
+  const t = useTranslations("Dashboard.admin.videos");
   const {
     videos,
     loading,
@@ -62,7 +65,7 @@ function AdminVideosContent() {
                 <Film className="text-primary/20" size={40} />
               </div>
               <p className="text-foreground/40 font-bold">
-                No video briefings found.
+                {t("empty")}
               </p>
             </div>
           )}

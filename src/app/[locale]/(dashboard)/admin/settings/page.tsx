@@ -18,6 +18,7 @@ import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccessModule, PermissionModule } from "@/lib/permissions";
 import { RoleGuard } from "@/components/RoleGuard";
+import { useTranslations } from "next-intl";
 
 const container = {
   hidden: { opacity: 0 },
@@ -36,6 +37,7 @@ const item = {
 
 export default function SettingsHub() {
   const { user } = useAuth();
+  const t = useTranslations("Dashboard.admin.settings.hub");
 
   const allSettingsCategories: Array<{
     title: string;
@@ -47,8 +49,8 @@ export default function SettingsHub() {
     module: PermissionModule;
   }> = [
     {
-      title: "Account Profile",
-      description: "Manage your personal information, security preferences, and account identity.",
+      title: t("profileTitle"),
+      description: t("profileDesc"),
       icon: UserCircle,
       color: "text-blue-600",
       bg: "bg-blue-50",
@@ -56,8 +58,8 @@ export default function SettingsHub() {
       module: "settings_profile"
     },
     {
-      title: "Social Feeds & Aggregator",
-      description: "Configure Tagembed live wall, aggregator widget ID, and manage official social media handles.",
+      title: t("socialTitle"),
+      description: t("socialDesc"),
       icon: Share2,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
@@ -65,8 +67,8 @@ export default function SettingsHub() {
       module: "settings_social"
     },
     {
-      title: "System Parameters",
-      description: "Fine-tune core application behaviors, service defaults, and facility configurations.",
+      title: t("systemParamsTitle"),
+      description: t("systemParamsDesc"),
       icon: Cpu,
       color: "text-primary",
       bg: "bg-primary/5",
@@ -74,8 +76,8 @@ export default function SettingsHub() {
       module: "settings_system_parameters"
     },
     {
-      title: "Notifications",
-      description: "Configure automated alerts for applications, certificates, and system events.",
+      title: t("notificationsTitle"),
+      description: t("notificationsDesc"),
       icon: Bell,
       color: "text-amber-600",
       bg: "bg-amber-50",
@@ -83,8 +85,8 @@ export default function SettingsHub() {
       module: "settings_notifications"
     },
     {
-      title: "Access Control",
-      description: "Manage role-based permissions and administrative security protocols.",
+      title: t("accessControlTitle"),
+      description: t("accessControlDesc"),
       link: "/admin/settings/access-control",
       icon: ShieldCheck,
       color: "text-indigo-600",
@@ -92,8 +94,8 @@ export default function SettingsHub() {
       module: "settings_access_control"
     },
     {
-      title: "Data Audit Logs",
-      description: "Review system activity logs and monitor administrative changes.",
+      title: t("auditTitle"),
+      description: t("auditDesc"),
       link: "/admin/settings/audit",
       icon: Database,
       color: "text-slate-600",
@@ -101,8 +103,8 @@ export default function SettingsHub() {
       module: "settings_audit"
     },
     {
-      title: "Integrations",
-      description: "Configure API credentials for Knock notifications, M-Pesa payments, Resend email, and OpenAI translation.",
+      title: t("integrationsTitle"),
+      description: t("integrationsDesc"),
       link: "/admin/settings/integrations",
       icon: Plug,
       color: "text-violet-600",
@@ -132,10 +134,10 @@ export default function SettingsHub() {
           </div>
           <div>
             <h1 className="text-4xl lg:text-5xl font-black font-outfit text-slate-900 tracking-tight">
-              Settings <span className="text-slate-300 font-normal italic">Hub</span>
+              {t("heading")} <span className="text-slate-300 font-normal italic">{t("headingHub")}</span>
             </h1>
             <p className="text-slate-500 font-medium text-lg mt-2">
-              Centralized platform configuration and administrative preferences.
+              {t("desc")}
             </p>
           </div>
         </div>
@@ -152,12 +154,12 @@ export default function SettingsHub() {
                   <div className="bg-rose-500/20 p-5 rounded-2xl w-fit group-hover:scale-110 transition-transform duration-500 border border-rose-500/30">
                     <Users className="h-8 w-8 text-rose-300" />
                   </div>
-                  <h3 className="text-3xl font-black text-white mt-8 font-outfit tracking-tight">Team Management</h3>
+                  <h3 className="text-3xl font-black text-white mt-8 font-outfit tracking-tight">{t("teamManagementTitle")}</h3>
                   <p className="text-slate-400 font-medium text-base mt-4 flex-grow leading-relaxed">
-                    Administrate system access, institutional roles, and staff profiles.
+                    {t("teamManagementDesc")}
                   </p>
                   <div className="mt-8 pt-6 border-t border-slate-800 flex items-center justify-between text-rose-400 font-black text-[11px] uppercase tracking-widest">
-                    <span>Manage Registry</span>
+                    <span>{t("manageRegistry")}</span>
                     <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform duration-500" />
                   </div>
                 </div>

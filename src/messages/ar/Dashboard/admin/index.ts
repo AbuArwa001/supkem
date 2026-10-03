@@ -14,6 +14,9 @@ import finance from './finance.json';
 import letters from './letters.json';
 import it from './it.json';
 import serviceNames from './serviceNames.json';
+import newsPapers from './newsPapers.json';
+import videos from './videos.json';
+import settings from './settings.json';
 
 export default {
   "applications": applications,
@@ -32,4 +35,7 @@ export default {
   "letters": letters,
   "it": it,
   "serviceNames": serviceNames,
+  "newsPapers": newsPapers,
+  "videos": videos,
+  "settings": settings,
 };

@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { RoleGuard } from "@/components/RoleGuard";
 import { canAccessModule } from "@/lib/permissions";
+import { useTranslations } from "next-intl";
 
 // --- Types ---
 interface SystemParameter {
@@ -75,6 +76,7 @@ export default function NotificationsSettingsPage() {
 }
 
 function NotificationsSettingsContent() {
+    const t = useTranslations("Dashboard.admin.settings.notifications");
     const { user } = useAuth();
     const canAccess = canAccessModule(user, "settings_notifications");
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
@@ -161,10 +163,10 @@ function NotificationsSettingsContent() {
                             </div>
                             <div>
                                 <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-                                    Notification <span className="text-foreground/40 italic">Settings</span>
+                                    {t("title")} <span className="text-foreground/40 italic">{t("titleSub")}</span>
                                 </h1>
                                 <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                                    Configure automated triggers and recipient protocols for system events.
+                                    {t("desc")}
                                 </p>
                             </div>
                         </div>
@@ -175,6 +177,7 @@ function NotificationsSettingsContent() {
                     size="icon"
                     onClick={() => mutateParams()}
                     className="rounded-xl hover:bg-slate-100 text-slate-500"
+                    title={t("refresh")}
                 >
                     <RefreshCw className={`h-5 w-5 ${paramsLoading ? 'animate-spin' : ''}`} />
                 </Button>

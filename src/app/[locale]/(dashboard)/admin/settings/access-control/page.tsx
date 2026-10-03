@@ -31,6 +31,7 @@ import { format } from "date-fns";
 import { RolePermissionsDialog } from "@/components/forms/RolePermissionsDialog";
 import { AddRoleDialog } from "@/components/forms/AddRoleDialog";
 import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 // --- Types ---
 interface Permission {
@@ -118,6 +119,7 @@ export default function AccessControlPage() {
 }
 
 function AccessControlContent() {
+    const t = useTranslations("Dashboard.admin.settings.accessControl");
     const { user } = useAuth();
     const { isSuperAdmin } = usePermissions();
     const isAdmin =
@@ -143,9 +145,9 @@ function AccessControlContent() {
                 <div className="bg-rose-50 p-6 rounded-full">
                     <AlertCircle className="h-12 w-12 text-rose-500" />
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">Access Restricted</h2>
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{t("accessRestricted")}</h2>
                 <p className="text-slate-500 font-semibold max-w-md text-center">
-                    Managing security protocols requires high-level administrative clearance.
+                    {t("accessRestrictedDesc")}
                 </p>
             </div>
         );
@@ -177,10 +179,10 @@ function AccessControlContent() {
                     </Link>
                     <div>
                         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-                            Access <span className="text-foreground/40 italic">Control</span>
+                            {t("title")} <span className="text-foreground/40 italic">{t("titleSub")}</span>
                         </h1>
                         <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                            Operational role definitions, user assignments, and fine-grained <span className="text-indigo-500 underline decoration-indigo-500/20 underline-offset-4 decoration-4">permission profiles</span>.
+                            {t("desc")}
                         </p>
                     </div>
                 </div>
@@ -191,7 +193,7 @@ function AccessControlContent() {
                             className="h-11 px-5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 flex items-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <ShieldPlus className="h-4 w-4" />
-                            <span>Add Role</span>
+                            <span>{t("addRole")}</span>
                         </Button>
                     )}
                     <Button
@@ -199,7 +201,7 @@ function AccessControlContent() {
                         size="icon"
                         onClick={() => mutate()}
                         className="h-11 w-11 rounded-xl hover:bg-slate-100 text-slate-500"
-                        title="Refresh roles"
+                        title={t("refresh")}
                     >
                         <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
                     </Button>
@@ -210,53 +212,53 @@ function AccessControlContent() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Total Defined Roles</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("totalDefinedRoles")}</span>
                         <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
                             <Layers size={16} />
                         </div>
                     </div>
                     <div className="text-2xl font-black font-outfit text-slate-900">{totalRoles}</div>
-                    <p className="text-[11px] text-slate-400 font-medium">Access boundaries active</p>
+                    <p className="text-[11px] text-slate-400 font-medium">{t("accessBoundariesActive")}</p>
                 </Card>
 
                 <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Core System Roles</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("coreSystemRoles")}</span>
                         <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
                             <ShieldCheck size={16} />
                         </div>
                     </div>
                     <div className="text-2xl font-black font-outfit text-slate-900">{coreRoles}</div>
-                    <p className="text-[11px] text-slate-400 font-medium">Protected baseline roles</p>
+                    <p className="text-[11px] text-slate-400 font-medium">{t("protectedBaselineRoles")}</p>
                 </Card>
 
                 <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Custom Profiles</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("customProfiles")}</span>
                         <div className="p-2 rounded-xl bg-emerald-50 text-emerald-600">
                             <ShieldPlus size={16} />
                         </div>
                     </div>
                     <div className="text-2xl font-black font-outfit text-slate-900">{customRoles}</div>
-                    <p className="text-[11px] text-slate-400 font-medium">Super Admin created</p>
+                    <p className="text-[11px] text-slate-400 font-medium">{t("superAdminCreated")}</p>
                 </Card>
 
                 <Card className="border-none shadow-premium rounded-2xl bg-white p-5 space-y-2">
                     <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">Governed Users</span>
+                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("governedUsers")}</span>
                         <div className="p-2 rounded-xl bg-teal-50 text-teal-600">
                             <Users size={16} />
                         </div>
                     </div>
                     <div className="text-2xl font-black font-outfit text-slate-900">{totalGovernedUsers}</div>
-                    <p className="text-[11px] text-slate-400 font-medium">Assigned authority profiles</p>
+                    <p className="text-[11px] text-slate-400 font-medium">{t("assignedAuthorityProfiles")}</p>
                 </Card>
             </div>
 
             <div className="relative group">
                 <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-primary transition-colors" />
                 <Input
-                    placeholder="Search defined roles..."
+                    placeholder={t("searchPlaceholder")}
                     className="h-16 pl-14 pr-6 rounded-[1.5rem] border-none shadow-premium bg-white font-bold text-lg focus:ring-4 focus:ring-primary/5 transition-all"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

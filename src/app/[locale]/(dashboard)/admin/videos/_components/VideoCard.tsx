@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { API_BASE_URL } from "@/lib/api";
 import { VideoBriefingItem } from "../_hooks/useVideosLogic";
+import { useTranslations } from "next-intl";
 
 interface VideoCardProps {
   item: VideoBriefingItem;
@@ -20,6 +21,7 @@ export const VideoCard = ({
   onEdit,
   onDelete,
 }: VideoCardProps) => {
+  const t = useTranslations("Dashboard.admin.videos");
   const videoUrl = item.video_file.startsWith("http")
     ? item.video_file
     : `${API_BASE_URL}${item.video_file.startsWith("/") ? "" : "/"}${item.video_file}`;
@@ -57,7 +59,7 @@ export const VideoCard = ({
                 : "bg-amber-500/90 text-white",
             )}
           >
-            {item.is_published ? "Published" : "Draft"}
+            {item.is_published ? t("published") : t("draft")}
           </span>
         </div>
       </Link>
@@ -70,7 +72,7 @@ export const VideoCard = ({
             </h3>
           </Link>
           <p className="text-sm text-foreground/60 line-clamp-2">
-            {item.description || "No description provided."}
+            {item.description || t("noDescription")}
           </p>
         </div>
 

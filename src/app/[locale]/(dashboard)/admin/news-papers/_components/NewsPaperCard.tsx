@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Edit2, Trash2, Download } from "lucide-react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { NewsPaperItem } from "@/services/news-service";
 import { API_BASE_URL } from "@/lib/api";
 import { cn } from "@/lib/utils";
@@ -14,6 +15,7 @@ interface NewsPaperCardProps {
 }
 
 export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardProps) {
+  const t = useTranslations("Dashboard.admin.newsPapers");
   const imageUrl = item.cover_image
     ? item.cover_image.startsWith("http")
       ? item.cover_image
@@ -53,11 +55,11 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
                 : "bg-amber-100 text-amber-700",
             )}
           >
-            {item.is_published ? "Published" : "Draft"}
+            {item.is_published ? t("published") : t("draft")}
           </span>
           {item.issue_number && (
             <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-white">
-              Issue {item.issue_number}
+              {t("issue")} {item.issue_number}
             </span>
           )}
         </div>
@@ -81,7 +83,7 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
               rel="noreferrer"
               className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/5 px-3 py-2 rounded-xl hover:bg-primary hover:text-white transition-all"
             >
-              <Download size={14} /> Download PDF
+              <Download size={14} /> {t("downloadPdf")}
             </a>
           )}
           <div className="flex items-center gap-2 ml-auto">

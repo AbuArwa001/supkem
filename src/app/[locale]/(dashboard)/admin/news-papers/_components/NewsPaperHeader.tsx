@@ -1,5 +1,6 @@
 import React from "react";
 import { Search, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface NewsPaperHeaderProps {
   searchTerm: string;
@@ -12,14 +13,16 @@ export function NewsPaperHeader({
   onSearchChange,
   onCreateClick,
 }: NewsPaperHeaderProps) {
+  const t = useTranslations("Dashboard.admin.newsPapers");
+
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
       <div className="space-y-1">
         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-          News Papers CMS
+          {t("heading")}
         </h1>
         <p className="text-foreground/60 font-medium">
-          Manage digital newspapers and monthly issues.
+          {t("desc")}
         </p>
       </div>
 
@@ -32,7 +35,7 @@ export function NewsPaperHeader({
           <input
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search news papers..."
+            placeholder={t("search")}
             className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-full sm:w-64 shadow-sm"
           />
         </div>
@@ -41,7 +44,7 @@ export function NewsPaperHeader({
           onClick={onCreateClick}
           className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex rtl:flex-row-reverse items-center justify-center gap-2 transition-all active:scale-95 shrink-0 whitespace-nowrap w-full sm:w-auto"
         >
-          <Plus size={20} /> Add News Paper
+          <Plus size={20} /> {t("addNewsPaper")}
         </button>
       </div>
     </div>

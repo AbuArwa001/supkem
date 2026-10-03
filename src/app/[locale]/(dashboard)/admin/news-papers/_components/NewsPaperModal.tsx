@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { NewsPaperItem } from "@/services/news-service";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface NewsPaperModalProps {
   isOpen: boolean;
@@ -38,6 +39,8 @@ export function NewsPaperModal({
   error,
   onSubmit,
 }: NewsPaperModalProps) {
+  const t = useTranslations("Dashboard.admin.newsPapers");
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -57,7 +60,7 @@ export function NewsPaperModal({
           >
             <div className="p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
-                {editingItem ? "Edit News Paper" : "Upload News Paper"}
+                {editingItem ? t("editNewsPaper") : t("uploadNewsPaper")}
               </h2>
               <button
                 onClick={onClose}
@@ -81,7 +84,7 @@ export function NewsPaperModal({
               )}
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Title
+                  {t("title")}
                 </label>
                 <input
                   required
@@ -89,7 +92,7 @@ export function NewsPaperModal({
                   onChange={(e) =>
                     setFormData({ ...formData, title: e.target.value })
                   }
-                  placeholder="Enter news paper title..."
+                  placeholder={t("titlePlaceholder")}
                   className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                 />
               </div>
@@ -97,20 +100,20 @@ export function NewsPaperModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    Issue Number
+                    {t("issueNumber")}
                   </label>
                   <input
                     value={formData.issue_number}
                     onChange={(e) =>
                       setFormData({ ...formData, issue_number: e.target.value })
                     }
-                    placeholder="e.g. Issue 7"
+                    placeholder={t("issueNumberPlaceholder")}
                     className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
                   />
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    Published Date
+                    {t("publishedDate")}
                   </label>
                   <input
                     type="date"
@@ -130,7 +133,7 @@ export function NewsPaperModal({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    PDF File
+                    {t("pdfFile")}
                   </label>
                   <div className="relative group">
                     <input
@@ -152,7 +155,7 @@ export function NewsPaperModal({
                     >
                       <FileText size={20} />
                       <span className="truncate max-w-[150px]">
-                        {formData.file ? formData.file.name : "Select PDF"}
+                        {formData.file ? formData.file.name : t("selectPdf")}
                       </span>
                     </label>
                   </div>
@@ -160,7 +163,7 @@ export function NewsPaperModal({
 
                 <div className="space-y-2">
                   <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                    Cover Image (Optional)
+                    {t("coverImage")}
                   </label>
                   <div className="relative group">
                     <input
@@ -183,7 +186,7 @@ export function NewsPaperModal({
                       <span className="truncate max-w-[150px]">
                         {formData.cover_image
                           ? formData.cover_image.name
-                          : "Select Image"}
+                          : t("selectImage")}
                       </span>
                     </label>
                   </div>
@@ -192,7 +195,7 @@ export function NewsPaperModal({
 
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  Status
+                  {t("status")}
                 </label>
                 <div className="flex items-center gap-4 py-4">
                   <label className="flex items-center gap-2 cursor-pointer group">
@@ -220,7 +223,7 @@ export function NewsPaperModal({
                       )}
                     </div>
                     <span className="font-bold text-primary text-sm">
-                      Published
+                      {t("published")}
                     </span>
                   </label>
                 </div>
@@ -232,7 +235,7 @@ export function NewsPaperModal({
                   onClick={onClose}
                   className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all font-outfit"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   disabled={isSubmitting}
@@ -241,12 +244,12 @@ export function NewsPaperModal({
                   {isSubmitting ? (
                     <>
                       <Loader2 className="animate-spin" size={20} />
-                      Saving...
+                      {t("saving")}
                     </>
                   ) : editingItem ? (
-                    "Update News Paper"
+                    t("updateNewsPaper")
                   ) : (
-                    "Create News Paper"
+                    t("createNewsPaper")
                   )}
                 </button>
               </div>

@@ -18,8 +18,10 @@ import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
 import api from "@/lib/api";
 import { PasswordInput } from "@/components/ui/password-input";
+import { useTranslations } from "next-intl";
 
 export default function ProfileSettings() {
+  const t = useTranslations("Dashboard.admin.settings.profile");
   const { user, login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -49,10 +51,10 @@ export default function ProfileSettings() {
     setSuccess("");
     try {
       await api.patch("/users/users/me/", formData);
-      setSuccess("Profile updated successfully!");
+      setSuccess(t("updateSuccess"));
     } catch (err: any) {
       console.error("Update failed", err);
-      setError(err.response?.data?.detail || "Failed to update profile.");
+      setError(err.response?.data?.detail || t("updateFailed"));
     } finally {
       setLoading(false);
     }
@@ -69,11 +71,10 @@ export default function ProfileSettings() {
         </Link>
         <div className="space-y-1">
           <h1 className="text-4xl font-bold font-outfit text-primary">
-            Account Settings
+            {t("title")}
           </h1>
           <p className="text-foreground/60 font-medium tracking-tight">
-            Manage your personal information, security preferences, and
-            notification settings.
+            {t("desc")}
           </p>
         </div>
       </div>
@@ -91,7 +92,7 @@ export default function ProfileSettings() {
                 <UserCircle size={28} />
               </div>
               <h3 className="text-2xl font-bold font-outfit">
-                Personal Information
+                {t("personalInfo")}
               </h3>
             </div>
 
@@ -110,7 +111,7 @@ export default function ProfileSettings() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  First Name
+                  {t("firstName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -128,7 +129,7 @@ export default function ProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Middle Name
+                  {t("middleName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -146,7 +147,7 @@ export default function ProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Last Name / Surname
+                  {t("lastName")}
                 </label>
                 <div className="relative group">
                   <User
@@ -164,7 +165,7 @@ export default function ProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Email Address
+                  {t("emailReadOnly")}
                 </label>
                 <div className="relative group">
                   <Mail
@@ -180,7 +181,7 @@ export default function ProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Phone Number
+                  {t("phoneNumber")}
                 </label>
                 <div className="relative group">
                   <Phone
@@ -210,7 +211,7 @@ export default function ProfileSettings() {
                 ) : (
                   <Save size={18} />
                 )}
-                Update Profile
+                {t("saveProfile")}
               </button>
             </div>
           </motion.div>
@@ -227,14 +228,14 @@ export default function ProfileSettings() {
                 <Lock size={28} />
               </div>
               <h3 className="text-2xl font-bold font-outfit">
-                Security & Access
+                {t("security")}
               </h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  Current Password
+                  {t("currentPassword")}
                 </label>
                 <PasswordInput
                   className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
@@ -242,7 +243,7 @@ export default function ProfileSettings() {
               </div>
               <div className="space-y-3">
                 <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
-                  New Password
+                  {t("newPassword")}
                 </label>
                 <PasswordInput
                   className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 px-6 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
@@ -252,7 +253,7 @@ export default function ProfileSettings() {
 
             <div className="pt-6">
               <button className="px-10 py-4 border-2 border-primary text-primary rounded-[24px] font-extrabold text-sm hover:bg-primary hover:text-white transition-all flex items-center gap-3">
-                Change Password
+                {t("changePassword")}
               </button>
             </div>
           </motion.div>

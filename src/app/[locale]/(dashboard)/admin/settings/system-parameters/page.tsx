@@ -31,6 +31,7 @@ import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
 import { RoleGuard } from "@/components/RoleGuard";
 import { canAccessModule } from "@/lib/permissions";
+import { useTranslations } from "next-intl";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface SystemParameter {
@@ -80,6 +81,7 @@ export default function SystemParametersPage() {
 }
 
 function SystemParametersContent() {
+    const t = useTranslations("Dashboard.admin.settings.systemParams");
     const { user } = useAuth();
     const canAccess = canAccessModule(user, "settings_system_parameters");
 
@@ -153,10 +155,10 @@ function SystemParametersContent() {
                             </div>
                             <div>
                                 <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-                                    System <span className="text-foreground/40 italic">Parameters</span>
+                                    {t("title")} <span className="text-foreground/40 italic">{t("titleSub")}</span>
                                 </h1>
                                 <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                                    Fine-tuning core application behaviors and facility defaults.
+                                    {t("desc")}
                                 </p>
                             </div>
                         </div>
@@ -178,7 +180,7 @@ function SystemParametersContent() {
                 <div className="relative flex-1">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input
-                        placeholder="Search parameters by name or identifier..."
+                        placeholder={t("searchPlaceholder")}
                         className="h-12 pl-11 rounded-2xl border-none shadow-sm bg-white font-medium"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -191,7 +193,7 @@ function SystemParametersContent() {
                         className={`rounded-xl px-4 h-10 font-bold text-xs uppercase tracking-widest ${selectedCategory === "all" ? "bg-primary hover:bg-primary/90" : ""
                             }`}
                     >
-                        All
+                        {t("allCategories")}
                     </Button>
                     {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
                         <Button
@@ -202,7 +204,7 @@ function SystemParametersContent() {
                                 }`}
                         >
                             <config.icon className="h-3 w-3 mr-2" />
-                            {config.label}
+                            {t.has(key) ? t(key) : config.label}
                         </Button>
                     ))}
                 </div>

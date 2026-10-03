@@ -28,6 +28,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@/i18n/routing";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslations } from "next-intl";
 import {
   SocialMediaSettings,
   SocialChannelConfig,
@@ -36,6 +37,7 @@ import {
 import Cookies from "js-cookie";
 
 export default function SocialSettingsPage() {
+  const t = useTranslations("Dashboard.admin.settings.social");
   const { user } = useAuth();
   const isAdmin =
     user?.is_superuser ||
@@ -443,11 +445,11 @@ export default function SocialSettingsPage() {
               <Share2 size={22} />
             </div>
             <h1 className="text-2xl sm:text-3xl font-black font-outfit text-slate-900 tracking-tight">
-              Social Media & Aggregator
+              {t("title")}
             </h1>
           </div>
           <p className="text-sm text-slate-500 pl-11">
-            Configure live Tagembed wall, toggle handles, and update official social media links without editing code.
+            {t("desc")}
           </p>
         </div>
 
@@ -455,7 +457,7 @@ export default function SocialSettingsPage() {
         <div className="flex items-center gap-3 pl-11 sm:pl-0">
           {hasUnsavedChanges && (
             <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-300 animate-pulse text-xs">
-              Unsaved Changes
+              {t("unsavedChanges")}
             </Badge>
           )}
           <Button
@@ -465,7 +467,7 @@ export default function SocialSettingsPage() {
             disabled={isSaving || isLoading}
             className="text-slate-600 hover:text-slate-900 text-xs"
           >
-            Reset
+            {t("reset")}
           </Button>
           <Button
             onClick={handleSave}
@@ -474,11 +476,11 @@ export default function SocialSettingsPage() {
           >
             {isSaving ? (
               <>
-                <RefreshCw size={14} className="animate-spin" /> Saving...
+                <RefreshCw size={14} className="animate-spin" /> {t("saving")}
               </>
             ) : (
               <>
-                <Save size={14} /> Save Changes
+                <Save size={14} /> {t("saveSettings")}
               </>
             )}
           </Button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { Search, Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface VideoHeaderProps {
   searchTerm: string;
@@ -13,14 +14,16 @@ export const VideoHeader = ({
   onSearchChange,
   onUploadClick,
 }: VideoHeaderProps) => {
+  const t = useTranslations("Dashboard.admin.videos");
+
   return (
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
       <div className="space-y-1">
         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-          Video Briefings
+          {t("heading")}
         </h1>
         <p className="text-foreground/60 font-medium">
-          Manage uploaded video content and press briefings.
+          {t("desc")}
         </p>
       </div>
 
@@ -33,7 +36,7 @@ export const VideoHeader = ({
           <input
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search videos..."
+            placeholder={t("search")}
             className="pl-12 pr-4 py-3 bg-white border border-border focus:border-primary/20 rounded-2xl text-sm transition-all outline-none w-full sm:w-64 shadow-sm"
           />
         </div>
@@ -42,7 +45,7 @@ export const VideoHeader = ({
           onClick={onUploadClick}
           className="px-6 py-3 bg-primary text-white rounded-2xl font-bold hover-lift premium-gradient shadow-lg flex rtl:flex-row-reverse items-center justify-center gap-2 shrink-0 whitespace-nowrap w-full sm:w-auto"
         >
-          <Plus size={20} /> Upload Video
+          <Plus size={20} /> {t("uploadVideo")}
         </button>
       </div>
     </div>
