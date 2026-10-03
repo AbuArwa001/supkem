@@ -271,7 +271,11 @@
     "recipientRolesDesc": "Select institutional roles that receive immediate dispatches for critical events:",
     "rolesConfigured": "{count} roles configured for broadcast alerts",
     "updateSuccess": "Notification setting \"{key}\" updated successfully.",
-    "updateError": "Failed to update configuration. Please try again."
+    "updateError": "Failed to update configuration. Please try again.",
+    "updateBtn": "Update Configuration",
+    "updating": "Updating...",
+    "units": "Units",
+    "realtimeFooter": "Settings are applied in real-time to the application environment."
   },
   "audit": {
     "title": "Data Audit",

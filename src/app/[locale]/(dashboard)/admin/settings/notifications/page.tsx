@@ -77,6 +77,7 @@ export default function NotificationsSettingsPage() {
 
 function NotificationsSettingsContent() {
     const t = useTranslations("Dashboard.admin.settings.notifications");
+    const tParams = useTranslations("Dashboard.admin.settings.systemParams");
     const { user } = useAuth();
     const canAccess = canAccessModule(user, "settings_notifications");
     const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
@@ -106,7 +107,7 @@ function NotificationsSettingsContent() {
         setUpdatingKey(key);
         try {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
-            toast.success(`Notification setting "${key}" updated successfully`);
+            toast.success(t("updateSuccess", { key }));
             if (parameters) {
                 const updatedParams = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
                 mutateParams(rawParams?.results ? { ...rawParams, results: updatedParams } : updatedParams, false);
@@ -118,7 +119,7 @@ function NotificationsSettingsContent() {
             });
         } catch (err) {
             console.error("Failed to update configuration", err);
-            toast.error("Failed to update configuration");
+            toast.error(t("updateError"));
         } finally {
             setUpdatingKey(null);
         }
