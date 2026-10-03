@@ -76,6 +76,26 @@ export function ServicesTable({ services, loading, onEdit, onDelete }: ServicesT
                                             {isAr ? "شهادة رسمية" : "Certificate"}
                                         </span>
                                     )}
+
+                                    {/* Dates / Validity Badge */}
+                                    {service.start_date || service.end_date ? (
+                                        <p className="text-[11px] text-foreground/50 mt-1.5 font-medium flex items-center gap-1">
+                                            <span>🗓️</span>
+                                            <span>
+                                                {service.start_date || "—"} → {service.end_date || service.expiration_date || "—"}
+                                            </span>
+                                        </p>
+                                    ) : service.document_type === "Certificate" && service.validity_duration && service.validity_duration !== "Indefinite" ? (
+                                        <p className="text-[11px] text-foreground/50 mt-1.5 font-medium flex items-center gap-1">
+                                            <span>⏱️</span>
+                                            <span>{service.validity_duration}</span>
+                                        </p>
+                                    ) : service.document_type === "Certificate" && service.is_indefinite !== false ? (
+                                        <p className="text-[11px] text-emerald-700/70 mt-1.5 font-medium flex items-center gap-1">
+                                            <span>♾️</span>
+                                            <span>{isAr ? "دائمة" : "Indefinite"}</span>
+                                        </p>
+                                    ) : null}
                                 </td>
                                 <td className="px-8 py-6 hidden sm:table-cell">
                                     <p className="font-bold text-primary flex items-center gap-1">
