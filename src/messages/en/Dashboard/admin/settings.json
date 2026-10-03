@@ -87,7 +87,9 @@
     "accessVerificationScope": "Your access includes administrative controls and platform auditing.",
     "notificationsTitle": "Notifications",
     "emailUpdates": "Email Updates",
-    "smsAlerts": "SMS Alerts"
+    "smsAlerts": "SMS Alerts",
+    "superAdmin": "Super Admin",
+    "admin": "Admin"
   },
   "systemParams": {
     "title": "System",

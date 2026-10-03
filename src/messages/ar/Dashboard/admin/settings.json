@@ -87,7 +87,9 @@
     "accessVerificationScope": "يتضمن وصولك ضوابط إدارية وتدقيقاً شاملاً للمنصة.",
     "notificationsTitle": "الإشعارات",
     "emailUpdates": "تحديثات البريد الإلكتروني",
-    "smsAlerts": "تنبيهات الرسائل النصية القصيرة"
+    "smsAlerts": "تنبيهات الرسائل النصية القصيرة",
+    "superAdmin": "المشرف العام",
+    "admin": "مسؤول النظام"
   },
   "systemParams": {
     "title": "معايير",
