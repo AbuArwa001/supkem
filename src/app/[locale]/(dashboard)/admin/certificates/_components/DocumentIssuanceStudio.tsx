@@ -122,8 +122,12 @@ export default function DocumentIssuanceStudio({
         setIsIndefinite(true);
       }
 
-      if (selectedApp.service_expiration_date) {
-        setExpiryDateString(selectedApp.service_expiration_date);
+      if ((selectedApp as any).service_start_date) {
+        setStartDateString((selectedApp as any).service_start_date);
+      }
+
+      if ((selectedApp as any).service_end_date || selectedApp.service_expiration_date) {
+        setExpiryDateString((selectedApp as any).service_end_date || selectedApp.service_expiration_date);
         setIsIndefinite(false);
       } else if (selectedApp.service_validity_duration && selectedApp.service_validity_duration !== "Indefinite") {
         setIsIndefinite(false);
