@@ -507,7 +507,7 @@ function IntegrationsPageContent() {
                         href="/admin/settings"
                         className="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-600 transition-colors font-medium"
                     >
-                        <ChevronLeft size={16} />
+                        <ChevronLeft size={16} className="rtl:rotate-180" />
                         {t("backToSettings")}
                     </Link>
                 </div>
