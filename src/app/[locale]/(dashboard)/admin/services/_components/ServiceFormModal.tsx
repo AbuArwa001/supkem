@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 
-import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban, Plus, Infinity, Clock, Calendar } from "lucide-react";
+import { X, Sparkles, DollarSign, CheckCircle2, Loader2, Award, FileText, Ban, Plus, Infinity, Clock, Calendar, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ServiceFormData, ServiceItem, ServiceCategoryItem } from "./types";
 import { useTranslations } from "next-intl";
