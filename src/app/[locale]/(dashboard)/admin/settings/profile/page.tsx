@@ -67,7 +67,7 @@ export default function ProfileSettings() {
           href="/admin/settings"
           className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary"
         >
-          <ChevronRight className="rotate-180" size={24} />
+          <ChevronRight className="rotate-180 rtl:rotate-0" size={24} />
         </Link>
         <div className="space-y-1">
           <h1 className="text-4xl font-bold font-outfit text-primary">
@@ -110,12 +110,12 @@ export default function ProfileSettings() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
+                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1 rtl:ml-0 rtl:mr-1">
                   {t("firstName")}
                 </label>
                 <div className="relative group">
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
+                    className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                     size={20}
                   />
                   <input
@@ -123,17 +123,17 @@ export default function ProfileSettings() {
                     onChange={(e) =>
                       setFormData({ ...formData, first_name: e.target.value })
                     }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
+                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 rtl:pl-4 rtl:pr-12 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
                   />
                 </div>
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
+                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1 rtl:ml-0 rtl:mr-1">
                   {t("middleName")}
                 </label>
                 <div className="relative group">
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
+                    className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                     size={20}
                   />
                   <input
@@ -141,17 +141,17 @@ export default function ProfileSettings() {
                     onChange={(e) =>
                       setFormData({ ...formData, middle_name: e.target.value })
                     }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
+                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 rtl:pl-4 rtl:pr-12 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
                   />
                 </div>
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
+                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1 rtl:ml-0 rtl:mr-1">
                   {t("lastName")}
                 </label>
                 <div className="relative group">
                   <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
+                    className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                     size={20}
                   />
                   <input
@@ -159,33 +159,33 @@ export default function ProfileSettings() {
                     onChange={(e) =>
                       setFormData({ ...formData, last_name: e.target.value })
                     }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
+                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 rtl:pl-4 rtl:pr-12 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
                   />
                 </div>
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
+                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1 rtl:ml-0 rtl:mr-1">
                   {t("emailReadOnly")}
                 </label>
                 <div className="relative group">
                   <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
+                    className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                     size={20}
                   />
                   <input
                     disabled
                     defaultValue={user?.email}
-                    className="w-full bg-primary/[0.01] border border-border rounded-2xl py-4 pl-12 pr-4 opacity-50 cursor-not-allowed font-bold text-primary"
+                    className="w-full bg-primary/[0.01] border border-border rounded-2xl py-4 pl-12 pr-4 rtl:pl-4 rtl:pr-12 opacity-50 cursor-not-allowed font-bold text-primary"
                   />
                 </div>
               </div>
               <div className="space-y-3">
-                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1">
+                <label className="text-xs font-black text-foreground/30 uppercase tracking-[0.2em] ml-1 rtl:ml-0 rtl:mr-1">
                   {t("phoneNumber")}
                 </label>
                 <div className="relative group">
                   <Phone
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
+                    className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 text-primary/20 group-focus-within:text-primary transition-colors"
                     size={20}
                   />
                   <input
@@ -193,7 +193,7 @@ export default function ProfileSettings() {
                     onChange={(e) =>
                       setFormData({ ...formData, phone_number: e.target.value })
                     }
-                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
+                    className="w-full bg-primary/[0.02] border border-border rounded-2xl py-4 pl-12 pr-4 rtl:pl-4 rtl:pr-12 focus:bg-white focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none font-bold text-primary"
                     placeholder="+254 7XX XXX XXX"
                   />
                 </div>
@@ -270,27 +270,30 @@ export default function ProfileSettings() {
               className="relative z-10"
             />
             <h3 className="text-2xl font-bold font-outfit relative z-10">
-              Access Verification
+              {t("accessVerificationTitle")}
             </h3>
             <p className="text-sm font-medium text-white/70 relative z-10 leading-relaxed">
-              You are currently signed in as a{" "}
+              {t("accessVerificationDesc")}{" "}
               <span className="text-secondary font-black">
-                {user?.role?.role_name}
+                {user?.role?.role_name?.toLowerCase().includes("super")
+                  ? t("superAdmin")
+                  : user?.role?.role_name?.toLowerCase().includes("admin")
+                  ? t("admin")
+                  : user?.role?.role_name || user?.role_name}
               </span>
-              . Your access includes administrative controls and platform
-              auditing.
+              . {t("accessVerificationScope")}
             </p>
           </div>
 
           <div className="p-10 rounded-[20px] bg-white border border-border shadow-sm space-y-8">
             <div className="flex items-center gap-3 text-primary">
               <Bell size={24} className="opacity-40" />
-              <h4 className="text-xl font-bold font-outfit">Notifications</h4>
+              <h4 className="text-xl font-bold font-outfit">{t("notificationsTitle")}</h4>
             </div>
             <div className="space-y-4">
               <label className="flex items-center justify-between p-4 rounded-3xl bg-primary/[0.02] border border-primary/5 cursor-pointer group">
                 <span className="text-sm font-bold text-primary opacity-60 group-hover:opacity-100 transition-opacity">
-                  Email Updates
+                  {t("emailUpdates")}
                 </span>
                 <input
                   type="checkbox"
@@ -300,7 +303,7 @@ export default function ProfileSettings() {
               </label>
               <label className="flex items-center justify-between p-4 rounded-3xl bg-primary/[0.02] border border-primary/5 cursor-pointer group">
                 <span className="text-sm font-bold text-primary opacity-60 group-hover:opacity-100 transition-opacity">
-                  SMS Alerts
+                  {t("smsAlerts")}
                 </span>
                 <input type="checkbox" className="w-5 h-5 accent-primary" />
               </label>
