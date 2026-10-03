@@ -416,13 +416,13 @@ export default function SocialSettingsPage() {
         <div className="w-16 h-16 bg-rose-50 text-rose-600 rounded-3xl flex items-center justify-center mx-auto border border-rose-200">
           <ShieldAlert size={32} />
         </div>
-        <h2 className="text-2xl font-bold text-slate-800">Super Admin Access Required</h2>
+        <h2 className="text-2xl font-bold text-slate-800">{t("accessRestricted")}</h2>
         <p className="text-slate-500 max-w-md mx-auto">
-          You need Super Admin or Staff privileges to configure social media feeds and third-party aggregator integrations.
+          {t("accessRestrictedDesc")}
         </p>
         <Link href="/admin/settings">
           <Button variant="outline" className="mt-4 gap-2">
-            <ArrowLeft size={16} /> Back to Settings
+            <ArrowLeft size={16} className="rtl:rotate-180" /> {t("backToSettings")}
           </Button>
         </Link>
       </div>
@@ -439,7 +439,7 @@ export default function SocialSettingsPage() {
               href="/admin/settings"
               className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-all"
             >
-              <ArrowLeft size={20} />
+              <ArrowLeft size={20} className="rtl:rotate-180" />
             </Link>
             <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200/50">
               <Share2 size={22} />

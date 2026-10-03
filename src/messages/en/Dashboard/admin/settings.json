@@ -147,6 +147,9 @@
     "saveSettings": "Save Changes",
     "saving": "Saving...",
     "reset": "Reset",
-    "unsavedChanges": "Unsaved Changes"
+    "unsavedChanges": "Unsaved Changes",
+    "backToSettings": "Back to Settings",
+    "accessRestricted": "Super Admin Access Required",
+    "accessRestrictedDesc": "You need Super Admin or Staff privileges to configure social media feeds and third-party aggregator integrations."
   }
 }
