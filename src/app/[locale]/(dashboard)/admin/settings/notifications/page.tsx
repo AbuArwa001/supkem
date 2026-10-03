@@ -204,14 +204,14 @@ function NotificationsSettingsContent() {
                                             <div className="space-y-2">
                                                 <div className="flex items-center gap-2">
                                                     <h3 className="text-xl md:text-2xl font-bold text-slate-900 tracking-tight font-outfit flex items-center gap-3">
-                                                        {param.name}
+                                                        {tParams.has(`items.${param.key}.name`) ? tParams(`items.${param.key}.name`) : param.name}
                                                     </h3>
                                                     {param.data_type === 'boolean' && (
-                                                        <Badge className="bg-emerald-50 text-emerald-600 border-emerald-100 text-[9px] uppercase tracking-widest px-2 py-0">Global</Badge>
+                                                        <Badge className="bg-emerald-50 text-emerald-600 border-emerald-100 text-[9px] uppercase tracking-widest px-2 py-0">{t("globalBadge")}</Badge>
                                                     )}
                                                 </div>
                                                 <p className="text-slate-500 font-medium leading-relaxed max-w-xl">
-                                                    {param.description}
+                                                    {tParams.has(`items.${param.key}.description`) ? tParams(`items.${param.key}.description`) : param.description}
                                                 </p>
                                             </div>
 
@@ -223,15 +223,15 @@ function NotificationsSettingsContent() {
                                                                 <Shield className="h-4 w-4 text-emerald-500" />}
                                                 </div>
                                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                                                    SYSTEM PARAMETER: <span className="text-primary">{param.key}</span>
+                                                    {t("paramKey", { key: param.key })}
                                                 </span>
                                             </div>
                                         </div>
 
                                         <div className="w-full lg:w-[360px] flex flex-col justify-center gap-6">
                                             <div className="space-y-3">
-                                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1">
-                                                    Configuration Value
+                                                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-1 rtl:ml-0 rtl:mr-1">
+                                                    {t("configValue")}
                                                 </label>
 
                                                 {param.data_type === "boolean" ? (
@@ -240,7 +240,7 @@ function NotificationsSettingsContent() {
                                                             "text-xs font-black uppercase tracking-widest",
                                                             (pendingChanges[param.key] ?? param.value).toLowerCase() === "true" ? "text-emerald-600" : "text-slate-400"
                                                         )}>
-                                                            {(pendingChanges[param.key] ?? param.value).toLowerCase() === "true" ? "Enabled" : "Disabled"}
+                                                            {(pendingChanges[param.key] ?? param.value).toLowerCase() === "true" ? t("activeOn") : t("inactiveOff")}
                                                         </span>
                                                         <Switch
                                                             checked={(pendingChanges[param.key] ?? param.value).toLowerCase() === "true"}
@@ -282,8 +282,8 @@ function NotificationsSettingsContent() {
                                                             className="h-16 px-8 rounded-[1.25rem] border-slate-100 bg-slate-50 focus:bg-white focus:border-primary/20 font-bold text-slate-900 transition-all text-lg shadow-sm"
                                                         />
                                                         {param.data_type === "number" && (
-                                                            <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 uppercase tracking-widest pointer-events-none">
-                                                                Units
+                                                            <div className="absolute right-6 rtl:right-auto rtl:left-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 uppercase tracking-widest pointer-events-none">
+                                                                {t("units")}
                                                             </div>
                                                         )}
                                                     </div>
@@ -306,8 +306,8 @@ function NotificationsSettingsContent() {
                                                                 <Loader2 className="h-5 w-5 animate-spin" />
                                                             ) : (
                                                                 <>
-                                                                    <Save className="h-5 w-5 mr-3" />
-                                                                    Update Configuration
+                                                                    <Save className="h-5 w-5 mr-3 rtl:mr-0 rtl:ml-3" />
+                                                                    {t("updateBtn")}
                                                                 </>
                                                             )}
                                                         </Button>
@@ -327,7 +327,7 @@ function NotificationsSettingsContent() {
                 <div className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 rounded-full">
                     <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-tight">
-                        Settings are applied in real-time to the application environment.
+                        {t("realtimeFooter")}
                     </span>
                 </div>
             </footer>
