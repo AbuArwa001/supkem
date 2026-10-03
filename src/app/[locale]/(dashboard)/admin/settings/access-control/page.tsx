@@ -175,7 +175,7 @@ function AccessControlContent() {
                         href="/admin/settings"
                         className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary self-start mt-2"
                     >
-                        <ChevronLeft size={24} />
+                        <ChevronLeft size={24} className="rtl:rotate-180" />
                     </Link>
                     <div>
                         <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
