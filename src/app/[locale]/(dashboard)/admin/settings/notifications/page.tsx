@@ -154,7 +154,7 @@ function NotificationsSettingsContent() {
                         href="/admin/settings"
                         className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary self-start mt-2"
                     >
-                        <ChevronLeft size={24} />
+                        <ChevronLeft size={24} className="rtl:rotate-180" />
                     </Link>
                     <div>
                         <div className="flex items-center gap-4 mb-4">
