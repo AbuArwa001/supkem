@@ -665,14 +665,14 @@ export default function SocialSettingsPage() {
                       </div>
                     </div>
                     <CardTitle className="text-xl font-bold font-outfit text-slate-900">
-                      Direct Meta API (Facebook & Instagram)
+                      {t("meta.title")}
                     </CardTitle>
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200 text-[10px] py-0 font-semibold">
-                      No Aggregator Needed
+                      {t("meta.badge")}
                     </Badge>
                   </div>
                   <CardDescription className="text-sm text-slate-500">
-                    Fetch official posts and high-res media directly from SUPKEM's verified Facebook Page and Instagram Business account via official Meta Graph API.
+                    {t("meta.desc")}
                   </CardDescription>
                 </div>
 
@@ -680,7 +680,7 @@ export default function SocialSettingsPage() {
                   <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex flex-col items-end">
                       <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        Direct Ingestion
+                        {t("directIngestion")}
                         {isTogglingMeta && (
                           <RefreshCw size={11} className="animate-spin text-blue-600" />
                         )}
@@ -697,7 +697,7 @@ export default function SocialSettingsPage() {
                               : "bg-slate-300"
                           }`}
                         />
-                        {settings.metaApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                        {settings.metaApi?.enabled ? t("activeStreaming") : t("inactive")}
                       </span>
                     </div>
                     <Switch
@@ -715,10 +715,10 @@ export default function SocialSettingsPage() {
                 {/* Facebook Page ID */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Facebook Page ID
+                    {t("meta.pageIdLabel")}
                   </label>
                   <Input
-                    placeholder="e.g. 100079747610399"
+                    placeholder={t("meta.pageIdPlaceholder")}
                     value={settings.metaApi?.facebookPageId || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -737,17 +737,17 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm font-mono"
                   />
                   <p className="text-xs text-slate-400">
-                    Default: <code className="bg-slate-100 px-1 py-0.5 rounded text-slate-700">100079747610399</code> (Supreme Council of Kenya Muslims).
+                    {t("meta.pageIdHint", { default: "100079747610399" })}
                   </p>
                 </div>
 
                 {/* Instagram Business Account ID */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Instagram Business Account ID (Optional)
+                    {t("meta.igIdLabel")}
                   </label>
                   <Input
-                    placeholder="e.g. 17841405309211844 (or leave blank if linked)"
+                    placeholder={t("meta.igIdPlaceholder")}
                     value={settings.metaApi?.instagramBusinessId || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -774,20 +774,20 @@ export default function SocialSettingsPage() {
                 <div className="space-y-2 md:col-span-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Meta Graph Page Access Token
+                      {t("meta.tokenLabel")}
                     </label>
                     <button
                       type="button"
                       onClick={() => setShowMetaGuide(!showMetaGuide)}
                       className="text-xs text-blue-600 hover:text-blue-700 font-semibold inline-flex items-center gap-1"
                     >
-                      <HelpCircle size={13} /> How to get this permanent token in 3 steps
+                      <HelpCircle size={13} /> {t("meta.guideBtn")}
                     </button>
                   </div>
                   <div className="relative">
                     <Input
                       type={showMetaToken ? "text" : "password"}
-                      placeholder="EAAG... (Meta Long-Lived Page Access Token)"
+                      placeholder={t("meta.tokenPlaceholder")}
                       value={settings.metaApi?.facebookAccessToken || ""}
                       onChange={(e) =>
                         setSettings((prev) => ({
@@ -810,11 +810,11 @@ export default function SocialSettingsPage() {
                       onClick={() => setShowMetaToken(!showMetaToken)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
-                      {showMetaToken ? "Hide" : "Show"}
+                      {showMetaToken ? t("hide") : t("show")}
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    This token allows your server to read public posts, photos, and engagement metrics safely without user authentication.
+                    {t("meta.tokenHint")}
                   </p>
                 </div>
               </div>
@@ -829,9 +829,9 @@ export default function SocialSettingsPage() {
                 >
                   <div className="font-bold text-sm text-blue-950 flex items-center gap-2">
                     <HelpCircle size={16} className="text-blue-600" />
-                    How to generate a Permanent Meta Page Access Token (100% Free):
+                    {t("meta.guideTitle")}
                   </div>
-                  <ol className="list-decimal pl-5 space-y-2 leading-relaxed text-slate-700">
+                  <ol className="list-decimal pl-5 rtl:pl-0 rtl:pr-5 space-y-2 leading-relaxed text-slate-700">
                     <li>
                       Visit <strong>Meta for Developers</strong> at{" "}
                       <a
@@ -870,9 +870,9 @@ export default function SocialSettingsPage() {
               {/* Diagnostic Test Tool */}
               <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">Connection Diagnostics</h4>
+                  <h4 className="text-sm font-bold text-slate-800">{t("diagnostics")}</h4>
                   <p className="text-xs text-slate-400">
-                    Verify that your Meta token is valid and can communicate with Facebook &amp; Instagram.
+                    {t("meta.diagnosticsDesc")}
                   </p>
                 </div>
 
@@ -885,7 +885,7 @@ export default function SocialSettingsPage() {
                   className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 text-xs font-bold gap-2"
                 >
                   <RefreshCw size={13} className={isTestingMeta ? "animate-spin text-blue-600" : "text-slate-500"} />
-                  {isTestingMeta ? "Verifying with Meta..." : "Test Meta Connection"}
+                  {isTestingMeta ? t("meta.testing") : t("meta.testBtn")}
                 </Button>
               </div>
 
@@ -941,14 +941,14 @@ export default function SocialSettingsPage() {
                       ▶
                     </div>
                     <CardTitle className="text-xl font-bold font-outfit text-slate-900">
-                      YouTube Data API (Official Videos)
+                      {t("youtube.title")}
                     </CardTitle>
                     <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-[10px] py-0 font-semibold">
-                      Google Data API v3
+                      {t("youtube.badge")}
                     </Badge>
                   </div>
                   <CardDescription className="text-sm text-slate-500">
-                    Stream official video briefings and announcements from SUPKEM directly on the social wall with interactive playback.
+                    {t("youtube.desc")}
                   </CardDescription>
                 </div>
 
@@ -960,13 +960,13 @@ export default function SocialSettingsPage() {
                     disabled={isSaving}
                     className="bg-red-600 hover:bg-red-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm hidden sm:inline-flex"
                   >
-                    <Save size={13} /> Save YouTube Settings
+                    <Save size={13} /> {t("youtube.saveBtn")}
                   </Button>
 
                   <div className="flex items-center gap-3 bg-white px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm">
                     <div className="flex flex-col items-end">
                       <span className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-                        Video Stream
+                        {t("youtube.videoStream")}
                         {isTogglingYt && (
                           <RefreshCw size={11} className="animate-spin text-red-600" />
                         )}
@@ -983,7 +983,7 @@ export default function SocialSettingsPage() {
                               : "bg-slate-300"
                           }`}
                         />
-                        {settings.youtubeApi?.enabled ? "ACTIVE (Streaming Live)" : "INACTIVE"}
+                        {settings.youtubeApi?.enabled ? t("activeStreaming") : t("inactive")}
                       </span>
                     </div>
                     <Switch
@@ -1002,7 +1002,7 @@ export default function SocialSettingsPage() {
                 <div className="space-y-2 md:col-span-2">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                      Google Cloud YouTube Data API Key
+                      {t("youtube.apiKeyLabel")}
                     </label>
                     <span className="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
                       <CheckCircle2 size={13} /> 10,000 free requests/day
@@ -1011,7 +1011,7 @@ export default function SocialSettingsPage() {
                   <div className="relative">
                     <Input
                       type={showYtApiKey ? "text" : "password"}
-                      placeholder="Enter YouTube Data API key"
+                      placeholder={t("youtube.apiKeyPlaceholder")}
                       value={settings.youtubeApi?.apiKey || ""}
                       onChange={(e) =>
                         setSettings((prev) => ({
@@ -1034,21 +1034,21 @@ export default function SocialSettingsPage() {
                       onClick={() => setShowYtApiKey(!showYtApiKey)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
-                      {showYtApiKey ? "Hide" : "Show"}
+                      {showYtApiKey ? t("hide") : t("show")}
                     </button>
                   </div>
                   <p className="text-xs text-slate-400">
-                    Generated from your Google Cloud Console project with YouTube Data API v3 enabled.
+                    {t("youtube.apiKeyHint")}
                   </p>
                 </div>
 
                 {/* Channel ID */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Official YouTube Channel ID
+                    {t("youtube.channelIdLabel")}
                   </label>
                   <Input
-                    placeholder="e.g. UCNbBcq2UNZahLtzrnyabhow"
+                    placeholder={t("youtube.channelIdPlaceholder")}
                     value={settings.youtubeApi?.channelId || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -1067,17 +1067,17 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm font-mono"
                   />
                   <p className="text-xs text-slate-400">
-                    Your official YouTube Channel ID.
+                    {t("youtube.channelIdHint")}
                   </p>
                 </div>
 
                 {/* Search Query Fallback */}
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                    Search Query Fallback
+                    {t("youtube.searchQueryLabel")}
                   </label>
                   <Input
-                    placeholder="e.g. SUPKEM Kenya"
+                    placeholder={t("youtube.searchQueryPlaceholder")}
                     value={settings.youtubeApi?.searchQuery || ""}
                     onChange={(e) =>
                       setSettings((prev) => ({
@@ -1096,7 +1096,7 @@ export default function SocialSettingsPage() {
                     className="h-11 rounded-xl text-sm"
                   />
                   <p className="text-xs text-slate-400">
-                    Used to fetch national press briefings when channel uploads are quiet.
+                    {t("youtube.searchQueryHint")}
                   </p>
                 </div>
               </div>
@@ -1104,9 +1104,9 @@ export default function SocialSettingsPage() {
               {/* Diagnostic Test Tool */}
               <div className="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h4 className="text-sm font-bold text-slate-800">Connection Diagnostics</h4>
+                  <h4 className="text-sm font-bold text-slate-800">{t("diagnostics")}</h4>
                   <p className="text-xs text-slate-400">
-                    Verify that your Google API key connects to YouTube and checks channel status.
+                    {t("youtube.diagnosticsDesc")}
                   </p>
                 </div>
 
@@ -1119,7 +1119,7 @@ export default function SocialSettingsPage() {
                   className="bg-white hover:bg-slate-50 border-slate-200 text-slate-700 text-xs font-bold gap-2"
                 >
                   <RefreshCw size={13} className={isTestingYt ? "animate-spin text-red-600" : "text-slate-500"} />
-                  {isTestingYt ? "Verifying with YouTube..." : "Test YouTube Connection"}
+                  {isTestingYt ? t("youtube.testing") : t("youtube.testBtn")}
                 </Button>
               </div>
 
