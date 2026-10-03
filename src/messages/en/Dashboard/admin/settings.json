@@ -80,7 +80,14 @@
     "newPassword": "New Password",
     "confirmPassword": "Confirm New Password",
     "updatePassword": "Update Password",
-    "passwordMismatch": "New passwords do not match."
+    "changePassword": "Change Password",
+    "passwordMismatch": "New passwords do not match.",
+    "accessVerificationTitle": "Access Verification",
+    "accessVerificationDesc": "You are currently signed in as a",
+    "accessVerificationScope": "Your access includes administrative controls and platform auditing.",
+    "notificationsTitle": "Notifications",
+    "emailUpdates": "Email Updates",
+    "smsAlerts": "SMS Alerts"
   },
   "systemParams": {
     "title": "System",
