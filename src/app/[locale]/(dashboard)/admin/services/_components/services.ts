@@ -41,6 +41,11 @@ export async function createServiceApi(data: ServiceFormData): Promise<void> {
         document_type: data.document_type || "Certificate",
         fee: data.fee,
         is_active: data.is_active,
+        is_indefinite: data.is_indefinite !== undefined ? data.is_indefinite : true,
+        validity_duration: data.validity_duration || "Indefinite",
+        expiration_date: data.end_date || data.expiration_date || null,
+        start_date: data.start_date || null,
+        end_date: data.end_date || data.expiration_date || null,
     };
     if ((data as any).name_ar) payload.name_ar = (data as any).name_ar;
     if ((data as any).description_ar) payload.description_ar = (data as any).description_ar;
@@ -56,6 +61,11 @@ export async function updateServiceApi(id: string, data: ServiceFormData): Promi
         category: data.category,
         fee: data.fee,
         is_active: data.is_active,
+        is_indefinite: data.is_indefinite !== undefined ? data.is_indefinite : true,
+        validity_duration: data.validity_duration || "Indefinite",
+        expiration_date: data.end_date || data.expiration_date || null,
+        start_date: data.start_date || null,
+        end_date: data.end_date || data.expiration_date || null,
     };
     if (data.target_audience) payload.target_audience = data.target_audience;
     if (data.document_type) payload.document_type = data.document_type;

@@ -13,6 +13,8 @@ export interface ServiceItem {
     is_indefinite?: boolean;
     validity_duration?: string;
     expiration_date?: string | null;
+    start_date?: string | null;
+    end_date?: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: any;
@@ -42,6 +44,8 @@ export interface ServiceFormData {
     is_indefinite?: boolean;
     validity_duration?: string;
     expiration_date?: string | null;
+    start_date?: string | null;
+    end_date?: string | null;
 }
 
 
