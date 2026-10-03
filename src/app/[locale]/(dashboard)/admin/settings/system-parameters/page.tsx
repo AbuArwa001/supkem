@@ -146,7 +146,7 @@ function SystemParametersContent() {
                         href="/admin/settings"
                         className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary self-start mt-2"
                     >
-                        <ChevronRight className="rotate-180" size={24} />
+                        <ChevronRight className="rotate-180 rtl:rotate-0" size={24} />
                     </Link>
                     <div>
                         <div className="flex items-center gap-4 mb-4">
