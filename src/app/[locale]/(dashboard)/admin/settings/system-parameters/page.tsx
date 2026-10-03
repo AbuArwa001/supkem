@@ -257,7 +257,7 @@ function SystemParametersContent() {
                                                     })()}
                                                     <div>
                                                         <h3 className="text-lg font-bold text-slate-900 tracking-tight uppercase font-outfit">
-                                                            {param.name}
+                                                            {t.has(`items.${param.key}.name`) ? t(`items.${param.key}.name`) : param.name}
                                                         </h3>
                                                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                                                             {t("paramId", { key: param.key })}
@@ -268,7 +268,7 @@ function SystemParametersContent() {
                                                 <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex items-start gap-3">
                                                     <Info className="h-4 w-4 text-primary opacity-40 shrink-0 mt-0.5" />
                                                     <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                                                        {param.description}
+                                                        {t.has(`items.${param.key}.description`) ? t(`items.${param.key}.description`) : param.description}
                                                     </p>
                                                 </div>
                                             </div>
@@ -329,10 +329,16 @@ function SystemParametersContent() {
                                     </CardContent>
                                     <div className="px-8 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                                         <Badge variant="outline" className="bg-white text-[9px] font-black uppercase tracking-widest border-slate-200 px-2 py-0.5 rounded-md">
-                                            {t("type", { type: param.data_type })}
+                                            {t("type", { type: t.has(`types.${param.data_type}`) ? t(`types.${param.data_type}`) : param.data_type })}
                                         </Badge>
                                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                            {t("synchronized", { date: new Date(param.updated_at).toLocaleDateString() })}
+                                            {t("synchronized", { 
+                                                date: new Date(param.updated_at).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
+                                                    year: "numeric",
+                                                    month: "short",
+                                                    day: "numeric"
+                                                }) 
+                                            })}
                                         </span>
                                     </div>
                                 </Card>
