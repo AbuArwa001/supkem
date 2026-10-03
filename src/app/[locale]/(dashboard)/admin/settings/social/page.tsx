@@ -1165,11 +1165,11 @@ export default function SocialSettingsPage() {
                   <div className="flex items-center gap-2">
                     <Globe className="w-5 h-5 text-blue-600" />
                     <CardTitle className="text-xl font-bold font-outfit text-slate-900">
-                      Official Social Media Channels
+                      {t("channels.title")}
                     </CardTitle>
                   </div>
                   <CardDescription className="text-sm text-slate-500">
-                    Add, edit, disable, or redirect official social handles shown across the website, footer, and community feed.
+                    {t("channels.desc")}
                   </CardDescription>
                 </div>
 
@@ -1181,7 +1181,7 @@ export default function SocialSettingsPage() {
                     disabled={isSaving}
                     className="bg-emerald-600 hover:bg-emerald-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm hidden sm:inline-flex"
                   >
-                    <Save size={13} /> Save Channels
+                    <Save size={13} /> {t("channels.saveBtn")}
                   </Button>
                   <Button
                     type="button"
@@ -1189,7 +1189,7 @@ export default function SocialSettingsPage() {
                     onClick={() => setIsAddingChannel(!isAddingChannel)}
                     className="bg-blue-600 hover:bg-blue-700 text-white gap-1.5 text-xs font-bold rounded-xl shadow-sm"
                   >
-                    <Plus size={15} /> Add Custom Channel
+                    <Plus size={15} /> {t("channels.addBtn")}
                   </Button>
                 </div>
               </div>
@@ -1203,22 +1203,22 @@ export default function SocialSettingsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4"
                 >
-                  <h4 className="text-sm font-bold text-slate-800">Add New Social Channel</h4>
+                  <h4 className="text-sm font-bold text-slate-800">{t("channels.addDrawerTitle")}</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <Input
-                      placeholder="Network Name (e.g. LinkedIn, WhatsApp)"
+                      placeholder={t("channels.networkPlaceholder")}
                       value={newChannelName}
                       onChange={(e) => setNewChannelName(e.target.value)}
                       className="text-xs"
                     />
                     <Input
-                      placeholder="Handle / Label (e.g. @SUPKEM_Ke)"
+                      placeholder={t("channels.handlePlaceholder")}
                       value={newChannelHandle}
                       onChange={(e) => setNewChannelHandle(e.target.value)}
                       className="text-xs"
                     />
                     <Input
-                      placeholder="Profile / Group URL"
+                      placeholder={t("channels.urlPlaceholder")}
                       value={newChannelUrl}
                       onChange={(e) => setNewChannelUrl(e.target.value)}
                       className="text-xs"
@@ -1232,7 +1232,7 @@ export default function SocialSettingsPage() {
                       onClick={() => setIsAddingChannel(false)}
                       className="text-xs"
                     >
-                      Cancel
+                      {t("channels.cancel")}
                     </Button>
                     <Button
                       type="button"
@@ -1240,7 +1240,7 @@ export default function SocialSettingsPage() {
                       onClick={addCustomChannel}
                       className="bg-blue-600 text-white text-xs"
                     >
-                      Add Channel
+                      {t("channels.confirmAdd")}
                     </Button>
                   </div>
                 </motion.div>
@@ -1272,15 +1272,15 @@ export default function SocialSettingsPage() {
                             </span>
                             {togglingChannelId === channel.id ? (
                               <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 text-[10px] py-0 flex items-center gap-1">
-                                <RefreshCw size={10} className="animate-spin" /> Saving...
+                                <RefreshCw size={10} className="animate-spin" /> {t("saving")}
                               </Badge>
                             ) : channel.enabled ? (
                               <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[10px] py-0">
-                                Active
+                                {t("active")}
                               </Badge>
                             ) : (
                               <Badge variant="outline" className="bg-slate-100 text-slate-500 border-slate-200 text-[10px] py-0">
-                                Disabled
+                                {t("disabled")}
                               </Badge>
                             )}
                           </div>
@@ -1294,7 +1294,7 @@ export default function SocialSettingsPage() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1">
                         <div className="space-y-1">
                           <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
-                            Handle / Display Text
+                            {t("channels.handleLabel")}
                           </label>
                           <Input
                             value={channel.handle}
@@ -1308,7 +1308,7 @@ export default function SocialSettingsPage() {
 
                         <div className="space-y-1">
                           <label className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">
-                            Direct Profile / Page URL
+                            {t("channels.urlLabel")}
                           </label>
                           <div className="flex items-center gap-1.5">
                             <Input
@@ -1325,7 +1325,7 @@ export default function SocialSettingsPage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all"
-                                title="Open Link"
+                                title={t("channels.openLink")}
                               >
                                 <ExternalLink size={14} />
                               </a>
@@ -1339,7 +1339,7 @@ export default function SocialSettingsPage() {
                         type="button"
                         onClick={() => deleteChannel(channel.id)}
                         className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-all self-end lg:self-center"
-                        title={`Delete ${channel.name} Channel`}
+                        title={t("channels.deleteTitle", { name: channel.name })}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -1366,7 +1366,7 @@ export default function SocialSettingsPage() {
               <div className="flex items-center gap-2.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
                 <span className="text-xs font-semibold text-slate-200">
-                  You have unsaved changes in settings
+                  {t("floatingUnsaved")}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -1377,7 +1377,7 @@ export default function SocialSettingsPage() {
                   disabled={isSaving}
                   className="text-xs text-slate-300 hover:text-white hover:bg-slate-800 h-8"
                 >
-                  Discard
+                  {t("discard")}
                 </Button>
                 <Button
                   size="sm"
@@ -1390,7 +1390,7 @@ export default function SocialSettingsPage() {
                   ) : (
                     <Save size={13} />
                   )}
-                  Save Changes
+                  {t("saveSettings")}
                 </Button>
               </div>
             </div>
