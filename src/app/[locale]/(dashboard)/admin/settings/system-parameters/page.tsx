@@ -31,7 +31,7 @@ import { Link } from "@/i18n/routing";
 import { toast } from "sonner";
 import { RoleGuard } from "@/components/RoleGuard";
 import { canAccessModule } from "@/lib/permissions";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface SystemParameter {
@@ -82,6 +82,7 @@ export default function SystemParametersPage() {
 
 function SystemParametersContent() {
     const t = useTranslations("Dashboard.admin.settings.systemParams");
+    const locale = useLocale();
     const { user } = useAuth();
     const canAccess = canAccessModule(user, "settings_system_parameters");
 
@@ -104,7 +105,6 @@ function SystemParametersContent() {
         setUpdatingKey(key);
         try {
             await api.patch(`/configurations/system-parameters/${key}/`, { value });
-            toast.success(`Parameter "${key}" committed successfully`);
             if (parameters) {
                 const updatedParameters = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
                 mutate(rawData?.results ? { ...rawData, results: updatedParameters } : updatedParameters, false);
@@ -124,8 +124,12 @@ function SystemParametersContent() {
     };
 
     const filteredParameters = parameters?.filter((p: SystemParameter) => {
+        const translatedName = t.has(`items.${p.key}.name`) ? t(`items.${p.key}.name`) : p.name;
+        const translatedDesc = t.has(`items.${p.key}.description`) ? t(`items.${p.key}.description`) : p.description;
         const matchesSearch = (p.name || "").toLowerCase().includes(search.toLowerCase()) ||
-            (p.key || "").toLowerCase().includes(search.toLowerCase());
+            (p.key || "").toLowerCase().includes(search.toLowerCase()) ||
+            (translatedName || "").toLowerCase().includes(search.toLowerCase()) ||
+            (translatedDesc || "").toLowerCase().includes(search.toLowerCase());
         const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
