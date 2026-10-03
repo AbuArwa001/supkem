@@ -102,10 +102,18 @@
     "notifications": "الإشعارات",
     "system": "النظام",
     "integrations": "التكاملات",
-    "save": "حفظ",
-    "saving": "جارٍ الحفظ...",
-    "noParametersFound": "لم يتم العثور على معايير مطابقة للتصفية.",
-    "lastUpdated": "آخر تحديث"
+    "refresh": "تحديث المعايير",
+    "settingValue": "قيمة الإعداد",
+    "enabled": "مفعل",
+    "disabled": "معطل",
+    "commitChange": "اعتماد التعديل",
+    "committing": "جارٍ الاعتماد...",
+    "paramId": "المعرف: {key}",
+    "type": "النوع: {type}",
+    "synchronized": "تمت المزامنة: {date}",
+    "noParametersFound": "لم يتم العثور على أي معايير تطابق فلتر البحث.",
+    "updateSuccess": "تم تحديث المعيار بنجاح.",
+    "updateError": "فشل في تحديث المعيار. يرجى المحاولة مرة أخرى."
   },
   "notifications": {
     "title": "إعدادات",

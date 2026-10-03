@@ -102,10 +102,18 @@
     "notifications": "Notifications",
     "system": "System",
     "integrations": "Integrations",
-    "save": "Save",
-    "saving": "Saving...",
+    "refresh": "Refresh parameters",
+    "settingValue": "Setting Value",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "commitChange": "Commit Change",
+    "committing": "Committing...",
+    "paramId": "ID: {key}",
+    "type": "Type: {type}",
+    "synchronized": "Synchronized: {date}",
     "noParametersFound": "No parameters found matching your filter.",
-    "lastUpdated": "Last updated"
+    "updateSuccess": "Parameter updated successfully.",
+    "updateError": "Failed to update parameter. Please try again."
   },
   "notifications": {
     "title": "Notification",

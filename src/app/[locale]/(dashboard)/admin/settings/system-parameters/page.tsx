@@ -114,9 +114,10 @@ function SystemParametersContent() {
                 delete next[key];
                 return next;
             });
+            toast.success(t("updateSuccess"));
         } catch (err) {
             console.error("Failed to update parameter", err);
-            toast.error("Failed to update parameter. Please try again.");
+            toast.error(t("updateError"));
         } finally {
             setUpdatingKey(null);
         }
@@ -170,6 +171,7 @@ function SystemParametersContent() {
                         size="icon"
                         onClick={() => mutate()}
                         className="rounded-xl hover:bg-slate-100 text-slate-500"
+                        title={t("refresh")}
                     >
                         <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
                     </Button>
@@ -178,10 +180,10 @@ function SystemParametersContent() {
 
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Search className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                     <Input
                         placeholder={t("searchPlaceholder")}
-                        className="h-12 pl-11 rounded-2xl border-none shadow-sm bg-white font-medium"
+                        className="h-12 pl-11 rtl:pl-4 rtl:pr-11 rounded-2xl border-none shadow-sm bg-white font-medium"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
@@ -203,7 +205,7 @@ function SystemParametersContent() {
                             className={`rounded-xl px-4 h-10 font-bold text-xs uppercase tracking-widest ${selectedCategory === key ? "bg-primary hover:bg-primary/90" : ""
                                 }`}
                         >
-                            <config.icon className="h-3 w-3 mr-2" />
+                            <config.icon className="h-3 w-3 mr-2 rtl:mr-0 rtl:ml-2" />
                             {t.has(key) ? t(key) : config.label}
                         </Button>
                     ))}
@@ -220,6 +222,10 @@ function SystemParametersContent() {
                             </CardContent>
                         </Card>
                     ))
+                ) : filteredParameters?.length === 0 ? (
+                    <div className="p-12 text-center bg-white rounded-[2rem] border border-slate-100 shadow-sm text-slate-500 font-medium">
+                        {t("noParametersFound")}
+                    </div>
                 ) : (
                     <AnimatePresence mode="popLayout">
                         {filteredParameters?.map((param) => (
@@ -250,7 +256,7 @@ function SystemParametersContent() {
                                                             {param.name}
                                                         </h3>
                                                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                                            ID: {param.key}
+                                                            {t("paramId", { key: param.key })}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -265,14 +271,14 @@ function SystemParametersContent() {
 
                                             <div className="w-full md:w-[400px] space-y-4">
                                                 <div className="space-y-2">
-                                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1">
-                                                        Setting Value
+                                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1 rtl:ml-0 rtl:mr-1">
+                                                        {t("settingValue")}
                                                     </label>
                                                     <div className="relative group">
                                                         {param.data_type === "boolean" ? (
                                                             <div className="h-14 flex items-center justify-between px-6 bg-slate-50 rounded-2xl border border-slate-100">
                                                                 <span className="text-sm font-bold text-slate-600 uppercase tracking-wider">
-                                                                    {(pendingChanges[param.key] ?? param.value) === "True" ? "Enabled" : "Disabled"}
+                                                                    {(pendingChanges[param.key] ?? param.value) === "True" ? t("enabled") : t("disabled")}
                                                                 </span>
                                                                 <Switch
                                                                     checked={(pendingChanges[param.key] ?? param.value) === "True"}
@@ -306,8 +312,8 @@ function SystemParametersContent() {
                                                                     <Loader2 className="h-4 w-4 animate-spin" />
                                                                 ) : (
                                                                     <>
-                                                                        <Save className="h-4 w-4 mr-2" />
-                                                                        Commit Change
+                                                                        <Save className="h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2" />
+                                                                        {t("commitChange")}
                                                                     </>
                                                                 )}
                                                             </Button>
@@ -319,10 +325,10 @@ function SystemParametersContent() {
                                     </CardContent>
                                     <div className="px-8 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
                                         <Badge variant="outline" className="bg-white text-[9px] font-black uppercase tracking-widest border-slate-200 px-2 py-0.5 rounded-md">
-                                            Type: {param.data_type}
+                                            {t("type", { type: param.data_type })}
                                         </Badge>
                                         <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                            Synchronized: {new Date(param.updated_at).toLocaleDateString()}
+                                            {t("synchronized", { date: new Date(param.updated_at).toLocaleDateString() })}
                                         </span>
                                     </div>
                                 </Card>
