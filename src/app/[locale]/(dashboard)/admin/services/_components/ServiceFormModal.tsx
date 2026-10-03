@@ -93,6 +93,43 @@ export function ServiceFormModal({
         }
     };
 
+    const validityMode: "indefinite" | "duration" | "dates" = useMemo(() => {
+        if (formData.is_indefinite !== false) return "indefinite";
+        if (
+            formData.start_date ||
+            formData.validity_duration === "Date Range" ||
+            formData.validity_duration === "Custom Date Range" ||
+            (formData.end_date && !["6 Months", "1 Year", "2 Years", "3 Years", "5 Years"].includes(formData.validity_duration || ""))
+        ) {
+            return "dates";
+        }
+        return "duration";
+    }, [formData.is_indefinite, formData.start_date, formData.end_date, formData.validity_duration]);
+
+    const dateSpan = useMemo(() => {
+        const startStr = formData.start_date;
+        const endStr = formData.end_date || formData.expiration_date;
+        if (!startStr || !endStr) return null;
+        const start = new Date(startStr);
+        const end = new Date(endStr);
+        const diffTime = end.getTime() - start.getTime();
+        if (isNaN(diffTime) || diffTime < 0) {
+            return { error: true, days: 0, text: "" };
+        }
+        const days = Math.round(diffTime / (1000 * 60 * 60 * 24));
+        let text = `${days} days`;
+        if (days >= 360 && days <= 370) text = "1 year";
+        else if (days >= 720 && days <= 740) text = "2 years";
+        else if (days >= 1080 && days <= 1110) text = "3 years";
+        else if (days >= 1800 && days <= 1850) text = "5 years";
+        else if (days >= 28 && days <= 32) text = "1 month";
+        else if (days >= 175 && days <= 190) text = "6 months";
+        else if (days > 30) {
+            const months = Math.round(days / 30.4);
+            text = `~${months} months`;
+        }
+        return { error: false, days, text };
+    }, [formData.start_date, formData.end_date, formData.expiration_date]);
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
