@@ -113,7 +113,147 @@
     "synchronized": "Synchronized: {date}",
     "noParametersFound": "No parameters found matching your filter.",
     "updateSuccess": "Parameter updated successfully.",
-    "updateError": "Failed to update parameter. Please try again."
+    "updateError": "Failed to update parameter. Please try again.",
+    "types": {
+      "string": "String",
+      "number": "Number",
+      "boolean": "Boolean",
+      "json": "JSON"
+    },
+    "items": {
+      "SOCIAL_MEDIA_SETTINGS": {
+        "name": "Social Media & Live Wall Settings",
+        "description": "Tagembed aggregator widget configuration and official social media handles."
+      },
+      "platform_name": {
+        "name": "Platform Name",
+        "description": "Official title of the platform displayed across portal headers and communications."
+      },
+      "support_email": {
+        "name": "Support Email Address",
+        "description": "The official email address for user support and member inquiries."
+      },
+      "support_phone": {
+        "name": "Official Helpdesk Phone",
+        "description": "Primary telephone contact for institutional inquiries and support."
+      },
+      "official_physical_address": {
+        "name": "Official Headquarters Address",
+        "description": "Physical registered headquarters address printed on official certificates."
+      },
+      "portal_maintenance_mode": {
+        "name": "Maintenance Mode Toggle",
+        "description": "When enabled, non-administrative visitors receive a scheduled maintenance notice."
+      },
+      "base_currency": {
+        "name": "Base Operating Currency",
+        "description": "The default ISO currency used for billing, invoices, and M-Pesa receipts."
+      },
+      "membership_annual_fee": {
+        "name": "Annual Affiliation Fee (KES)",
+        "description": "Standard annual affiliation renewal fee for registered community organizations and mosques."
+      },
+      "halal_inspection_base_fee": {
+        "name": "Halal Inspection Base Fee (KES)",
+        "description": "Standard audit, inspection, and verification fee for commercial Halal certification."
+      },
+      "marriage_certificate_fee": {
+        "name": "Marriage Certificate Fee (KES)",
+        "description": "Standard administrative filing and record issuance fee for Islamic marriage certification."
+      },
+      "payment_gateway_auto_reconciliation": {
+        "name": "Auto Reconcile Payments",
+        "description": "Automatically match and verify completed M-Pesa transactions against application records."
+      },
+      "notification_email_enabled": {
+        "name": "Email Notifications Enabled",
+        "description": "Global toggle for automated outgoing email notifications and event triggers."
+      },
+      "notification_sms_enabled": {
+        "name": "SMS Notifications Enabled",
+        "description": "Global toggle for outgoing SMS alerts and applicant status notifications via gateway."
+      },
+      "notify_roles": {
+        "name": "Alert Recipient Roles",
+        "description": "Select institutional roles that receive immediate dispatches for critical events."
+      },
+      "application_expiry_alert_days": {
+        "name": "Expiry Alert Lead Time (Days)",
+        "description": "Number of days prior to certificate, permit, or license expiration to trigger warnings."
+      },
+      "inactivity_timeout_days": {
+        "name": "Account Inactivity Threshold (Days)",
+        "description": "Days of member inactivity before flagging accounts or notifying zonal coordinators."
+      },
+      "admin_alert_email": {
+        "name": "Administrative Alert Recipient",
+        "description": "Central security and IT dispatch mailbox receiving infrastructure notifications."
+      },
+      "max_file_size_mb": {
+        "name": "Max Upload File Size (MB)",
+        "description": "Maximum allowed file size in megabytes for document attachments."
+      },
+      "allowed_upload_extensions": {
+        "name": "Allowed File Upload Formats",
+        "description": "Permitted document extensions for applicant attachments and verification files."
+      },
+      "org_approval_required": {
+        "name": "Organization Vetting Required",
+        "description": "Whether newly registered community institutions require administrative approval before activation."
+      },
+      "session_timeout_minutes": {
+        "name": "Administrative Session Timeout (Minutes)",
+        "description": "Minutes of idle inactivity before an administrator session requires re-authentication."
+      },
+      "KNOCK_SECRET_API_KEY": {
+        "name": "Knock Secret API Key",
+        "description": "Secret API key for server-side event dispatch and user identity management."
+      },
+      "KNOCK_PUBLIC_API_KEY": {
+        "name": "Knock Public API Key",
+        "description": "Public client API key for frontend notification feed components."
+      },
+      "KNOCK_FEED_CHANNEL_ID": {
+        "name": "Knock In-App Feed Channel ID",
+        "description": "Channel identifier for the in-app notification bell and popover feed."
+      },
+      "MPESA_CONSUMER_KEY": {
+        "name": "M-Pesa Consumer Key",
+        "description": "Safaricom Daraja API Consumer Key for OAuth authorization."
+      },
+      "MPESA_CONSUMER_SECRET": {
+        "name": "M-Pesa Consumer Secret",
+        "description": "Safaricom Daraja API Consumer Secret for token generation."
+      },
+      "MPESA_SHORTCODE": {
+        "name": "M-Pesa Business Shortcode",
+        "description": "Lipa Na M-Pesa Online shortcode (Paybill or Till Number)."
+      },
+      "MPESA_PASSKEY": {
+        "name": "M-Pesa Online Passkey",
+        "description": "Daraja Lipa Na M-Pesa Online (STK Push) passkey used to generate the password."
+      },
+      "MPESA_ENVIRONMENT": {
+        "name": "M-Pesa Environment",
+        "description": "Daraja runtime environment: 'sandbox' for testing or 'production' for live payments."
+      },
+      "RESEND_API_KEY": {
+        "name": "Resend API Key",
+        "description": "API credential for transactional email dispatch via Resend."
+      },
+      "OPENAI_API_KEY": {
+        "name": "OpenAI API Key",
+        "description": "Credential for AI automated content translation and semantic operations."
+      },
+      "MPESA_CALLBACK_URL": {
+        "name": "M-Pesa Callback URL",
+        "description": "Public HTTPS webhook URL where Safaricom sends transaction payment results."
+      },
+      "BACKEND_URL": {
+        "name": "Backend Public Base URL",
+        "description": "Canonical base domain where the Django REST API is publicly hosted."
+      }
+    }
   },
   "notifications": {
     "title": "Notification",
@@ -121,7 +261,17 @@
     "desc": "Configure automated triggers and recipient protocols for system events.",
     "refresh": "Refresh parameters",
     "saveSettings": "Save Settings",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "globalBadge": "Global",
+    "paramKey": "SYSTEM PARAMETER: {key}",
+    "configValue": "Configuration Value",
+    "activeOn": "Active / On",
+    "inactiveOff": "Inactive / Off",
+    "recipientRolesTitle": "Recipient Roles Access Protocol",
+    "recipientRolesDesc": "Select institutional roles that receive immediate dispatches for critical events:",
+    "rolesConfigured": "{count} roles configured for broadcast alerts",
+    "updateSuccess": "Notification setting \"{key}\" updated successfully.",
+    "updateError": "Failed to update configuration. Please try again."
   },
   "audit": {
     "title": "Data Audit",

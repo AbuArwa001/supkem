@@ -630,12 +630,12 @@ export default function SocialSettingsPage() {
                           },
                         }))
                       }
-                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                      className="h-11 rounded-xl text-sm font-mono pr-20 rtl:pr-3 rtl:pl-20"
                     />
                     <button
                       type="button"
                       onClick={() => setShowTwitterToken(!showTwitterToken)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
+                      className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
                       {showTwitterToken ? t("hide") : t("show")}
                     </button>
@@ -803,12 +803,12 @@ export default function SocialSettingsPage() {
                           },
                         }))
                       }
-                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                      className="h-11 rounded-xl text-sm font-mono pr-20 rtl:pr-3 rtl:pl-20"
                     />
                     <button
                       type="button"
                       onClick={() => setShowMetaToken(!showMetaToken)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
+                      className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
                       {showMetaToken ? t("hide") : t("show")}
                     </button>
@@ -910,16 +910,16 @@ export default function SocialSettingsPage() {
                   {metaTestResult.page && (
                     <div className="pt-2 border-t border-emerald-200/60 grid grid-cols-1 sm:grid-cols-2 gap-2 text-slate-700">
                       <div>
-                        <strong>Connected Facebook Page:</strong> {metaTestResult.page.name}
+                        <strong>{t("connectedPage")}</strong> {metaTestResult.page.name}
                       </div>
                       {metaTestResult.page.username && (
                         <div>
-                          <strong>Username:</strong> @{metaTestResult.page.username}
+                          <strong>{t("twitter.usernameLabel")}:</strong> @{metaTestResult.page.username}
                         </div>
                       )}
                       {metaTestResult.instagram && (
                         <div className="sm:col-span-2 text-pink-700 font-semibold">
-                          Connected Instagram: @{metaTestResult.instagram.username} (ID: {metaTestResult.instagram.id})
+                          {t("connectedInstagram")} @{metaTestResult.instagram.username} (ID: {metaTestResult.instagram.id})
                         </div>
                       )}
                     </div>
@@ -1027,12 +1027,12 @@ export default function SocialSettingsPage() {
                           },
                         }))
                       }
-                      className="h-11 rounded-xl text-sm font-mono pr-20"
+                      className="h-11 rounded-xl text-sm font-mono pr-20 rtl:pr-3 rtl:pl-20"
                     />
                     <button
                       type="button"
                       onClick={() => setShowYtApiKey(!showYtApiKey)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
+                      className="absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400 hover:text-slate-700 p-1 font-medium"
                     >
                       {showYtApiKey ? t("hide") : t("show")}
                     </button>
@@ -1144,11 +1144,11 @@ export default function SocialSettingsPage() {
                   {ytTestResult.channel && (
                     <div className="pt-2 border-t border-emerald-200/60 flex items-center justify-between text-slate-700">
                       <div>
-                        <strong>Connected Channel:</strong> {ytTestResult.channel.title} (ID: {ytTestResult.channel.id})
+                        <strong>{t("connectedChannel")}</strong> {ytTestResult.channel.title} (ID: {ytTestResult.channel.id})
                       </div>
                       {ytTestResult.channel.videoCount !== undefined && (
                         <div className="text-slate-600 font-semibold">
-                          {ytTestResult.channel.videoCount} Videos Indexed
+                          {t("videosIndexed", { count: ytTestResult.channel.videoCount })}
                         </div>
                       )}
                     </div>
