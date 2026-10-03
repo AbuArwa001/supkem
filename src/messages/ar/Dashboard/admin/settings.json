@@ -80,7 +80,14 @@
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور الجديدة",
     "updatePassword": "تحديث كلمة المرور",
-    "passwordMismatch": "كلمتا المرور الجديدتان غير متطابقتين."
+    "changePassword": "تغيير كلمة المرور",
+    "passwordMismatch": "كلمتا المرور الجديدتان غير متطابقتين.",
+    "accessVerificationTitle": "التحقق من صلاحية الوصول",
+    "accessVerificationDesc": "أنت مسجل الدخول حالياً بصفتك",
+    "accessVerificationScope": "يتضمن وصولك ضوابط إدارية وتدقيقاً شاملاً للمنصة.",
+    "notificationsTitle": "الإشعارات",
+    "emailUpdates": "تحديثات البريد الإلكتروني",
+    "smsAlerts": "تنبيهات الرسائل النصية القصيرة"
   },
   "systemParams": {
     "title": "معايير",
