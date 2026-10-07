@@ -1,16 +1,17 @@
 "use client";
 
-import { useProtectedRouteLogic } from "./useProtectedRouteLogic";
+import { useProtectedRouteLogic, isAllowed } from "./useProtectedRouteLogic";
 import { LoadingSpinner } from "./_components/LoadingSpinner";
-import { hasRole } from "@/lib/permissions";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: string | string[];
+  /** Require access to the staff dashboard, derived from role permissions. */
+  requireStaff?: boolean;
 }
 
-const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
-  const logic = useProtectedRouteLogic(requiredRole);
+const ProtectedRoute = ({ children, requiredRole, requireStaff }: ProtectedRouteProps) => {
+  const logic = useProtectedRouteLogic(requiredRole, requireStaff);
   const { loading, isAuthenticated, user } = logic;
 
   if (loading) {
@@ -19,8 +20,8 @@ const ProtectedRoute = ({ children, requiredRole }: ProtectedRouteProps) => {
 
   if (!isAuthenticated) return null;
 
-  if (requiredRole && !hasRole(user, requiredRole)) {
-    return null;
+  if (!isAllowed(user, requiredRole, requireStaff)) {
+    return <LoadingSpinner logic={logic} />;
   }
 
   return <>{children}</>;

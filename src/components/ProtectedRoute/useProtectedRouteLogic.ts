@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { hasRole, getHomePath } from "@/lib/permissions";
+import { hasRole, getHomePath, isStaff } from "@/lib/permissions";
 
 export interface ProtectedRouteLogicReturn {
   loading: boolean;
@@ -11,8 +11,22 @@ export interface ProtectedRouteLogicReturn {
   tc: (key: string) => string;
 }
 
+/**
+ * Returns true when the user satisfies the route's access requirements.
+ */
+export const isAllowed = (
+  user: any,
+  requiredRole?: string | string[],
+  requireStaff?: boolean
+): boolean => {
+  if (requireStaff && !isStaff(user)) return false;
+  if (requiredRole && !hasRole(user, requiredRole)) return false;
+  return true;
+};
+
 export const useProtectedRouteLogic = (
-  requiredRole?: string | string[]
+  requiredRole?: string | string[],
+  requireStaff?: boolean
 ): ProtectedRouteLogicReturn => {
   const { user, loading, isAuthenticated } = useAuth();
   const router = useRouter();
@@ -22,13 +36,11 @@ export const useProtectedRouteLogic = (
     if (!loading) {
       if (!isAuthenticated) {
         router.push("/login");
-      } else if (requiredRole) {
-        if (!hasRole(user, requiredRole)) {
-          router.replace(getHomePath(user));
-        }
+      } else if (!isAllowed(user, requiredRole, requireStaff)) {
+        router.replace(getHomePath(user));
       }
     }
-  }, [loading, isAuthenticated, router, requiredRole, user]);
+  }, [loading, isAuthenticated, router, requiredRole, requireStaff, user]);
 
   return { loading, isAuthenticated, user, tc };
 };

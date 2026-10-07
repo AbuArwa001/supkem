@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTranslations } from "next-intl";
-import { canAccessModule, getUserRoleName } from "@/lib/permissions";
+import { canAccessModule, getUserRoleName, getHomePath } from "@/lib/permissions";
 import { FinanceOverviewDashboard } from "./_components/FinanceOverviewDashboard";
 import { ITDashboardView } from "./_components/ITDashboardView";
 
@@ -41,12 +41,13 @@ export default function AdminOverview() {
   const { user } = useAuth();
   const router = useRouter();
   const roleName = getUserRoleName(user);
+  const canOverview = canAccessModule(user, "overview");
 
   useEffect(() => {
-    if (roleName === "Media Officer") router.replace("/admin/news");
-  }, [roleName, router]);
+    if (user && !canOverview) router.replace(getHomePath(user));
+  }, [user, canOverview, router]);
 
-  if (roleName === "Media Officer") {
+  if (!canOverview) {
     return <DashboardSkeleton />;
   }
 
