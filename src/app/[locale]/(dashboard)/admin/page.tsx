@@ -15,7 +15,8 @@ import {
   ChevronDown,
   Receipt,
 } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
+import { useEffect } from "react";
 import { useAdminDashboard } from "./_hooks/useAdminDashboard";
 import { useAuth } from "@/hooks/useAuth";
 import { StatCard } from "./_components/StatCard";
@@ -38,7 +39,16 @@ import { ITDashboardView } from "./_components/ITDashboardView";
 
 export default function AdminOverview() {
   const { user } = useAuth();
+  const router = useRouter();
   const roleName = getUserRoleName(user);
+
+  useEffect(() => {
+    if (roleName === "Media Officer") router.replace("/admin/news");
+  }, [roleName, router]);
+
+  if (roleName === "Media Officer") {
+    return <DashboardSkeleton />;
+  }
 
   if (roleName === "Finance Officer") {
     return <FinanceOverviewDashboard />;

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { hasRole, getUserRoleName } from "@/lib/permissions";
+import { hasRole, getHomePath } from "@/lib/permissions";
 
 export interface ProtectedRouteLogicReturn {
   loading: boolean;
@@ -24,12 +24,7 @@ export const useProtectedRouteLogic = (
         router.push("/login");
       } else if (requiredRole) {
         if (!hasRole(user, requiredRole)) {
-          const currentRole = getUserRoleName(user);
-          if (currentRole === "Normal User") {
-            router.push("/portal");
-          } else {
-            router.push("/admin");
-          }
+          router.replace(getHomePath(user));
         }
       }
     }

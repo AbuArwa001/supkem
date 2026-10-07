@@ -4,6 +4,7 @@ export type SystemRole =
   | "IT Officer"
   | "Finance Officer"
   | "Agent"
+  | "Media Officer"
   | "Normal User";
 
 export type PermissionModule =
@@ -93,18 +94,22 @@ export const MODULE_ROLES_MAP: Record<PermissionModule, string[]> = {
   news: [
     "Super Admin",
     "Admin",
+    "Media Officer",
   ],
   newspapers: [
     "Super Admin",
     "Admin",
+    "Media Officer",
   ],
   leadership: [
     "Super Admin",
     "Admin",
+    "Media Officer",
   ],
   videos: [
     "Super Admin",
     "Admin",
+    "Media Officer",
   ],
   deadlines: [
     "Super Admin",
@@ -157,6 +162,7 @@ export const MODULE_ROLES_MAP: Record<PermissionModule, string[]> = {
     "IT Officer",
     "Finance Officer",
     "Agent",
+    "Media Officer",
   ],
 
   // Member / Citizen Portal
@@ -166,6 +172,7 @@ export const MODULE_ROLES_MAP: Record<PermissionModule, string[]> = {
     "IT Officer",
     "Finance Officer",
     "Agent",
+    "Media Officer",
     "Normal User",
   ],
 };
@@ -198,6 +205,28 @@ export function hasRole(user: any, allowedRoles: string | string[]): boolean {
   return roles.some(
     (r) => r.toLowerCase().trim() === currentRole.toLowerCase().trim()
   );
+}
+
+/**
+ * Roles allowed into the administrative dashboard (/admin).
+ */
+export const ADMIN_ROLES: SystemRole[] = [
+  "Super Admin",
+  "Admin",
+  "IT Officer",
+  "Finance Officer",
+  "Agent",
+  "Media Officer",
+];
+
+/**
+ * Resolves the landing route for a user. Any role that is not an admin role
+ * (including custom / unrecognised roles) lands on the portal, which prevents
+ * redirect loops that render a blank page.
+ */
+export function getHomePath(user: any): string {
+  if (getUserRoleName(user) === "Media Officer") return "/admin/news";
+  return hasRole(user, ADMIN_ROLES) ? "/admin" : "/portal";
 }
 
 /**

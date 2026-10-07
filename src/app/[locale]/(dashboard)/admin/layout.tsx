@@ -3,6 +3,7 @@
 import { useState } from "react";
 import AdminSidebar from "@/components/AdminSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { ADMIN_ROLES } from "@/lib/permissions";
 import { Menu } from "lucide-react";
 import { KnockNotifications } from "@/components/KnockNotifications";
 import { LanguageToggle } from "@/components/LanguageToggle";
@@ -20,9 +21,7 @@ export default function AdminLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <ProtectedRoute
-      requiredRole={["Admin", "Super Admin", "IT Officer", "Finance Officer", "Agent"]}
-    >
+    <ProtectedRoute requiredRole={ADMIN_ROLES}>
       <div className="flex min-h-screen bg-primary/[0.02] print:block print:min-h-0 print:bg-white">
         <AdminSidebar
           isOpen={isSidebarOpen}

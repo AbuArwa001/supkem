@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Link, useRouter } from "@/i18n/routing";
 import { PasswordInput } from "@/components/ui/password-input";
 import { useTranslations } from "next-intl";
+import { getHomePath } from "@/lib/permissions";
 
 export default function LoginPage() {
   const t = useTranslations("Auth.login");
@@ -28,12 +29,7 @@ export default function LoginPage() {
       setSuccess(t("successMsg"));
       setIsRedirecting(true);
       setTimeout(() => {
-        const role = res.user.role?.role_name;
-        if (role === "Normal User") {
-          router.push("/portal");
-        } else {
-          router.push("/admin");
-        }
+        router.push(getHomePath(res.user));
       }, 2000);
     } else {
       setError(res.error || "An error occurred");
