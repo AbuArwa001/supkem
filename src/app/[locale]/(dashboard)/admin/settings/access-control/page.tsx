@@ -120,38 +120,18 @@ export default function AccessControlPage() {
 
 function AccessControlContent() {
     const t = useTranslations("Dashboard.admin.settings.accessControl");
-    const { user } = useAuth();
     const { isSuperAdmin } = usePermissions();
-    const isAdmin =
-        user?.is_superuser ||
-        user?.is_staff ||
-        user?.role?.role_name?.toLowerCase().includes("admin") ||
-        user?.role_name?.toLowerCase().includes("admin");
     const [search, setSearch] = useState("");
     const [selectedRole, setSelectedRole] = useState<Role | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isAddRoleOpen, setIsAddRoleOpen] = useState(false);
 
     const { data: rawRoles, isLoading, error, mutate } = useSWR<any>(
-        isAdmin ? "/users/roles/" : null,
+        "/users/roles/",
         fetcher
     );
 
     const roles: Role[] = Array.isArray(rawRoles) ? rawRoles : (rawRoles?.results || []);
-
-    if (!isAdmin) {
-        return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-                <div className="bg-rose-50 p-6 rounded-full">
-                    <AlertCircle className="h-12 w-12 text-rose-500" />
-                </div>
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tight">{t("accessRestricted")}</h2>
-                <p className="text-slate-500 font-semibold max-w-md text-center">
-                    {t("accessRestrictedDesc")}
-                </p>
-            </div>
-        );
-    }
 
     const filteredRoles = roles?.filter((role: Role) =>
         role.role_name.toLowerCase().includes(search.toLowerCase())

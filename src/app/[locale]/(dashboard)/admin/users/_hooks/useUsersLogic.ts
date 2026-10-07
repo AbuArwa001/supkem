@@ -31,7 +31,7 @@ export interface UserItem {
  * Custom hook for Team Management business logic.
  */
 export const useUsersLogic = () => {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, loading: authLoading } = useAuth();
   const isAdmin = canAccessModule(currentUser, "users");
 
   const [page, setPage] = useState(1);
@@ -313,6 +313,7 @@ export const useUsersLogic = () => {
   };
 
   return {
+    authLoading,
     isAdmin,
     users,
     totalCount,
