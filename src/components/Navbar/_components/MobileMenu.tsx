@@ -3,6 +3,7 @@ import { Link } from "@/i18n/routing";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NavbarLogicReturn } from "../types";
+import { NavbarSocialIcons } from "./NavbarSocialIcons";
 
 export const MobileMenu = ({ logic }: { logic: NavbarLogicReturn }) => {
   const { isOpen, setIsOpen, navLinks, pathname, t, locale, handleENClick, handleARClick } = logic;
@@ -72,6 +73,13 @@ export const MobileMenu = ({ logic }: { logic: NavbarLogicReturn }) => {
                   AR
                 </button>
               </div>
+            </div>
+
+            <div className="flex items-center justify-between p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                Socials
+              </p>
+              <NavbarSocialIcons scrolled={true} className="bg-white border-slate-200" />
             </div>
 
             <Link href="/login" className="text-center py-4 bg-slate-50 text-slate-700 rounded-2xl font-bold hover:bg-slate-100 transition-colors border border-slate-200">

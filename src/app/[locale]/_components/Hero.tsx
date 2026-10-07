@@ -6,6 +6,7 @@ import { Link } from "@/i18n/routing";
 import { ArrowRight } from "lucide-react";
 import { useHeroSlider } from "../_hooks/useHeroSlider";
 import { useTranslations } from "next-intl";
+import { NavbarSocialIcons } from "@/components/Navbar/_components/NavbarSocialIcons";
 
 const SLIDES = [
   { url: "/images/slider/olesaudib.jpg", alt: "International Relations" },
@@ -146,6 +147,12 @@ export const Hero = () => {
               <p className="text-xs font-black uppercase tracking-[0.4em] text-slate-500 leading-relaxed max-w-[220px] mx-auto">
                 {t("council")}
               </p>
+              <div className="mt-8 flex flex-col items-center gap-2">
+                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
+                  Official Channels
+                </span>
+                <NavbarSocialIcons className="bg-white/90 border-slate-200/90 shadow-sm" />
+              </div>
             </div>
           </div>
 
