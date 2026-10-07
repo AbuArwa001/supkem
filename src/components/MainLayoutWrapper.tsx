@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { cn } from "@/lib/utils";
+import { SessionExpiryWarningModal } from "@/components/SessionExpiryWarningModal";
 
 interface MainLayoutWrapperProps {
   children: React.ReactNode;
@@ -35,6 +36,7 @@ const MainLayoutWrapper = ({ children }: MainLayoutWrapperProps) => {
         {children}
       </main>
       {showGlobalNav && <Footer />}
+      <SessionExpiryWarningModal />
     </>
   );
 };
