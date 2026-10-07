@@ -248,8 +248,9 @@ export const useUsersLogic = () => {
       setSelectedUserIds([]);
       mutate();
       mutateStats();
-    } catch (err) {
-      toast.error("Failed to complete bulk operation.");
+    } catch (err: any) {
+      const msg = err?.response?.data?.detail || err?.response?.data?.message || "Failed to complete bulk operation.";
+      toast.error(msg);
     }
   };
 
