@@ -5,7 +5,6 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useNavbarLogic } from "./useNavbarLogic";
 import { DesktopLinks } from "./_components/DesktopLinks";
-import { NavbarSocialIcons } from "./_components/NavbarSocialIcons";
 import { AuthButtons } from "./_components/AuthButtons";
 import { LanguageToggle } from "./_components/LanguageToggle";
 import { MobileMenuButton } from "./_components/MobileMenuButton";
@@ -50,7 +49,6 @@ const Navbar = () => {
           <DesktopLinks logic={logic} />
 
           <div className="hidden md:flex items-center gap-3">
-            <NavbarSocialIcons scrolled={scrolled} />
             <LanguageToggle logic={logic} />
             <AuthButtons logic={logic} />
           </div>

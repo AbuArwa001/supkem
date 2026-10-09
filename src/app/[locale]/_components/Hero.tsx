@@ -3,10 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useHeroSlider } from "../_hooks/useHeroSlider";
 import { useTranslations } from "next-intl";
-import { NavbarSocialIcons } from "@/components/Navbar/_components/NavbarSocialIcons";
+import { HeroSocialBadge } from "./HeroSocialBadge";
 
 const SLIDES = [
   { url: "/images/slider/olesaudib.jpg", alt: "International Relations" },
@@ -62,10 +62,15 @@ export const Hero = () => {
   const t = useTranslations("Hero");
 
   return (
-    <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden py-24 px-6">
+    <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden pt-28 pb-20 px-6">
       <HeroSlider />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-20">
+      {/* Executive Floating Social Badge - Top Right */}
+      <div className="absolute top-24 sm:top-28 right-4 sm:right-8 lg:right-14 z-30">
+        <HeroSocialBadge />
+      </div>
+
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center relative z-20">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -147,11 +152,11 @@ export const Hero = () => {
               <p className="text-xs font-black uppercase tracking-[0.4em] text-slate-500 leading-relaxed max-w-[220px] mx-auto">
                 {t("council")}
               </p>
-              <div className="mt-8 flex flex-col items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">
-                  Official Channels
+              <div className="mt-8 flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100/90 border border-slate-200/90 shadow-xs">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700">
+                  Apex Muslim Leadership
                 </span>
-                <NavbarSocialIcons className="bg-white/90 border-slate-200/90 shadow-sm" />
               </div>
             </div>
           </div>

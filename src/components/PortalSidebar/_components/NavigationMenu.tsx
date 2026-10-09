@@ -22,7 +22,9 @@ export const NavigationMenu = ({ logic }: { logic: PortalSidebarLogicReturn }) =
         </div>
       )}
       {menuItems.map((item) => {
-        const isActive = pathname === item.href;
+        const isActive =
+          pathname === item.href ||
+          (item.href !== "/portal" && pathname?.startsWith(`${item.href}/`));
         return (
           <Link
             key={item.href}
@@ -31,13 +33,16 @@ export const NavigationMenu = ({ logic }: { logic: PortalSidebarLogicReturn }) =
             className={cn(
               "flex items-center justify-between px-4 py-3.5 rounded-2xl font-medium transition-all group relative overflow-hidden shrink-0",
               isActive
-                ? "text-white shadow-lg"
-                : "text-white/50 hover:bg-white/5 hover:text-white",
+                ? "text-white shadow-lg shadow-black/20 font-semibold"
+                : "text-white/60 hover:bg-white/5 hover:text-white",
               isCollapsed ? "p-0 justify-center h-12 w-12" : "w-full"
             )}
           >
             {isActive && (
-              <div className="absolute inset-0 bg-gradient-to-r from-primary to-primary/50 opacity-90" />
+              <>
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-700 to-emerald-800/90 shadow-inner" />
+                <div className="absolute ltr:left-0 rtl:right-0 top-1/2 -translate-y-1/2 w-1 h-6 bg-secondary rounded-full" />
+              </>
             )}
             <div
               className={cn(
@@ -66,7 +71,7 @@ export const NavigationMenu = ({ logic }: { logic: PortalSidebarLogicReturn }) =
               )}
             </div>
             {isActive && !isCollapsed && (
-              <ChevronRight size={16} className="relative z-10 text-white/50" />
+              <ChevronRight size={16} className="relative z-10 text-secondary/80" />
             )}
           </Link>
         );
