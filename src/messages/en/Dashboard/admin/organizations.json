@@ -1,22 +1,61 @@
 {
   "heading": "Organization Audit",
   "desc": "Monitoring all {totalCount} registered entities.",
-  "search": "Search organizations...",
+  "search": "Search by name, PIN, registration no, county...",
   "filters": {
     "all": "All",
     "pending": "Pending",
     "accredited": "Accredited",
     "suspended": "Suspended"
   },
+  "stats": {
+    "totalEntities": "Total Registered",
+    "totalEntitiesDesc": "Registered organizations & mosques",
+    "accreditedEntities": "Accredited",
+    "accreditedDesc": "Verified & fully active",
+    "pendingEntities": "Pending Review",
+    "pendingDesc": "Awaiting accreditation",
+    "suspendedEntities": "Suspended",
+    "suspendedDesc": "Requires administrative review",
+    "totalApps": "Total Applications",
+    "totalCerts": "Issued Certificates"
+  },
+  "sort": {
+    "label": "Sort By",
+    "name_asc": "Name (A - Z)",
+    "name_desc": "Name (Z - A)",
+    "apps_desc": "Most Applications",
+    "certs_desc": "Most Certificates",
+    "newest": "Newest First"
+  },
+  "allTypes": "All Types",
   "viewRegistry": "View Registry",
   "apps": "Apps",
   "certs": "Certs",
+  "actions": {
+    "copyReg": "Copy Reg No",
+    "copyPin": "Copy PIN",
+    "copied": "Copied to clipboard",
+    "viewDetails": "View Registry Profile",
+    "sendEmail": "Send Email",
+    "call": "Call Phone"
+  },
+  "empty": {
+    "title": "No organizations found",
+    "desc": "We couldn't find any organizations matching your current search or filter criteria.",
+    "clear": "Reset all filters"
+  },
   "types": {
     "educational": "Educational",
     "cbo": "CBO",
     "mosque": "Mosque",
     "ngo": "NGO",
     "school": "School",
+    "school/college": "School / College",
+    "hospital/clinic": "Hospital / Clinic",
+    "ngo/cbo": "NGO / CBO",
+    "community group": "Community Group",
+    "other": "Other",
     "default": "Entity"
   },
   "location": {

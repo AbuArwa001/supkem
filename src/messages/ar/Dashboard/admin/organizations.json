@@ -1,22 +1,61 @@
 {
   "heading": "تدقيق المنظمات",
   "desc": "مراقبة جميع الكيانات الـ {totalCount} المسجلة.",
-  "search": "البحث في المنظمات...",
+  "search": "البحث بالاسم، الرقم الضريبي، رقم التسجيل، المقاطعة...",
   "filters": {
     "all": "الكل",
     "pending": "قيد الانتظار",
     "accredited": "معتمد",
     "suspended": "موقوف"
   },
+  "stats": {
+    "totalEntities": "إجمالي الكيانات",
+    "totalEntitiesDesc": "المؤسسات والمساجد المسجلة",
+    "accreditedEntities": "معتمدة",
+    "accreditedDesc": "موثقة ونشطة بالكامل",
+    "pendingEntities": "قيد المراجعة",
+    "pendingDesc": "في انتظار الاعتماد",
+    "suspendedEntities": "موقوفة",
+    "suspendedDesc": "تتطلب مراجعة إدارية",
+    "totalApps": "إجمالي الطلبات",
+    "totalCerts": "الشهادات الصادرة"
+  },
+  "sort": {
+    "label": "ترتيب حسب",
+    "name_asc": "الاسم (أ - ي)",
+    "name_desc": "الاسم (ي - أ)",
+    "apps_desc": "الأكثر طلباً",
+    "certs_desc": "الأكثر شهادات",
+    "newest": "الأحدث أولاً"
+  },
+  "allTypes": "جميع الأنواع",
   "viewRegistry": "عرض السجل",
   "apps": "الطلبات",
   "certs": "الشهادات",
+  "actions": {
+    "copyReg": "نسخ رقم التسجيل",
+    "copyPin": "نسخ الرقم الضريبي",
+    "copied": "تم النسخ للحافظة",
+    "viewDetails": "عرض الملف التعريفي",
+    "sendEmail": "إرسال بريد إلكتروني",
+    "call": "الاتصال"
+  },
+  "empty": {
+    "title": "لم يتم العثور على منظمات",
+    "desc": "لم نتمكن من العثور على أي منظمات تطابق معايير البحث أو التصفية الحالية.",
+    "clear": "إعادة ضبط الفلاتر"
+  },
   "types": {
     "educational": "تعليمي",
     "cbo": "منظمة مجتمعية",
     "mosque": "مسجد",
     "ngo": "منظمة غير ربحية",
     "school": "مدرسة",
+    "school/college": "مدرسة / كلية",
+    "hospital/clinic": "مستشفى / عيادة",
+    "ngo/cbo": "منظمة غير حكومية / مجتمعية",
+    "community group": "مجموعة مجتمعية",
+    "other": "أخرى",
     "default": "كيان"
   },
   "location": {
