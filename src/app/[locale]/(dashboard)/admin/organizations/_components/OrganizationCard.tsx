@@ -16,6 +16,7 @@ import {
     Clock,
     AlertTriangle,
     Shield,
+    Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Organization } from "./types";
@@ -35,9 +36,10 @@ interface OrganizationCardProps {
     org: Organization;
     index: number;
     viewMode?: "grid" | "list";
+    onDelete?: (org: Organization) => void;
 }
 
-export function OrganizationCard({ org, index }: OrganizationCardProps) {
+export function OrganizationCard({ org, index, onDelete }: OrganizationCardProps) {
     const t = useTranslations("Dashboard.admin.organizations");
     const theme = getOrgTypeTheme(org.type);
     const Icon = theme.icon;
@@ -173,6 +175,18 @@ export function OrganizationCard({ org, index }: OrganizationCardProps) {
                                             {t("actions.call")}
                                         </a>
                                     </DropdownMenuItem>
+                                )}
+                                {onDelete && (
+                                    <>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem
+                                            onClick={() => onDelete(org)}
+                                            className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg cursor-pointer"
+                                        >
+                                            <Trash2 size={14} className="text-rose-500" />
+                                            {t("actions.delete")}
+                                        </DropdownMenuItem>
+                                    </>
                                 )}
                             </DropdownMenuContent>
                         </DropdownMenu>

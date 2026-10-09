@@ -13,6 +13,7 @@ import {
     Phone,
     ExternalLink,
     Shield,
+    Trash2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Organization } from "./types";
@@ -30,9 +31,10 @@ import {
 
 interface OrganizationTableProps {
     organizations: Organization[];
+    onDelete?: (org: Organization) => void;
 }
 
-export function OrganizationTable({ organizations }: OrganizationTableProps) {
+export function OrganizationTable({ organizations, onDelete }: OrganizationTableProps) {
     const t = useTranslations("Dashboard.admin.organizations");
 
     const copyToClipboard = (text: string, label: string) => {
@@ -262,6 +264,18 @@ export function OrganizationTable({ organizations }: OrganizationTableProps) {
                                                                 {t("actions.call")}
                                                             </a>
                                                         </DropdownMenuItem>
+                                                    )}
+                                                    {onDelete && (
+                                                        <>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem
+                                                                onClick={() => onDelete(org)}
+                                                                className="flex items-center gap-2 px-2.5 py-2 text-xs font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 rounded-lg cursor-pointer"
+                                                            >
+                                                                <Trash2 size={14} className="text-rose-500" />
+                                                                {t("actions.delete")}
+                                                            </DropdownMenuItem>
+                                                        </>
                                                     )}
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

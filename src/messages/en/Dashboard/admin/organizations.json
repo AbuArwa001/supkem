@@ -38,7 +38,18 @@
     "copied": "Copied to clipboard",
     "viewDetails": "View Registry Profile",
     "sendEmail": "Send Email",
-    "call": "Call Phone"
+    "call": "Call Phone",
+    "delete": "Delete Organization"
+  },
+  "deleteSuccess": "Organization deleted successfully",
+  "deleteError": "Failed to delete organization. Please try again.",
+  "deleteModal": {
+    "title": "Delete Organization",
+    "desc": "Are you sure you want to permanently delete {name}? This action cannot be undone and will remove all associated records from the registry.",
+    "warning": "Warning: Deleting an organization removes its credentials and linkages from the system.",
+    "cancel": "Cancel",
+    "confirm": "Yes, Delete Organization",
+    "deleting": "Deleting..."
   },
   "empty": {
     "title": "No organizations found",

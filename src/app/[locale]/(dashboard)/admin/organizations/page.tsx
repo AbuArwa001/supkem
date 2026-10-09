@@ -11,6 +11,7 @@ import { OrganizationStatusFilters } from "./_components/OrganizationStatusFilte
 import { OrganizationCard } from "./_components/OrganizationCard";
 import { OrganizationTable } from "./_components/OrganizationTable";
 import { OrganizationSkeleton } from "./_components/OrganizationSkeleton";
+import { DeleteOrganizationModal } from "./_components/DeleteOrganizationModal";
 import { RoleGuard } from "@/components/RoleGuard";
 
 export default function AdminOrganizations() {
@@ -40,6 +41,12 @@ function AdminOrganizationsContent() {
         stats,
         isLoading,
         clearAllFilters,
+        orgToDelete,
+        isDeleteModalOpen,
+        isDeleting,
+        openDeleteModal,
+        closeDeleteModal,
+        confirmDeleteOrganization,
     } = useAdminOrganizationsLogic();
 
     const t = useTranslations("Dashboard.admin.organizations");
@@ -127,7 +134,10 @@ function AdminOrganizationsContent() {
                     )}
                 </motion.div>
             ) : viewMode === "list" ? (
-                <OrganizationTable organizations={filteredOrgs} />
+                <OrganizationTable
+                    organizations={filteredOrgs}
+                    onDelete={openDeleteModal}
+                />
             ) : (
                 <motion.div
                     layout
@@ -139,11 +149,21 @@ function AdminOrganizationsContent() {
                                 key={org.id}
                                 org={org}
                                 index={i}
+                                onDelete={openDeleteModal}
                             />
                         ))}
                     </AnimatePresence>
                 </motion.div>
             )}
+
+            {/* Delete Confirmation Modal */}
+            <DeleteOrganizationModal
+                isOpen={isDeleteModalOpen}
+                onClose={closeDeleteModal}
+                onConfirm={confirmDeleteOrganization}
+                organization={orgToDelete}
+                isDeleting={isDeleting}
+            />
         </motion.div>
     );
 }
