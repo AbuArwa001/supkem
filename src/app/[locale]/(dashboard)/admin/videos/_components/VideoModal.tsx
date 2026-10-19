@@ -5,6 +5,8 @@ import { X, Video as VideoIcon, CheckCircle2, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VideoFormData, VideoBriefingItem } from "../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
+import { UploadProgress } from "@/components/UploadProgress";
+import { formatBytes } from "@/lib/upload";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -14,6 +16,7 @@ interface VideoModalProps {
   setFormData: (data: VideoFormData) => void;
   editingItem: VideoBriefingItem | null;
   isSubmitting: boolean;
+  uploadPercent?: number | null;
 }
 
 export const VideoModal = ({
@@ -24,27 +27,28 @@ export const VideoModal = ({
   setFormData,
   editingItem,
   isSubmitting,
+  uploadPercent = null,
 }: VideoModalProps) => {
   const t = useTranslations("Dashboard.admin.videos");
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={isSubmitting ? undefined : onClose}
             className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
           />
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-lg bg-white rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
+            className="relative w-full max-w-lg bg-white rounded-t-[20px] sm:rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
           >
-            <div className="p-8 border-b border-border flex items-center justify-between">
+            <div className="p-5 sm:p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
                 {editingItem ? t("editVideo") : t("uploadVideoBriefing")}
               </h2>
@@ -58,7 +62,7 @@ export const VideoModal = ({
 
             <form
               onSubmit={onSubmit}
-              className="p-8 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar"
+              className="p-5 sm:p-8 space-y-6 max-h-[80vh] sm:max-h-[70vh] overflow-y-auto custom-scrollbar"
             >
               <div className="space-y-2">
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
@@ -97,7 +101,8 @@ export const VideoModal = ({
                 <div className="relative group">
                   <input
                     type="file"
-                    accept="video/mp4,video/webm"
+                    accept="video/*"
+                    disabled={isSubmitting}
                     required={!editingItem}
                     onChange={(e) =>
                       setFormData({
@@ -118,8 +123,11 @@ export const VideoModal = ({
                     />
                     <span className="text-center">
                       {formData.video_file ? (
-                        <span className="text-primary">
+                        <span className="text-primary break-all">
                           {formData.video_file.name}
+                          <span className="block text-xs font-medium text-primary/60 mt-1">
+                            {formatBytes(formData.video_file.size)}
+                          </span>
                         </span>
                       ) : editingItem ? (
                         <span>{t("replaceVideo")}</span>
@@ -129,6 +137,17 @@ export const VideoModal = ({
                     </span>
                   </label>
                 </div>
+                {uploadPercent !== null && (
+                  <UploadProgress
+                    percent={uploadPercent}
+                    label={uploadPercent >= 100 ? "Finalizing…" : "Uploading video…"}
+                    detail={
+                      formData.video_file
+                        ? `${formatBytes(Math.round((formData.video_file.size * uploadPercent) / 100))} of ${formatBytes(formData.video_file.size)} · keep this page open`
+                        : undefined
+                    }
+                  />
+                )}
               </div>
 
               <div className="space-y-2">

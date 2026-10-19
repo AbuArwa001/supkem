@@ -30,6 +30,7 @@ function AdminVideosContent() {
     formData,
     setFormData,
     isSubmitting,
+    uploadPercent,
     handleOpenModal,
     handleSubmit,
     handleDelete,
@@ -80,6 +81,7 @@ function AdminVideosContent() {
         setFormData={setFormData}
         editingItem={editingItem}
         isSubmitting={isSubmitting}
+        uploadPercent={uploadPercent}
       />
     </div>
   );
