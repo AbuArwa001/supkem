@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import PortalSidebar from "@/components/PortalSidebar";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { Menu } from "lucide-react";
@@ -30,8 +31,8 @@ export default function PortalLayout({
           {/* Mobile Header */}
           <header className="lg:hidden flex items-center justify-between p-6 bg-[#0A1A14] text-white sticky top-0 z-50 border-b-2 border-secondary/20 shadow-xl shadow-black/10 no-print print:hidden">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm">
-                <img src="/logo.svg" alt="SUPKEM Logo" className="w-5 h-5 brightness-0 invert" />
+              <div className="relative w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center border border-white/20 backdrop-blur-sm overflow-hidden shrink-0">
+                <Image src="/logo.svg" alt="SUPKEM Logo" width={24} height={24} className="object-contain" priority />
               </div>
               <span className="font-outfit font-black tracking-widest text-xs uppercase text-white/90">
                 {t("portalHeading")}
