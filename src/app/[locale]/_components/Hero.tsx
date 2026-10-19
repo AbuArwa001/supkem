@@ -65,8 +65,8 @@ export const Hero = () => {
     <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden pt-28 pb-20 px-6">
       <HeroSlider />
 
-      {/* Executive Floating Social Badge - Top Right */}
-      <div className="absolute top-24 sm:top-28 right-4 sm:right-8 lg:right-14 z-30">
+      {/* Executive Floating Social Badge - Top Right on desktop/tablets */}
+      <div className="hidden md:block absolute top-28 right-8 rtl:right-auto rtl:left-8 lg:right-14 rtl:lg:left-14 z-30">
         <HeroSocialBadge />
       </div>
 
@@ -75,11 +75,19 @@ export const Hero = () => {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="space-y-10"
+          className="space-y-8 sm:space-y-10"
         >
-          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-sm font-bold tracking-tight shadow-2xl">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-secondary animate-ping" />
-            {t("badge")}
+          {/* Header Badges: Voice of Ummah Badge & In-flow Social Badge for mobile */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3.5 sm:gap-4 w-full">
+            <div className="inline-flex items-center gap-2.5 sm:gap-3 px-4 sm:px-5 py-2 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white text-xs sm:text-sm font-bold tracking-tight shadow-2xl">
+              <span className="flex h-2.5 w-2.5 rounded-full bg-secondary animate-ping" />
+              {t("badge")}
+            </div>
+
+            {/* In-flow on mobile screens (< md) to avoid overlapping the badge */}
+            <div className="md:hidden">
+              <HeroSocialBadge />
+            </div>
           </div>
 
           <div className="space-y-6">
