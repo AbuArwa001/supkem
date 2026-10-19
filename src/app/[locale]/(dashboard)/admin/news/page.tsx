@@ -33,6 +33,7 @@ function AdminNewsContent() {
     pendingGalleryFiles,
     savedGallery,
     isDeletingGalleryId,
+    galleryProgress,
     handleAddGalleryFiles,
     handleRemovePendingFile,
     handleDeleteSavedImage,
@@ -64,6 +65,7 @@ function AdminNewsContent() {
         pendingGalleryFiles={pendingGalleryFiles}
         savedGallery={savedGallery}
         isDeletingGalleryId={isDeletingGalleryId}
+        galleryProgress={galleryProgress}
         onAddGalleryFiles={handleAddGalleryFiles}
         onRemovePendingFile={handleRemovePendingFile}
         onDeleteSavedImage={handleDeleteSavedImage}

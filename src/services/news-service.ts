@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import api, { API_BASE_URL } from "@/lib/api";
+import { apiMultipartWithProgress } from "@/lib/upload";
 
 async function postMultipart<T>(endpoint: string, data: FormData): Promise<T> {
     const token = Cookies.get('access_token');
@@ -108,6 +109,24 @@ export const NewsGalleryService = {
         const data = new FormData();
         files.forEach((f) => data.append("images", f));
         return await postMultipart<NewsGalleryItem[]>(`/news/news/${slug}/gallery/`, data);
+    },
+
+    /**
+     * Uploads a single gallery image, reporting byte progress (0-100).
+     */
+    async addImage(
+        slug: string,
+        file: File,
+        onProgress?: (percent: number) => void
+    ): Promise<NewsGalleryItem[]> {
+        const data = new FormData();
+        data.append("images", file);
+        return await apiMultipartWithProgress<NewsGalleryItem[]>(
+            "POST",
+            `/news/news/${slug}/gallery/`,
+            data,
+            onProgress
+        );
     },
 
     /**

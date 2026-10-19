@@ -12,6 +12,8 @@ import dynamic from "next/dynamic";
 import { NewsItem, NewsGalleryItem } from "@/services/news-service";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { UploadProgress } from "@/components/UploadProgress";
+import type { GalleryUploadProgress } from "../_hooks/useNewsLogic";
 
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -34,6 +36,7 @@ interface NewsModalProps {
   pendingGalleryFiles: File[];
   savedGallery: NewsGalleryItem[];
   isDeletingGalleryId: string | null;
+  galleryProgress: GalleryUploadProgress | null;
   onAddGalleryFiles: (files: File[]) => void;
   onRemovePendingFile: (index: number) => void;
   onDeleteSavedImage: (id: string) => void;
@@ -120,6 +123,7 @@ export function NewsModal({
   pendingGalleryFiles,
   savedGallery,
   isDeletingGalleryId,
+  galleryProgress,
   onAddGalleryFiles,
   onRemovePendingFile,
   onDeleteSavedImage,
@@ -152,22 +156,22 @@ export function NewsModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={isSubmitting ? undefined : onClose}
             className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
           />
           <motion.div
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative w-full max-w-2xl bg-white rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
+            className="relative w-full max-w-2xl bg-white rounded-t-[20px] sm:rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
           >
             {/* Header */}
-            <div className="p-8 border-b border-border flex items-center justify-between">
+            <div className="p-5 sm:p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
                 {editingItem ? t("editNews") : t("createNews")}
               </h2>
@@ -181,7 +185,7 @@ export function NewsModal({
 
             <form
               onSubmit={onSubmit}
-              className="p-8 space-y-6 max-h-[75vh] overflow-y-auto custom-scrollbar"
+              className="p-5 sm:p-8 space-y-6 max-h-[80vh] sm:max-h-[75vh] overflow-y-auto custom-scrollbar"
             >
               {/* Title */}
               <div className="space-y-2">
@@ -385,7 +389,7 @@ export function NewsModal({
 
                 {/* Gallery grid */}
                 {totalGalleryCount > 0 && (
-                  <div className="grid grid-cols-4 gap-3">
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                     {/* Saved (server-side) images */}
                     {savedGallery.map((item) => (
                       <SavedGalleryThumb
@@ -412,6 +416,23 @@ export function NewsModal({
                   <p className="text-xs text-primary/50 px-1 font-medium">
                     {pendingGalleryFiles.length} {pendingGalleryFiles.length === 1 ? t("image") : t("images")} {t("queued")}
                   </p>
+                )}
+
+                {galleryProgress && (
+                  <UploadProgress
+                    percent={galleryProgress.percent}
+                    label={
+                      galleryProgress.phase === "optimizing"
+                        ? "Optimizing images…"
+                        : `Uploading images: ${galleryProgress.uploaded} of ${galleryProgress.total} done`
+                    }
+                    detail={`${
+                      galleryProgress.total - galleryProgress.uploaded - galleryProgress.failed
+                    } remaining${
+                      galleryProgress.failed > 0 ? ` · ${galleryProgress.failed} failed` : ""
+                    }`}
+                    tone={galleryProgress.failed > 0 ? "warning" : "primary"}
+                  />
                 )}
               </div>
 
