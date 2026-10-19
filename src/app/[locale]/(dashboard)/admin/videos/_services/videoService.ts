@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 import api, { API_BASE_URL } from "@/lib/api";
+import { apiMultipartWithProgress } from "@/lib/upload";
 
 async function postMultipart<T>(endpoint: string, data: FormData): Promise<T> {
     const token = Cookies.get('access_token');
@@ -83,11 +84,13 @@ export const videoService = {
     return res.data;
   },
 
-  createVideo: async (formData: FormData) => {
+  createVideo: async (formData: FormData, onProgress?: (percent: number) => void) => {
+    if (onProgress) return await apiMultipartWithProgress("POST", "/videos/", formData, onProgress);
     return await postMultipart("/videos/", formData);
   },
 
-  updateVideo: async (id: string, formData: FormData) => {
+  updateVideo: async (id: string, formData: FormData, onProgress?: (percent: number) => void) => {
+    if (onProgress) return await apiMultipartWithProgress("PATCH", `/videos/${id}/`, formData, onProgress);
     return await patchMultipart(`/videos/${id}/`, formData);
   },
 

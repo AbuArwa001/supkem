@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { videoService } from "../_services/videoService";
+import { uploadVideoDirect } from "@/lib/upload";
 
 export interface VideoBriefingItem {
   id: string;
@@ -36,6 +37,7 @@ export const useVideosLogic = () => {
     video_file: null
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadPercent, setUploadPercent] = useState<number | null>(null);
 
   const fetchVideos = async () => {
     setLoading(true);
@@ -83,21 +85,32 @@ export const useVideosLogic = () => {
     }
 
     setIsSubmitting(true);
+    setUploadPercent(null);
 
     const data = new FormData();
     data.append("title", formData.title);
     data.append("description", formData.description);
     data.append("is_published", formData.is_published ? "true" : "false");
 
-    if (formData.video_file) {
-      data.append("video_file", formData.video_file);
-    }
-
     try {
+      if (formData.video_file) {
+        setUploadPercent(0);
+        // Preferred: browser -> S3 directly (chunked, no server memory/timeouts)
+        const key = await uploadVideoDirect(formData.video_file, setUploadPercent);
+        if (key) {
+          data.append("video_key", key);
+        } else {
+          data.append("video_file", formData.video_file);
+        }
+      }
+
+      // Only the small metadata (or fallback file) goes through the API.
+      const sendingFile = data.has("video_file");
+      const onProgress = sendingFile ? setUploadPercent : undefined;
       if (editingItem) {
-        await videoService.updateVideo(editingItem.id, data);
+        await videoService.updateVideo(editingItem.id, data, onProgress);
       } else {
-        await videoService.createVideo(data);
+        await videoService.createVideo(data, onProgress);
       }
       setIsModalOpen(false);
       fetchVideos();
@@ -107,10 +120,11 @@ export const useVideosLogic = () => {
         ? Object.entries(err.response.data)
             .map(([field, msgs]) => `${field}: ${msgs}`)
             .join("\n")
-        : "Failed to save video. Please ensure all fields are correct.";
+        : err.message || "Failed to save video. Please ensure all fields are correct.";
       alert(errorMsg);
     } finally {
       setIsSubmitting(false);
+      setUploadPercent(null);
     }
   };
 
@@ -140,6 +154,7 @@ export const useVideosLogic = () => {
     formData,
     setFormData,
     isSubmitting,
+    uploadPercent,
     handleOpenModal,
     handleSubmit,
     handleDelete
