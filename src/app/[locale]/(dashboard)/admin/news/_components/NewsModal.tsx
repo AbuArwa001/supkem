@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -7,6 +7,7 @@ import {
   Loader2,
   Plus,
   Trash2,
+  Camera,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import { NewsItem, NewsGalleryItem } from "@/services/news-service";
@@ -130,6 +131,19 @@ export function NewsModal({
 }: NewsModalProps) {
   const t = useTranslations("Dashboard.admin.news");
 
+  // The markdown editor toolbar is unusable on phones; use a plain textarea there.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const textareaClass =
+    "w-full px-4 py-3.5 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary text-base transition-all min-h-[180px] resize-y";
+
   const handleGalleryDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault();
@@ -199,7 +213,7 @@ export function NewsModal({
                     setFormData({ ...formData, title: e.target.value })
                   }
                   placeholder={t("titlePlaceholder")}
-                  className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
+                  className="w-full px-4 sm:px-6 py-3.5 sm:py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary text-base transition-all"
                 />
               </div>
 
@@ -208,6 +222,17 @@ export function NewsModal({
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
                   {t("contentLabel")}
                 </label>
+                {isMobile ? (
+                  <textarea
+                    value={formData.content}
+                    onChange={(e) =>
+                      setFormData({ ...formData, content: e.target.value })
+                    }
+                    placeholder={t("contentPlaceholder")}
+                    rows={9}
+                    className={textareaClass}
+                  />
+                ) : (
                 <div
                   data-color-mode="light"
                   className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all"
@@ -225,6 +250,7 @@ export function NewsModal({
                     }}
                   />
                 </div>
+                )}
               </div>
 
               {/* Arabic Translation Section */}
@@ -246,7 +272,7 @@ export function NewsModal({
                     }
                     placeholder={t("titleArPlaceholder")}
                     dir="rtl"
-                    className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all text-right font-arabic"
+                    className="w-full px-4 sm:px-6 py-3.5 sm:py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary text-base transition-all text-right font-arabic"
                   />
                 </div>
 
@@ -255,6 +281,18 @@ export function NewsModal({
                   <label className="text-sm font-bold text-primary/70 uppercase tracking-widest px-1">
                     {t("contentAr")}
                   </label>
+                  {isMobile ? (
+                    <textarea
+                      value={formData.content_ar}
+                      onChange={(e) =>
+                        setFormData({ ...formData, content_ar: e.target.value })
+                      }
+                      placeholder={t("contentArPlaceholder")}
+                      dir="rtl"
+                      rows={7}
+                      className={`${textareaClass} text-right font-arabic`}
+                    />
+                  ) : (
                   <div
                     data-color-mode="light"
                     className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all"
@@ -273,6 +311,7 @@ export function NewsModal({
                       }}
                     />
                   </div>
+                  )}
                 </div>
               </div>
 
@@ -385,6 +424,23 @@ export function NewsModal({
                       {t("fileSupports")}
                     </span>
                   </label>
+
+                  {/* Phones: open the camera directly */}
+                  <input
+                    type="file"
+                    id="gallery-camera"
+                    accept="image/*"
+                    capture="environment"
+                    className="hidden"
+                    onChange={handleGalleryInputChange}
+                  />
+                  <label
+                    htmlFor="gallery-camera"
+                    className="sm:hidden mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-primary/10 text-primary font-bold active:scale-95 transition-transform"
+                  >
+                    <Camera size={20} />
+                    Take photo
+                  </label>
                 </div>
 
                 {/* Gallery grid */}
@@ -437,17 +493,18 @@ export function NewsModal({
               </div>
 
               {/* Actions */}
-              <div className="pt-4 flex items-center gap-4">
+              <div className="sticky bottom-0 -mx-5 sm:-mx-8 -mb-5 sm:-mb-8 px-5 sm:px-8 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] sm:pb-6 bg-white/95 backdrop-blur border-t border-border/60 flex items-center gap-3 sm:gap-4">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all font-outfit"
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 sm:px-8 py-3.5 sm:py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all font-outfit disabled:opacity-50"
                 >
                   {t("cancel")}
                 </button>
                 <button
                   disabled={isSubmitting}
-                  className="flex-[2] px-8 py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 font-outfit transition-all active:scale-95 premium-gradient shadow-primary/20"
+                  className="flex-[2] px-4 sm:px-8 py-3.5 sm:py-4 bg-primary text-white rounded-2xl font-bold hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 font-outfit transition-all active:scale-95 premium-gradient shadow-primary/20"
                 >
                   {isSubmitting ? (
                     <>

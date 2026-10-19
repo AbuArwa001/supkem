@@ -63,7 +63,7 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
         </div>
       </div>
 
-      <div className="p-6 space-y-4 flex-1 flex flex-col">
+      <div className="p-4 sm:p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
           <h3
             className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug"
@@ -79,20 +79,22 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
           </p>
         </div>
 
-        <div className="pt-6 mt-auto border-t border-border/50 flex items-center justify-between">
+        <div className="pt-4 sm:pt-6 mt-auto border-t border-border/50 flex items-center justify-between">
           <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">
             {new Date(item.created_at).toLocaleDateString()}
           </p>
           <div className="flex items-center gap-2">
             <button
               onClick={onEdit}
-              className="p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
+              aria-label="Edit"
+              className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
             >
               <Edit2 size={16} />
             </button>
             <button
               onClick={onDelete}
-              className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90"
+              aria-label="Delete"
+              className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90"
             >
               <Trash2 size={16} />
             </button>
