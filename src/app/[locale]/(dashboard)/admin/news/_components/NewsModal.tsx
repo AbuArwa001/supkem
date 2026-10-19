@@ -131,7 +131,8 @@ export function NewsModal({
 }: NewsModalProps) {
   const t = useTranslations("Dashboard.admin.news");
 
-  // The markdown editor toolbar is unusable on phones; use a plain textarea there.
+  // Smaller editor height on phones; the toolbar scrolls sideways so all
+  // markdown buttons stay reachable, and 16px text prevents iOS zoom-on-focus.
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)");
@@ -141,8 +142,11 @@ export function NewsModal({
     return () => mq.removeEventListener("change", update);
   }, []);
 
-  const textareaClass =
-    "w-full px-4 py-3.5 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary text-base transition-all min-h-[180px] resize-y";
+  const editorWrapperClass =
+    "border border-border overflow-hidden focus-within:border-primary/20 transition-all " +
+    "[&_.w-md-editor-toolbar]:overflow-x-auto [&_.w-md-editor-toolbar]:whitespace-nowrap " +
+    "[&_.w-md-editor-toolbar>ul]:flex-nowrap [&_.w-md-editor-toolbar_li>button]:min-w-9 [&_.w-md-editor-toolbar_li>button]:h-9 " +
+    "[&_.w-md-editor-text-input]:!text-base [&_.w-md-editor-text-pre>code]:!text-base [&_.w-md-editor-text]:!text-base";
 
   const handleGalleryDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
@@ -222,20 +226,9 @@ export function NewsModal({
                 <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
                   {t("contentLabel")}
                 </label>
-                {isMobile ? (
-                  <textarea
-                    value={formData.content}
-                    onChange={(e) =>
-                      setFormData({ ...formData, content: e.target.value })
-                    }
-                    placeholder={t("contentPlaceholder")}
-                    rows={9}
-                    className={textareaClass}
-                  />
-                ) : (
                 <div
                   data-color-mode="light"
-                  className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all"
+                  className={`${editorWrapperClass} rounded-2xl`}
                 >
                   <MDEditor
                     value={formData.content}
@@ -243,14 +236,13 @@ export function NewsModal({
                       setFormData({ ...formData, content: val || "" })
                     }
                     preview="edit"
-                    height={300}
+                    height={isMobile ? 280 : 300}
                     className="!border-none"
                     textareaProps={{
                       placeholder: t("contentPlaceholder"),
                     }}
                   />
                 </div>
-                )}
               </div>
 
               {/* Arabic Translation Section */}
@@ -281,21 +273,9 @@ export function NewsModal({
                   <label className="text-sm font-bold text-primary/70 uppercase tracking-widest px-1">
                     {t("contentAr")}
                   </label>
-                  {isMobile ? (
-                    <textarea
-                      value={formData.content_ar}
-                      onChange={(e) =>
-                        setFormData({ ...formData, content_ar: e.target.value })
-                      }
-                      placeholder={t("contentArPlaceholder")}
-                      dir="rtl"
-                      rows={7}
-                      className={`${textareaClass} text-right font-arabic`}
-                    />
-                  ) : (
                   <div
                     data-color-mode="light"
-                    className="border border-border rounded-2xl overflow-hidden focus-within:border-primary/20 transition-all"
+                    className={`${editorWrapperClass} rounded-2xl`}
                   >
                     <MDEditor
                       value={formData.content_ar}
@@ -303,7 +283,7 @@ export function NewsModal({
                         setFormData({ ...formData, content_ar: val || "" })
                       }
                       preview="edit"
-                      height={200}
+                      height={isMobile ? 220 : 200}
                       className="!border-none"
                       textareaProps={{
                         placeholder: t("contentArPlaceholder"),
@@ -311,7 +291,6 @@ export function NewsModal({
                       }}
                     />
                   </div>
-                  )}
                 </div>
               </div>
 
