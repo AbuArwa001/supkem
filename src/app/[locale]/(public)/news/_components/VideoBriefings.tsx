@@ -5,6 +5,7 @@ import { Film, PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import useSWR from "swr";
 import { API_BASE_URL } from "@/lib/api";
+import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
 import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
 import { useTranslations, useLocale } from "next-intl";
 
@@ -53,9 +54,8 @@ export function VideoBriefings({ videos: initialVideos, limit = 3 }: VideoBriefi
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {displayVideos.map((video, i) => {
-          const videoUrl = video.video_file.startsWith("https")
-            ? video.video_file
-            : `${API_BASE_URL}${video.video_file.startsWith("/") ? "" : "/"}${video.video_file}`;
+          const videoUrl = resolveVideoStreamUrl(video);
+          const fallbackUrl = resolveVideoFallbackUrl(video);
 
           return (
             <Link
@@ -64,8 +64,7 @@ export function VideoBriefings({ videos: initialVideos, limit = 3 }: VideoBriefi
               className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
             >
               <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
-                <div className="absolute inset-0 pointer-events-none z-10 bg-black/20 group-hover:bg-transparent transition-colors" />
-                <VideoPlayer url={videoUrl} />
+                <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} isCardPreview />
                 <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="w-16 h-16 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
                     <PlayCircle size={32} />

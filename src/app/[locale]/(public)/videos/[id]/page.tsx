@@ -1,6 +1,7 @@
 import { Calendar, User, ArrowLeft, PlayCircle, Film, Share2 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import api, { API_BASE_URL } from "@/lib/api";
+import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
 import { notFound } from "next/navigation";
 import VideoPlayer from "@/components/news/VideoPlayer";
 import ShareButton from "@/components/news/ShareButton";
@@ -24,9 +25,8 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
         notFound();
     }
 
-    const videoUrl = video.video_file.startsWith('http')
-        ? video.video_file
-        : `${API_BASE_URL}${video.video_file.startsWith('/') ? '' : '/'}${video.video_file}`;
+    const videoUrl = resolveVideoStreamUrl(video);
+    const fallbackUrl = resolveVideoFallbackUrl(video);
 
     return (
         <div className="pb-24 bg-slate-50 min-h-screen">
@@ -72,7 +72,7 @@ export default async function VideoBriefingPage({ params }: { params: Promise<{ 
                 <div className="space-y-12">
                     {/* Premium Video Container */}
                     <div className="aspect-video bg-black rounded-[20px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-4 border-white/5 relative group">
-                        <VideoPlayer url={videoUrl} />
+                        <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} />
                     </div>
 
                     {/* Meta & Description */}

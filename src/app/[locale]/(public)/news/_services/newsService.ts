@@ -19,6 +19,8 @@ export interface VideoItem {
     title: string;
     description?: string;
     video_file: string;
+    stream_url?: string;
+    download_url?: string;
     created_at: string;
     is_published: boolean;
     [key: string]: any;

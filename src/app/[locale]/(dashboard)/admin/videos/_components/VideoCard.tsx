@@ -5,6 +5,7 @@ import { Edit2, Trash2, Video as VideoIcon, PlayCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { API_BASE_URL } from "@/lib/api";
+import { resolveVideoStreamUrl } from "@/lib/videoUtils";
 import { VideoBriefingItem } from "../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
 
@@ -22,9 +23,7 @@ export const VideoCard = ({
   onDelete,
 }: VideoCardProps) => {
   const t = useTranslations("Dashboard.admin.videos");
-  const videoUrl = item.video_file.startsWith("http")
-    ? item.video_file
-    : `${API_BASE_URL}${item.video_file.startsWith("/") ? "" : "/"}${item.video_file}`;
+  const videoUrl = resolveVideoStreamUrl(item);
 
   return (
     <motion.div
@@ -40,6 +39,7 @@ export const VideoCard = ({
         {item.video_file ? (
           <video
             src={videoUrl}
+            preload="none"
             className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           />
         ) : (

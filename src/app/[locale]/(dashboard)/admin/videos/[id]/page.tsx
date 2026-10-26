@@ -4,6 +4,7 @@ import { use } from "react";
 import { ArrowLeft, XCircle, Loader2 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { API_BASE_URL } from "@/lib/api";
+import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
 import { useVideoDetailLogic } from "./_hooks/useVideoDetailLogic";
 import { VideoPreviewHeader } from "./_components/VideoPreviewHeader";
 import { VideoPlayerSection } from "./_components/VideoPlayerSection";
@@ -59,16 +60,15 @@ function AdminVideoDetailContent({ params }: PageProps) {
     );
   }
 
-  const videoUrl = video.video_file.startsWith("http")
-    ? video.video_file
-    : `${API_BASE_URL}${video.video_file.startsWith("/") ? "" : "/"}${video.video_file}`;
+  const videoUrl = resolveVideoStreamUrl(video);
+  const fallbackUrl = resolveVideoFallbackUrl(video);
 
   return (
     <div className="space-y-10 pb-20">
       <VideoPreviewHeader video={video} onDelete={handleDelete} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-        <VideoPlayerSection video={video} videoUrl={videoUrl} />
+        <VideoPlayerSection video={video} videoUrl={videoUrl} fallbackUrl={fallbackUrl} />
         <VideoMetadataSidebar video={video} />
       </div>
     </div>
