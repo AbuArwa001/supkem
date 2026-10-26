@@ -15,7 +15,7 @@ interface VideoBriefingsProps {
   limit?: number;
 }
 
-export function VideoBriefings({ videos: initialVideos, limit = 6 }: VideoBriefingsProps) {
+export function VideoBriefings({ videos: initialVideos, limit = 3 }: VideoBriefingsProps) {
   const t = useTranslations("NewsPage.videos");
 
   const locale = useLocale();

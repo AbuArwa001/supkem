@@ -19,10 +19,10 @@ export default async function NewsPage() {
     return (
         <div className="space-y-24 pb-24">
             <NewsHero />
-            <NewsPapersSection newsPapers={newsPapers} />
-            <VideoBriefings videos={videos} />
+            <NewsPapersSection newsPapers={newsPapers} limit={3} />
+            <VideoBriefings videos={videos} limit={3} />
             <NewsSocialWallSection />
-            <FeaturedNews newsItems={newsItems} />
+            <FeaturedNews newsItems={newsItems} limit={3} />
         </div>
     );
 }
