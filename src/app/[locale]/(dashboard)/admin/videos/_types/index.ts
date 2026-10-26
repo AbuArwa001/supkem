@@ -5,6 +5,8 @@ export interface VideoBriefingItem {
   video_file: string;
   stream_url?: string;
   download_url?: string;
+  thumbnail?: string;
+  thumbnail_url?: string;
   is_published: boolean;
   created_at: string;
   updated_at: string;

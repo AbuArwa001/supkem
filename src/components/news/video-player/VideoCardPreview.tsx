@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 interface VideoCardPreviewProps {
   src: string;
@@ -8,17 +8,28 @@ interface VideoCardPreviewProps {
 }
 
 export function VideoCardPreview({ src, poster }: VideoCardPreviewProps) {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="absolute inset-0 bg-slate-950 flex items-center justify-center overflow-hidden group">
-      <video
-        src={src}
-        poster={poster}
-        preload="none"
-        playsInline
-        muted
-        className="w-full h-full object-cover pointer-events-none opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+      {poster && !imgError ? (
+        <img
+          src={poster}
+          alt="Video briefing thumbnail"
+          onError={() => setImgError(true)}
+          className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+        />
+      ) : (
+        <video
+          src={src ? `${src}#t=0.001` : undefined}
+          poster={poster}
+          preload="metadata"
+          playsInline
+          muted
+          className="w-full h-full object-cover pointer-events-none opacity-85 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
     </div>
   );
 }

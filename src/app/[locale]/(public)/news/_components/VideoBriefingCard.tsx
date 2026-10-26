@@ -3,7 +3,7 @@
 import { Link } from "@/i18n/routing";
 import { PlayCircle, ArrowRight } from "lucide-react";
 import VideoPlayer from "@/components/news/VideoPlayer";
-import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
+import { resolveVideoStreamUrl, resolveVideoFallbackUrl, resolveVideoThumbnail } from "@/lib/videoUtils";
 import { VideoItem } from "@/app/[locale]/(public)/news/_services/newsService";
 
 interface VideoBriefingCardProps {
@@ -15,6 +15,7 @@ interface VideoBriefingCardProps {
 export function VideoBriefingCard({ video, locale, watchNowText }: VideoBriefingCardProps) {
   const videoUrl = resolveVideoStreamUrl(video);
   const fallbackUrl = resolveVideoFallbackUrl(video);
+  const thumbnailUrl = resolveVideoThumbnail(video);
   const formattedDate = new Date(video.created_at).toLocaleDateString(
     locale === "ar" ? "ar-KE" : "en-US",
     { year: "numeric", month: "long", day: "numeric" }
@@ -26,7 +27,13 @@ export function VideoBriefingCard({ video, locale, watchNowText }: VideoBriefing
       className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col"
     >
       <div className="aspect-video relative bg-black flex items-center justify-center overflow-hidden">
-        <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} isCardPreview />
+        <VideoPlayer
+          url={videoUrl}
+          fallbackUrl={fallbackUrl}
+          poster={thumbnailUrl}
+          title={video.title}
+          isCardPreview
+        />
         <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
           <div className="w-16 h-16 rounded-full bg-primary/90 text-white flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
             <PlayCircle size={32} />

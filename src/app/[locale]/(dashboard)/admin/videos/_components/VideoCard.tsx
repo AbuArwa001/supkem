@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Edit2, Trash2, Video as VideoIcon, PlayCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { resolveVideoStreamUrl } from "@/lib/videoUtils";
+import { resolveVideoStreamUrl, resolveVideoThumbnail } from "@/lib/videoUtils";
 import { VideoBriefingItem } from "../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
 
@@ -18,6 +18,7 @@ interface VideoCardProps {
 export const VideoCard = ({ item, index, onEdit, onDelete }: VideoCardProps) => {
   const t = useTranslations("Dashboard.admin.videos");
   const videoUrl = resolveVideoStreamUrl(item);
+  const thumbnailUrl = resolveVideoThumbnail(item);
 
   return (
     <motion.div
@@ -30,10 +31,16 @@ export const VideoCard = ({ item, index, onEdit, onDelete }: VideoCardProps) => 
         href={`/admin/videos/${item.id}`}
         className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden cursor-pointer"
       >
-        {item.video_file ? (
+        {thumbnailUrl ? (
+          <img
+            src={thumbnailUrl}
+            alt={item.title}
+            className="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+          />
+        ) : item.video_file ? (
           <video
-            src={videoUrl}
-            preload="none"
+            src={`${videoUrl}#t=0.001`}
+            preload="metadata"
             className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
           />
         ) : (

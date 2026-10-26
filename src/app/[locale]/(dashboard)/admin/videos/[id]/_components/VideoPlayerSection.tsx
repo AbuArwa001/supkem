@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import VideoPlayer from "@/components/news/VideoPlayer";
+import { resolveVideoThumbnail } from "@/lib/videoUtils";
 import { VideoBriefingItem } from "../../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
 
@@ -18,11 +19,12 @@ export const VideoPlayerSection = ({
 }: VideoPlayerSectionProps) => {
   const t = useTranslations("Dashboard.admin.videos.detail");
   const tv = useTranslations("Dashboard.admin.videos");
+  const thumbnailUrl = resolveVideoThumbnail(video);
 
   return (
     <div className="lg:col-span-8 space-y-8">
       <div className="aspect-video bg-black rounded-[16px] overflow-hidden shadow-2xl border-4 border-white shadow-primary/5 relative">
-        <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} />
+        <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} poster={thumbnailUrl} title={video.title} />
       </div>
 
       <div className="bg-white border border-border rounded-[16px] p-8 lg:p-12 space-y-6">
