@@ -17,19 +17,13 @@ export function CertificatePrintStyles({ isMarriage = false }: CertificatePrintS
           margin: 0;
         }
 
-        /* Hide all navigation, sidebars, headers, floating bars, and no-print elements */
-        header,
-        nav,
-        aside,
-        button,
-        .no-print,
-        .print\:hidden {
+        /* Hide all navigation, sidebars, headers, and no-print elements */
+        header, nav, aside, button, .no-print, .print\\:hidden {
           display: none !important;
           visibility: hidden !important;
         }
 
-        html,
-        body {
+        html, body {
           background: #ffffff !important;
           color: #000000 !important;
           margin: 0 !important;
@@ -46,8 +40,7 @@ export function CertificatePrintStyles({ isMarriage = false }: CertificatePrintS
           print-color-adjust: exact !important;
         }
 
-        .certificate-canvas,
-        .certificate-canvas * {
+        .certificate-canvas, .certificate-canvas * {
           visibility: visible !important;
         }
 
@@ -78,24 +71,12 @@ export function CertificatePrintStyles({ isMarriage = false }: CertificatePrintS
         --slate-800-safe: #1e293b;
         --slate-500-safe: #64748b;
       }
-      .certificate-canvas :global(.text-primary) {
-        color: var(--primary-safe) !important;
-      }
-      .certificate-canvas :global(.text-secondary) {
-        color: var(--secondary-safe) !important;
-      }
-      .certificate-canvas :global(.bg-primary\/5) {
-        background-color: rgba(22, 84, 61, 0.05) !important;
-      }
-      .certificate-canvas :global(.bg-secondary\/10) {
-        background-color: rgba(231, 180, 8, 0.1) !important;
-      }
-      .certificate-canvas :global(.border-primary\/10) {
-        border-color: rgba(22, 84, 61, 0.1) !important;
-      }
-      .certificate-canvas :global(.border-primary\/5) {
-        border-color: rgba(22, 84, 61, 0.05) !important;
-      }
+      .certificate-canvas :global(.text-primary) { color: var(--primary-safe) !important; }
+      .certificate-canvas :global(.text-secondary) { color: var(--secondary-safe) !important; }
+      .certificate-canvas :global(.bg-primary\\/5) { background-color: rgba(22, 84, 61, 0.05) !important; }
+      .certificate-canvas :global(.bg-secondary\\/10) { background-color: rgba(231, 180, 8, 0.1) !important; }
+      .certificate-canvas :global(.border-primary\\/10) { border-color: rgba(22, 84, 61, 0.1) !important; }
+      .certificate-canvas :global(.border-primary\\/5) { border-color: rgba(22, 84, 61, 0.05) !important; }
     `}</style>
   );
 }

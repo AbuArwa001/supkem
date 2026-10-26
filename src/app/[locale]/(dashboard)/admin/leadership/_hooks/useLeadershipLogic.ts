@@ -2,93 +2,49 @@ import { useState, useEffect, useMemo } from "react";
 import { LeadershipService, LeadershipProfile } from "@/services/leadership-service";
 import { toast } from "sonner";
 
+const initialForm = {
+  name: "", title: "", bio: "", order: 0, is_active: true, photo: null as File | null,
+  twitter_url: "", linkedin_url: "", facebook_url: "",
+};
+
 export function useLeadershipLogic() {
   const [profiles, setProfiles] = useState<LeadershipProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<LeadershipProfile | null>(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    title: "",
-    bio: "",
-    order: 0,
-    is_active: true,
-    photo: null as File | null,
-    twitter_url: "",
-    linkedin_url: "",
-    facebook_url: "",
-  });
+  const [formData, setFormData] = useState(initialForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchProfiles = async () => {
     setLoading(true);
-    try {
-      const data = await LeadershipService.getProfiles(true);
-      setProfiles(data);
-    } catch (err) {
-      console.error("Failed to fetch leadership profiles", err);
-      toast.error("Failed to fetch leadership profiles.");
-    } finally {
-      setLoading(false);
-    }
+    try { setProfiles(await LeadershipService.getProfiles(true)); }
+    catch { toast.error("Failed to fetch leadership profiles."); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => {
-    fetchProfiles();
-  }, []);
+  useEffect(() => { fetchProfiles(); }, []);
 
   const handleOpenModal = (item: LeadershipProfile | null = null) => {
-    if (item) {
-      setEditingItem(item);
-      setFormData({
-        name: item.name,
-        title: item.title,
-        bio: item.bio || "",
-        order: item.order,
-        is_active: item.is_active,
-        photo: null,
-        twitter_url: item.twitter_url || "",
-        linkedin_url: item.linkedin_url || "",
-        facebook_url: item.facebook_url || "",
-      });
-    } else {
-      setEditingItem(null);
-      setFormData({
-        name: "",
-        title: "",
-        bio: "",
-        order: 0,
-        is_active: true,
-        photo: null,
-        twitter_url: "",
-        linkedin_url: "",
-        facebook_url: "",
-      });
-    }
+    setEditingItem(item);
+    setFormData(item ? {
+      name: item.name, title: item.title, bio: item.bio || "", order: item.order,
+      is_active: item.is_active, photo: null, twitter_url: item.twitter_url || "",
+      linkedin_url: item.linkedin_url || "", facebook_url: item.facebook_url || "",
+    } : initialForm);
     setIsModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+  const handleCloseModal = () => setIsModalOpen(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     const data = new FormData();
-    data.append("name", formData.name);
-    data.append("title", formData.title);
-    data.append("bio", formData.bio);
-    data.append("order", String(formData.order));
-    data.append("is_active", String(formData.is_active));
-    if (formData.photo) {
-      data.append("photo", formData.photo);
-    }
-    data.append("twitter_url", formData.twitter_url);
-    data.append("linkedin_url", formData.linkedin_url);
-    data.append("facebook_url", formData.facebook_url);
+    Object.entries(formData).forEach(([k, v]) => {
+      if (k === "photo" && v instanceof File) data.append("photo", v);
+      else if (k !== "photo" && v !== null && v !== undefined) data.append(k, String(v));
+    });
 
     try {
       if (editingItem) {
@@ -100,12 +56,8 @@ export function useLeadershipLogic() {
       }
       setIsModalOpen(false);
       fetchProfiles();
-    } catch (err: any) {
-      console.error("Failed to save leadership profile", err);
-      toast.error("Failed to save leadership profile.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    } catch { toast.error("Failed to save leadership profile."); }
+    finally { setIsSubmitting(false); }
   };
 
   const handleDelete = async (id: string) => {
@@ -114,34 +66,16 @@ export function useLeadershipLogic() {
         await LeadershipService.deleteProfile(id);
         toast.success("Profile deleted successfully");
         fetchProfiles();
-      } catch (err) {
-        console.error("Failed to delete profile", err);
-        toast.error("Failed to delete profile");
-      }
+      } catch { toast.error("Failed to delete profile"); }
     }
   };
 
-  const filteredProfiles = useMemo(() => {
-    return profiles.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [profiles, searchTerm]);
+  const filteredProfiles = useMemo(() => profiles.filter((i) =>
+    i.name.toLowerCase().includes(searchTerm.toLowerCase()) || i.title.toLowerCase().includes(searchTerm.toLowerCase())
+  ), [profiles, searchTerm]);
 
   return {
-    profiles: filteredProfiles,
-    loading,
-    searchTerm,
-    setSearchTerm,
-    isModalOpen,
-    editingItem,
-    formData,
-    setFormData,
-    isSubmitting,
-    handleOpenModal,
-    handleCloseModal,
-    handleSubmit,
-    handleDelete,
-    fetchProfiles,
+    profiles: filteredProfiles, loading, searchTerm, setSearchTerm, isModalOpen, editingItem,
+    formData, setFormData, isSubmitting, handleOpenModal, handleCloseModal, handleSubmit, handleDelete, fetchProfiles,
   };
 }

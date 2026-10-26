@@ -1,16 +1,13 @@
 "use client";
 
-import { AnimatePresence } from "framer-motion";
 import { Loader2, AlertTriangle } from "lucide-react";
-
 import { useOrganizationDetailLogic } from "./_components/useOrganizationDetailLogic";
 import { OrganizationHeader } from "./_components/OrganizationHeader";
 import { OrganizationCoreInfo } from "./_components/OrganizationCoreInfo";
 import { OrganizationRecords } from "./_components/OrganizationRecords";
 import { OrganizationPersonnel } from "./_components/OrganizationPersonnel";
 import { OrganizationAdministrativeActions } from "./_components/OrganizationAdministrativeActions";
-import { AddPersonnelModal } from "./_components/AddPersonnelModal";
-import { EditOrganizationModal } from "./_components/EditOrganizationModal";
+import { OrganizationDetailModals } from "./_components/OrganizationDetailModals";
 import { RoleGuard } from "@/components/RoleGuard";
 
 export default function OrganizationDetail() {
@@ -22,29 +19,8 @@ export default function OrganizationDetail() {
 }
 
 function OrganizationDetailContent() {
-    const {
-        id,
-        router,
-        org,
-        personnel,
-        loading,
-        isModalOpen,
-        setIsModalOpen,
-        isEditModalOpen,
-        setIsEditModalOpen,
-        searchQuery,
-        setSearchQuery,
-        searchResults,
-        defaultUsers,
-        isSearching,
-        actionLoading,
-        handleSearchUsers,
-        handleAddPersonnel,
-        handleRemovePersonnel,
-        handleSuspendPersonnel,
-        handleUpdateStatus,
-        handleOrganizationUpdated
-    } = useOrganizationDetailLogic();
+    const logic = useOrganizationDetailLogic();
+    const { router, org, personnel, loading, isModalOpen, setIsModalOpen, isEditModalOpen, setIsEditModalOpen } = logic;
 
     if (loading) {
         return (
@@ -61,88 +37,44 @@ function OrganizationDetailContent() {
                 <AlertTriangle size={48} className="text-red-500/80" />
                 <h2 className="text-2xl font-bold text-slate-800 font-outfit">Organization Not Found</h2>
                 <p className="text-slate-500">The requested profile could not be located in the registry.</p>
-                <button 
-                    onClick={() => router.back()} 
-                    className="mt-4 px-6 py-2 bg-primary text-white rounded-xl"
-                >
-                    Go Back
-                </button>
+                <button onClick={() => router.back()} className="mt-4 px-6 py-2 bg-primary text-white rounded-xl">Go Back</button>
             </div>
         );
     }
 
     return (
         <div className="space-y-12 pb-20 max-w-7xl mx-auto">
-            <OrganizationHeader 
-                name={org.name} 
-                id={org.id} 
-                status={org.accreditation_status}
-                canEdit={true}
-                onEdit={() => setIsEditModalOpen(true)}
-                onBack={() => router.back()} 
-            />
+            <OrganizationHeader name={org.name} id={org.id} status={org.accreditation_status} canEdit onEdit={() => setIsEditModalOpen(true)} onBack={() => router.back()} />
 
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
                 <div className="xl:col-span-2 space-y-8">
-                    <OrganizationCoreInfo 
-                        org={org} 
-                        canEdit={true}
-                        onEdit={() => setIsEditModalOpen(true)}
-                    />
-                    <OrganizationRecords 
-                        appsCount={org.apps_count ?? 0}
-                        certsCount={org.certs_count ?? 0}
-                        applicationsHref={`/admin/applications`}
-                        certificatesHref={`/admin/certificates`}
-                    />
+                    <OrganizationCoreInfo org={org} canEdit onEdit={() => setIsEditModalOpen(true)} />
+                    <OrganizationRecords appsCount={org.apps_count ?? 0} certsCount={org.certs_count ?? 0} applicationsHref="/admin/applications" certificatesHref="/admin/certificates" />
                 </div>
 
                 <div className="space-y-6">
-                    <OrganizationPersonnel 
-                        personnel={personnel}
-                        actionLoading={actionLoading}
-                        onSuspendPersonnel={handleSuspendPersonnel}
-                        onRemovePersonnel={handleRemovePersonnel}
-                        onOpenModal={() => setIsModalOpen(true)}
-                    />
-
-                    <OrganizationAdministrativeActions 
-                        org={org}
-                        actionLoading={actionLoading}
-                        onUpdateStatus={handleUpdateStatus}
-                    />
+                    <OrganizationPersonnel personnel={personnel} actionLoading={logic.actionLoading} onSuspendPersonnel={logic.handleSuspendPersonnel} onRemovePersonnel={logic.handleRemovePersonnel} onOpenModal={() => setIsModalOpen(true)} />
+                    <OrganizationAdministrativeActions org={org} actionLoading={logic.actionLoading} onUpdateStatus={logic.handleUpdateStatus} />
                 </div>
             </div>
 
-            <AnimatePresence>
-                {isModalOpen && (
-                    <AddPersonnelModal
-                        orgName={org.name}
-                        personnel={personnel}
-                        searchQuery={searchQuery}
-                        setSearchQuery={setSearchQuery}
-                        searchResults={searchResults}
-                        defaultUsers={defaultUsers}
-                        isSearching={isSearching}
-                        actionLoading={actionLoading}
-                        onSearchUsers={handleSearchUsers}
-                        onAddPersonnel={handleAddPersonnel}
-                        onClose={() => setIsModalOpen(false)}
-                    />
-                )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {isEditModalOpen && (
-                    <EditOrganizationModal
-                        org={org}
-                        isOpen={isEditModalOpen}
-                        onClose={() => setIsEditModalOpen(false)}
-                        onSuccess={handleOrganizationUpdated}
-                    />
-                )}
-            </AnimatePresence>
+            <OrganizationDetailModals
+                org={org}
+                personnel={personnel}
+                isModalOpen={isModalOpen}
+                isEditModalOpen={isEditModalOpen}
+                searchQuery={logic.searchQuery}
+                searchResults={logic.searchResults}
+                defaultUsers={logic.defaultUsers}
+                isSearching={logic.isSearching}
+                actionLoading={logic.actionLoading}
+                setSearchQuery={logic.setSearchQuery}
+                handleSearchUsers={logic.handleSearchUsers}
+                handleAddPersonnel={logic.handleAddPersonnel}
+                setIsModalOpen={setIsModalOpen}
+                setIsEditModalOpen={setIsEditModalOpen}
+                handleOrganizationUpdated={logic.handleOrganizationUpdated}
+            />
         </div>
     );
 }
-

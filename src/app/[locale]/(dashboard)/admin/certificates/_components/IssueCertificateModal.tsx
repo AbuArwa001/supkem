@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Award, X, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { EligibleApplication } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
+import { EligibleAppSelect } from "./EligibleAppSelect";
 
 interface IssueCertificateModalProps {
   isOpen: boolean;
@@ -39,22 +39,13 @@ export default function IssueCertificateModal({
           >
             <div className="p-8 border-b border-border flex items-center justify-between bg-primary/5">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center">
-                  <Award size={24} />
-                </div>
+                <div className="w-12 h-12 bg-primary/10 text-primary rounded-2xl flex items-center justify-center"><Award size={24} /></div>
                 <div>
-                  <h3 className="text-xl font-bold font-outfit text-primary tracking-tight">
-                    Issue New Certificate
-                  </h3>
-                  <p className="text-xs font-medium text-foreground/40">
-                    Select an approved application
-                  </p>
+                  <h3 className="text-xl font-bold font-outfit text-primary tracking-tight">Issue New Certificate</h3>
+                  <p className="text-xs font-medium text-foreground/40">Select an approved application</p>
                 </div>
               </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-white rounded-xl transition-colors"
-              >
+              <button onClick={onClose} className="p-2 hover:bg-white rounded-xl transition-colors">
                 <X size={20} className="text-foreground/40" />
               </button>
             </div>
@@ -66,81 +57,31 @@ export default function IssueCertificateModal({
                   animate={{ opacity: 1, y: 0 }}
                   className={cn(
                     "p-4 rounded-2xl flex items-center gap-3 font-medium text-sm",
-                    message.type === "success"
-                      ? "bg-green-50 text-green-600 border border-green-100"
-                      : "bg-red-50 text-red-600 border border-red-100",
+                    message.type === "success" ? "bg-green-50 text-green-600 border border-green-100" : "bg-red-50 text-red-600 border border-red-100"
                   )}
                 >
-                  {message.type === "success" ? (
-                    <CheckCircle2 size={18} />
-                  ) : (
-                    <AlertCircle size={18} />
-                  )}
+                  {message.type === "success" ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
                   {message.text}
                 </motion.div>
               )}
 
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-[0.2em] text-foreground/40 ml-1">
-                  Application Reference
-                </label>
-                <div className="relative">
-                  <select
-                    required
-                    value={selectedAppId}
-                    onChange={(e) => setSelectedAppId(e.target.value)}
-                    className="w-full p-4 bg-white border border-border rounded-[20px] text-sm appearance-none outline-none focus:border-primary/20 transition-all shadow-sm disabled:opacity-50"
-                    disabled={
-                      isLoadingApplications ||
-                      isIssuing ||
-                      message?.type === "success"
-                    }
-                  >
-                    <option value="">
-                      {isLoadingApplications
-                        ? "Loading approved applications..."
-                        : "Select approved application..."}
-                    </option>
-                    {eligibleApplications.map((app) => (
-                      <option key={app.id} value={app.id}>
-                        {app.organization_name} - {app.service_name} (
-                        {app.id.slice(0, 8)})
-                      </option>
-                    ))}
-                  </select>
-                  {!isLoadingApplications &&
-                    eligibleApplications.length === 0 && (
-                      <p className="text-[10px] text-red-500 mt-2 ml-1">
-                        No approved applications pending certification.
-                      </p>
-                    )}
-                </div>
-              </div>
+              <EligibleAppSelect
+                eligibleApplications={eligibleApplications}
+                isLoadingApplications={isLoadingApplications}
+                disabled={isLoadingApplications || isIssuing || message?.type === "success"}
+                selectedAppId={selectedAppId}
+                onSelectAppId={setSelectedAppId}
+              />
 
               <div className="pt-4 flex flex-col gap-3">
                 <button
                   type="submit"
-                  disabled={
-                    !selectedAppId || isIssuing || message?.type === "success"
-                  }
+                  disabled={!selectedAppId || isIssuing || message?.type === "success"}
                   className="w-full py-4 bg-primary text-white rounded-[20px] font-bold text-sm hover-lift premium-gradient shadow-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:hover:transform-none"
                 >
-                  {isIssuing ? (
-                    <>
-                      <Loader2 size={18} className="animate-spin" /> Issuing
-                      Digital Certificate...
-                    </>
-                  ) : (
-                    <>
-                      <Award size={18} /> Generate Certificate
-                    </>
-                  )}
+                  {isIssuing ? <><Loader2 size={18} className="animate-spin" /> Issuing Digital Certificate...</> : <><Award size={18} /> Generate Certificate</>}
                 </button>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="w-full py-4 text-foreground/40 font-bold text-sm hover:text-primary transition-all"
-                >
+                <button type="button" onClick={onClose} className="w-full py-4 text-foreground/40 font-bold text-sm hover:text-primary transition-all">
                   Cancel
                 </button>
               </div>

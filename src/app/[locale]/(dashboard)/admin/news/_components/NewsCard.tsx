@@ -14,50 +14,26 @@ interface NewsCardProps {
   onDelete: () => void;
 }
 
-/**
- * Individual news card component.
- */
 export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
   const t = useTranslations("Dashboard.admin.news");
-  const locale = useLocale();
-  const isArabic = locale === "ar";
-
+  const isArabic = useLocale() === "ar";
   const displayTitle = (isArabic && item.title_ar) ? item.title_ar : item.title;
   const displayContent = (isArabic && item.content_ar) ? item.content_ar : item.content;
 
   const imageUrl = item.featured_image
-    ? item.featured_image.startsWith("http")
-      ? item.featured_image
-      : `${API_BASE_URL}${item.featured_image.startsWith("/") ? "" : "/"}${item.featured_image}`
+    ? (item.featured_image.startsWith("http") ? item.featured_image : `${API_BASE_URL}${item.featured_image.startsWith("/") ? "" : "/"}${item.featured_image}`)
     : null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full"
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full">
       <div className="aspect-video relative bg-primary/5 flex items-center justify-center overflow-hidden">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={displayTitle}
-            fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
-          />
+          <Image src={imageUrl} alt={displayTitle} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
         ) : (
           <ImageIcon className="text-primary/20" size={48} />
         )}
         <div className="absolute top-4 end-4">
-          <span
-            className={cn(
-              "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-              item.is_published
-                ? "bg-green-100 text-green-700"
-                : "bg-amber-100 text-amber-700",
-            )}
-          >
+          <span className={cn("px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest", item.is_published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700")}>
             {item.is_published ? t("published") : t("draft")}
           </span>
         </div>
@@ -65,37 +41,17 @@ export function NewsCard({ item, index, onEdit, onDelete }: NewsCardProps) {
 
       <div className="p-4 sm:p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
-          <h3
-            className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug"
-            dir={isArabic ? "rtl" : "ltr"}
-          >
-            {displayTitle}
-          </h3>
-          <p
-            className="text-sm text-foreground/60 line-clamp-3 leading-relaxed"
-            dir={isArabic ? "rtl" : "ltr"}
-          >
-            {displayContent}
-          </p>
+          <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug" dir={isArabic ? "rtl" : "ltr"}>{displayTitle}</h3>
+          <p className="text-sm text-foreground/60 line-clamp-3 leading-relaxed" dir={isArabic ? "rtl" : "ltr"}>{displayContent}</p>
         </div>
 
         <div className="pt-4 sm:pt-6 mt-auto border-t border-border/50 flex items-center justify-between">
-          <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">
-            {new Date(item.created_at).toLocaleDateString()}
-          </p>
+          <p className="text-xs font-bold text-foreground/30 uppercase tracking-widest">{new Date(item.created_at).toLocaleDateString()}</p>
           <div className="flex items-center gap-2">
-            <button
-              onClick={onEdit}
-              aria-label="Edit"
-              className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
-            >
+            <button onClick={onEdit} aria-label="Edit" className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90">
               <Edit2 size={16} />
             </button>
-            <button
-              onClick={onDelete}
-              aria-label="Delete"
-              className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90"
-            >
+            <button onClick={onDelete} aria-label="Delete" className="min-h-11 min-w-11 flex items-center justify-center p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90">
               <Trash2 size={16} />
             </button>
           </div>

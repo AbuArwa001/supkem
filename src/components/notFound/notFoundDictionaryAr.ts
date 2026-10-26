@@ -1,0 +1,61 @@
+import { ShieldCheck, Briefcase, UserCheck, Headphones } from "lucide-react";
+import { NotFoundDictionaryLocale } from "./notFoundTypes";
+
+export const NOT_FOUND_DICT_AR: NotFoundDictionaryLocale = {
+  badge: "خطأ 404 • الصفحة غير موجودة",
+  title: "هل ضللت الطريق في الأمة الرقمية؟",
+  description:
+    "الصفحة أو الوثيقة أو رابط الخدمة الذي تبحث عنه قد تم نقله أو تحديثه أو لم يعد متوفراً عبر البوابة الوطنية.",
+  searchPlaceholder: "ابحث في الخدمات، التحقق، الأخبار...",
+  pressEnter: "اضغط Enter للانتقال",
+  returnHome: "العودة للرئيسية",
+  goBack: "الرجوع للخلف",
+  quickNavigation: "وجهات مقترحة",
+  requestedUrl: "الرابط المطلوب",
+  copyUrl: "نسخ الرابط",
+  urlCopied: "تم نسخ الرابط إلى الحافظة",
+  reportIssue: "إبلاغ عن رابط معطل",
+  noMatches: "لم يتم العثور على وجهة مطابقة لبحثك.",
+  destinations: [
+    {
+      id: "verify",
+      title: "التحقق من الوثائق",
+      description: "التحقق المباشر من صحة شهادات وخطابات سوبكيم الرسمية",
+      href: "/verify",
+      icon: ShieldCheck,
+      badge: "بوابة عامة",
+      accent: "emerald",
+      keywords: ["تحقق", "شهادة", "رمز", "باركود", "خطاب", "أصالة", "فحص"],
+    },
+    {
+      id: "services",
+      title: "دليل الخدمات",
+      description: "الاعتماد المؤسسي، شهادات الحلال، الحج والعمرة، وتوثيق الزواج",
+      href: "/services",
+      icon: Briefcase,
+      badge: "الدليل الشامل",
+      accent: "gold",
+      keywords: ["خدمات", "حلال", "حج", "عمرة", "زواج", "اعتماد", "مدرسة", "مسجد"],
+    },
+    {
+      id: "portal",
+      title: "بوابة الأعضاء والمواطنين",
+      description: "متابعة الطلبات، تقديم المستندات، وإدارة الملف التعريفي",
+      href: "/portal",
+      icon: UserCheck,
+      badge: "لوحة التحكم",
+      accent: "blue",
+      keywords: ["بوابة", "دخول", "طلب", "لوحة", "حساب", "ملف"],
+    },
+    {
+      id: "contact",
+      title: "الأمانة العامة والدعم",
+      description: "تواصل مع المقر الرئيسي لسوبكيم أو المكاتب الإقليمية بالمحافظات",
+      href: "/contact",
+      icon: Headphones,
+      badge: "المساعدة",
+      accent: "slate",
+      keywords: ["اتصال", "دعم", "مساعدة", "بريد", "هاتف", "المقر", "مكتب"],
+    },
+  ],
+};

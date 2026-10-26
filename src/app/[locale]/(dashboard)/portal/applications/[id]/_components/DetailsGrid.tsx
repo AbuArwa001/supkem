@@ -1,98 +1,22 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { FileText, Building2, Award, Mail, ShieldCheck } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-interface DetailsGridProps {
-  application: {
-    id: string;
-    service_name: string;
-    service_category?: string;
-    service_document_type?: string;
-    organization_name?: string;
-    user_name: string;
-    submitted_at: string;
-    updated_at: string;
-    payment?: {
-      status: string;
-      amount: string;
-      receipt_number?: string;
-    };
-    certification?: { id: string; serial_number: string } | null;
-    letter?: { id: string; serial_number: string } | null;
-    marriage_details?: any;
-    pilgrim_details?: any;
-    education_details?: any;
-    travel_visa_details?: any;
-    employment_details?: any;
-  };
-}
-
-/** Determine what kind of document this application produces */
-function getDocumentType(application: DetailsGridProps["application"]) {
-  if (application.letter) return { label: "Letter Issued", icon: Mail, color: "bg-blue-500" };
-  if (application.certification) return { label: "Certificate Issued", icon: Award, color: "bg-emerald-500" };
-  
-  if (application.service_document_type === "Letter") {
-    return { label: "Will Produce an Official Letter", icon: Mail, color: "bg-blue-400" };
-  }
-  if (application.service_document_type === "Certificate") {
-    return { label: "Will Produce an Official Certificate", icon: ShieldCheck, color: "bg-emerald-400" };
-  }
-  if (application.service_document_type === "None") {
-    return { label: "No Document Required", icon: FileText, color: "bg-slate-400" };
-  }
-
-  // Fallback heuristic if not explicitly configured
-  const svc = application.service_name?.toLowerCase() || "";
-  const letterServices = ["study", "hajj", "umrah", "travel", "visa", "employment", "marriage"];
-  const isLetter = letterServices.some((k) => svc.includes(k));
-  return isLetter
-    ? { label: "Will Produce a Letter", icon: Mail, color: "bg-blue-400" }
-    : { label: "Will Produce a Certificate", icon: ShieldCheck, color: "bg-emerald-400" };
-}
+import { FileText, Building2 } from "lucide-react";
+import { getDocumentType } from "../_utils/documentType";
+import { DetailItem } from "./DetailItem";
+import { DocumentTypeBanner } from "./DocumentTypeBanner";
+import { SpecificDetailsCard } from "./SpecificDetailsCard";
+import type { DetailsGridProps } from "../_types";
 
 export const DetailsGrid = ({ application }: DetailsGridProps) => {
-  const hasSpecificDetails =
-    application.marriage_details ||
-    application.pilgrim_details ||
-    application.education_details ||
-    application.travel_visa_details ||
-    application.employment_details;
-
   const docType = getDocumentType(application);
-  const DocIcon = docType.icon;
+  const serialNo = application.letter?.serial_number || application.certification?.serial_number;
 
   return (
     <div className="space-y-6">
-      {/* Document Type Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-wrap items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm"
-      >
-        <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0", docType.color)}>
-          <DocIcon size={20} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Document Type</p>
-          <p className="font-black text-slate-800">{docType.label}</p>
-        </div>
-        {application.service_category && (
-          <span className="text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-xl bg-primary/10 text-primary border border-primary/20 shrink-0">
-            {application.service_category}
-          </span>
-        )}
-        {(application.letter?.serial_number || application.certification?.serial_number) && (
-          <span className="font-mono text-xs font-semibold bg-slate-100 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-200 shrink-0">
-            {application.letter?.serial_number || application.certification?.serial_number}
-          </span>
-        )}
-      </motion.div>
+      <DocumentTypeBanner docType={docType} category={application.service_category} serialNumber={serialNo} />
 
       <div className="grid md:grid-cols-2 gap-6">
-        {/* Service Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,9 +28,7 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
               <FileText size={22} className="sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Requested Service
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Requested Service</p>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 group-hover:text-primary transition-colors break-words">
                 {application.service_name}
               </h3>
@@ -117,20 +39,12 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
             <DetailItem label="Submission Date" value={new Date(application.submitted_at).toLocaleDateString()} />
             <DetailItem label="Last Updated" value={new Date(application.updated_at).toLocaleDateString()} />
             <DetailItem label="Application ID" value={application.id} isMono />
-            <DetailItem
-              label="Payment Status"
-              value={application.payment ? application.payment.status : "Pending/Unpaid"}
-            />
-            {application.payment?.amount && (
-              <DetailItem label="Amount" value={`KES ${application.payment.amount}`} />
-            )}
-            {application.payment?.receipt_number && (
-              <DetailItem label="Receipt No." value={application.payment.receipt_number} isMono />
-            )}
+            <DetailItem label="Payment Status" value={application.payment ? application.payment.status : "Pending/Unpaid"} />
+            {application.payment?.amount && <DetailItem label="Amount" value={`KES ${application.payment.amount}`} />}
+            {application.payment?.receipt_number && <DetailItem label="Receipt No." value={application.payment.receipt_number} isMono />}
           </div>
         </motion.div>
 
-        {/* Entity Details */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -142,9 +56,7 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
               <Building2 size={22} className="sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Entity Details
-              </p>
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Entity Details</p>
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 break-words">
                 {application.organization_name || "Personal/Individual Application"}
               </h3>
@@ -157,81 +69,14 @@ export const DetailsGrid = ({ application }: DetailsGridProps) => {
         </motion.div>
       </div>
 
-      {/* Specific Details */}
-      {hasSpecificDetails && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="p-5 sm:p-8 md:p-10 bg-white border border-slate-100 rounded-2xl sm:rounded-[32px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-500 group"
-        >
-          <div className="flex items-center gap-4 sm:gap-5 border-b border-slate-100 pb-6 sm:pb-8">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center shrink-0 border border-primary/20 group-hover:scale-110 transition-transform duration-500">
-              <FileText size={22} className="sm:w-6 sm:h-6" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-                Application Content
-              </p>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight mt-1 break-words">
-                {application.service_name} — Details
-              </h3>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-x-8 gap-y-1 pt-6">
-            {application.marriage_details && (
-              <>
-                <DetailItem label="Husband Name" value={application.marriage_details.husband_name} />
-                <DetailItem label="Wife Name" value={application.marriage_details.wife_name} />
-                <DetailItem label="Date of Marriage" value={application.marriage_details.date_of_marriage} />
-                <DetailItem label="Place of Marriage" value={application.marriage_details.place_of_marriage} />
-              </>
-            )}
-            {application.pilgrim_details && (
-              <>
-                <DetailItem label="Pilgrim Name" value={application.pilgrim_details.full_name} />
-                <DetailItem label="Passport No." value={application.pilgrim_details.passport_number} />
-                <DetailItem label="Trip Type" value={application.pilgrim_details.trip_type} />
-                <DetailItem label="Expected Travel Date" value={application.pilgrim_details.expected_travel_date} />
-              </>
-            )}
-            {application.education_details && (
-              <>
-                <DetailItem label="Student Name" value={application.education_details.full_name} />
-                <DetailItem label="Institution" value={application.education_details.institution_name} />
-                <DetailItem label="Course" value={application.education_details.course_of_study} />
-                <DetailItem label="Country" value={application.education_details.country} />
-              </>
-            )}
-            {application.travel_visa_details && (
-              <>
-                <DetailItem label="Traveler Name" value={application.travel_visa_details.full_name} />
-                <DetailItem label="Passport No." value={application.travel_visa_details.passport_number} />
-                <DetailItem label="Destination" value={application.travel_visa_details.destination_country} />
-                <DetailItem label="Trip Purpose" value={application.travel_visa_details.trip_purpose} />
-              </>
-            )}
-            {application.employment_details && (
-              <>
-                <DetailItem label="Applicant Name" value={application.employment_details.full_name} />
-                <DetailItem label="ID Number" value={application.employment_details.id_number} />
-                <DetailItem label="Position" value={application.employment_details.position_applied_for} />
-                <DetailItem label="Employer" value={application.employment_details.employer_name} />
-              </>
-            )}
-          </div>
-        </motion.div>
-      )}
+      <SpecificDetailsCard
+        serviceName={application.service_name}
+        marriageDetails={application.marriage_details}
+        pilgrimDetails={application.pilgrim_details}
+        educationDetails={application.education_details}
+        travelVisaDetails={application.travel_visa_details}
+        employmentDetails={application.employment_details}
+      />
     </div>
   );
 };
-
-const DetailItem = ({ label, value, isMono = false }: { label: string; value: string; isMono?: boolean }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4 py-3 sm:py-4 border-b border-slate-100 last:border-0">
-    <span className="text-slate-500 font-medium text-xs sm:text-sm shrink-0">{label}</span>
-    <span className={isMono ? "text-slate-900 font-mono text-xs font-semibold bg-slate-100 px-2 py-1 rounded break-all" : "text-slate-900 font-bold text-xs sm:text-sm break-words"}>
-      {value}
-    </span>
-  </div>
-);

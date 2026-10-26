@@ -1,22 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import {
-    Building2,
-    MapPin,
-    Globe,
-    Phone,
-    Mail,
-    ExternalLink,
-    Edit3,
-    Copy,
-    Check,
-    Navigation
-} from "lucide-react";
+import { Building2, Edit3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { OrganizationDetail } from "./types";
+import { OrganizationRegistryCards } from "./OrganizationRegistryCards";
+import { OrganizationDigitalPresence } from "./OrganizationDigitalPresence";
 
 interface OrganizationCoreInfoProps {
     org: OrganizationDetail;
@@ -26,19 +16,6 @@ interface OrganizationCoreInfoProps {
 
 export function OrganizationCoreInfo({ org, canEdit = false, onEdit }: OrganizationCoreInfoProps) {
     const t = useTranslations("Dashboard.admin.organizations.detail");
-    const [copiedField, setCopiedField] = useState<string | null>(null);
-
-    const handleCopy = (field: string, text: string) => {
-        if (!text) return;
-        navigator.clipboard.writeText(text);
-        setCopiedField(field);
-        setTimeout(() => setCopiedField(null), 2000);
-    };
-
-    const hasGps = Boolean(org.gps_location && org.gps_location !== "N/A");
-    const mapsUrl = hasGps
-        ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(org.gps_location)}`
-        : null;
 
     return (
         <motion.div
@@ -48,7 +25,6 @@ export function OrganizationCoreInfo({ org, canEdit = false, onEdit }: Organizat
         >
             <div className="absolute top-0 end-0 w-64 h-64 bg-primary/[0.02] rounded-full -translate-y-1/2 translate-x-1/2" />
 
-            {/* Header section with Icon, Title, Badges, and Edit Button */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative z-10">
                 <div className="flex items-center gap-5">
                     <div className="w-16 h-16 sm:w-20 sm:h-20 bg-primary/5 text-primary rounded-[22px] flex items-center justify-center border border-primary/10 shadow-md shadow-primary/5 shrink-0">
@@ -87,173 +63,8 @@ export function OrganizationCoreInfo({ org, canEdit = false, onEdit }: Organizat
                 )}
             </div>
 
-            {/* 4 Key Stat Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 relative z-10">
-                {/* Reg No Card */}
-                <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10 space-y-1 relative group hover:border-primary/30 transition-all">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50">
-                            {t("regNo")}
-                        </p>
-                        {org.reg_number && (
-                            <button
-                                onClick={() => handleCopy("reg", org.reg_number)}
-                                className="text-slate-400 hover:text-primary transition-colors cursor-pointer"
-                                title={t("copyRegNo")}
-                            >
-                                {copiedField === "reg" ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
-                            </button>
-                        )}
-                    </div>
-                    <p className="text-base font-bold text-primary truncate" title={org.reg_number}>
-                        {org.reg_number || t("notAssigned")}
-                    </p>
-                </div>
-
-                {/* PIN No Card */}
-                <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10 space-y-1 relative group hover:border-primary/30 transition-all">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50">
-                            {t("pinNo")}
-                        </p>
-                        {org.pin_number && (
-                            <button
-                                onClick={() => handleCopy("pin", org.pin_number)}
-                                className="text-slate-400 hover:text-primary transition-colors cursor-pointer"
-                                title={t("copyPin")}
-                            >
-                                {copiedField === "pin" ? <Check size={12} className="text-emerald-600" /> : <Copy size={12} />}
-                            </button>
-                        )}
-                    </div>
-                    <p className="text-base font-bold text-primary truncate font-mono" title={org.pin_number}>
-                        {org.pin_number || t("notAssigned")}
-                    </p>
-                </div>
-
-                {/* Location Card */}
-                <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10 space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50">
-                        {t("jurisdiction")}
-                    </p>
-                    <p className="text-base font-bold text-primary flex items-center gap-1.5 truncate" title={org.county_council_name}>
-                        <MapPin size={14} className="text-primary/60 shrink-0" />
-                        <span className="truncate">{org.county_council_name || t("notAssigned")}</span>
-                    </p>
-                    {org.region_name && (
-                        <p className="text-[10px] text-slate-400 font-semibold truncate ps-5">
-                            {org.region_name} {t("region")}
-                        </p>
-                    )}
-                </div>
-
-                {/* GPS Location Card */}
-                <div className="p-4 rounded-2xl bg-primary/[0.02] border border-primary/10 space-y-1">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/50">
-                            {t("gpsCoordinates")}
-                        </p>
-                        {mapsUrl && (
-                            <a
-                                href={mapsUrl}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-slate-400 hover:text-primary transition-colors"
-                                title={t("openMaps")}
-                            >
-                                <Navigation size={12} />
-                            </a>
-                        )}
-                    </div>
-                    <p className="text-base font-bold text-primary truncate font-mono" title={org.gps_location}>
-                        {hasGps ? org.gps_location : "N/A"}
-                    </p>
-                </div>
-            </div>
-
-            {/* Digital Presence Section */}
-            <div className="space-y-4 pt-4 border-t border-border/60">
-                <h4 className="text-xs font-black uppercase tracking-widest text-primary flex items-center gap-2.5">
-                    <span className="w-2 h-2 rounded-full bg-secondary" />
-                    {t("digitalPresence")}
-                </h4>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {/* Website */}
-                    <div className="flex items-center justify-between p-4 rounded-2xl border border-border bg-slate-50/50 hover:bg-white hover:border-primary/20 transition-all group">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                                <Globe size={18} className="text-primary/70 group-hover:text-primary transition-colors" />
-                            </div>
-                            <div className="overflow-hidden">
-                                <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("website")}</p>
-                                <span className="text-sm font-bold text-slate-700 truncate block">
-                                    {org.website ? org.website.replace(/^https?:\/\//, '').replace(/\/$/, '') : t("notProvided")}
-                                </span>
-                            </div>
-                        </div>
-                        {org.website && (
-                            <a
-                                href={org.website.startsWith('http') ? org.website : `https://${org.website}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2 text-primary/40 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
-                                title={t("visitWebsite")}
-                            >
-                                <ExternalLink size={16} />
-                            </a>
-                        )}
-                    </div>
-
-                    {/* Phone */}
-                    <div className="flex items-center justify-between p-4 rounded-2xl border border-border bg-slate-50/50 hover:bg-white hover:border-primary/20 transition-all group">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                                <Phone size={18} className="text-primary/70 group-hover:text-primary transition-colors" />
-                            </div>
-                            <div className="overflow-hidden">
-                                <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("officialPhone")}</p>
-                                <span className="text-sm font-bold text-slate-700 truncate block">
-                                    {org.phone_number || t("notProvided")}
-                                </span>
-                            </div>
-                        </div>
-                        {org.phone_number && (
-                            <a
-                                href={`tel:${org.phone_number}`}
-                                className="p-2 text-primary/40 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
-                                title={t("callPhone")}
-                            >
-                                <ExternalLink size={16} />
-                            </a>
-                        )}
-                    </div>
-
-                    {/* Email */}
-                    <div className="flex items-center justify-between p-4 rounded-2xl border border-border bg-slate-50/50 hover:bg-white hover:border-primary/20 transition-all group">
-                        <div className="flex items-center gap-3 overflow-hidden">
-                            <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center shrink-0">
-                                <Mail size={18} className="text-primary/70 group-hover:text-primary transition-colors" />
-                            </div>
-                            <div className="overflow-hidden">
-                                <p className="text-[10px] font-black uppercase tracking-wider text-slate-400">{t("officialEmail")}</p>
-                                <span className="text-sm font-bold text-slate-700 truncate block">
-                                    {org.email || t("notProvided")}
-                                </span>
-                            </div>
-                        </div>
-                        {org.email && (
-                            <a
-                                href={`mailto:${org.email}`}
-                                className="p-2 text-primary/40 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors cursor-pointer"
-                                title={t("sendEmail")}
-                            >
-                                <ExternalLink size={16} />
-                            </a>
-                        )}
-                    </div>
-                </div>
-            </div>
+            <OrganizationRegistryCards org={org} />
+            <OrganizationDigitalPresence org={org} />
         </motion.div>
     );
 }

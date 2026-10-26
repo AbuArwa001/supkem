@@ -1,15 +1,7 @@
 import { NextResponse } from "next/server";
-import { OFFICIAL_CHANNELS } from "@/components/social/socialData";
-import { SocialPost } from "@/components/social/types";
 import { fetchSocialSettings } from "@/lib/socialSettingsServer";
-import {
-  fetchFacebookPageFeed,
-  fetchInstagramBusinessMedia,
-  formatRelativeTime,
-} from "@/lib/metaGraphApi";
-
-const SERVER_API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
+import { fetchLiveSocialPosts } from "./ingestion";
+import { buildDynamicChannels, filterAndSortPosts } from "./filters";
 
 export async function GET(request: Request) {
   try {
@@ -19,141 +11,9 @@ export async function GET(request: Request) {
     const search = searchParams.get("search")?.toLowerCase();
 
     const currentSettings = await fetchSocialSettings();
-
-    // Dynamically build active channel map from settings
-    const dynamicChannels: Record<string, any> = { ...OFFICIAL_CHANNELS };
-    currentSettings.channels.forEach((ch) => {
-      if (ch.enabled) {
-        dynamicChannels[ch.id] = {
-          name: ch.name,
-          handle: ch.handle,
-          url: ch.url,
-          color: ch.color || "#000000",
-          bgClass: ch.bgClass || "bg-slate-900 text-white",
-          badgeClass: ch.badgeClass || "bg-slate-900 text-white border-slate-700",
-        };
-      } else {
-        delete dynamicChannels[ch.id];
-      }
-    });
-
-    const liveSocialPosts: SocialPost[] = [];
-
-    // 1. Direct Meta Graph API Ingestion (Facebook & Instagram)
-    const metaConfig = currentSettings.metaApi;
-    if (metaConfig?.enabled && metaConfig?.facebookAccessToken) {
-      try {
-        const [fbPosts, igPosts] = await Promise.all([
-          metaConfig.facebookPageId
-            ? fetchFacebookPageFeed(
-                metaConfig.facebookPageId,
-                metaConfig.facebookAccessToken,
-                10,
-                metaConfig.cacheDurationMinutes || 30
-              )
-            : Promise.resolve([]),
-          metaConfig.instagramBusinessId
-            ? fetchInstagramBusinessMedia(
-                metaConfig.instagramBusinessId,
-                metaConfig.facebookAccessToken,
-                10,
-                metaConfig.cacheDurationMinutes || 30
-              )
-            : Promise.resolve([]),
-        ]);
-
-        liveSocialPosts.push(...fbPosts, ...igPosts);
-      } catch (metaErr) {
-        console.warn("Meta Graph ingestion notice:", metaErr);
-      }
-    }
-
-    // 2. Direct YouTube Data API Ingestion
-    const ytConfig = currentSettings.youtubeApi;
-    if (ytConfig?.enabled && ytConfig?.apiKey) {
-      try {
-        const { fetchYouTubeVideos } = await import("@/lib/youtubeApi");
-        const ytPosts = await fetchYouTubeVideos(ytConfig.apiKey, {
-          channelId: ytConfig.channelId,
-          searchQuery: ytConfig.searchQuery || "SUPKEM Kenya",
-          limit: ytConfig.maxResults || 6,
-        });
-        liveSocialPosts.push(...ytPosts);
-      } catch (ytErr) {
-        console.warn("YouTube ingestion notice:", ytErr);
-      }
-    }
-
-    // 3. Direct Twitter (X) API Ingestion
-    const twConfig = currentSettings.twitterApi;
-    if (twConfig?.enabled && twConfig?.bearerToken) {
-      try {
-        const { fetchTwitterFeed } = await import("@/lib/twitterApi");
-        const twPosts = await fetchTwitterFeed(
-          twConfig.bearerToken,
-          twConfig.username || "SUPKEM1",
-          twConfig.maxResults || 6
-        );
-        liveSocialPosts.push(...twPosts);
-      } catch (twErr) {
-        console.warn("Twitter ingestion notice:", twErr);
-      }
-    }
-
-    let allPosts: SocialPost[] = [...liveSocialPosts];
-
-    // Active platforms include both enabled channels and enabled direct API integrations
-    const activePlatforms = new Set<string>();
-    if (Array.isArray(currentSettings.channels)) {
-      currentSettings.channels.forEach((ch) => {
-        if (ch.enabled !== false) {
-          activePlatforms.add(ch.id.toLowerCase());
-        }
-      });
-    }
-
-    // Direct API integrations explicitly activate their platforms
-    if (currentSettings.youtubeApi?.enabled) {
-      activePlatforms.add("youtube");
-    }
-    if (currentSettings.metaApi?.enabled) {
-      activePlatforms.add("facebook");
-      activePlatforms.add("instagram");
-    }
-    if (currentSettings.twitterApi?.enabled) {
-      activePlatforms.add("x");
-    }
-
-    allPosts = allPosts.filter((p) => activePlatforms.has(p.platform.toLowerCase()));
-
-    // Filter by platform
-    if (platform && platform !== "all") {
-      allPosts = allPosts.filter((p) => p.platform === platform);
-    }
-
-    // Filter by search query
-    if (search) {
-      allPosts = allPosts.filter(
-        (p) =>
-          p.content.toLowerCase().includes(search) ||
-          p.tags.some((tag) => tag.toLowerCase().includes(search)) ||
-          p.author.name.toLowerCase().includes(search)
-      );
-    }
-
-    // Deduplicate and sort by date descending
-    const seenIds = new Set<string>();
-    const uniquePosts = allPosts.filter((p) => {
-      if (seenIds.has(p.id)) return false;
-      seenIds.add(p.id);
-      return true;
-    });
-
-    uniquePosts.sort(
-      (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-    );
-
-    const finalPosts = limit > 0 ? uniquePosts.slice(0, limit) : uniquePosts;
+    const dynamicChannels = buildDynamicChannels(currentSettings);
+    const liveSocialPosts = await fetchLiveSocialPosts(currentSettings);
+    const finalPosts = filterAndSortPosts(liveSocialPosts, currentSettings, platform, search, limit);
 
     return NextResponse.json({
       success: true,

@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { ZoomIn, ZoomOut, Maximize2 } from "lucide-react";
+import React from "react";
+import { ZoomIn, ZoomOut } from "lucide-react";
+import { useDocumentScale } from "./documentScale/useDocumentScale";
 
 interface DocumentScaleWrapperProps {
   children: React.ReactNode;
-  baseWidth?: number; // default A4 portrait width in px at 96dpi ~ 794
-  baseHeight?: number; // default A4 portrait height in px at 96dpi ~ 1123
+  baseWidth?: number;
+  baseHeight?: number;
   isLandscape?: boolean;
 }
 
@@ -16,40 +17,15 @@ export function DocumentScaleWrapper({
   baseHeight: customBaseHeight,
   isLandscape = false,
 }: DocumentScaleWrapperProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState<number>(1);
-  const [isFullZoom, setIsFullZoom] = useState<boolean>(false);
-
   const baseWidth = customBaseWidth || (isLandscape ? 1123 : 794);
   const baseHeight = customBaseHeight || (isLandscape ? 794 : 1123);
-
-  useEffect(() => {
-    const updateScale = () => {
-      if (!containerRef.current) return;
-      const availableWidth = containerRef.current.clientWidth;
-      if (availableWidth <= 0) return;
-
-      if (isFullZoom) {
-        setScale(1);
-      } else {
-        // Leave 16px padding on mobile screens
-        const padding = availableWidth < 640 ? 16 : 32;
-        const targetScale = Math.min(1, (availableWidth - padding) / baseWidth);
-        setScale(targetScale);
-      }
-    };
-
-    updateScale();
-    window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
-  }, [baseWidth, isFullZoom]);
+  const { containerRef, scale, isFullZoom, setIsFullZoom } = useDocumentScale(baseWidth);
 
   const scaledWidth = Math.round(baseWidth * scale);
   const scaledHeight = Math.round(baseHeight * scale);
 
   return (
     <div className="w-full flex flex-col items-center select-none" ref={containerRef}>
-      {/* Mobile/Tablet zoom indicator & toggle button */}
       <div className="flex items-center justify-end w-full max-w-4xl mb-3 px-2 no-print">
         {scale < 1 && (
           <button
@@ -73,7 +49,6 @@ export function DocumentScaleWrapper({
         )}
       </div>
 
-      {/* Document container */}
       <div
         className={`w-full flex justify-center print:block print:w-full ${
           isFullZoom ? "overflow-x-auto pb-4 justify-start sm:justify-center" : ""

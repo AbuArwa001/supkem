@@ -1,26 +1,13 @@
 "use client";
 
-// React/Next.js core
 import { Link } from "@/i18n/routing";
-
-// External libraries
 import { motion } from "framer-motion";
-import {
-  FileText,
-  CheckCircle2,
-  Clock,
-  AlertCircle,
-  ChevronRight,
-  MoreVertical,
-} from "lucide-react";
-
-// Internal components
+import { FileText, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 import { useServiceName } from "@/hooks/useServiceName";
-
-// Types
-import { Application } from "@/app/[locale]/(dashboard)/admin/applications/_types";
+import { Application } from "../_types";
+import { ApplicationStatusBadge } from "./ApplicationStatusBadge";
 
 interface ApplicationCardProps {
   application: Application;
@@ -72,31 +59,7 @@ export default function ApplicationCard({
         </div>
 
         <div className="space-y-1.5 flex-1">
-          <span
-            className={cn(
-              "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-[0.2em] inline-flex items-center gap-1.5 border mb-2",
-              application.status === "Approved"
-                ? "bg-emerald-50 text-emerald-700 border-emerald-100"
-                : application.status === "Rejected"
-                  ? "bg-rose-50 text-rose-700 border-rose-100"
-                  : application.status === "Withdrawn"
-                    ? "bg-slate-100 text-slate-600 border-slate-200"
-                    : (application.status === "Pending" || application.status === "Submitted")
-                      ? "bg-amber-50 text-amber-700 border-amber-200"
-                      : "bg-slate-100 text-slate-700 border-slate-200",
-            )}
-          >
-            {application.status === "Approved" ? (
-              <CheckCircle2 size={10} />
-            ) : (application.status === "Rejected" || application.status === "Withdrawn") ? (
-              <AlertCircle size={10} />
-            ) : (
-              <Clock size={10} />
-            )}
-            {application.status === "Submitted"
-              ? (t("filters.PENDING") || "PENDING")
-              : (t(`filters.${application.status.toUpperCase()}`) || application.status)}
-          </span>
+          <ApplicationStatusBadge status={application.status} />
           <h4 className="text-xl font-bold font-outfit text-slate-900 leading-tight group-hover:text-primary transition-colors cursor-pointer line-clamp-2">
             {application.display_id} {application.service_name ? `- ${translateService(application.service_name)}` : ""}
           </h4>
@@ -104,7 +67,7 @@ export default function ApplicationCard({
             {application.organization_name || t("type")}
           </p>
         </div>
-        
+
         <div className="py-4 border-t border-slate-100 mt-2">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">
             {t("submittedOn")}

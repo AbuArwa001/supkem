@@ -1,12 +1,11 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Video as VideoIcon, CheckCircle2, Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { X, Loader2 } from "lucide-react";
 import { VideoFormData, VideoBriefingItem } from "../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
-import { UploadProgress } from "@/components/UploadProgress";
-import { formatBytes } from "@/lib/upload";
+import { VideoFileInput } from "./VideoFileInput";
+import { VideoModalFields } from "./VideoModalFields";
 
 interface VideoModalProps {
   isOpen: boolean;
@@ -20,14 +19,7 @@ interface VideoModalProps {
 }
 
 export const VideoModal = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  formData,
-  setFormData,
-  editingItem,
-  isSubmitting,
-  uploadPercent = null,
+  isOpen, onClose, onSubmit, formData, setFormData, editingItem, isSubmitting, uploadPercent = null,
 }: VideoModalProps) => {
   const t = useTranslations("Dashboard.admin.videos");
 
@@ -36,160 +28,37 @@ export const VideoModal = ({
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={isSubmitting ? undefined : onClose}
             className="absolute inset-0 bg-primary/20 backdrop-blur-sm"
           />
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            initial={{ scale: 0.95, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 20 }}
             className="relative w-full max-w-lg bg-white rounded-t-[20px] sm:rounded-[20px] shadow-2xl overflow-hidden shadow-primary/10"
           >
             <div className="p-5 sm:p-8 border-b border-border flex items-center justify-between">
               <h2 className="text-2xl font-bold font-outfit text-primary">
                 {editingItem ? t("editVideo") : t("uploadVideoBriefing")}
               </h2>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-primary/5 rounded-xl transition-colors"
-              >
+              <button onClick={onClose} className="p-2 hover:bg-primary/5 rounded-xl transition-colors">
                 <X size={24} />
               </button>
             </div>
 
-            <form
-              onSubmit={onSubmit}
-              className="p-5 sm:p-8 space-y-6 max-h-[80vh] sm:max-h-[70vh] overflow-y-auto custom-scrollbar"
-            >
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  {t("title")}
-                </label>
-                <input
-                  required
-                  value={formData.title}
-                  onChange={(e) =>
-                    setFormData({ ...formData, title: e.target.value })
-                  }
-                  placeholder={t("titlePlaceholder")}
-                  className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all"
-                />
-              </div>
+            <form onSubmit={onSubmit} className="p-5 sm:p-8 space-y-6 max-h-[80vh] sm:max-h-[70vh] overflow-y-auto custom-scrollbar">
+              <VideoModalFields formData={formData} setFormData={setFormData} />
 
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  {t("description")}
-                </label>
-                <textarea
-                  rows={4}
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                  placeholder={t("descriptionPlaceholder")}
-                  className="w-full px-6 py-4 bg-primary/[0.02] border border-border focus:border-primary/20 rounded-2xl outline-none font-medium text-primary transition-all resize-none"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  {t("videoFile")}
-                </label>
-                <div className="relative group">
-                  <input
-                    type="file"
-                    accept="video/*"
-                    disabled={isSubmitting}
-                    required={!editingItem}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        video_file: e.target.files?.[0] || null,
-                      })
-                    }
-                    className="hidden"
-                    id="video-upload"
-                  />
-                  <label
-                    htmlFor="video-upload"
-                    className="w-full px-6 py-4 bg-primary/[0.02] border border-dashed border-border group-hover:border-primary/50 rounded-2xl cursor-pointer flex flex-col items-center justify-center gap-3 text-foreground/40 font-bold transition-all min-h-[120px]"
-                  >
-                    <VideoIcon
-                      size={32}
-                      className="text-primary/30 group-hover:text-primary transition-colors"
-                    />
-                    <span className="text-center">
-                      {formData.video_file ? (
-                        <span className="text-primary break-all">
-                          {formData.video_file.name}
-                          <span className="block text-xs font-medium text-primary/60 mt-1">
-                            {formatBytes(formData.video_file.size)}
-                          </span>
-                        </span>
-                      ) : editingItem ? (
-                        <span>{t("replaceVideo")}</span>
-                      ) : (
-                        <span>{t("browseVideo")}</span>
-                      )}
-                    </span>
-                  </label>
-                </div>
-                {uploadPercent !== null && (
-                  <UploadProgress
-                    percent={uploadPercent}
-                    label={uploadPercent >= 100 ? "Finalizing…" : "Uploading video…"}
-                    detail={
-                      formData.video_file
-                        ? `${formatBytes(Math.round((formData.video_file.size * uploadPercent) / 100))} of ${formatBytes(formData.video_file.size)} · keep this page open`
-                        : undefined
-                    }
-                  />
-                )}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-primary uppercase tracking-widest px-1">
-                  {t("visibilityStatus")}
-                </label>
-                <div className="flex items-center gap-4 py-4">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_published}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          is_published: e.target.checked,
-                        })
-                      }
-                      className="hidden"
-                    />
-                    <div
-                      className={cn(
-                        "w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
-                        formData.is_published
-                          ? "bg-primary border-primary"
-                          : "border-border group-hover:border-primary/30",
-                      )}
-                    >
-                      {formData.is_published && (
-                        <CheckCircle2 size={14} className="text-white" />
-                      )}
-                    </div>
-                    <span className="font-bold text-primary text-sm">
-                      {t("publishedToPublic")}
-                    </span>
-                  </label>
-                </div>
-              </div>
+              <VideoFileInput
+                videoFile={formData.video_file}
+                onFileChange={(file) => setFormData({ ...formData, video_file: file })}
+                isEditing={!!editingItem}
+                isSubmitting={isSubmitting}
+                uploadPercent={uploadPercent}
+              />
 
               <div className="pt-8 flex items-center gap-4">
                 <button
-                  type="button"
-                  onClick={onClose}
+                  type="button" onClick={onClose}
                   className="flex-1 px-8 py-4 bg-foreground/5 text-primary rounded-2xl font-bold hover:bg-foreground/10 transition-all"
                 >
                   {t("cancel")}

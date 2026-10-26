@@ -1,24 +1,16 @@
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import {
-  Award,
-  Download,
-  MoreVertical,
-  Calendar,
-  ChevronRight,
-} from "lucide-react";
+import { Award, Download, MoreVertical, Calendar, ChevronRight } from "lucide-react";
 import { Certificate } from "@/app/[locale]/(dashboard)/admin/certificates/_types";
 import { useTranslations } from "next-intl";
 
-export default function CertificateCard({
-  cert,
-  index,
-  type = "certificate",
-}: {
+interface CertificateCardProps {
   cert: Certificate;
   index: number;
   type?: "certificate" | "letter";
-}) {
+}
+
+export default function CertificateCard({ cert, index, type = "certificate" }: CertificateCardProps) {
   const t = useTranslations("Dashboard.admin.certificates");
   const tSn = useTranslations("Dashboard.admin.serviceNames");
 
@@ -32,7 +24,6 @@ export default function CertificateCard({
       transition={{ delay: index * 0.05 }}
       className="p-8 rounded-[20px] bg-white border-2 border-border hover:border-primary/20 hover:shadow-2xl hover:shadow-primary/5 transition-all group relative overflow-hidden"
     >
-      {/* Premium Background Accent */}
       <div className="absolute top-0 right-0 w-32 h-32 bg-primary/[0.03] -translate-y-12 translate-x-12 rounded-full group-hover:bg-primary/5 transition-colors" />
 
       <div className="flex items-center justify-between mb-8">
@@ -51,9 +42,7 @@ export default function CertificateCard({
 
       <div className="space-y-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary mb-1">
-            {t("activeCert")}
-          </p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-secondary mb-1">{t("activeCert")}</p>
           <h4 className="text-xl font-bold font-outfit text-primary group-hover:underline cursor-pointer tracking-tight leading-tight">
             {translatedName}
           </h4>
@@ -64,18 +53,13 @@ export default function CertificateCard({
 
         <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border/50">
           <div className="space-y-1">
-            <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">
-              {t("issuedDate")}
-            </p>
+            <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">{t("issuedDate")}</p>
             <p className="text-xs font-bold text-primary flex items-center gap-1">
-              <Calendar size={12} />{" "}
-              {cert.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
+              <Calendar size={12} /> {cert.issued_at ? new Date(cert.issued_at).toLocaleDateString() : "N/A"}
             </p>
           </div>
           <div className="space-y-1">
-            <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">
-              {t("serialNumber")}
-            </p>
+            <p className="text-[10px] font-bold text-foreground/20 uppercase tracking-widest">{t("serialNumber")}</p>
             <p className="text-xs font-bold text-secondary flex items-center gap-1 font-mono tracking-tighter">
               <Award size={12} /> {cert.serial_number}
             </p>

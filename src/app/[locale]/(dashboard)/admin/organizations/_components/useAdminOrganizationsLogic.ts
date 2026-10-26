@@ -1,9 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
-
 import { fetchOrganizations, deleteOrganization } from "./services";
 import { Organization } from "./types";
+import { filterAndSortOrganizations, computeOrgStats } from "./organizationFilterUtils";
 
 export type OrganizationSortOption = "name_asc" | "name_desc" | "apps_desc" | "certs_desc" | "newest";
 
@@ -17,14 +17,13 @@ export function useAdminOrganizationsLogic() {
     const [sortBy, setSortBy] = useState<OrganizationSortOption>("name_asc");
     const [isLoading, setIsLoading] = useState(true);
 
-    // Delete state
     const [orgToDelete, setOrgToDelete] = useState<Organization | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
         let isMounted = true;
-        const loadOrgs = async () => {
+        (async () => {
             try {
                 setIsLoading(true);
                 const data = await fetchOrganizations();
@@ -34,97 +33,22 @@ export function useAdminOrganizationsLogic() {
             } finally {
                 if (isMounted) setIsLoading(false);
             }
-        };
-        loadOrgs();
+        })();
         return () => { isMounted = false; };
     }, []);
 
     const distinctTypes = useMemo(() => {
         const set = new Set<string>();
-        organizations.forEach((org) => {
-            if (org.type) set.add(org.type);
-        });
+        organizations.forEach((org) => { if (org.type) set.add(org.type); });
         return Array.from(set).sort();
     }, [organizations]);
 
-    const filteredOrgs = useMemo(() => {
-        const term = searchTerm.trim().toLowerCase();
+    const filteredOrgs = useMemo(
+        () => filterAndSortOrganizations(organizations, searchTerm, statusFilter, typeFilter, sortBy),
+        [organizations, searchTerm, statusFilter, typeFilter, sortBy]
+    );
 
-        return organizations
-            .filter((org) => {
-                const matchesSearch =
-                    !term ||
-                    org.name?.toLowerCase().includes(term) ||
-                    org.reg_number?.toLowerCase().includes(term) ||
-                    org.pin_number?.toLowerCase().includes(term) ||
-                    org.county_council_name?.toLowerCase().includes(term) ||
-                    org.region_name?.toLowerCase().includes(term) ||
-                    org.type?.toLowerCase().includes(term) ||
-                    org.email?.toLowerCase().includes(term) ||
-                    org.phone_number?.toLowerCase().includes(term);
-
-                const accreditationStatus = org.accreditation_status || "Pending";
-                const matchesStatus = statusFilter === "All" || accreditationStatus.toLowerCase() === statusFilter.toLowerCase();
-
-                const matchesType = typeFilter === "All" || org.type === typeFilter;
-
-                return matchesSearch && matchesStatus && matchesType;
-            })
-            .sort((a, b) => {
-                if (sortBy === "name_asc") {
-                    return (a.name || "").localeCompare(b.name || "");
-                }
-                if (sortBy === "name_desc") {
-                    return (b.name || "").localeCompare(a.name || "");
-                }
-                if (sortBy === "apps_desc") {
-                    return (b.apps_count || 0) - (a.apps_count || 0);
-                }
-                if (sortBy === "certs_desc") {
-                    return (b.certs_count || 0) - (a.certs_count || 0);
-                }
-                if (sortBy === "newest") {
-                    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-                    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
-                    return dateB - dateA;
-                }
-                return 0;
-            });
-    }, [organizations, searchTerm, statusFilter, typeFilter, sortBy]);
-
-    const statusCounts = useMemo(() => {
-        const counts: Record<string, number> = {
-            All: organizations.length,
-            Pending: 0,
-            Accredited: 0,
-            Suspended: 0,
-        };
-
-        organizations.forEach((org) => {
-            const status = org.accreditation_status || "Pending";
-            counts[status] = (counts[status] || 0) + 1;
-        });
-
-        return counts;
-    }, [organizations]);
-
-    const stats = useMemo(() => {
-        let totalApps = 0;
-        let totalCerts = 0;
-        organizations.forEach((org) => {
-            totalApps += org.apps_count || 0;
-            totalCerts += org.certs_count || 0;
-        });
-
-        return {
-            total: organizations.length,
-            accredited: statusCounts["Accredited"] || 0,
-            pending: statusCounts["Pending"] || 0,
-            suspended: statusCounts["Suspended"] || 0,
-            totalApps,
-            totalCerts,
-        };
-    }, [organizations, statusCounts]);
+    const { counts: statusCounts, stats } = useMemo(() => computeOrgStats(organizations), [organizations]);
 
     const clearAllFilters = () => {
         setSearchTerm("");
@@ -133,16 +57,8 @@ export function useAdminOrganizationsLogic() {
         setSortBy("name_asc");
     };
 
-    const openDeleteModal = (org: Organization) => {
-        setOrgToDelete(org);
-        setIsDeleteModalOpen(true);
-    };
-
-    const closeDeleteModal = () => {
-        if (isDeleting) return;
-        setOrgToDelete(null);
-        setIsDeleteModalOpen(false);
-    };
+    const openDeleteModal = (org: Organization) => { setOrgToDelete(org); setIsDeleteModalOpen(true); };
+    const closeDeleteModal = () => { if (!isDeleting) { setOrgToDelete(null); setIsDeleteModalOpen(false); } };
 
     const confirmDeleteOrganization = async () => {
         if (!orgToDelete) return;
@@ -162,30 +78,9 @@ export function useAdminOrganizationsLogic() {
     };
 
     return {
-        organizations,
-        filteredOrgs,
-        searchTerm,
-        setSearchTerm,
-        viewMode,
-        setViewMode,
-        statusFilter,
-        setStatusFilter,
-        typeFilter,
-        setTypeFilter,
-        distinctTypes,
-        sortBy,
-        setSortBy,
-        isLoading,
-        statusCounts,
-        stats,
-        clearAllFilters,
-        orgToDelete,
-        isDeleteModalOpen,
-        isDeleting,
-        openDeleteModal,
-        closeDeleteModal,
-        confirmDeleteOrganization,
+        organizations, filteredOrgs, searchTerm, setSearchTerm, viewMode, setViewMode,
+        statusFilter, setStatusFilter, typeFilter, setTypeFilter, distinctTypes,
+        sortBy, setSortBy, isLoading, statusCounts, stats, clearAllFilters,
+        orgToDelete, isDeleteModalOpen, isDeleting, openDeleteModal, closeDeleteModal, confirmDeleteOrganization
     };
 }
-
-

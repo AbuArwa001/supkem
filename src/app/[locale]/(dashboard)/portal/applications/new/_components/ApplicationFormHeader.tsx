@@ -1,8 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { Check, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
+import { ApplicationStepPipeline } from "./ApplicationStepPipeline";
 
 interface ApplicationFormHeaderProps {
   step: number;
@@ -33,7 +32,6 @@ export function ApplicationFormHeader({
 
   return (
     <div className="space-y-8 pb-8 border-b border-slate-200/80">
-      {/* Header title and meta */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-wider">
@@ -48,7 +46,6 @@ export function ApplicationFormHeader({
           </p>
         </div>
 
-        {/* Progress percent pill */}
         <div className="flex items-center gap-3 bg-white px-5 py-3 rounded-2xl border border-slate-200/80 shadow-xs shrink-0 self-start md:self-auto">
           <div className="text-right">
             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Completion</p>
@@ -60,68 +57,8 @@ export function ApplicationFormHeader({
         </div>
       </div>
 
-      {/* Multi-Step Pipeline */}
       {maxSteps > 1 && (
-        <div className="relative">
-          {/* Connecting track line */}
-          <div className="hidden sm:block absolute top-6 left-12 right-12 h-1 bg-slate-100 rounded-full z-0">
-            <motion.div
-              className="h-full bg-gradient-to-r from-primary to-accent rounded-full transition-all duration-500 ease-out"
-              style={{
-                width: `${((step - 1) / (maxSteps - 1)) * 100}%`,
-              }}
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 relative z-10">
-            {stepMeta.map((s) => {
-              const isDone = step > s.number;
-              const isActive = step === s.number;
-              const isUpcoming = step < s.number;
-
-              return (
-                <div
-                  key={s.number}
-                  className={cn(
-                    "flex items-center gap-4 p-3.5 rounded-2xl transition-all duration-300",
-                    isActive
-                      ? "bg-white border-2 border-primary shadow-lg shadow-primary/5 ring-4 ring-primary/10"
-                      : isDone
-                      ? "bg-white/80 border border-slate-200 hover:border-slate-300"
-                      : "bg-slate-50/70 border border-slate-200/60 opacity-65"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "w-11 h-11 rounded-xl flex items-center justify-center font-black font-outfit text-sm shrink-0 transition-all duration-300",
-                      isActive
-                        ? "bg-primary text-white shadow-md shadow-primary/30 scale-105"
-                        : isDone
-                        ? "bg-emerald-500 text-white shadow-xs"
-                        : "bg-white text-slate-400 border border-slate-200"
-                    )}
-                  >
-                    {isDone ? <Check size={18} strokeWidth={3} /> : s.number}
-                  </div>
-
-                  <div className="min-w-0">
-                    <p
-                      className={cn(
-                        "text-xs font-black uppercase tracking-wider truncate",
-                        isActive ? "text-primary" : isDone ? "text-slate-800" : "text-slate-400"
-                      )}
-                    >
-                      {s.title}
-                    </p>
-                    <p className="text-[11px] text-slate-400 font-medium truncate mt-0.5">
-                      {isDone ? "Completed" : isActive ? "In Progress" : s.subtitle}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <ApplicationStepPipeline step={step} maxSteps={maxSteps} stepMeta={stepMeta} />
       )}
     </div>
   );

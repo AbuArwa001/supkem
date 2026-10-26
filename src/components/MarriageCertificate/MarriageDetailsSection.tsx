@@ -1,8 +1,8 @@
 import { Row } from "./Row";
-import { SignatureRow } from "./SignatureRow";
-import { WitnessRow } from "./WitnessRow";
 import { OfficerRow } from "./OfficerRow";
 import { MarriageDetails } from "./types";
+import { MarriageSignaturesSection } from "./MarriageSignaturesSection";
+import { MarriageWitnessesSection } from "./MarriageWitnessesSection";
 
 interface MarriageDetailsSectionProps {
   details: MarriageDetails;
@@ -65,41 +65,14 @@ export const MarriageDetailsSection = ({ details, dateOfIssuance }: MarriageDeta
         ar="الاقليم الذي عقد فيه الزواج"
       />
 
-      {/* Signatures */}
-      <SignatureRow
-        enLabel="Husband's Signature or His Attorney"
-        arLabel="توقيع الزوج او وكيله"
-        signatureStyle="style1"
-      />
-      <SignatureRow
-        enLabel="Wife's/Guardian's Signature"
-        arLabel="توقيع الزوجة او وليها"
-        signatureStyle="style2"
-      />
+      <MarriageSignaturesSection />
+      <MarriageWitnessesSection details={details} />
 
-      {/* Witnesses */}
-      <WitnessRow
-        orderNum="1"
-        suffix="st"
-        arLabel="إسم الشاهد الأول ورقم بطاقته الشخصية وتوقيعه"
-        name={details.witness_1_name}
-        idNo={details.witness_1_id}
-      />
-      <WitnessRow
-        orderNum="2"
-        suffix="nd"
-        arLabel="إسم الشاهد الثاني ورقم بطاقته الشخصية وتوقيعه"
-        name={details.witness_2_name}
-        idNo={details.witness_2_id}
-      />
-
-      {/* Muslim Marriage Officer */}
       <OfficerRow
         name={details.marriage_officer_name}
         county={details.county_of_marriage || details.husband_residence_county}
       />
 
-      {/* Date of Issuance row right in the table as in official Form MM3 */}
       <Row
         en="Date of Issuance"
         value={formattedIssuanceDate}

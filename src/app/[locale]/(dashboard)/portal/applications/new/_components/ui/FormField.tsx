@@ -1,10 +1,11 @@
 "use client";
 
-// React/Next.js core
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import React from "react";
+
+export * from "./formStyles";
 
 interface FormFieldProps {
   label: string;
@@ -27,7 +28,6 @@ export function FormField({
   name,
   error,
   colSpan,
-  readOnly,
   required,
   hint,
   children,
@@ -38,11 +38,7 @@ export function FormField({
       data-error-field={name}
       data-has-error={!!error}
       id={name ? `field-${name}` : undefined}
-      className={cn(
-        "space-y-2 transition-all duration-200",
-        colSpan && "md:col-span-2",
-        className
-      )}
+      className={cn("space-y-2 transition-all duration-200", colSpan && "md:col-span-2", className)}
     >
       <div className="flex items-center justify-between ml-1">
         <label
@@ -51,9 +47,7 @@ export function FormField({
         >
           <span>{label}</span>
           {required && (
-            <span className="text-rose-500 font-bold text-sm leading-none" title="Required field">
-              *
-            </span>
+            <span className="text-rose-500 font-bold text-sm leading-none" title="Required field">*</span>
           )}
         </label>
         {!required && (
@@ -63,9 +57,7 @@ export function FormField({
         )}
       </div>
 
-      <div className="relative group">
-        {children}
-      </div>
+      <div className="relative group">{children}</div>
 
       <AnimatePresence mode="wait">
         {error ? (
@@ -81,26 +73,9 @@ export function FormField({
             <span>{error}</span>
           </motion.div>
         ) : hint ? (
-          <p className="text-[11px] font-medium text-slate-400 ml-1 tracking-wide">
-            {hint}
-          </p>
+          <p className="text-[11px] font-medium text-slate-400 ml-1 tracking-wide">{hint}</p>
         ) : null}
       </AnimatePresence>
     </div>
   );
 }
-
-/** Standard CSS classes for modern luxury form inputs */
-export const inputBase =
-  "w-full bg-slate-50/70 border rounded-2xl px-5 py-4 focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white outline-none transition-all duration-200 font-semibold text-slate-800 shadow-xs hover:border-slate-300 hover:bg-slate-50 placeholder:text-slate-400 text-sm";
-
-export const inputReadOnly =
-  "w-full bg-slate-100/70 border border-slate-200/80 rounded-2xl px-5 py-4 outline-none font-semibold text-slate-500 shadow-xs cursor-not-allowed text-sm select-none";
-
-export const inputError =
-  "border-rose-400 bg-rose-50/20 text-rose-950 focus:ring-rose-500/10 focus:border-rose-500";
-
-export const inputNormal = "border-slate-200/90";
-
-/** Helper: derive border & focus classes from error state */
-export const borderFor = (error?: string) => (error ? inputError : inputNormal);

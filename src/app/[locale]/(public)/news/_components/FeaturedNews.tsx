@@ -1,30 +1,22 @@
 "use client";
 
-import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import useSWR from "swr";
-import { Calendar, User, ArrowRight, BookOpen } from "lucide-react";
-import { API_BASE_URL } from "@/lib/api";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { NewsItem } from "@/app/[locale]/(public)/news/_services/newsService";
 import { useTranslations, useLocale } from "next-intl";
+import { FeaturedLeadArticle } from "./FeaturedLeadArticle";
+import { FeaturedSecondaryCard } from "./FeaturedSecondaryCard";
+import { FeaturedNewsEmpty, FeaturedNewsComingSoon } from "./FeaturedNewsEmpty";
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://supkem-drf.onrender.com";
 
 interface FeaturedNewsProps {
   newsItems: NewsItem[];
   limit?: number;
 }
 
-const extractFirstImage = (content: string) => {
-  const match = content.match(/!\[.*?\]\((.*?)\)/);
-  return match ? match[1] : null;
-};
-
-export function FeaturedNews({
-  newsItems: initialNewsItems,
-  limit = 3,
-}: FeaturedNewsProps) {
+export function FeaturedNews({ newsItems: initialNewsItems, limit = 3 }: FeaturedNewsProps) {
   const t = useTranslations("NewsPage.news");
   const t2 = useTranslations("NewsPage.article");
   const locale = useLocale();
@@ -35,7 +27,7 @@ export function FeaturedNews({
       fetch(url, { headers: { "Accept-Language": loc } })
         .then((r) => r.json())
         .then((d) => {
-          const items = Array.isArray(d) ? d : (d?.results ?? []);
+          const items = Array.isArray(d) ? d : d?.results ?? [];
           return items.filter((item: any) => item.is_published);
         }),
     { fallbackData: initialNewsItems, refreshInterval: 30000 },
@@ -51,9 +43,7 @@ export function FeaturedNews({
           <BookOpen className="text-primary" size={28} />
         </div>
         <div>
-          <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">
-            {t("heading")}
-          </h2>
+          <h2 className="text-3xl font-black font-outfit text-primary tracking-tight">{t("heading")}</h2>
           <p className="text-foreground/60 font-medium">{t("desc")}</p>
         </div>
       </div>
@@ -61,148 +51,18 @@ export function FeaturedNews({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         {displayNews.length > 0 ? (
           <>
-            {/* Large Feature (First Item) */}
-            {(() => {
-              const item = displayNews[0];
-              const extractedImg = extractFirstImage(item.content);
-              const imageSource = item.featured_image
-                ? item.featured_image.startsWith("http")
-                  ? item.featured_image
-                  : `${API_BASE_URL}${item.featured_image.startsWith("/") ? "" : "/"}${item.featured_image}`
-                : extractedImg ||
-                  "https://images.unsplash.com/photo-1541872703-74c5e4001bc2?auto=format&fit=crop&q=80&w=800";
-
-              return (
-                <div className="p-8 rounded-[24px] bg-white border border-border overflow-hidden flex flex-col group hover:shadow-2xl transition-all h-full shadow-lg shadow-primary/5">
-                  <Link
-                    href={`/news/${item.slug}`}
-                    className="block h-full flex flex-col"
-                  >
-                    <div className="aspect-video bg-primary/5 rounded-[16px] overflow-hidden mb-8 relative shrink-0">
-                      <Image
-                        src={imageSource}
-                        alt={item.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-700"
-                      />
-                    </div>
-                    <div className="space-y-4 flex flex-col flex-1">
-                      <div className="flex items-center gap-6 text-xs font-bold text-foreground/30 uppercase tracking-widest">
-                        <span className="flex items-center gap-1.5">
-                          <Calendar size={14} className="text-secondary" />{" "}
-                          {new Date(item.created_at).toLocaleDateString(
-                            locale === "ar" ? "ar-KE" : "en-US",
-                            { year: "numeric", month: "long", day: "numeric" },
-                          )}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <User size={14} className="text-secondary" />{" "}
-                          {t2("press")}
-                        </span>
-                      </div>
-                      <h2 className="text-3xl font-bold font-outfit text-primary group-hover:text-secondary transition-colors underline decoration-primary/10 underline-offset-8">
-                        {item.title}
-                      </h2>
-                      <p className="text-lg text-foreground/70 leading-relaxed font-medium line-clamp-3">
-                        {item.content
-                          .replace(/[#*`_~>\[\]\(\)]/g, "")
-                          .replace(/\n+/g, " ")
-                          .substring(0, 150)}
-                        ...
-                      </p>
-                      <div className="mt-auto pt-4">
-                        <button className="text-primary font-black uppercase tracking-[0.2em] text-xs flex items-center gap-2 group-hover:gap-4 transition-all">
-                          {t("readMore")} <ArrowRight size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              );
-            })()}
-
+            <FeaturedLeadArticle item={displayNews[0]} locale={locale} pressText={t2("press")} readMoreText={t("readMore")} />
             <div className="flex flex-col gap-8 h-full">
-              {displayNews.slice(1).map((item: NewsItem, i: number) => {
-                const extractedImg = extractFirstImage(item.content);
-                const imageSource = item.featured_image
-                  ? item.featured_image.startsWith("http")
-                    ? item.featured_image
-                    : `${API_BASE_URL}${item.featured_image.startsWith("/") ? "" : "/"}${item.featured_image}`
-                  : extractedImg ||
-                    "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800";
-
-                return (
-                  <Link
-                    href={`/news/${item.slug}`}
-                    key={i}
-                    className="group/item flex-1 flex flex-col"
-                  >
-                    <div className="p-6 rounded-[20px] bg-white border border-border flex flex-col sm:flex-row gap-8 hover-lift hover:border-primary/20 shadow-sm shadow-primary/5 h-full">
-                      <div className="w-full sm:w-48 h-48 bg-primary/5 rounded-[16px] overflow-hidden shrink-0 relative">
-                        <Image
-                          src={imageSource}
-                          alt={item.title}
-                          fill
-                          className="object-cover group-hover/item:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="space-y-3 py-2 flex-1 flex flex-col justify-center">
-                        <div className="flex items-center gap-4 text-[10px] font-bold text-foreground/30 uppercase tracking-widest">
-                          <span className="flex items-center gap-1.5">
-                            <Calendar size={12} className="text-secondary" />{" "}
-                            {new Date(item.created_at).toLocaleDateString(
-                              locale === "ar" ? "ar-KE" : "en-US",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                              },
-                            )}
-                          </span>
-                        </div>
-                        <h3 className="text-xl font-bold font-outfit text-primary leading-tight group-hover/item:text-secondary transition-colors line-clamp-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-foreground/60 leading-relaxed font-medium line-clamp-2">
-                          {item.content
-                            .replace(/[#*`_~>\[\]\(\)]/g, "")
-                            .replace(/\n+/g, " ")
-                            .substring(0, 100)}
-                          ...
-                        </p>
-                        <span className="pt-2 text-primary font-bold uppercase tracking-widest text-[10px] flex items-center gap-2 group-hover/item:gap-3 transition-all">
-                          {t("details")} <ArrowRight size={12} />
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
+              {displayNews.slice(1).map((item: NewsItem, i: number) => (
+                <FeaturedSecondaryCard key={item.slug || i} item={item} locale={locale} detailsText={t("details")} />
+              ))}
               {newsItems.length <= 1 && (
-                <div className="p-8 rounded-[20px] bg-secondary/10 border border-secondary/20 flex flex-col items-center justify-center text-center gap-4 h-full min-h-[300px]">
-                  <BookOpen size={40} className="text-secondary" />
-                  <h4 className="text-xl font-bold font-outfit">
-                    {t("comingSoon")}
-                  </h4>
-                  <p className="text-sm font-medium opacity-60">
-                    {t("comingSoonDesc")}
-                  </p>
-                </div>
+                <FeaturedNewsComingSoon title={t("comingSoon")} desc={t("comingSoonDesc")} />
               )}
             </div>
           </>
         ) : (
-          <div className="col-span-1 lg:col-span-2 py-32 text-center space-y-6">
-            <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mx-auto">
-              <BookOpen size={40} className="text-primary/40" />
-            </div>
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold font-outfit text-primary">
-                {t("noNews")}
-              </h2>
-              <p className="text-foreground/60">{t("noNewsDesc")}</p>
-            </div>
-          </div>
+          <FeaturedNewsEmpty noNewsText={t("noNews")} noNewsDescText={t("noNewsDesc")} />
         )}
       </div>
 

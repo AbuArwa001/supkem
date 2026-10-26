@@ -1,0 +1,61 @@
+import { ShieldCheck, Briefcase, UserCheck, Headphones } from "lucide-react";
+import { NotFoundDictionaryLocale } from "./notFoundTypes";
+
+export const NOT_FOUND_DICT_EN: NotFoundDictionaryLocale = {
+  badge: "Error 404 • Resource Not Found",
+  title: "Lost in the Digital Ummah?",
+  description:
+    "The page, document, or service link you are looking for has been moved, updated, or is no longer accessible on the national portal.",
+  searchPlaceholder: "Search services, verification, news...",
+  pressEnter: "Press Enter to jump",
+  returnHome: "Return Home",
+  goBack: "Go Back",
+  quickNavigation: "Suggested Destinations",
+  requestedUrl: "Requested URL",
+  copyUrl: "Copy URL",
+  urlCopied: "URL copied to clipboard",
+  reportIssue: "Report Broken Link",
+  noMatches: "No destination directly matches your search.",
+  destinations: [
+    {
+      id: "verify",
+      title: "Credential Verification",
+      description: "Verify official certificates and letters in real-time",
+      href: "/verify",
+      icon: ShieldCheck,
+      badge: "New Public Portal",
+      accent: "emerald",
+      keywords: ["verify", "certificate", "hash", "qr", "letter", "authenticity", "check"],
+    },
+    {
+      id: "services",
+      title: "Services Directory",
+      description: "Institutional accreditation, Halal, Hajj/Umrah, & Marriages",
+      href: "/services",
+      icon: Briefcase,
+      badge: "Core Catalog",
+      accent: "gold",
+      keywords: ["services", "halal", "hajj", "umrah", "marriage", "accreditation", "school", "mosque"],
+    },
+    {
+      id: "portal",
+      title: "Member & Citizen Portal",
+      description: "Access ongoing applications, submit documents, & view profile",
+      href: "/portal",
+      icon: UserCheck,
+      badge: "Dashboard",
+      accent: "blue",
+      keywords: ["portal", "login", "application", "dashboard", "account", "profile"],
+    },
+    {
+      id: "contact",
+      title: "Secretariat & Support",
+      description: "Contact national headquarters or regional county offices",
+      href: "/contact",
+      icon: Headphones,
+      badge: "Helpdesk",
+      accent: "slate",
+      keywords: ["contact", "support", "help", "email", "phone", "headquarters", "office"],
+    },
+  ],
+};

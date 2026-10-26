@@ -1,12 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Link } from "@/i18n/routing";
-import { Heart, Shield, Users, BookOpen, ArrowRight } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Heart, Shield, Users, BookOpen } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { ProgramCard, ProgramItem } from "./programs/ProgramCard";
 
-const getPrograms = (t: any) => [
+const getPrograms = (t: any): ProgramItem[] => [
   {
     title: t("programs.prog1.title"),
     desc: t("programs.prog1.desc"),
@@ -46,10 +44,7 @@ export const ProgramAreas = () => {
   const programs = getPrograms(t);
 
   return (
-    <section
-      id="strategic-focus"
-      className="py-40 px-6 bg-white relative overflow-hidden"
-    >
+    <section id="strategic-focus" className="py-40 px-6 bg-white relative overflow-hidden">
       <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-slate-50 to-transparent -z-10" />
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-24">
@@ -68,39 +63,12 @@ export const ProgramAreas = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {programs.map((prog, i) => (
-            <motion.div
+            <ProgramCard
               key={i}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              whileHover={{ y: -15 }}
-              className={cn(
-                "p-14 rounded-[14px] bg-slate-50/30 border border-slate-100 hover:bg-white hover:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.08)] transition-all duration-700 relative group overflow-hidden",
-                prog.accent,
-              )}
-            >
-              <div className="absolute top-0 left-0 w-2 h-0 bg-primary group-hover:h-full transition-all duration-500" />
-              <div
-                className={cn(
-                  "inline-flex p-6 rounded-[2rem] mb-12 shadow-inner",
-                  prog.color,
-                )}
-              >
-                <prog.icon size={42} strokeWidth={1.5} />
-              </div>
-              <h3 className="text-3xl font-black font-outfit text-primary mb-8 tracking-tight">
-                {prog.title}
-              </h3>
-              <p className="text-xl text-slate-500 leading-relaxed font-medium mb-8">
-                {prog.desc}
-              </p>
-              <Link
-                href={prog.href}
-                className="inline-flex items-center gap-2 text-primary font-bold hover:gap-4 transition-all uppercase tracking-widest text-xs"
-              >
-                {t("programs.learnMore")} <ArrowRight size={16} />
-              </Link>
-            </motion.div>
+              program={prog}
+              index={i}
+              learnMoreText={t("programs.learnMore")}
+            />
           ))}
         </div>
       </div>

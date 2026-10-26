@@ -24,24 +24,16 @@ export function FormNavigation({
   onNext,
 }: FormNavigationProps) {
   const hasMultipleSteps = isMarriageService || isOtherService;
-  const isLastStep =
-    (isMarriageService && step === 3) ||
-    (isOtherService && step === 2) ||
-    (!hasMultipleSteps && step === 1);
-
+  const isLastStep = (isMarriageService && step === 3) || (isOtherService && step === 2) || (!hasMultipleSteps && step === 1);
   const activeErrors = Object.entries(errors).filter(([_, val]) => !!val);
   const hasErrors = activeErrors.length > 0;
 
   return (
     <div className="pt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-6 border-t border-slate-200/80">
       <div className="flex items-center gap-4">
-        <Link
-          href="/portal"
-          className="text-slate-400 hover:text-rose-600 font-bold text-sm transition-colors flex items-center gap-2 py-2"
-        >
+        <Link href="/portal" className="text-slate-400 hover:text-rose-600 font-bold text-sm transition-colors flex items-center gap-2 py-2">
           Cancel Application
         </Link>
-
         {hasErrors && (
           <button
             type="button"

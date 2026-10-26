@@ -1,352 +1,77 @@
 "use client";
 
-import { useState } from "react";
-import useSWR from "swr";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-    Settings2,
-    Save,
-    RefreshCw,
-    Search,
-    AlertCircle,
-    CheckCircle2,
-    Info,
-    LayoutDashboard,
-    DollarSign,
-    Truck,
-    Bell,
-    Cpu,
-    Loader2,
-    ChevronRight,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import api from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
-import { Link } from "@/i18n/routing";
-import { toast } from "sonner";
 import { RoleGuard } from "@/components/RoleGuard";
 import { canAccessModule } from "@/lib/permissions";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
+import { SystemParamsHeader } from "./_components/SystemParamsHeader";
+import { SystemParamsFilterBar } from "./_components/SystemParamsFilterBar";
+import { SystemParamItemCard } from "./_components/SystemParamItemCard";
+import { useSystemParameters } from "./_components/useSystemParameters";
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-interface SystemParameter {
-    id: string;
-    key: string;
-    name: string;
-    description: string;
-    value: string;
-    data_type: 'string' | 'number' | 'boolean' | 'json';
-    category: 'general' | 'financial' | 'notifications' | 'system' | 'integrations';
-    updated_at: string;
-}
-
-type ParameterCategory = SystemParameter['category'];
-
-// ─── Animations ───────────────────────────────────────────────────────────────
 const container = {
-    hidden: { opacity: 0 },
-    show: {
-        opacity: 1,
-        transition: { staggerChildren: 0.05 },
-    },
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
-
-const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 },
-};
-
-// ─── Constants ───────────────────────────────────────────────────────────────
-const CATEGORY_CONFIG: Record<string, { label: string; icon: any; color: string }> = {
-    general: { label: "General", icon: LayoutDashboard, color: "text-indigo-600 bg-indigo-50" },
-    financial: { label: "Financial", icon: DollarSign, color: "text-emerald-600 bg-emerald-50" },
-    notifications: { label: "Notifications", icon: Bell, color: "text-rose-600 bg-rose-50" },
-    system: { label: "System", icon: Cpu, color: "text-slate-600 bg-slate-50" },
-    integrations: { label: "Integrations", icon: Settings2, color: "text-violet-600 bg-violet-50" },
-};
-
-const fetcher = (url: string) => api.get(url).then(res => res.data);
 
 export default function SystemParametersPage() {
-    return (
-        <RoleGuard module="settings_system_parameters">
-            <SystemParametersContent />
-        </RoleGuard>
-    );
+  return (
+    <RoleGuard module="settings_system_parameters">
+      <SystemParametersContent />
+    </RoleGuard>
+  );
 }
 
 function SystemParametersContent() {
-    const t = useTranslations("Dashboard.admin.settings.systemParams");
-    const locale = useLocale();
-    const { user } = useAuth();
-    const canAccess = canAccessModule(user, "settings_system_parameters");
+  const t = useTranslations("Dashboard.admin.settings.systemParams");
+  const { user } = useAuth();
+  const canAccess = canAccessModule(user, "settings_system_parameters");
+  const {
+    search, setSearch, selectedCategory, setSelectedCategory,
+    pendingChanges, updatingKey, isLoading, mutate,
+    handleValueChange, handleSave, filteredParameters,
+  } = useSystemParameters(canAccess);
 
-    const [search, setSearch] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState<string>("all");
-    const [pendingChanges, setPendingChanges] = useState<Record<string, string>>({});
-    const [updatingKey, setUpdatingKey] = useState<string | null>(null);
+  return (
+    <motion.div variants={container} initial="hidden" animate="show" className="space-y-12">
+      <SystemParamsHeader onRefresh={() => mutate()} isLoading={isLoading} />
+      <SystemParamsFilterBar
+        search={search} setSearch={setSearch}
+        selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory}
+      />
 
-    const { data: rawData, error, mutate, isLoading } = useSWR<any>(
-        canAccess ? "/configurations/system-parameters/" : null,
-        fetcher
-    );
-
-    const parameters: SystemParameter[] = Array.isArray(rawData) ? rawData : (rawData?.results || []);
-
-    const handleSave = async (key: string) => {
-        const value = pendingChanges[key];
-        if (value === undefined) return;
-
-        setUpdatingKey(key);
-        try {
-            await api.patch(`/configurations/system-parameters/${key}/`, { value });
-            if (parameters) {
-                const updatedParameters = parameters.map((p: SystemParameter) => p.key === key ? { ...p, value } : p);
-                mutate(rawData?.results ? { ...rawData, results: updatedParameters } : updatedParameters, false);
-            }
-            setPendingChanges(prev => {
-                const next = { ...prev };
-                delete next[key];
-                return next;
-            });
-            toast.success(t("updateSuccess"));
-        } catch (err) {
-            console.error("Failed to update parameter", err);
-            toast.error(t("updateError"));
-        } finally {
-            setUpdatingKey(null);
-        }
-    };
-
-    const filteredParameters = parameters?.filter((p: SystemParameter) => {
-        const translatedName = t.has(`items.${p.key}.name`) ? t(`items.${p.key}.name`) : p.name;
-        const translatedDesc = t.has(`items.${p.key}.description`) ? t(`items.${p.key}.description`) : p.description;
-        const matchesSearch = (p.name || "").toLowerCase().includes(search.toLowerCase()) ||
-            (p.key || "").toLowerCase().includes(search.toLowerCase()) ||
-            (translatedName || "").toLowerCase().includes(search.toLowerCase()) ||
-            (translatedDesc || "").toLowerCase().includes(search.toLowerCase());
-        const matchesCategory = selectedCategory === "all" || p.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-    });
-
-    const handleValueChange = (key: string, value: string) => {
-        setPendingChanges(prev => ({ ...prev, [key]: value }));
-    };
-
-    return (
-        <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
-            className="space-y-12"
-        >
-            <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-                <div className="flex items-center gap-4">
-                    <Link
-                        href="/admin/settings"
-                        className="p-2 hover:bg-slate-100 rounded-xl transition-colors text-slate-400 hover:text-primary self-start mt-2"
-                    >
-                        <ChevronRight className="rotate-180 rtl:rotate-0" size={24} />
-                    </Link>
-                    <div>
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-12 h-12 bg-primary/5 rounded-2xl flex items-center justify-center text-primary">
-                                <Settings2 size={28} />
-                            </div>
-                            <div>
-                                <h1 className="text-4xl font-bold font-outfit text-primary tracking-tight">
-                                    {t("title")} <span className="text-foreground/40 italic">{t("titleSub")}</span>
-                                </h1>
-                                <p className="text-foreground/60 font-medium tracking-tight mt-1">
-                                    {t("desc")}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex items-center gap-3">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => mutate()}
-                        className="rounded-xl hover:bg-slate-100 text-slate-500"
-                        title={t("refresh")}
-                    >
-                        <RefreshCw className={`h-5 w-5 ${isLoading ? 'animate-spin' : ''}`} />
-                    </Button>
-                </div>
-            </header>
-
-            <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1">
-                    <Search className="absolute left-4 rtl:left-auto rtl:right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <Input
-                        placeholder={t("searchPlaceholder")}
-                        className="h-12 pl-11 rtl:pl-4 rtl:pr-11 rounded-2xl border-none shadow-sm bg-white font-medium"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
-                </div>
-                <div className="flex gap-2 p-1 bg-white rounded-2xl shadow-sm overflow-x-auto no-scrollbar">
-                    <Button
-                        variant={selectedCategory === "all" ? "default" : "ghost"}
-                        onClick={() => setSelectedCategory("all")}
-                        className={`rounded-xl px-4 h-10 font-bold text-xs uppercase tracking-widest ${selectedCategory === "all" ? "bg-primary hover:bg-primary/90" : ""
-                            }`}
-                    >
-                        {t("allCategories")}
-                    </Button>
-                    {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
-                        <Button
-                            key={key}
-                            variant={selectedCategory === key ? "default" : "ghost"}
-                            onClick={() => setSelectedCategory(key as ParameterCategory)}
-                            className={`rounded-xl px-4 h-10 font-bold text-xs uppercase tracking-widest ${selectedCategory === key ? "bg-primary hover:bg-primary/90" : ""
-                                }`}
-                        >
-                            <config.icon className="h-3 w-3 mr-2 rtl:mr-0 rtl:ml-2" />
-                            {t.has(key) ? t(key) : config.label}
-                        </Button>
-                    ))}
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6">
-                {isLoading ? (
-                    [...Array(4)].map((_, i) => (
-                        <Card key={i} className="border-none shadow-sm rounded-[2rem] overflow-hidden bg-white">
-                            <CardContent className="p-8">
-                                <Skeleton className="h-6 w-1/3 mb-4" />
-                                <Skeleton className="h-12 w-full rounded-xl" />
-                            </CardContent>
-                        </Card>
-                    ))
-                ) : filteredParameters?.length === 0 ? (
-                    <div className="p-12 text-center bg-white rounded-[2rem] border border-slate-100 shadow-sm text-slate-500 font-medium">
-                        {t("noParametersFound")}
-                    </div>
-                ) : (
-                    <AnimatePresence mode="popLayout">
-                        {filteredParameters?.map((param) => (
-                            <motion.div
-                                key={param.id}
-                                layout
-                                variants={item}
-                                initial="hidden"
-                                animate="show"
-                                exit={{ opacity: 0, scale: 0.95 }}
-                            >
-                                <Card className="border-none shadow-premium bg-white rounded-[2rem] overflow-hidden hover:shadow-premium-hover transition-all duration-300">
-                                    <CardContent className="p-8">
-                                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
-                                            <div className="space-y-4 flex-1">
-                                                <div className="flex items-center gap-3">
-                                                    {(() => {
-                                                        const conf = CATEGORY_CONFIG[param.category] || { label: param.category, icon: Cpu, color: "text-slate-600 bg-slate-50" };
-                                                        const Icon = conf.icon;
-                                                        return (
-                                                            <div className={`p-2 rounded-xl ${conf.color}`}>
-                                                                <Icon className="h-4 w-4" />
-                                                            </div>
-                                                        );
-                                                    })()}
-                                                    <div>
-                                                        <h3 className="text-lg font-bold text-slate-900 tracking-tight uppercase font-outfit">
-                                                            {t.has(`items.${param.key}.name`) ? t(`items.${param.key}.name`) : param.name}
-                                                        </h3>
-                                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
-                                                            {t("paramId", { key: param.key })}
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100 flex items-start gap-3">
-                                                    <Info className="h-4 w-4 text-primary opacity-40 shrink-0 mt-0.5" />
-                                                    <p className="text-sm text-slate-500 font-medium leading-relaxed">
-                                                        {t.has(`items.${param.key}.description`) ? t(`items.${param.key}.description`) : param.description}
-                                                    </p>
-                                                </div>
-                                            </div>
-
-                                            <div className="w-full md:w-[400px] space-y-4">
-                                                <div className="space-y-2">
-                                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-primary ml-1 rtl:ml-0 rtl:mr-1">
-                                                        {t("settingValue")}
-                                                    </label>
-                                                    <div className="relative group">
-                                                        {param.data_type === "boolean" ? (
-                                                            <div className="h-14 flex items-center justify-between px-6 bg-slate-50 rounded-2xl border border-slate-100">
-                                                                <span className="text-sm font-bold text-slate-600 uppercase tracking-wider">
-                                                                    {(pendingChanges[param.key] ?? param.value) === "True" ? t("enabled") : t("disabled")}
-                                                                </span>
-                                                                <Switch
-                                                                    checked={(pendingChanges[param.key] ?? param.value) === "True"}
-                                                                    onCheckedChange={(checked: boolean) => handleValueChange(param.key, checked ? "True" : "False")}
-                                                                />
-                                                            </div>
-                                                        ) : (
-                                                            <Input
-                                                                type={param.data_type === "number" ? "number" : "text"}
-                                                                value={pendingChanges[param.key] ?? param.value}
-                                                                onChange={(e) => handleValueChange(param.key, e.target.value)}
-                                                                className="h-14 px-6 rounded-2xl border-slate-100 bg-slate-50 focus:bg-white focus:border-primary/20 font-bold text-slate-900 transition-all text-lg shadow-sm"
-                                                            />
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                <AnimatePresence>
-                                                    {pendingChanges[param.key] !== undefined && (
-                                                        <motion.div
-                                                            initial={{ opacity: 0, y: 10 }}
-                                                            animate={{ opacity: 1, y: 0 }}
-                                                            exit={{ opacity: 0, y: 10 }}
-                                                        >
-                                                            <Button
-                                                                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-white font-bold uppercase tracking-widest text-xs shadow-lg shadow-primary/20"
-                                                                onClick={() => handleSave(param.key)}
-                                                                disabled={updatingKey === param.key}
-                                                            >
-                                                                {updatingKey === param.key ? (
-                                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                                ) : (
-                                                                    <>
-                                                                        <Save className="h-4 w-4 mr-2 rtl:mr-0 rtl:ml-2" />
-                                                                        {t("commitChange")}
-                                                                    </>
-                                                                )}
-                                                            </Button>
-                                                        </motion.div>
-                                                    )}
-                                                </AnimatePresence>
-                                            </div>
-                                        </div>
-                                    </CardContent>
-                                    <div className="px-8 py-3 bg-slate-50 border-t border-slate-100 flex justify-between items-center">
-                                        <Badge variant="outline" className="bg-white text-[9px] font-black uppercase tracking-widest border-slate-200 px-2 py-0.5 rounded-md">
-                                            {t("type", { type: t.has(`types.${param.data_type}`) ? t(`types.${param.data_type}`) : param.data_type })}
-                                        </Badge>
-                                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                                            {t("synchronized", { 
-                                                date: new Date(param.updated_at).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-US", {
-                                                    year: "numeric",
-                                                    month: "short",
-                                                    day: "numeric"
-                                                }) 
-                                            })}
-                                        </span>
-                                    </div>
-                                </Card>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
-                )}
-            </div>
-        </motion.div>
-    );
+      <div className="grid grid-cols-1 gap-6">
+        {isLoading ? (
+          [...Array(4)].map((_, i) => (
+            <Card key={i} className="border-none shadow-sm rounded-[2rem] overflow-hidden bg-white">
+              <CardContent className="p-8">
+                <Skeleton className="h-6 w-1/3 mb-4" />
+                <Skeleton className="h-12 w-full rounded-xl" />
+              </CardContent>
+            </Card>
+          ))
+        ) : filteredParameters?.length === 0 ? (
+          <div className="p-12 text-center bg-white rounded-[2rem] border border-slate-100 shadow-sm text-slate-500 font-medium">
+            {t("noParametersFound")}
+          </div>
+        ) : (
+          <AnimatePresence mode="popLayout">
+            {filteredParameters?.map((param) => (
+              <SystemParamItemCard
+                key={param.id}
+                param={param}
+                pendingValue={pendingChanges[param.key]}
+                isUpdating={updatingKey === param.key}
+                onValueChange={handleValueChange}
+                onSave={handleSave}
+              />
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
+    </motion.div>
+  );
 }

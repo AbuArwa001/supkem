@@ -1,0 +1,91 @@
+import {
+  SocialChannelConfig,
+  MetaApiSettings,
+  YouTubeApiSettings,
+  TwitterApiSettings,
+  SocialMediaSettings,
+} from "./socialSettingsTypes";
+
+export const DEFAULT_SOCIAL_CHANNELS: SocialChannelConfig[] = [
+  {
+    id: "x",
+    name: "X (Twitter)",
+    handle: "@SUPKEM1",
+    url: "https://x.com/SUPKEM1",
+    enabled: true,
+    color: "#000000",
+    bgClass: "bg-slate-900 text-white hover:bg-black",
+    badgeClass: "bg-slate-900 text-white border-slate-700",
+  },
+  {
+    id: "facebook",
+    name: "Facebook",
+    handle: "Supreme Council of Kenya Muslims",
+    url: "https://www.facebook.com/p/Supreme-Council-of-Kenya-Muslims-100079747610399/",
+    enabled: true,
+    color: "#1877F2",
+    bgClass: "bg-[#1877F2] text-white hover:bg-[#166fe5]",
+    badgeClass: "bg-[#1877F2]/15 text-[#1877F2] border-[#1877F2]/30",
+  },
+  {
+    id: "instagram",
+    name: "Instagram",
+    handle: "@supkem_kenya",
+    url: "https://www.instagram.com/supkem_kenya/",
+    enabled: true,
+    color: "#E1306C",
+    bgClass: "bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white",
+    badgeClass: "bg-pink-500/15 text-pink-600 border-pink-500/30",
+  },
+  {
+    id: "tiktok",
+    name: "TikTok",
+    handle: "@supkem_kenya",
+    url: "https://www.tiktok.com/@supkem_kenya",
+    enabled: true,
+    color: "#000000",
+    bgClass: "bg-black text-white hover:bg-neutral-800",
+    badgeClass: "bg-cyan-500/15 text-cyan-600 border-cyan-500/30",
+  },
+  {
+    id: "youtube",
+    name: "YouTube",
+    handle: "SUPKEM Kenya",
+    url: "https://youtube.com/@SUPKEM",
+    enabled: true,
+    color: "#FF0000",
+    bgClass: "bg-red-600 text-white hover:bg-red-700",
+    badgeClass: "bg-red-500/15 text-red-600 border-red-500/30",
+  },
+];
+
+export const getDefaultMetaApiSettings = (): MetaApiSettings => ({
+  enabled: false,
+  facebookPageId: "",
+  facebookAccessToken: "",
+  instagramBusinessId: "",
+  cacheDurationMinutes: 30,
+});
+
+export const getDefaultYouTubeApiSettings = (): YouTubeApiSettings => ({
+  enabled: false,
+  apiKey: "",
+  channelId: "",
+  searchQuery: "SUPKEM Kenya",
+  maxResults: 6,
+});
+
+export const getDefaultTwitterApiSettings = (): TwitterApiSettings => ({
+  enabled: false,
+  bearerToken: "",
+  username: "SUPKEM1",
+  maxResults: 6,
+});
+
+export const getDefaultSocialSettings = (): SocialMediaSettings => ({
+  channels: DEFAULT_SOCIAL_CHANNELS,
+  metaApi: getDefaultMetaApiSettings(),
+  youtubeApi: getDefaultYouTubeApiSettings(),
+  twitterApi: getDefaultTwitterApiSettings(),
+  updatedAt: new Date().toISOString(),
+});

@@ -9,75 +9,39 @@ interface VideoMetadataSidebarProps {
   video: VideoBriefingItem;
 }
 
+function MetaItem({ icon: Icon, label, value, sub, isMono }: { icon: any; label: string; value: React.ReactNode; sub?: string; isMono?: boolean }) {
+  return (
+    <div className="flex items-start gap-4">
+      <div className="p-3 bg-primary/5 rounded-xl"><Icon className="text-primary" size={20} /></div>
+      <div>
+        <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">{label}</p>
+        <div className={`font-bold text-primary ${isMono ? "text-xs font-mono break-all" : ""}`}>{value}</div>
+        {sub && <p className="text-xs text-foreground/40 font-medium">{sub}</p>}
+      </div>
+    </div>
+  );
+}
+
 export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
   const t = useTranslations("Dashboard.admin.videos.detail");
 
   return (
     <div className="lg:col-span-4 space-y-6">
       <div className="bg-white border border-border rounded-[16px] p-8 space-y-8">
-        <h3 className="text-xl font-bold font-outfit text-primary">
-          {t("metadataDetails")}
-        </h3>
+        <h3 className="text-xl font-bold font-outfit text-primary">{t("metadataDetails")}</h3>
 
         <div className="space-y-6">
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl">
-              <Calendar className="text-primary" size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                {t("createdDate")}
-              </p>
-              <p className="font-bold text-primary">
-                {new Date(video.created_at).toLocaleDateString()}
-              </p>
-              <p className="text-xs text-foreground/40 font-medium">
-                {new Date(video.created_at).toLocaleTimeString()}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl">
-              <User className="text-primary" size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                {t("author")}
-              </p>
-              <p className="font-bold text-primary">{t("pressOffice")}</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl">
-              <Film className="text-primary" size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                {t("filePath")}
-              </p>
-              <p className="text-xs font-mono font-bold text-primary break-all">
-                {video.video_file}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="p-3 bg-primary/5 rounded-xl">
-              <CheckCircle2 className="text-primary" size={20} />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-widest text-foreground/30">
-                {t("visibility")}
-              </p>
-              <p className="font-bold text-primary">
-                {video.is_published
-                  ? t("visibleToEveryone")
-                  : t("internalReviewOnly")}
-              </p>
-            </div>
-          </div>
+          <MetaItem
+            icon={Calendar} label={t("createdDate")}
+            value={new Date(video.created_at).toLocaleDateString()}
+            sub={new Date(video.created_at).toLocaleTimeString()}
+          />
+          <MetaItem icon={User} label={t("author")} value={t("pressOffice")} />
+          <MetaItem icon={Film} label={t("filePath")} value={video.video_file} isMono />
+          <MetaItem
+            icon={CheckCircle2} label={t("visibility")}
+            value={video.is_published ? t("visibleToEveryone") : t("internalReviewOnly")}
+          />
         </div>
 
         <div className="pt-6 border-t border-border/50">
@@ -91,21 +55,13 @@ export const VideoMetadataSidebar = ({ video }: VideoMetadataSidebarProps) => {
       </div>
 
       <div className="bg-gradient-to-br from-secondary to-primary-dark rounded-[16px] p-8 text-white shadow-xl shadow-secondary/20 relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 rotate-12">
-          <Film size={80} />
-        </div>
+        <div className="absolute top-0 right-0 p-4 opacity-10 scale-150 rotate-12"><Film size={80} /></div>
         <div className="relative z-10 space-y-4">
-          <h3 className="text-xl font-bold font-outfit tracking-tight">
-            {t("systemInfo")}
-          </h3>
+          <h3 className="text-xl font-bold font-outfit tracking-tight">{t("systemInfo")}</h3>
           <p className="text-xs opacity-80 leading-relaxed font-medium">
-            {t("systemInfoDesc", {
-              date: new Date(video.updated_at).toLocaleDateString(),
-            })}
+            {t("systemInfoDesc", { date: new Date(video.updated_at).toLocaleDateString() })}
           </p>
-          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">
-            {t("id", { id: video.id })}
-          </p>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-40">{t("id", { id: video.id })}</p>
         </div>
       </div>
     </div>

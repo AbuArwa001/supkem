@@ -1,18 +1,12 @@
-// React/Next.js core
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "@/i18n/routing";
 import { toast } from "sonner";
-
-// Internal — hooks, services, data, types
-import { useFormSteps } from "@/app/[locale]/(dashboard)/portal/applications/new/_hooks/useFormSteps";
-import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
-import { initialFormData } from "@/app/[locale]/(dashboard)/portal/applications/new/_data/initialFormData";
+import { useFormSteps } from "../_hooks/useFormSteps";
+import { applicationSubmitService } from "../_services/applicationSubmitService";
+import { initialFormData } from "../_data/initialFormData";
 import { useAuth } from "@/hooks/useAuth";
-import type {
-  ApplicationFormData,
-  Organization,
-  Service,
-} from "@/app/[locale]/(dashboard)/portal/applications/new/_types";
+import type { ApplicationFormData, Organization, Service } from "../_types";
+import { buildApplicationPayload } from "../_utils/applicationPayload";
 
 export function useSubmitApplicationLogic() {
   const router = useRouter();
@@ -24,20 +18,16 @@ export function useSubmitApplicationLogic() {
   const [formData, setFormData] = useState<ApplicationFormData>(initialFormData);
 
   const selectedService = services.find((s) => s.id === formData.service);
-
   const { step, errors, setErrors, clearFieldError, flags, handleNextStep, handlePrevStep, runValidation } =
     useFormSteps(formData, selectedService);
 
   const { isIndividualService, isMarriageService, isHajjUmrahService, isEducationService,
     isTravelVisaService, isEmploymentService } = flags;
-
   const canSelectOrganization = !isIndividualService || isMarriageService;
 
-  // Seed user full name into personal-detail sub-forms when auth resolves
   useEffect(() => {
     if (!user) return;
-    const fullName = [user.first_name, user.middle_name, user.last_name]
-      .filter(Boolean).join(" ").trim();
+    const fullName = [user.first_name, user.middle_name, user.last_name].filter(Boolean).join(" ").trim();
     if (!fullName) return;
     setFormData((prev) => ({
       ...prev,
@@ -48,17 +38,10 @@ export function useSubmitApplicationLogic() {
     }));
   }, [user]);
 
-  // Fetch organisations and services on mount
   useEffect(() => {
     setDataLoading(true);
-    Promise.all([
-      applicationSubmitService.fetchOrganizations(),
-      applicationSubmitService.fetchServices(),
-    ])
-      .then(([orgs, servs]) => {
-        setOrganizations(orgs);
-        setServices(servs);
-      })
+    Promise.all([applicationSubmitService.fetchOrganizations(), applicationSubmitService.fetchServices()])
+      .then(([orgs, servs]) => { setOrganizations(orgs); setServices(servs); })
       .catch((err) => console.error("Failed to fetch data", err))
       .finally(() => setDataLoading(false));
   }, []);
@@ -73,33 +56,23 @@ export function useSubmitApplicationLogic() {
     if (!runValidation(step)) return;
     setLoading(true);
     try {
-      const payload = {
-        ...formData,
-        organization: formData.organization || null,
-        marriage_details: isMarriageService ? formData.marriage_details : null,
-        pilgrim_details: isHajjUmrahService ? formData.pilgrim_details : null,
-        education_details: isEducationService ? formData.education_details : null,
-        travel_visa_details: isTravelVisaService ? formData.travel_visa_details : null,
-        employment_details: isEmploymentService ? formData.employment_details : null,
-      };
+      const payload = buildApplicationPayload(formData, {
+        isMarriageService, isHajjUmrahService, isEducationService, isTravelVisaService, isEmploymentService,
+      });
       const response = await applicationSubmitService.submitApplication(payload as Record<string, unknown>);
       const rawFee = selectedService?.fee;
       const fee = rawFee !== undefined && rawFee !== null && !isNaN(Number(rawFee)) ? Number(rawFee) : 0;
       
-      // If service fee is 0, bypass M-Pesa payment entirely
       if (fee <= 0) {
         toast.success("Application submitted successfully! No payment required for this service.");
         router.push(`/portal/applications/${response.id}`);
         return;
       }
 
-      router.push(
-        `/portal/applications/new/confirm?appId=${response.id}&service=${encodeURIComponent(selectedService?.name ?? "Service")}&fee=${fee}`,
-      );
+      router.push(`/portal/applications/new/confirm?appId=${response.id}&service=${encodeURIComponent(selectedService?.name ?? "Service")}&fee=${fee}`);
     } catch (err: any) {
       console.error("Submission failed", err);
-      const msg = err?.response?.data?.detail || "Application submission failed. Please review your information and try again.";
-      toast.error(msg);
+      toast.error(err?.response?.data?.detail || "Application submission failed. Please review your information and try again.");
     } finally {
       setLoading(false);
     }
@@ -110,7 +83,6 @@ export function useSubmitApplicationLogic() {
     selectedService, isIndividualService, isMarriageService,
     isHajjUmrahService, isEducationService, isTravelVisaService,
     isEmploymentService, canSelectOrganization, updateSubDetails,
-    handleNextStep, handlePrevStep, handleSubmit, setFormData, setErrors,
-    clearFieldError,
+    handleNextStep, handlePrevStep, handleSubmit, setFormData, setErrors, clearFieldError,
   };
 }

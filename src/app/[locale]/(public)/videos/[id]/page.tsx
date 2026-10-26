@@ -1,11 +1,17 @@
-import { Calendar, User, ArrowLeft, PlayCircle, Film, Share2 } from "lucide-react";
-import { Link } from "@/i18n/routing";
-import api, { API_BASE_URL } from "@/lib/api";
-import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
 import { notFound } from "next/navigation";
-import VideoPlayer from "@/components/news/VideoPlayer";
-import ShareButton from "@/components/news/ShareButton";
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
+import api from "@/lib/api";
+import { resolveVideoStreamUrl, resolveVideoFallbackUrl } from "@/lib/videoUtils";
+import VideoPlayer from "@/components/news/VideoPlayer";
+import { VideoHero } from "./_components/VideoHero";
+import { VideoDescription } from "./_components/VideoDescription";
+import { VideoSidebar } from "./_components/VideoSidebar";
+import { VideoSchema } from "./_components/VideoSchema";
+
+interface PageProps {
+    params: Promise<{ id: string; locale: string }>;
+}
 
 async function getVideo(id: string, locale: string) {
     try {
@@ -16,101 +22,43 @@ async function getVideo(id: string, locale: string) {
     }
 }
 
-export default async function VideoBriefingPage({ params }: { params: Promise<{ id: string, locale: string }> }) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { id, locale } = await params;
+    const video = await getVideo(id, locale);
+    if (!video || !video.is_published) return {};
+    const title = `${video.title} | SUPKEM Press Briefing`;
+    const description = video.description?.slice(0, 160) || "SUPKEM Official Media Briefing";
+    return {
+        title,
+        description,
+        openGraph: { title, description, type: "video.other" },
+        twitter: { card: "summary_large_image", title, description },
+    };
+}
+
+export default async function VideoBriefingPage({ params }: PageProps) {
     const { id, locale } = await params;
     const t = await getTranslations({ locale, namespace: "NewsPage.videoDetail" });
     const video = await getVideo(id, locale);
 
-    if (!video || !video.is_published) {
-        notFound();
-    }
+    if (!video || !video.is_published) notFound();
 
     const videoUrl = resolveVideoStreamUrl(video);
     const fallbackUrl = resolveVideoFallbackUrl(video);
 
     return (
         <div className="pb-24 bg-slate-50 min-h-screen">
-            {/* Dark Hero Section for Video */}
-            <header className="relative bg-black pt-20 pb-12 lg:pt-32 lg:pb-24 px-6 overflow-hidden">
-                {/* Decorative Background Elements */}
-                <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 translate-x-1/4 pointer-events-none" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-500/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2 pointer-events-none" />
-
-                <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-                    <Link
-                        href="/news"
-                        className="inline-flex items-center gap-2 text-white/50 hover:text-white transition-colors font-bold uppercase tracking-widest text-xs bg-white/5 px-4 py-2 rounded-full backdrop-blur-md"
-                    >
-                        <ArrowLeft size={14} /> {t("backToMedia")}
-                    </Link>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                        <div className="lg:col-span-12 space-y-6">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-widest">
-                                <Film size={12} /> {t("pressBriefing")}
-                            </div>
-                            <h1 className="text-4xl lg:text-7xl font-black font-outfit text-white leading-tight tracking-tighter">
-                                {video.title}
-                            </h1>
-                            <div className="flex flex-wrap items-center gap-8 text-sm font-bold text-white/40 uppercase tracking-widest">
-                                <span className="flex items-center gap-2.5">
-                                    <Calendar size={16} className="text-primary" />
-                                    {new Date(video.created_at).toLocaleDateString(locale === 'ar' ? 'ar-KE' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                </span>
-                                <span className="flex items-center gap-2.5">
-                                    <User size={16} className="text-primary" />
-                                    {t("supkemMedia")}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+            <VideoSchema title={video.title} description={video.description || "SUPKEM Briefing"} uploadDate={video.created_at} contentUrl={videoUrl} />
+            <VideoHero title={video.title} createdAt={video.created_at} locale={locale} backText={t("backToMedia")} pressBriefingText={t("pressBriefing")} supkemMediaText={t("supkemMedia")} />
+            <main className="max-w-5xl mx-auto px-6 -mt-10 lg:-mt-20 relative z-20 space-y-12">
+                <div className="aspect-video bg-black rounded-[20px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-4 border-white/5 relative group">
+                    <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} />
                 </div>
-            </header>
-
-            {/* Video Content Section */}
-            <main className="max-w-5xl mx-auto px-6 -mt-10 lg:-mt-20 relative z-20">
-                <div className="space-y-12">
-                    {/* Premium Video Container */}
-                    <div className="aspect-video bg-black rounded-[20px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border-4 border-white/5 relative group">
-                        <VideoPlayer url={videoUrl} fallbackUrl={fallbackUrl} title={video.title} />
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                    <div className="lg:col-span-2 space-y-8">
+                        <VideoDescription heading={t("aboutBriefing")} description={video.description} defaultDesc={t("defaultDesc")} />
                     </div>
-
-                    {/* Meta & Description */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
-                        <div className="lg:col-span-2 space-y-8">
-                            <div className="bg-white rounded-[16px] p-8 lg:p-12 shadow-xl shadow-black/5 border border-slate-100">
-                                <h2 className="text-2xl font-black font-outfit text-primary mb-6 flex items-center gap-3">
-                                    <PlayCircle className="text-secondary" />
-                                    {t("aboutBriefing")}
-                                </h2>
-                                <p className="text-lg text-foreground/70 leading-relaxed font-medium whitespace-pre-wrap">
-                                    {video.description || t("defaultDesc")}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Sidebar / Actions */}
-                        <div className="space-y-6">
-                            <div className="bg-white rounded-[16px] p-6 shadow-xl shadow-black/5 border border-slate-100 space-y-6">
-                                <p className="text-xs font-black uppercase tracking-widest text-foreground/40 px-2">{t("actions")}</p>
-                                <ShareButton title={video.title} />
-                                <Link
-                                    href="/news"
-                                    className="w-full py-4 bg-slate-50 text-primary rounded-[20px] font-bold text-sm hover:bg-primary/5 transition-all flex items-center justify-center gap-2 border border-slate-100"
-                                >
-                                    {t("moreMedia")}
-                                </Link>
-                            </div>
-
-                            <div className="bg-gradient-to-br from-primary to-primary-dark rounded-[16px] p-8 text-white shadow-xl shadow-primary/20 space-y-4">
-                                <h3 className="text-xl font-bold font-outfit tracking-tight">{t("stayInformed")}</h3>
-                                <p className="text-sm opacity-80 leading-relaxed font-medium">{t("followChannels")}</p>
-                                <div className="pt-2">
-                                    <Link href="/contact" className="text-xs font-black uppercase tracking-widest underline underline-offset-4 hover:text-white/80 transition-all">{t("contactPressOffice")}</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <VideoSidebar title={video.title} actionsLabel={t("actions")} moreMediaLabel={t("moreMedia")} stayInformedTitle={t("stayInformed")} followChannelsDesc={t("followChannels")} contactPressLabel={t("contactPressOffice")} />
                 </div>
             </main>
         </div>

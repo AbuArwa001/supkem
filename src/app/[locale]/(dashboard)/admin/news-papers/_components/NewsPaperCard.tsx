@@ -17,44 +17,21 @@ interface NewsPaperCardProps {
 export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardProps) {
   const t = useTranslations("Dashboard.admin.newsPapers");
   const imageUrl = item.cover_image
-    ? item.cover_image.startsWith("http")
-      ? item.cover_image
-      : `${API_BASE_URL}${item.cover_image.startsWith("/") ? "" : "/"}${item.cover_image}`
+    ? (item.cover_image.startsWith("http") ? item.cover_image : `${API_BASE_URL}${item.cover_image.startsWith("/") ? "" : "/"}${item.cover_image}`)
     : null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full"
-    >
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.05 }} className="bg-white border border-border rounded-[16px] overflow-hidden hover:shadow-2xl hover:shadow-primary/5 transition-all group flex flex-col h-full">
       <div className="aspect-[3/4] relative bg-primary/5 flex items-center justify-center overflow-hidden">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={item.title}
-            fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
-          />
+          <Image src={imageUrl} alt={item.title} fill className="object-cover group-hover:scale-110 transition-transform duration-500" />
         ) : item.file ? (
-          <iframe
-            src={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file)}&embedded=true`}
-            className="w-full h-full group-hover:scale-105 transition-transform duration-700 opacity-90 scale-110"
-            title={item.title}
-          />
+          <iframe src={`https://docs.google.com/viewer?url=${encodeURIComponent(item.file)}&embedded=true`} className="w-full h-full group-hover:scale-105 transition-transform duration-700 opacity-90 scale-110" title={item.title} />
         ) : (
           <BookOpen className="text-primary/20" size={48} />
         )}
         <div className="absolute top-4 right-4 flex flex-col gap-2 items-end">
-          <span
-            className={cn(
-              "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest",
-              item.is_published
-                ? "bg-green-100 text-green-700"
-                : "bg-amber-100 text-amber-700",
-            )}
-          >
+          <span className={cn("px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest", item.is_published ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700")}>
             {item.is_published ? t("published") : t("draft")}
           </span>
           {item.issue_number && (
@@ -67,36 +44,21 @@ export function NewsPaperCard({ item, index, onEdit, onDelete }: NewsPaperCardPr
 
       <div className="p-6 space-y-4 flex-1 flex flex-col">
         <div className="space-y-2">
-          <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug">
-            {item.title}
-          </h3>
-          <p className="text-sm font-semibold text-foreground/60 uppercase tracking-widest">
-            {new Date(item.published_date).toLocaleDateString()}
-          </p>
+          <h3 className="text-xl font-bold font-outfit text-primary line-clamp-2 leading-snug">{item.title}</h3>
+          <p className="text-sm font-semibold text-foreground/60 uppercase tracking-widest">{new Date(item.published_date).toLocaleDateString()}</p>
         </div>
 
         <div className="pt-6 mt-auto border-t border-border/50 flex items-center justify-between">
           {item.file && (
-            <a
-              href={item.file.startsWith("http") ? item.file : `${API_BASE_URL}${item.file}`}
-              target="_blank"
-              rel="noreferrer"
-              className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/5 px-3 py-2 rounded-xl hover:bg-primary hover:text-white transition-all"
-            >
+            <a href={item.file.startsWith("http") ? item.file : `${API_BASE_URL}${item.file}`} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-xs font-bold text-primary bg-primary/5 px-3 py-2 rounded-xl hover:bg-primary hover:text-white transition-all">
               <Download size={14} /> {t("downloadPdf")}
             </a>
           )}
           <div className="flex items-center gap-2 ml-auto">
-            <button
-              onClick={onEdit}
-              className="p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90"
-            >
+            <button onClick={onEdit} className="p-2 bg-primary/5 text-primary rounded-xl hover:bg-primary hover:text-white transition-all shadow-sm active:scale-90">
               <Edit2 size={16} />
             </button>
-            <button
-              onClick={onDelete}
-              className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90"
-            >
+            <button onClick={onDelete} className="p-2 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm active:scale-90">
               <Trash2 size={16} />
             </button>
           </div>

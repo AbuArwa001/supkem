@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { Edit2, Trash2, Video as VideoIcon, PlayCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { API_BASE_URL } from "@/lib/api";
 import { resolveVideoStreamUrl } from "@/lib/videoUtils";
 import { VideoBriefingItem } from "../_hooks/useVideosLogic";
 import { useTranslations } from "next-intl";
@@ -16,12 +15,7 @@ interface VideoCardProps {
   onDelete: (id: string) => void;
 }
 
-export const VideoCard = ({
-  item,
-  index,
-  onEdit,
-  onDelete,
-}: VideoCardProps) => {
+export const VideoCard = ({ item, index, onEdit, onDelete }: VideoCardProps) => {
   const t = useTranslations("Dashboard.admin.videos");
   const videoUrl = resolveVideoStreamUrl(item);
 

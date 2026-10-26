@@ -1,15 +1,15 @@
-// React/Next.js core
-import { useState, useEffect } from "react";
+"use client";
 
-// Internal — payment step components
-import { PaymentModalHeader } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/PaymentModalHeader";
-import { ConfirmationStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/ConfirmationStep";
-import { PhoneEntryStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/PhoneEntryStep";
-import { InitiatingStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/InitiatingStep";
-import { WaitingStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/WaitingStep";
-import { SuccessStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/SuccessStep";
-import { ErrorStep } from "@/app/[locale]/(dashboard)/portal/applications/new/_components/payment/ErrorStep";
-import { applicationSubmitService } from "@/app/[locale]/(dashboard)/portal/applications/new/_services/applicationSubmitService";
+import { useState } from "react";
+import { PaymentModalHeader } from "./payment/PaymentModalHeader";
+import { ConfirmationStep } from "./payment/ConfirmationStep";
+import { PhoneEntryStep } from "./payment/PhoneEntryStep";
+import { InitiatingStep } from "./payment/InitiatingStep";
+import { WaitingStep } from "./payment/WaitingStep";
+import { SuccessStep } from "./payment/SuccessStep";
+import { ErrorStep } from "./payment/ErrorStep";
+import { applicationSubmitService } from "../_services/applicationSubmitService";
+import { usePaymentPolling } from "../_hooks/usePaymentPolling";
 
 type PaymentStatus = "confirmation" | "idle" | "initiating" | "waiting" | "success" | "error";
 
@@ -40,41 +40,7 @@ export function PaymentModal({ applicationId, serviceName, serviceFee, onSuccess
     }
   };
 
-  // Poll payment status every 3 seconds while waiting
-  useEffect(() => {
-    if (status !== "waiting") return;
-    let attempts = 0;
-    const interval = setInterval(async () => {
-      attempts++;
-      try {
-        const appData = await applicationSubmitService.getApplication(applicationId);
-        if (appData.payment?.status === "Completed") {
-          setStatus("success");
-          clearInterval(interval);
-          setTimeout(onSuccess, 2000);
-          return;
-        } else if (appData.payment?.status === "Failed") {
-          setStatus("error");
-          setErrorMsg("Payment failed or was cancelled remotely.");
-          clearInterval(interval);
-          return;
-        }
-
-        if (attempts >= 3 && attempts % 3 === 0) {
-          applicationSubmitService.checkPaymentStatus(applicationId).then((res) => {
-            if (res?.status === "Completed" || res?.payment?.status === "Completed") {
-              setStatus("success");
-              clearInterval(interval);
-              setTimeout(onSuccess, 2000);
-            }
-          }).catch(() => {
-            // keep waiting quietly
-          });
-        }
-      } catch { /* keep waiting */ }
-    }, 2500);
-    return () => clearInterval(interval);
-  }, [status, applicationId, onSuccess]);
+  usePaymentPolling(status, applicationId, onSuccess, setStatus, setErrorMsg);
 
   const canClose = ["confirmation", "idle", "error"].includes(status);
 
